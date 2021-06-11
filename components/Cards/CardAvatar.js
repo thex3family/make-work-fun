@@ -1,5 +1,7 @@
 import React from "react";
-import Button from '@/components/ui/Button';
+import { useEffect, useState } from 'react'
+import Button from '@/components/ui/Button'
+import { supabase } from '@/utils/supabase-client'
 
 export default function Avatar({
   statName,
@@ -9,8 +11,29 @@ export default function Avatar({
   statWinName,
   statWinType,
   statWinGold,
-  statWinEXP
+  statWinEXP,
+  url
 }) {
+
+  const [avatarUrl, setAvatarUrl] = useState(null)
+  
+  useEffect(() => {
+    if (url) downloadImage(url)
+  }, [url])
+
+  async function downloadImage(path) {
+    try {
+      const { data, error } = await supabase.storage.from('avatars').download(path)
+      if (error) {
+        throw error
+      }
+      const url = URL.createObjectURL(data)
+      setAvatarUrl(url)
+      console.log(avatarUrl)
+    } catch (error) {
+      console.log('Error downloading image: ', error.message)
+    }
+  }
 
   const statTitle = "Newbie";
   const statMaxLevel = "100";
@@ -31,7 +54,15 @@ export default function Avatar({
 <div className="bg-primary-2 rounded mx-auto">
   <div className="rounded-tr-md rounded-tl-md w-auto bg-cover bg-player-pattern">
     <div className ="rounded bg-black bg-opacity-80">
-  <img className="rounded h-60 mx-auto py-5" src="/img/avatar.png" alt="" />
+    {avatarUrl ? (
+        <img
+          className="avatar image m-auto py-5 h-60"
+          src={avatarUrl}
+          alt="Avatar"
+        />
+      ) : (
+        <img className="avatar image m-auto py-5 h-60" src='img/default_avatar.png'/>
+      )}
   </div>
   </div>
   <div className="p-8 rounded-bl-md rounded-br-md">
@@ -51,7 +82,7 @@ export default function Avatar({
               </span>
             </div>
             
-            <div className="relative w-auto pl-4 flex-initial">
+            {/* <div className="relative w-auto pl-4 flex-initial">
               <button 
                 className={
                   "text-white p-3 text-center inline-flex items-center justify-center w-10 h-10 border shadow-lg rounded-full " +
@@ -60,7 +91,7 @@ export default function Avatar({
               >
                 <i className={statIconName}></i>
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="font-semibold text-sm text-right -mt-3">{statEXP} / {statLevelEXP} XP</div>
           <div className="flex flex-wrap">

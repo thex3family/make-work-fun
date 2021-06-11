@@ -1,6 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Button from '@/components/ui/Button';
+import React from "react"
+import PropTypes from "prop-types"
+import Button from '@/components/ui/Button'
+import Link from 'next/link'
 
 export default function CardStats({
   statTitle,
@@ -39,6 +40,7 @@ export default function CardStats({
             </div>
             
             <div className="relative w-auto pl-4 flex-initial">
+              <Link href="/account">
               <button 
                 className={
                   "text-white p-3 text-center inline-flex items-center justify-center w-10 h-10 border shadow-lg rounded-full " +
@@ -47,6 +49,7 @@ export default function CardStats({
               >
                 <i className={statIconName}></i>
               </button>
+              </Link>
             </div>
           </div>
           <div className="font-semibold text-sm text-right -mt-3">{statEXP} / {statLevelEXP} XP</div>

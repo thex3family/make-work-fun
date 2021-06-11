@@ -3,9 +3,7 @@ import Button from '@/components/ui/Button';
 import Avatar from '@/components/Cards/CardAvatar';
 import { getLeaderboardStats } from '@/utils/supabase-client';
 
-export default function HomePage( {players } ) {
-
-console.log(players);
+export default function HomePage({ players }) {
 
   return (
     <section className="justify-center">
@@ -38,6 +36,7 @@ console.log(players);
     statWinType = {player.type}
     statWinGold = {player.gold_reward}
     statWinEXP = {player.exp_reward}  
+    url = {player.avatar_url}
     />
     ))}
     </div>
