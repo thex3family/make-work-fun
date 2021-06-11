@@ -10,8 +10,6 @@ import { postData } from '@/utils/helpers';
 import { supabase } from '../utils/supabase-client';
 import Datatable, { createTheme } from 'react-data-table-component';
 
-import Avatar from '@/components/avatar';
-
 import React from "react";
 
 // components
@@ -75,8 +73,10 @@ export default function Player() {
   const[wins, setWins] = useState([])
 
   const[playerLevel, setPlayerLevel] = React.useState(false);
+  const[playerName, setPlayerName] = React.useState(false);
   const[playerGold, setPlayerGold] = React.useState(false);
   const[playerEXP, setPlayerEXP] = React.useState(false);
+  const [avatar_url, setAvatarUrl] = useState(null);
   
   const [showModal, setShowModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState(false);
@@ -84,8 +84,6 @@ export default function Player() {
   const [activeDate, setActiveDate] = React.useState(false);
   const [activeGold, setActiveGold] = React.useState(false);
   const [activeEXP, setActiveEXP] = React.useState(false);
-  
-  const [avatar_url, setAvatarUrl] = React.useState(false);
 
   const columns = [
     {
@@ -144,7 +142,7 @@ export default function Player() {
     try {
       setLoading(true)
       const user = supabase.auth.user()
-      console.log('leaderboard');
+      
       const { data, error } = await supabase
       .from('leaderboard')
       .select('*')
@@ -153,11 +151,13 @@ export default function Player() {
 
       console.log(data);
 
+      setPlayerName(data.full_name);
       setPlayerLevel(data.total_level);
-      setPlayerGold(data.total_exp);
-      setPlayerEXP(data.total_gold);
-
+      setPlayerGold(data.total_gold);
+      setPlayerEXP(data.total_exp);
+      setAvatarUrl(data.avatar_url);  
     
+      console.log(avatar_url);
 
     if (error && status !== 406) {
             throw error
@@ -224,19 +224,20 @@ export default function Player() {
     }
   }
 
+  // specific update for avatar URL, and other stuff late
+
   async function updateProfile({ avatar_url }) {
     try {
       setLoading(true)
       const user = supabase.auth.user()
 
-      const updates = {
-        id: user.id,
-        avatar_url
-      }
-      console.log('5users');
-      let { error } = await supabase.from('users').upsert(updates, {
-        returning: 'minimal', // Don't return the value after inserting
+
+      let { error } =   await supabase
+      .from('users')
+      .update({
+        avatar_url: avatar_url
       })
+      .eq('id', user.id);
 
       if (error) {
         throw error
@@ -266,8 +267,8 @@ export default function Player() {
       <div className="pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:flex-col align-center">
           <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
-            Welcome, <span className="text-emerald-500">{userDetails ? (
-              `${userDetails?.full_name ?? 'Player 1'}`
+            Welcome, <span className="text-emerald-500">{playerName ? (
+              `${playerName ?? 'Player 1'}`
             ) : (
                 <LoadingDots />
             )}!</span>
@@ -277,24 +278,17 @@ export default function Player() {
           </p>
         </div>
       </div>
-      <div className="form-widget">
-    {/* Add to the body */}
-    <Avatar
-      url={avatar_url}
-      size={150}
-      onUpload={(url) => {
-        setAvatarUrl(url)
-        updateProfile({ avatar_url: url })
-      }}
-    />
-    {/* ... */}
-  </div>
       <div className="max-w-6xl px-4 md:px-10 mx-auto w-full -m-24">
+        
       <HeaderStats 
-        full_name={userDetails?.full_name} 
+        full_name={playerName} 
         total_level={playerLevel} 
         total_gold={playerGold} 
-        total_exp={playerEXP} />
+        total_exp={playerEXP} 
+        avatar_url={avatar_url}
+        setAvatarUrl={setAvatarUrl}
+      updateProfile={updateProfile}
+        />
       <div className="flex flex-wrap mt-4">
         <div className="w-full mb-12 px-4">
         {/* <CardTable color="dark" data={wins} /> */}

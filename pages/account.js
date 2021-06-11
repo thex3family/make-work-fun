@@ -11,6 +11,8 @@ import Input from '@/components/ui/Input';
 
 import { supabase } from '../utils/supabase-client';
 
+import Avatar from '@/components/avatar';
+
 function Card({ title, description, footer, children }) {
   return (
     <div className="border border-accents-1	max-w-3xl w-full p rounded-md m-auto my-8">
@@ -33,6 +35,7 @@ export default function Account() {
   const [notion_api_secret, setNotionAPISecret] = useState(null);
   const [notion_success_plan, setNotionSuccessPlan] = useState(null);
   const { userLoaded, user, session, userDetails, subscription } = useUser();
+  const [avatar_url, setAvatarUrl] = useState(null);
 
   useEffect(() => {
     if (!user) router.replace('/signin');
@@ -50,7 +53,7 @@ export default function Account() {
 
       let { data, error, status } = await supabase
         .from('users')
-        .select(`full_name, notion_api_secret, notion_success_plan`)
+        .select(`full_name, notion_api_secret, notion_success_plan, avatar_url`)
         .eq('id', user.id)
         .single()
 
@@ -62,6 +65,7 @@ export default function Account() {
         setName(data.full_name)
         setNotionAPISecret(data.notion_api_secret)
         setNotionSuccessPlan(data.notion_success_plan)
+        setAvatarUrl(data.avatar_url)
       }
     } catch (error) {
       alert(error.message)
@@ -70,7 +74,7 @@ export default function Account() {
     }
   }
 
-  async function updateProfile({ full_name, notion_api_secret, notion_success_plan }) {
+  async function updateProfile({ full_name, notion_api_secret, notion_success_plan, avatar_url }) {
     try {
       setLoading(true)
       const user = supabase.auth.user()
@@ -81,7 +85,8 @@ export default function Account() {
       .update({
         full_name: full_name,
         notion_api_secret: notion_api_secret,
-        notion_success_plan: notion_success_plan
+        notion_success_plan: notion_success_plan,
+        avatar_url: avatar_url
       })
       .eq('id', user.id);
 

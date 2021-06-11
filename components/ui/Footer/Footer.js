@@ -6,8 +6,8 @@ import GitHub from '@/components/icons/GitHub';
 
 export default function Footer() {
   return (
-    <footer className="mx-auto max-w-8xl px-6 bg-primary-2">
-      <div className="py-12 space-y-4 bg-primary-2">
+    <footer className="mx-auto max-w-8xl px-6 bg-primary-1">
+      <div className="py-12 space-y-4 bg-primary-1">
         <div className="text-center">
           <span className="text-primary align-middle font-semibold">Version 0.1</span>
           <a href="https://co-x3.com" aria-label="Co-x3 Family">
