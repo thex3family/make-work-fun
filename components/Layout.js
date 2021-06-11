@@ -7,8 +7,8 @@ import Footer from '@/components/ui/Footer';
 export default function Layout({ children, meta: pageMeta }) {
   const router = useRouter();
   const meta = {
-    title: 'Next.js Subscription Starter',
-    description: 'Brought to you by Vercel, Stripe, and Supabase.',
+    title: 'Co-x3 Family Connection',
+    description: 'Multiplayer for Personal Development.',
     cardImage: '/og.png',
     ...pageMeta
   };
@@ -30,10 +30,11 @@ export default function Layout({ children, meta: pageMeta }) {
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.cardImage} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@vercel" />
+        <meta name="twitter:site" content="@thex3family" />
         <meta name="twitter:title" content={meta.title} />
         <meta name="twitter:description" content={meta.description} />
         <meta name="twitter:image" content={meta.cardImage} />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       </Head>
       <Navbar />
       <main id="skip">{children}</main>

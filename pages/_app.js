@@ -5,6 +5,8 @@ import '@/assets/chrome-bug.css';
 import Layout from '@/components/Layout';
 import { UserContextProvider } from '@/utils/useUser';
 
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     document.body.classList?.remove('loading');

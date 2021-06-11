@@ -7,6 +7,10 @@ import Button from '@/components/ui/Button';
 import { useUser } from '@/utils/useUser';
 import { postData } from '@/utils/helpers';
 
+import Input from '@/components/ui/Input';
+
+import { supabase } from '../utils/supabase-client';
+
 function Card({ title, description, footer, children }) {
   return (
     <div className="border border-accents-1	max-w-3xl w-full p rounded-md m-auto my-8">
@@ -21,14 +25,76 @@ function Card({ title, description, footer, children }) {
     </div>
   );
 }
+
 export default function Account() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [full_name, setName] = useState(null);
+  const [notion_api_secret, setNotionAPISecret] = useState(null);
+  const [notion_success_plan, setNotionSuccessPlan] = useState(null);
   const { userLoaded, user, session, userDetails, subscription } = useUser();
 
   useEffect(() => {
     if (!user) router.replace('/signin');
   }, [user]);
+
+  useEffect(() => {
+    if (user) getProfile()
+  }, [session])
+
+
+  async function getProfile() {
+    try {
+      setLoading(true)
+      const user = supabase.auth.user()
+
+      let { data, error, status } = await supabase
+        .from('users')
+        .select(`full_name, notion_api_secret, notion_success_plan`)
+        .eq('id', user.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setName(data.full_name)
+        setNotionAPISecret(data.notion_api_secret)
+        setNotionSuccessPlan(data.notion_success_plan)
+      }
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function updateProfile({ full_name, notion_api_secret, notion_success_plan }) {
+    try {
+      setLoading(true)
+      const user = supabase.auth.user()
+
+
+      let { error } =   await supabase
+      .from('users')
+      .update({
+        full_name: full_name,
+        notion_api_secret: notion_api_secret,
+        notion_success_plan: notion_success_plan
+      })
+      .eq('id', user.id);
+
+      if (error) {
+        throw error
+      }
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
 
   const redirectToCustomerPortal = async () => {
     setLoading(true);
@@ -58,7 +124,7 @@ export default function Account() {
             Account
           </h1>
           <p className="mt-5 text-xl text-accents-6 sm:text-center sm:text-2xl max-w-2xl m-auto">
-            We partnered with Stripe for a simplified billing.
+            Your details with us.
           </p>
         </div>
       </div>
@@ -72,9 +138,9 @@ export default function Account() {
           footer={
             <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
               <p className="pb-4 sm:pb-0">
-                Manage your subscription on Stripe.
+                Manage your subscription.
               </p>
-              <Button
+              <Button className="w-full sm:w-auto"
                 variant="slim"
                 loading={loading}
                 disabled={loading || !subscription}
@@ -94,35 +160,78 @@ export default function Account() {
               `${subscriptionPrice}/${subscription.prices.interval}`
             ) : (
               <Link href="/">
-                <a>Choose your plan</a>
+                <a className="text-emerald-500">EARLY ACCESS - Thank you for being a very important member of our family.</a>
               </Link>
             )}
           </div>
         </Card>
+        
+        <Card
+          title="Your Email"
+          description="Please enter the email address you want to use to login."
+          footer={<p>Options to change email coming soon.</p>}
+          >
+            <p className="text-xl mt-8 mb-4 font-semibold">
+              {user ? user.email : undefined}
+            </p>
+        </Card>
+        <div className="form-widget">
         <Card
           title="Your Name"
           description="Please enter your full name, or a display name you are comfortable with."
           footer={<p>Please use 64 characters at maximum.</p>}
         >
-          <div className="text-xl mt-8 mb-4 font-semibold">
-            {userDetails ? (
-              `${userDetails?.full_name ?? ''}`
-            ) : (
-              <div className="h-8 mb-6">
-                <LoadingDots />
-              </div>
-            )}
-          </div>
+          
+          <Input htmlFor="full_name" className="text-xl mt-8 mb-4 font-semibold rounded"
+            id="full_name"
+            type="text"
+            value={full_name || ''}
+            onChange={setName}
+          />
         </Card>
         <Card
-          title="Your Email"
-          description="Please enter the email address you want to use to login."
-          footer={<p>We will email you to verify the change.</p>}
+          title="Your Notion Credentials"
+          description="Gives the application access to your Notion database."
+          footer={
+            <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+              <p className="pb-4 sm:pb-0">
+                This is needed to access your Notion databases. Let Conrad know when this is filled out!
+              </p>
+              {/* <Button className="w-full sm:w-auto"
+                variant="slim"
+              >
+                Learn More
+              </Button> */}
+            </div>
+          }
         >
-          <p className="text-xl mt-8 mb-4 font-semibold">
-            {user ? user.email : undefined}
-          </p>
+        <p className="mt-4 font-semibold">Notion API Secret</p>
+        <Input className="text-xl mb-4 font-semibold rounded"
+          id="notion_api_secret"
+          type="varchar"
+          value={notion_api_secret || ''}
+          onChange={setNotionAPISecret}
+        />
+        <p className="mt-4 font-semibold">Success Plan Database ID</p>
+        <Input className="text-xl mb-4 font-semibold rounded"
+          id="notion_success_plan"
+          type="varchar"
+          value={notion_success_plan || ''}
+          onChange={setNotionSuccessPlan}
+        />
         </Card>
+        <Card>
+          
+          <Button className="w-full"
+                    variant="slim"
+                    type="submit"
+                    onClick={() => updateProfile({ full_name, notion_api_secret, notion_success_plan })}
+                    disabled={loading}
+                    >
+                      {loading ? 'Loading ...' : 'Update All'}
+          </Button></Card>
+          
+          </div>
       </div>
     </section>
   );
