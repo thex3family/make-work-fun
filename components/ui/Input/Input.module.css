@@ -5,3 +5,7 @@
 .root:focus {
   @apply outline-none;
 }
+
+.clickable-row {
+  @apply text-emerald-600;
+}

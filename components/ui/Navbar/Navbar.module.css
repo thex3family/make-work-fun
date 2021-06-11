@@ -3,7 +3,7 @@
 }
 
 .link {
-  @apply inline-flex items-center text-primary leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-accents-6 rounded-md p-1;
+  @apply inline-flex items-center text-primary leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-accents-6 rounded-md p-1 px-2;
 }
 
 .link:hover {
@@ -11,7 +11,7 @@
 }
 
 .link:focus {
-  @apply outline-none text-accents-8 ring-2 ring-pink ring-opacity-50;
+  @apply outline-none text-accents-8 ring-2 bg-emerald-500 ring-emerald-500 ring-opacity-50;
 }
 
 .logo {
@@ -20,5 +20,9 @@
   &:hover {
     @apply shadow-md;
     transform: scale(1.05);
+  }
+
+  &:focus {
+    @apply ring-0;
   }
 }

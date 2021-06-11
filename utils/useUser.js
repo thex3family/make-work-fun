@@ -27,6 +27,7 @@ export const UserContextProvider = (props) => {
   }, []);
 
   const getUserDetails = () => supabase.from('users').select('*').single();
+  const getSuccessPlan = () => supabase.from('success_plan').select('*');
   const getSubscription = () =>
     supabase
       .from('subscriptions')
@@ -36,7 +37,7 @@ export const UserContextProvider = (props) => {
 
   useEffect(() => {
     if (user) {
-      Promise.allSettled([getUserDetails(), getSubscription()]).then(
+      Promise.allSettled([getUserDetails(), getSubscription(), getSuccessPlan()]).then(
         (results) => {
           setUserDetails(results[0].value.data);
           setSubscription(results[1].value.data);

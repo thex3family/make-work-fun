@@ -6,7 +6,6 @@ import Button from '@/components/ui/Button';
 import GitHub from '@/components/icons/GitHub';
 import Input from '@/components/ui/Input';
 import LoadingDots from '@/components/ui/LoadingDots';
-import Logo from '@/components/icons/Logo';
 import { useUser } from '@/utils/useUser';
 
 const SignIn = () => {
@@ -48,7 +47,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (user) {
-      router.replace('/account');
+      router.replace('/player');
     }
   }, [user]);
 
@@ -57,7 +56,7 @@ const SignIn = () => {
       <div className="flex justify-center height-screen-helper">
         <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
           <div className="flex justify-center pb-12 ">
-            <Logo width="64px" height="64px" />
+            <img src="logo-white.svg"  width="64px" height="64px" />
           </div>
           <div className="flex flex-col space-y-4">
             {message.content && (

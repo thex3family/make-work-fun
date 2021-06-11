@@ -6,30 +6,60 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "stripe:listen": "stripe listen --forward-to=localhost:3000/api/webhooks --project-name=saas-starter"
+    "stripe:listen": "stripe listen --forward-to=localhost:3000/api/webhooks --project-name=saas-starter",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm run build:tailwind && npm run dev",
+    "build:tailwind": "tailwind build styles/index.css -o styles/tailwind.css"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "5.15.3",
+    "@popperjs/core": "^2.9.2",
     "@stripe/stripe-js": "1.11.0",
     "@supabase/supabase-js": "1.3.2",
+    "@tailwindcss/forms": "0.2.1",
+    "chart.js": "2.9.4",
     "classnames": "2.2.6",
-    "next": "10.0.5",
+    "gulp": "4.0.2",
+    "gulp-append-prepend": "1.0.8",
+    "next": "10.0.9",
     "react": "17.0.1",
+    "react-data-table-component": "^6.11.7",
     "react-dom": "17.0.1",
     "react-merge-refs": "1.1.0",
+    "react-scripts": "4.0.3",
     "stripe": "8.132.0",
+    "styled-components": "^5.3.0",
     "swr": "0.4.0",
-    "tailwindcss": "2.0.2"
+    "tailwindcss": "2.0.4"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "devDependencies": {
-    "postcss": "8.2.4",
+    "autoprefixer": "10.2.5",
+    "postcss": "8.2.8",
     "postcss-flexbugs-fixes": "5.0.2",
     "postcss-preset-env": "6.7.0",
     "prettier": "2.2.1"
+  },
+  "optionalDependencies": {
+    "typescript": "4.2.3"
   },
   "prettier": {
     "arrowParens": "always",
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "none"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

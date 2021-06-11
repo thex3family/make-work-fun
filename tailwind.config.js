@@ -1,7 +1,12 @@
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      backgroundImage: theme => ({
+        'player-pattern': "url('/background/cityscape.jpg')",
+       }),
       maxWidth: {
         '8xl': '1920px'
       },
@@ -29,7 +34,10 @@ module.exports = {
         cyan: 'var(--cyan)',
         blue: 'var(--blue)',
         green: 'var(--green)',
-        red: 'var(--red)'
+        red: colors.red,
+        emerald: colors.emerald,
+        blueGray: colors.blueGray,
+        lightBlue: colors.lightBlue,
       },
       textColor: {
         base: 'var(--text-base)',

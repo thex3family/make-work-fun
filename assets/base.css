@@ -46,7 +46,7 @@
 }
 
 *:focus {
-  @apply outline-none ring-2 ring-pink ring-opacity-50;
+  @apply outline-none ring-2 ring-emerald-600 ring-opacity-50;
 }
 
 html {
@@ -115,4 +115,9 @@ a {
 
 .height-screen-helper {
   height: var(--vh100-offset);
+}
+
+mark {
+  background: linear-gradient(rgba(0, 184, 92, 0) 70%, rgb(0, 95, 40) 70%);
+  color: white;
 }

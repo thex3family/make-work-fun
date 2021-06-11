@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import s from './Navbar.module.css';
 
-import Logo from '@/components/icons/Logo';
 import { useUser } from '@/utils/useUser';
 
 const Navbar = () => {
@@ -17,20 +16,23 @@ const Navbar = () => {
           <div className="flex flex-1 items-center">
             <Link href="/">
               <a className={s.logo} aria-label="Logo">
-                <Logo />
+                <img className="h-10" src="img/co-x3logo_white_full.png" alt="Co-x3" />
               </a>
             </Link>
-            <nav className="space-x-2 ml-6 hidden lg:block">
-              <Link href="/">
-                <a className={s.link}>Pricing</a>
+            <nav className="space-x-2 ml-6 hidden sm:block">
+              <Link href="/player">
+                <a className={s.link}>Player 🐣</a>
               </Link>
+              {/* <Link href="/player">
+                <a className={s.link}>Leaderboard 🏆</a>
+              </Link> */}
               <Link href="/account">
-                <a className={s.link}>Account</a>
+                <a className={s.link}>Account 📋</a>
               </Link>
             </nav>
           </div>
 
-          <div className="flex flex-1 justify-end space-x-8">
+          <div className="flex justify-end space-x-8">
             {user ? (
               <Link href="#">
                 <a className={s.link} onClick={() => signOut()}>
