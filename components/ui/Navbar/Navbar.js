@@ -29,6 +29,9 @@ const Navbar = () => {
               <Link href="/account">
                 <a className={s.link}>Account 📋</a>
               </Link>
+              <Link href="/new">
+                <a className={s.link}>Updates ✨</a>
+              </Link>
             </nav>
           </div>
 

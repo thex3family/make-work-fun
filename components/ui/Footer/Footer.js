@@ -17,6 +17,7 @@ export default function Footer() {
               className="inline-block h-6 ml-4 text-primary"
             />
           </a>
+          <p className="mt-1 text-sm text-primary align-middle font-semi-bold">© All Rights Reserved</p>
         </div>
       </div>
     </footer>
