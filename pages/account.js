@@ -129,7 +129,7 @@ export default function Account() {
             Account
           </h1>
           <p className="mt-5 text-xl text-accents-6 sm:text-center sm:text-2xl max-w-2xl m-auto">
-            Your details with us.
+            Fill out this page to get started.
           </p>
         </div>
       </div>
@@ -200,7 +200,7 @@ export default function Account() {
           footer={
             <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
               <p className="pb-4 sm:pb-0">
-                This is needed to access your Notion databases. Let Conrad know when this is filled out!
+              <a href="https://academy.co-x3.com/en/articles/5263453-how-to-connect-to-the-co-x3-api-server/?utm_source=family-connection" target="_blank">IMPORTANT! This is required for this application to work properly. Click here for detailed instructions.</a>
               </p>
               {/* <Button className="w-full sm:w-auto"
                 variant="slim"

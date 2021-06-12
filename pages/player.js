@@ -130,13 +130,14 @@ export default function Player() {
   
   useEffect(() => {
     if (!user) router.replace('/signin');
+    if (!user.notion_api_secret) router.replace('/account');
   }, [user]);
 
 
   useEffect(() => {
-    if (user) fetchPlayerStats()
-    if (user) fetchWins()
-    if (user) fetchLatestWin()
+    if (user.notion_api_secret) fetchPlayerStats()
+    if (user.notion_api_secret) fetchWins()
+    if (user.notion_api_secret) fetchLatestWin()
   }, [])
 
   async function fetchPlayerStats() {
