@@ -37,8 +37,8 @@ export default function Avatar({
 
   const statTitle = "Newbie";
   const statMaxLevel = "100";
-  const statLevelEXP = "500";
-  const statEXPPercent =  Math.round((statEXP / statLevelEXP)*100);
+  const statLevelEXP = 500*(statLevel+1);
+  const statEXPPercent =  Math.round(((statEXP - (statLevel * 500)) / statLevelEXP)*100);
   const statArrow = "up";
   const statPercent = "0";
   const statPercentColor = "text-white";

@@ -20,8 +20,8 @@ export default function HeaderStats({
 
 {
 
-  const level_exp = 500;
-  const exp_percent = Math.round((total_exp / level_exp)*100);
+  const level_exp = 500*(total_level+1);
+  const exp_percent =  Math.round(((total_exp - (total_level * 500)) / level_exp)*100);
 
   return (
     <>

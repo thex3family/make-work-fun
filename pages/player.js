@@ -81,6 +81,7 @@ export default function Player() {
   const [showModal, setShowModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState(false);
   const [activeName, setActiveName] = React.useState(false);
+  const [activeUpstream, setActiveUpstream] = React.useState(false);
   const [activeDate, setActiveDate] = React.useState(false);
   const [activeGold, setActiveGold] = React.useState(false);
   const [activeEXP, setActiveEXP] = React.useState(false);
@@ -94,10 +95,10 @@ export default function Player() {
       name: 'TYPE',
       selector: 'type'
     },
-    {
-      name: 'PUNCTUALITY',
-      selector: 'punctuality'
-    },
+    // {
+    //   name: 'PUNCTUALITY',
+    //   selector: 'punctuality'
+    // },
     {
       name: 'COMPLETED',
       selector: 'closing_date',
@@ -177,7 +178,7 @@ export default function Player() {
       
       const { data, error } = await supabase
       .from('success_plan')
-      .select('name, type, punctuality, closing_date, gold_reward, exp_reward')
+      .select('name, type, punctuality, closing_date, gold_reward, exp_reward, upstream')
       .eq('player', user.id)
 
       setWins(data)
@@ -200,7 +201,7 @@ export default function Player() {
       
       const { data, error } = await supabase
       .from('success_plan')
-      .select('name, type, punctuality, closing_date, gold_reward, exp_reward, entered_on')
+      .select('name, type, closing_date, gold_reward, exp_reward, entered_on, upstream')
       .eq('player', user.id) 
       .order('entered_on', { ascending: false })
       .limit(1)
@@ -209,6 +210,7 @@ export default function Player() {
       setShowModal(true);
       setActiveType(data.type);
       setActiveName(data.name);
+      setActiveUpstream(data.upstream);
       setActiveDate(data.closing_date);
       setActiveGold(data.gold_reward);
       setActiveEXP(data.exp_reward);
@@ -253,6 +255,7 @@ export default function Player() {
     setShowModal(true);
     setActiveType(wins.type);
     setActiveName(wins.name);
+    setActiveUpstream(wins.upstream);
     setActiveDate(wins.closing_date);
     setActiveGold(wins.gold_reward);
     setActiveEXP(wins.exp_reward);
@@ -260,7 +263,7 @@ export default function Player() {
 
 
   return (
-
+  
   <>
     <section className="bg-black bg-player-pattern bg-fixed">
       <div className="bg-black max-w-6xl mx-auto pb-32 bg-opacity-90">
@@ -287,7 +290,7 @@ export default function Player() {
         total_exp={playerEXP} 
         avatar_url={avatar_url}
         setAvatarUrl={setAvatarUrl}
-      updateProfile={updateProfile}
+       updateProfile={updateProfile}
         />
       <div className="flex flex-wrap mt-4">
         <div className="w-full mb-12 px-4">
@@ -317,7 +320,7 @@ export default function Player() {
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
             // onClick={() => setShowModal(false)}
           >
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+            <div className="relative w-auto my-6 mx-auto max-w-xl">
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
@@ -339,8 +342,8 @@ export default function Player() {
                   <div className="my-4">
                   <p className="text-2xl leading-none text-primary-2 font-bold">
                     {activeName}
-                    {/* <br />
-                    <span className="text-sm">📁 Personal Life Management</span> */}
+                    <br />
+                    <span className="text-sm">{activeUpstream}</span>
                   </p>
                   <p className="my-2 font-light text-sm">{activeDate}</p>
                   </div>
