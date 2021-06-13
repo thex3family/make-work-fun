@@ -8,6 +8,7 @@ export const UserContextProvider = (props) => {
   const [session, setSession] = useState(null);
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
+  const [userOnboarding, setUserOnboarding] = useState(null);
   const [subscription, setSubscription] = useState(null);
 
   useEffect(() => {
@@ -26,8 +27,8 @@ export const UserContextProvider = (props) => {
     };
   }, []);
 
-  const getUserDetails = () => supabase.from('users').select('*').single();
-  const getSuccessPlan = () => supabase.from('success_plan').select('*');
+  const getUserDetails = () => supabase.from('leaderboard').select('*').eq('player', user.id).single();
+  const getUserOnboarding = () => supabase.from('onboarding').select('*').eq('id', user.id).single();
   const getSubscription = () =>
     supabase
       .from('subscriptions')
@@ -37,10 +38,11 @@ export const UserContextProvider = (props) => {
 
   useEffect(() => {
     if (user) {
-      Promise.allSettled([getUserDetails(), getSubscription(), getSuccessPlan()]).then(
+      Promise.allSettled([getUserDetails(), getUserOnboarding(), getSubscription()]).then(
         (results) => {
           setUserDetails(results[0].value.data);
-          setSubscription(results[1].value.data);
+          setUserOnboarding(results[1].value.data);
+          setSubscription(results[2].value.data);
           setUserLoaded(true);
         }
       );
@@ -51,12 +53,14 @@ export const UserContextProvider = (props) => {
     session,
     user,
     userDetails,
+    userOnboarding,
     userLoaded,
     subscription,
     signIn: (options) => supabase.auth.signIn(options),
     signUp: (options) => supabase.auth.signUp(options),
     signOut: () => {
       setUserDetails(null);
+      setUserOnboarding(null);
       setSubscription(null);
       return supabase.auth.signOut();
     }

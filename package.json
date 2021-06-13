@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-subscription-payments",
+  "name": "co-x3-family-connection",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -14,7 +14,8 @@
     "@fortawesome/fontawesome-free": "5.15.3",
     "@popperjs/core": "^2.9.2",
     "@stripe/stripe-js": "1.11.0",
-    "@supabase/supabase-js": "^1.14.0",
+    "@supabase/supabase-js": "^1.15.0",
+    "@supabase/ui": "^0.27.2",
     "@tailwindcss/forms": "0.2.1",
     "chart.js": "2.9.4",
     "classnames": "2.2.6",

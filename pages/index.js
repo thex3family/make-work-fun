@@ -25,7 +25,7 @@ export default function HomePage({ players }) {
         
       </div>
     
-    <div className="mb-24 sm:mx-24 flex justify-center flex-col flex-wrap sm:flex-row">
+    <div className="mb-24 mx-6 sm:mx-6 md:mx-12 xl:mx-24 flex justify-center flex-col flex-wrap sm:flex-row">
     {players.map((player) => (
     <Avatar 
     statName = {player.full_name}    

@@ -14,15 +14,29 @@ export default function updates() {
             We’re constantly making our app better. Here are some of the of notable new features and improvements that we’ve made.
           </p>
           </div>
-          <div>
-            
+          <div className="timeline z-10">
+          <div className="text-center z-10">
+            <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+  June, 13, 2021
+</span>
+</div>
+          <div className="my-4 mb-12 p-8 bg-primary-2 rounded w-full md:w-4/5 lg:w-3/5 z-10">
+            <h2 className="text-3xl font-bold mb-3 text-white">Improved Onboarding Experience</h2>
+            <p className="text-xl mb-5">We wanted to make onboarding easier, so we've built a step by step user journey to help you get started, faster! We've also improved loading logic for smooth app navigation.
+            </p>
+            <img
+            className="avatar image m-auto"
+            src='updates/0.02.png'
+            />
+            <p className="text-sm font-semibold text-right mr-4">v.02</p>
+          </div>
           <div className="text-center">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
   June, 12, 2021
 </span>
 </div>
           <div className="my-4 p-8 bg-primary-2 rounded">
-            <h2 className="text-3xl font-bold mb-3 text-emerald-500">Initial Release - v.01</h2>
+            <h2 className="text-3xl font-bold mb-3 text-white">Initial Release</h2>
             <p className="text-xl mb-5">Our goal for our initial release is to create a new gamified experience for your productivity, and starting our community on the journey of co-op for personal development. In our initial release, you can...
             </p><p className="text-lg">
             <b>Connect Your Notion Workspace (Success Plan)</b><br/> 
@@ -40,6 +54,7 @@ export default function updates() {
             🤝 Get a popup for new wins that you can screenshot to your friends<br />
             🤝 Send a notification to the community for wins you want to announce
             </p>
+            <p className="text-sm font-semibold text-right mr-4">v.01</p>
           </div>
           </div>
           <a href="https://toolbox.co-x3.com/family-connection/?utm_source=family-connection" target="_blank" className="mx-auto">
