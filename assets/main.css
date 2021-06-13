@@ -5,3 +5,20 @@
 @import './components.css';
 
 @tailwind utilities;
+
+.timeline:before {
+    position: absolute;
+    display: block;
+    content: '';
+    width: .6rem;
+    height:100%;
+    background-color: #A7F3D0;
+    left: 50%;
+    margin-left: -.3rem;
+    border-radius: 1em;
+    z-index: -1;
+}
+
+.timeline {
+    position:relative;
+}

@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from 'react'
 import Button from '@/components/ui/Button'
 import { supabase } from '@/utils/supabase-client'
+import LoadingDots from '@/components/ui/LoadingDots';
 
 export default function Avatar({
   statName,
@@ -16,9 +17,11 @@ export default function Avatar({
 }) {
 
   const [avatarUrl, setAvatarUrl] = useState(null)
+  const [avatarStatus, setAvatarStatus] = useState(null)
   
   useEffect(() => {
     if (url) downloadImage(url)
+    if (!url) setAvatarStatus('Missing')
   }, [url])
 
   async function downloadImage(path) {
@@ -29,12 +32,13 @@ export default function Avatar({
       }
       const url = URL.createObjectURL(data)
       setAvatarUrl(url)
-      console.log(avatarUrl)
     } catch (error) {
       console.log('Error downloading image: ', error.message)
+    } finally {
+      setAvatarStatus('Exists')
     }
   }
-
+  
   const statTitle = "Newbie";
   const statMaxLevel = "100";
   const statLevelEXP = 500*(statLevel+1);
@@ -50,11 +54,11 @@ export default function Avatar({
         <>
 
 
-<div className="px-8 mt-10 w-full sm:w-1/2 md:1/3 xl:w-1/4">
+<div className="px-8 mt-10 w-full sm:w-1/2 md:1/2 lg:w-1/3 xl:w-1/4">
 <div className="bg-primary-2 rounded mx-auto">
   <div className="rounded-tr-md rounded-tl-md w-auto bg-cover bg-player-pattern">
     <div className ="rounded bg-black bg-opacity-80">
-    {avatarUrl ? (
+    {/* {avatarUrl ? (
         <img
           className="avatar image m-auto py-5 h-60"
           src={avatarUrl}
@@ -62,7 +66,25 @@ export default function Avatar({
         />
       ) : (
         <img className="avatar image m-auto py-5 h-60" src='img/default_avatar.png'/>
-      )}
+      )} */}
+      
+      {avatarStatus == 'Exists' ? 
+        (<img
+        className="avatar image m-auto py-5 h-60"
+        src={avatarUrl}
+        alt="Avatar"
+        />)
+        : avatarStatus == 'Missing' ? 
+        (<img
+        className="avatar image m-auto py-5 h-60"
+        src='img/default_avatar.png'
+        alt="Avatar"
+        />)
+        : 
+        (<div className="flex avatar image m-auto py-5 h-60 justify-center">
+        <LoadingDots /> 
+        </div>)
+      }
   </div>
   </div>
   <div className="p-8 rounded-bl-md rounded-br-md">

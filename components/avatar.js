@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabase-client'
+import LoadingDots from '@/components/ui/LoadingDots';
 
 export default function Avatar({ url, size, onUpload }) {
   const [avatarUrl, setAvatarUrl] = useState(null)
+  const [avatarStatus, setAvatarStatus] = useState(null)
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     if (url) downloadImage(url)
+    if (!url) setAvatarStatus('Missing')
   }, [url])
 
   async function downloadImage(path) {
@@ -19,6 +22,8 @@ export default function Avatar({ url, size, onUpload }) {
       setAvatarUrl(url)
     } catch (error) {
       console.log('Error downloading image: ', error.message)
+    } finally {
+      setAvatarStatus('Exists')
     }
   }
 
@@ -54,7 +59,24 @@ export default function Avatar({ url, size, onUpload }) {
 
   return (
     <div>
-      {avatarUrl ? (
+         {avatarStatus == 'Exists' ? 
+        (<img
+        className="avatar image m-auto"
+        src={avatarUrl}
+        alt="Avatar"
+        />)
+        : avatarStatus == 'Missing' ? 
+        (<img
+        className="avatar image m-auto"
+        src='img/default_avatar.png'
+        alt="Avatar"
+        />)
+        : 
+        (<div className="flex avatar image m-auto justify-center">
+        <LoadingDots /> 
+        </div>)
+      }
+      {/* {avatarUrl ? (
         <img
           className="avatar image m-auto"
           src={avatarUrl}
@@ -63,7 +85,7 @@ export default function Avatar({ url, size, onUpload }) {
         />
       ) : (
         <img className="avatar image m-auto" src='img/default_avatar.png' style={{ height: size, width: size }}/>
-      )}
+      )} */}
       <div className="" style={{ width: size }}>
         <label className="font-bold button primary block cursor-pointer py-2 rounded bg-emerald-500 mt-6 w-1/2 md:w-full lg:w-1/2 mx-auto" htmlFor="single">
           {uploading ? 'Uploading ...' : 'Personalize ✨'}

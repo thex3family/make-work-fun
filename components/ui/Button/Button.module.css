@@ -23,6 +23,11 @@
   @apply bg-emerald-600 border-emerald-500 text-white;
 }
 
+.onboarding {
+  @apply transform-none normal-case justify-start;
+  @apply bg-emerald-200 rounded border-black;
+}
+
 .disabled,
 .disabled:hover {
   @apply text-accents-4 border-accents-2 bg-accents-1 cursor-not-allowed;

@@ -66,9 +66,9 @@ createTheme('game', {
 
 
 export default function Player() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { userLoaded, user, session, userDetails, subscription } = useUser();
+  const { userLoaded, user, session, userDetails, userOnboarding, subscription } = useUser();
 
   const[wins, setWins] = useState([])
 
@@ -79,6 +79,7 @@ export default function Player() {
   const [avatar_url, setAvatarUrl] = useState(null);
   
   const [showModal, setShowModal] = React.useState(false);
+  const [showIntroModal, setShowIntroModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState(false);
   const [activeName, setActiveName] = React.useState(false);
   const [activeUpstream, setActiveUpstream] = React.useState(false);
@@ -117,31 +118,49 @@ export default function Player() {
   ];
 
 
-  const subscriptionName = subscription && subscription.prices.products.name;
-  const subscriptionPrice =
-    subscription &&
-    new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: subscription.prices.currency,
-      minimumFractionDigits: 0
-    }).format(subscription.prices.unit_amount / 100);
+  // Redirects user to sign in if they are not logged in yet
 
 
-  
-  useEffect(() => {
-    if (!user) router.replace('/signin');
-  }, [user]);
+ useEffect(() => {
+  if (!user) router.replace('/signin');
+ }, [user]);
 
+  // Waits until database fetches user state before loading anything
 
   useEffect(() => {
-    if (user) fetchPlayerStats()
-    if (user) fetchWins()
-    if (user) fetchLatestWin()
-  }, [])
+    if (userOnboarding) initializePlayer()
+  }, [userOnboarding])
+
+  // Checks what state the user is in, and then shows intro/loads them into the application
+
+  function initializePlayer() {
+    try {
+        if(userOnboarding.onboarding_state.includes('1') || userOnboarding.onboarding_state.includes('2') || userOnboarding.onboarding_state.includes('3')){
+          setShowIntroModal(true);
+          setLoading(false);
+        } else {
+          loadPlayer();
+        }
+      } catch (error) {
+          alert(error.message)
+      } finally {
+        console.log("InitializedPlayer")
+      }
+      
+    }
+
+  // If player is ready to load, go for it!
+
+  async function loadPlayer(){
+    console.log('Loading Player')
+    fetchPlayerStats()
+    fetchWins()
+    fetchLatestWin()
+  }
+
 
   async function fetchPlayerStats() {
     try {
-      setLoading(true)
       const user = supabase.auth.user()
       
       const { data, error } = await supabase
@@ -150,15 +169,11 @@ export default function Player() {
       .eq('player', user.id)
       .single()
 
-      console.log(data);
-
       setPlayerName(data.full_name);
       setPlayerLevel(data.total_level);
       setPlayerGold(data.total_gold);
       setPlayerEXP(data.total_exp);
       setAvatarUrl(data.avatar_url);  
-    
-      console.log(avatar_url);
 
     if (error && status !== 406) {
             throw error
@@ -173,7 +188,6 @@ export default function Player() {
 
   async function fetchWins() {
     try {
-      setLoading(true)
       const user = supabase.auth.user()
       
       const { data, error } = await supabase
@@ -190,13 +204,11 @@ export default function Player() {
     } catch (error) {
       alert(error.message)
     } finally {
-      setLoading(false)
     }
   }
 
   async function fetchLatestWin() {
     try {
-      setLoading(true)
       const user = supabase.auth.user()
       
       const { data, error } = await supabase
@@ -222,7 +234,6 @@ export default function Player() {
     } catch (error) {
       alert(error.message)
     } finally {
-      setLoading(false)
     }
   }
 
@@ -231,9 +242,8 @@ export default function Player() {
   async function updateProfile({ avatar_url }) {
     try {
       setLoading(true)
+      if (userDetails) {
       const user = supabase.auth.user()
-
-
       let { error } =   await supabase
       .from('users')
       .update({
@@ -244,6 +254,7 @@ export default function Player() {
       if (error) {
         throw error
       }
+    }
     } catch (error) {
       alert(error.message)
     } finally {
@@ -261,6 +272,105 @@ export default function Player() {
     setActiveEXP(wins.exp_reward);
   }  
 
+  if (loading) {
+    return (
+        <div className="h-screen flex justify-center">
+          <LoadingDots/>
+        </div>
+    );
+  }
+
+  if (showIntroModal) {
+    return (
+      <div className="h-screen flex justify-center">
+          <div
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+            // onClick={() => setShowModal(false)}
+          >
+            <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-emerald-500">
+                  <h3 className="text-2xl font-semibold text-white">
+                  👋 Welcome. Let's get you all set up!
+                  </h3>
+                  
+                  <button
+                    className="p-1 ml-auto bg-transparent border-0 float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={() => router.reload(window.location.pathname)}
+                  >
+                    <i className="fas fa-sync-alt"></i>
+                  </button>
+                </div>
+                {/*body*/}
+                <div className="relative p-6 text-blueGray-500">
+                  <div className="my-2 flex flex-col">
+                  {userOnboarding ? userOnboarding.onboarding_state.includes('1') ?
+                  <div>
+                  <Link href="/account">
+                  <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+                  <i className={"fas fa-link mr-3"}></i>
+                  Connect To Notion
+                  </Button>
+                  </Link>
+                  </div> 
+                  : userOnboarding.onboarding_state.includes('2') ?
+                  <div>
+                  <Link href="/account">
+                  <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+                  <i className={"fas fa-link mr-3"}></i>
+                  Connect To Notion
+                  </Button>
+                  </Link>
+                  <Link href="/account">
+                  <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+                  <i className={"fas fa-link mr-3"}></i>
+                  Connect Your Database
+                  </Button>
+                  </Link>
+                  </div>
+                  :
+                  <div>
+                  <Link href="/account">
+                  <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+                  <i className={"fas fa-link mr-3"}></i>
+                  Connect To Notion
+                  </Button>
+                  </Link>
+                  <Link href="/account">
+                  <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+                  <i className={"fas fa-link mr-3"}></i>
+                  Connect Your Database
+                  </Button>
+                  </Link>
+                  <a href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_34be8a79e7" target="_blank">
+                  <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold w-full">
+                  <i className={"fas fa-check-square mr-3"}></i>
+                  Share A Win With Our Family
+                  </Button>
+                  </a>
+                  </div>
+                  :
+                  <div></div>
+                  }
+                  </div>
+                </div>
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                  <a href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection?utm_source=family-connection"target="_blank"
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  >
+                    Troubleshoot
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </div>
+    );
+  }
 
   return (
   
@@ -290,7 +400,7 @@ export default function Player() {
         total_exp={playerEXP} 
         avatar_url={avatar_url}
         setAvatarUrl={setAvatarUrl}
-       updateProfile={updateProfile}
+        updateProfile={updateProfile}
         />
       <div className="flex flex-wrap mt-4">
         <div className="w-full mb-12 px-4">
@@ -320,7 +430,7 @@ export default function Player() {
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
             // onClick={() => setShowModal(false)}
           >
-            <div className="relative w-auto my-6 mx-auto max-w-xl">
+            <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
@@ -380,6 +490,8 @@ export default function Player() {
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
+
+    
     </>
   );
 }
