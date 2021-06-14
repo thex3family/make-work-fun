@@ -26,7 +26,7 @@ export default function updates() {
             </p>
             <img
             className="mb-4 m-auto"
-            src='updates/0.03.png'
+            src='updates/0.03.PNG'
             />
             <p className="text-sm font-semibold text-right mr-4">v.03</p>
           </div>
