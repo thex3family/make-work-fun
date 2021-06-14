@@ -69,7 +69,7 @@ export default function CardStats({
             </div>
           </div>
           <div className="flex flex-row items-center gap-4">
-            <Button variant="slim" className="mt-4 w-2/5">{statGold} 💰</Button>
+            <Button variant="slim" disabled={true} className="mt-4 w-2/5">{statGold} 💰</Button>
             <Button disabled={true} variant="slim" className="mt-4 w-3/5">
               <span className={statPercentColor + " mr-2"}>
                 <i

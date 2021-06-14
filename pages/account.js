@@ -173,8 +173,6 @@ export default function Account() {
         
         <Card
           title="Your Email"
-          description="Please enter the email address you want to use to login."
-          footer={<p>Options to change email coming soon.</p>}
           >
             <p className="text-xl mt-8 mb-4 font-semibold">
               {user ? user.email : undefined}
@@ -200,7 +198,7 @@ export default function Account() {
           footer={
             <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
               <p className="pb-4 sm:pb-0">
-              <a href="https://academy.co-x3.com/en/articles/5263453-how-to-connect-to-the-co-x3-api-server/?utm_source=family-connection" target="_blank">IMPORTANT! This is required for this application to work properly. Click here for detailed instructions.</a>
+              <a className="text-emerald-600" href="https://academy.co-x3.com/en/articles/5263453-how-to-connect-to-the-co-x3-api-server/?utm_source=family-connection" target="_blank">IMPORTANT! This is required for this application to work properly. Click here for detailed instructions.</a>
               </p>
               {/* <Button className="w-full sm:w-auto"
                 variant="slim"

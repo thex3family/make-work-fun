@@ -1,26 +1,31 @@
 import React from "react";
 import Chart from "chart.js";
+import { useState, useEffect } from 'react';
+import { supabase } from '../../utils/supabase-client';
 
-export default function CardLineChart() {
+export default function CardLineChart( {weekWins} ) {
+
+  console.log(weekWins.w0d5)
+
   React.useEffect(() => {
     var config = {
       type: "line",
       data: {
         labels: [
+          "Sun",
           "Mon",
           "Tue",
           "Wed",
           "Thu",
           "Fri",
           "Sat",
-          "Sun",
         ],
         datasets: [
           {
             label: "This Week",
             backgroundColor: "#10b981",
             borderColor: "#10b981",
-            data: [3, 5, 2, 6, 4, 7, 9],
+            data: [weekWins.w1d0, weekWins.w1d1, weekWins.w1d2, weekWins.w1d3, weekWins.w1d4, weekWins.w1d5, weekWins.w1d6],
             fill: false,
           },
           {
@@ -28,7 +33,7 @@ export default function CardLineChart() {
             fill: false,
             backgroundColor: "#fff",
             borderColor: "#fff",
-            data: [2, 4, 3, 5, 6, 5, 4],
+            data: [weekWins.w0d0, weekWins.w0d1, weekWins.w0d2, weekWins.w0d3, weekWins.w0d4, weekWins.w0d5, weekWins.w0d6],
           },
         ],
       },
@@ -82,6 +87,7 @@ export default function CardLineChart() {
             {
               ticks: {
                 fontColor: "rgba(255,255,255,.7)",
+                stepSize: 1,
               },
               display: true,
               scaleLabel: {

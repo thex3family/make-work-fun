@@ -16,6 +16,7 @@ export default function HeaderStats({
   avatar_url,
   setAvatarUrl,
   updateProfile,
+  weekWins,
 })
 
 {
@@ -67,7 +68,7 @@ export default function HeaderStats({
               </Link> */}
               
               <div className="w-full pt-6">
-              <CardLineChart/>
+              <CardLineChart weekWins={weekWins}/>
               </div>
               </div>
             </div>
