@@ -5,8 +5,6 @@ import { supabase } from '../../utils/supabase-client';
 
 export default function CardLineChart( {weekWins} ) {
 
-  console.log(weekWins.w0d5)
-
   React.useEffect(() => {
     var config = {
       type: "line",
