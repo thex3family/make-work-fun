@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       backgroundImage: theme => ({
         'player-pattern': "url('/background/cityscape.jpg')",
+        'first-place': "url('/img/first-place.svg')",
        }),
       maxWidth: {
         '8xl': '1920px'
@@ -38,6 +39,7 @@ module.exports = {
         emerald: colors.emerald,
         blueGray: colors.blueGray,
         lightBlue: colors.lightBlue,
+        blue: colors.blue,
       },
       textColor: {
         base: 'var(--text-base)',

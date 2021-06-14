@@ -72,20 +72,24 @@ export default function Player() {
 
   const[wins, setWins] = useState([])
 
-  const[playerLevel, setPlayerLevel] = React.useState(false);
-  const[playerName, setPlayerName] = React.useState(false);
-  const[playerGold, setPlayerGold] = React.useState(false);
-  const[playerEXP, setPlayerEXP] = React.useState(false);
+  const[playerLevel, setPlayerLevel] = React.useState(null);
+  const[playerName, setPlayerName] = React.useState(null);
+  const[playerGold, setPlayerGold] = React.useState(null);
+  const[playerEXP, setPlayerEXP] = React.useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
   
   const [showModal, setShowModal] = React.useState(false);
   const [showIntroModal, setShowIntroModal] = React.useState(false);
-  const [activeType, setActiveType] = React.useState(false);
-  const [activeName, setActiveName] = React.useState(false);
-  const [activeUpstream, setActiveUpstream] = React.useState(false);
-  const [activeDate, setActiveDate] = React.useState(false);
-  const [activeGold, setActiveGold] = React.useState(false);
-  const [activeEXP, setActiveEXP] = React.useState(false);
+
+  const [activeType, setActiveType] = React.useState(null);
+  const [activeName, setActiveName] = React.useState(null);
+  const [activeUpstream, setActiveUpstream] = React.useState(null);
+  const [activeDate, setActiveDate] = React.useState(null);
+  const [activeGold, setActiveGold] = React.useState(null);
+  const [activeEXP, setActiveEXP] = React.useState(null);
+
+  
+  const[weekWins, setWeekWins] = useState([])
 
   const columns = [
     {
@@ -96,13 +100,14 @@ export default function Player() {
       name: 'TYPE',
       selector: 'type'
     },
-    // {
-    //   name: 'PUNCTUALITY',
-    //   selector: 'punctuality'
-    // },
     {
       name: 'COMPLETED',
       selector: 'closing_date',
+      sortable: true
+    },
+    {
+      name: 'TREND',
+      selector: 'trend',
       sortable: true
     },
     {
@@ -156,8 +161,31 @@ export default function Player() {
     fetchPlayerStats()
     fetchWins()
     fetchLatestWin()
+    fetchWeekWins()
   }
 
+  async function fetchWeekWins() {
+    try {
+      const user = supabase.auth.user()
+
+      const { data, error } = await supabase
+      .from('week_win_count')
+      .select('*')
+      .eq('player', user.id)
+      .single()
+      
+      setWeekWins(data)
+
+    if (error && status !== 406) {
+            throw error
+    }
+
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   async function fetchPlayerStats() {
     try {
@@ -175,6 +203,8 @@ export default function Player() {
       setPlayerEXP(data.total_exp);
       setAvatarUrl(data.avatar_url);  
 
+      console.log(playerName)
+
     if (error && status !== 406) {
             throw error
     }
@@ -182,7 +212,6 @@ export default function Player() {
     } catch (error) {
       alert(error.message)
     } finally {
-      setLoading(false)
     }
   }
 
@@ -192,10 +221,11 @@ export default function Player() {
       
       const { data, error } = await supabase
       .from('success_plan')
-      .select('name, type, punctuality, closing_date, gold_reward, exp_reward, upstream')
+      .select('name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend')
       .eq('player', user.id)
-
+      
       setWins(data)
+      console.log(wins)
 
     if (error && status !== 406) {
             throw error
@@ -344,7 +374,7 @@ export default function Player() {
                   Connect Your Database
                   </Button>
                   </Link>
-                  <a href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_34be8a79e7" target="_blank">
+                  <a href="https://notion.so/" target="_blank">
                   <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold w-full">
                   <i className={"fas fa-check-square mr-3"}></i>
                   Share A Win With Our Family
@@ -401,6 +431,7 @@ export default function Player() {
         avatar_url={avatar_url}
         setAvatarUrl={setAvatarUrl}
         updateProfile={updateProfile}
+        weekWins={weekWins}
         />
       <div className="flex flex-wrap mt-4">
         <div className="w-full mb-12 px-4">
