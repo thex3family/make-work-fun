@@ -174,14 +174,17 @@ export default function Player() {
       .eq('player', user.id)
       .single()
       
+      if(data){
       setWeekWins(data)
+      }
+      
 
     if (error && status !== 406) {
             throw error
     }
 
     } catch (error) {
-      alert(error.message)
+      // alert(error.message)
     } finally {
       setLoading(false)
     }
@@ -203,8 +206,6 @@ export default function Player() {
       setPlayerEXP(data.total_exp);
       setAvatarUrl(data.avatar_url);  
 
-      console.log(playerName)
-
     if (error && status !== 406) {
             throw error
     }
@@ -225,7 +226,6 @@ export default function Player() {
       .eq('player', user.id)
       
       setWins(data)
-      console.log(wins)
 
     if (error && status !== 406) {
             throw error
