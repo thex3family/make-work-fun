@@ -6,12 +6,32 @@
   @apply inline-flex items-center text-primary leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-accents-6 rounded-md p-1 px-2;
 }
 
+.mobile {
+  @apply block py-2 rounded-md text-base font-medium text-primary text-center;
+}
+
+.mobile:hover {
+  @apply text-accents-9 bg-gradient-to-r from-emerald-500 to-blue-500;
+}
+
+.mobile:focus {
+  @apply outline-none text-accents-8;
+}
+
+.mobile:active {
+  @apply bg-gradient-to-r from-emerald-500 to-blue-500;
+}
+
 .link:hover {
-  @apply text-accents-9;
+  @apply text-accents-9 bg-gradient-to-r from-emerald-500 to-blue-500;
 }
 
 .link:focus {
-  @apply outline-none text-accents-8 bg-gradient-to-r from-emerald-500 to-blue-500;
+  @apply outline-none text-accents-8;
+}
+
+.link:active {
+  @apply bg-gradient-to-r from-emerald-500 to-blue-500;
 }
 
 .logo {

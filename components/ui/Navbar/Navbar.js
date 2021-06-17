@@ -101,13 +101,13 @@ const Navbar = () => {
                         
             {user ? (
               <Link href="#">
-                <a className="px-4 py-2 text-center font-medium text-primary rounded bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9" onClick={() => signOut()}>
+                <a className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9" onClick={() => signOut()}>
                   Sign out
                 </a>
               </Link>
             ) : (
               <Link href="/signin">
-                <a className="px-4 py-2 text-center font-medium text-primary rounded bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9">Sign in</a>
+                <a className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9">Sign in</a>
               </Link>
             )}
          
@@ -131,7 +131,7 @@ const Navbar = () => {
             className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
           >
             <div className="rounded-lg shadow-md bg-primary-2 bg-opacity-90 ring-1 ring-black ring-opacity-5 overflow-hidden">
-              <div className="px-5 pt-4 flex items-center justify-between">
+              <div className="px-5 pt-4 pb-2 flex items-center justify-between">
                 <div>
                 <a href="/" className={s.logo}>
                   <img
@@ -149,17 +149,20 @@ const Navbar = () => {
                 </div>
               </div>
               <div className="px-2 pt-2 pb-3 space-y-1">
+              <Popover.Button className="w-full">
                 {navigation.map((item) => (
                   <Link href={item.href}>
                   <a
                     key={item.name}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-primary hover:text-accents-9 hover:bg-emerald-600"
+                    className={s.mobile}
                   >
                     {item.name}
                   </a>
                   </Link>
                 ))}
+                </Popover.Button>
               </div>
+              <Popover.Button className="w-full">
               {user ? (
               <Link href="#">
                 <a className="block w-full px-5 py-3 text-center font-medium text-primary bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9" onClick={() => signOut()}>
@@ -171,6 +174,7 @@ const Navbar = () => {
                 <a className="block w-full px-5 py-3 text-center font-medium text-primary bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9">Sign in</a>
               </Link>
             )}
+            </Popover.Button>
             </div>
           </Popover.Panel>
         </Transition>
