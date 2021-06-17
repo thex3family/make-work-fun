@@ -1,6 +1,14 @@
 import { useEffect, useState, createContext, useContext } from 'react';
 import { supabase } from './supabase-client';
 
+const postData = (url, data = {}) =>
+  fetch(url, {
+    method: 'POST',
+    headers: new Headers({ 'Content-Type': 'application/json' }),
+    credentials: 'same-origin',
+    body: JSON.stringify(data),
+  }).then((res) => res.json())
+
 export const UserContext = createContext();
 
 export const UserContextProvider = (props) => {
@@ -10,6 +18,7 @@ export const UserContextProvider = (props) => {
   const [userDetails, setUserDetails] = useState(null);
   const [userOnboarding, setUserOnboarding] = useState(null);
   const [subscription, setSubscription] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
     const session = supabase.auth.session();
@@ -17,8 +26,18 @@ export const UserContextProvider = (props) => {
     setUser(session?.user ?? null);
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+        // setSession(session);
+        // setUser(session?.user ?? null);
+        console.log(`Supbase auth event: ${event}`)
+
+        // This is what forwards the session to our auth API route which sets/deletes the cookie:
+        await postData('/api/auth', {
+          event,
+          session: session,
+        })
+        setSession(session)
+        setUser(session?.user ?? null)
+
       }
     );
 
@@ -29,6 +48,7 @@ export const UserContextProvider = (props) => {
 
   const getUserDetails = () => supabase.from('leaderboard').select('*').eq('player', user.id).single();
   const getUserOnboarding = () => supabase.from('onboarding').select('*').eq('id', user.id).single();
+  const getUserProfile = () => supabase.from('users').select('full_name, notion_api_secret, notion_success_plan').eq('id', user.id).single();
   const getSubscription = () =>
     supabase
       .from('subscriptions')
@@ -36,13 +56,15 @@ export const UserContextProvider = (props) => {
       .in('status', ['trialing', 'active'])
       .single();
 
+
   useEffect(() => {
     if (user) {
-      Promise.allSettled([getUserDetails(), getUserOnboarding(), getSubscription()]).then(
+      Promise.allSettled([getUserDetails(), getUserOnboarding(), getUserProfile(), getSubscription()]).then(
         (results) => {
           setUserDetails(results[0].value.data);
           setUserOnboarding(results[1].value.data);
-          setSubscription(results[2].value.data);
+          setUserProfile(results[2].value.data);
+          setSubscription(results[3].value.data);
           setUserLoaded(true);
         }
       );
@@ -54,6 +76,7 @@ export const UserContextProvider = (props) => {
     user,
     userDetails,
     userOnboarding,
+    userProfile,
     userLoaded,
     subscription,
     signIn: (options) => supabase.auth.signIn(options),
@@ -61,6 +84,7 @@ export const UserContextProvider = (props) => {
     signOut: () => {
       setUserDetails(null);
       setUserOnboarding(null);
+      setUserProfile(null);
       setSubscription(null);
       return supabase.auth.signOut();
     }

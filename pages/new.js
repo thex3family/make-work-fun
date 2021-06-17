@@ -15,6 +15,27 @@ export default function updates() {
           </p>
           </div>
           <div className="timeline z-10 grid grid-cols-3">
+            {/* start  */}
+            
+          {/* left card start */}
+          <div className="col-start-1 col-end-4 text-center z-10">
+            <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+            June, 17, 2021
+          </span>
+          </div>
+          <div className="sm:col-start-1 col-span-3 md:col-start-1 md:col-end-3 col-end-4  my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
+            <h2 className="text-3xl font-bold mb-3 text-white">Data Validation</h2>
+            <p className="text-xl mb-5">We want to help you understand your data easier - so we created a wizard that walks you through your Notion API connection and explains each property we use and how we use it.
+            <br /><br />
+            Required and optional properties have been revamped and all task management databases can now easily connect to our app.            
+            </p>
+            <img
+            className="m-auto"
+            src='updates/0.04.png'
+            />
+            <p className="text-sm font-semibold text-right mr-4">v.04</p>
+          </div>
+          {/* left card end */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
   June, 14, 2021
@@ -22,7 +43,7 @@ export default function updates() {
 </div>
           <div className="sm:col-start-1 col-span-3 md:col-start-2 col-end-4 my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
             <h2 className="text-3xl font-bold mb-3 text-white">Compare Your Growth</h2>
-            <p className="text-xl mb-5">Graphs are now functional! Visualize your wins from the last week and compare it to how you're doing this week.
+            <p className="text-xl mb-5">Graphs are now functional! Visualize your wins from the last week and compare your stats to how you're doing this week.
             </p>
             <img
             className="mb-4 m-auto"
@@ -30,11 +51,12 @@ export default function updates() {
             />
             <p className="text-sm font-semibold text-right mr-4">v.03</p>
           </div>
+          {/* left card start */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-  June, 13, 2021
-</span>
-</div>
+            June, 13, 2021
+          </span>
+          </div>
           <div className="sm:col-start-1 col-span-3 md:col-start-1 md:col-end-3 col-end-4  my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
             <h2 className="text-3xl font-bold mb-3 text-white">Improved Onboarding Experience</h2>
             <p className="text-xl mb-5">We wanted to make onboarding easier, so we've built a step by step user journey to help you get started, faster! We've also improved loading logic for smooth app navigation.
@@ -45,6 +67,7 @@ export default function updates() {
             />
             <p className="text-sm font-semibold text-right mr-4">v.02</p>
           </div>
+          {/* left card end */}
           <div className="col-start-1 col-end-4 text-center">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
   June, 12, 2021

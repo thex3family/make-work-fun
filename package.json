@@ -1,6 +1,6 @@
 {
   "name": "co-x3-family-connection",
-  "version": "0.0.0",
+  "version": "0.0.03",
   "license": "MIT",
   "scripts": {
     "dev": "next",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.3",
+    "@notionhq/client": "^0.1.9",
     "@popperjs/core": "^2.9.2",
     "@stripe/stripe-js": "1.11.0",
     "@supabase/supabase-js": "^1.15.0",
