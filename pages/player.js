@@ -456,6 +456,7 @@ export default function Player() {
     {/* // Modal Section */}
     {showModal ? (
         <>
+        <div className="h-screen flex justify-center">
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
             // onClick={() => setShowModal(false)}
@@ -465,7 +466,7 @@ export default function Player() {
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
-                  <h3 className="text-2xl font-semibold text-white">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-white">
                   🎉 You've completed a <span className="font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">{activeType}!</span>
                   </h3>
                   <button
@@ -480,7 +481,7 @@ export default function Player() {
                 {/*body*/}
                 <div className="relative p-6 flex-auto text-blueGray-500 text-center">
                   <div className="my-4">
-                  <p className="text-2xl leading-none text-primary-2 font-bold">
+                  <p className="text-xl sm:text-2xl leading-none text-primary-2 font-bold">
                     {activeName}
                     <br />
                     <span className="text-sm">{activeUpstream}</span>
@@ -494,7 +495,7 @@ export default function Player() {
                     </tr>
                     </tbody>
                   </table>
-                <img src="img/celebratory-cat.gif" height="auto" className="mx-auto pb-2" />
+                <img src="img/celebratory-cat.gif" height="auto" className="w-3/4 mx-auto pb-2" />
                 It's time to celebrate! 😄
                 </div>
                 {/*footer*/}
@@ -507,17 +508,18 @@ export default function Player() {
                     Close
                   </button>
                   <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() => setShowModal(false)}
                   >
-                    Send To Guilded
+                    Share With Family
                   </button>
                 </div>
               </div>
             </div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </div>
         </>
       ) : null}
 

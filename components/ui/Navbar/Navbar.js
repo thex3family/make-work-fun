@@ -93,9 +93,10 @@ const Navbar = () => {
             </div>
             <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
               {navigation.map((item) => (
-                <a key={item.name} href={item.href} className={s.link}>
+                <Link href={item.href}><a key={item.name} className={s.link}>
                   {item.name}
                 </a>
+                </Link>
               ))}
                         
             {user ? (
@@ -149,13 +150,14 @@ const Navbar = () => {
               </div>
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navigation.map((item) => (
+                  <Link href={item.href}>
                   <a
                     key={item.name}
-                    href={item.href}
                     className="block px-3 py-2 rounded-md text-base font-medium text-primary hover:text-accents-9 hover:bg-emerald-600"
                   >
                     {item.name}
                   </a>
+                  </Link>
                 ))}
               </div>
               {user ? (

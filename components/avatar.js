@@ -87,13 +87,13 @@ export default function Avatar({ url, size, onUpload }) {
         <img className="avatar image m-auto" src='img/default_avatar.png' style={{ height: size, width: size }}/>
       )} */}
       <div className="" style={{ width: size }}>
-        <label className="font-bold button primary block cursor-pointer py-2 rounded bg-emerald-500 mt-6 w-1/2 md:w-full lg:w-1/2 mx-auto" htmlFor="single">
+        <label className="font-bold button primary block cursor-pointer py-2 rounded bg-gradient-to-r from-emerald-500 to-blue-500 mt-6 w-1/2 md:w-full lg:w-1/2 mx-auto" htmlFor="single">
           {uploading ? 'Uploading ...' : 'Personalize ✨'}
         </label>
         <input
           style={{
             visibility: 'hidden',
-            position: 'absolute',
+            position: 'relative',
           }}
           type="file"
           id="single"

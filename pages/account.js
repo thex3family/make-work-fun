@@ -209,7 +209,7 @@ export default function Account() {
         </Card>
         <Card
           title="Your Notion Credentials"
-          description="Gives the application access to your workspace to start rewarding you for your wins."
+          description="Connect your workspace to start earning rewards for your wins."
           footer={
             <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
               <p className="pb-4 sm:pb-0">
@@ -234,7 +234,7 @@ export default function Account() {
           onChange={setNotionAPISecret}
         />
         <div className="mt-2 flex flex-row justify-between">
-        <p className="font-semibold">Success Plan Database ID</p><a className="text-right font-semibold text-emerald-500" href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246" target="_blank">Where do I find this?</a>
+        <p className="font-semibold">Success Plan (ID)</p><a className="text-right font-semibold text-emerald-500" href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246" target="_blank">Where do I find this?</a>
         </div>
         <Input className="text-xl mb-4 font-semibold rounded"
           id="notion_success_plan"
@@ -272,7 +272,7 @@ export default function Account() {
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                 <h3 className="text-2xl font-semibold text-white">
-                🕺 Woohoo! We've saved your details!
+                🕺 Woohoo! One quest down!
                 </h3>
               </div>
               {/*body*/}
