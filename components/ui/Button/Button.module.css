@@ -23,6 +23,11 @@
   @apply bg-emerald-600 border-emerald-500 text-white;
 }
 
+.prominent {
+  @apply py-2 transform-none normal-case;
+  @apply bg-gradient-to-r from-emerald-500 to-blue-500 border-emerald-500 text-white;
+}
+
 .onboarding {
   @apply transform-none normal-case justify-start;
   @apply bg-emerald-200 rounded border-black;

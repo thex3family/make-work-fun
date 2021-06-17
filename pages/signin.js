@@ -105,7 +105,7 @@ const SignIn = () => {
                   required
                 />
                 <Button
-                  variant="slim"
+                  variant="prominent"
                   type="submit"
                   loading={loading}
                   disabled={!email.length}
@@ -133,7 +133,7 @@ const SignIn = () => {
                 />
                 <Button
                   className="mt-1"
-                  variant="slim"
+                  variant="prominent"
                   type="submit"
                   loading={loading}
                   disabled={!password.length || !email.length}

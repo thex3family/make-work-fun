@@ -25,6 +25,7 @@ export default function CardStats({
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+              
               <h5 className="text-emerald-400 uppercase font-bold text-xs">
                 {statTitle}
               </h5>

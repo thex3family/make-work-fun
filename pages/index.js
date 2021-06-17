@@ -17,7 +17,7 @@ export default function HomePage({ players }) {
           </p>
           <Link href="/player">
           <Button className="w-auto mx-auto my-10"
-              variant="slim"
+              variant="prominent"
               >
               Get Started 🚀
           </Button>
@@ -25,7 +25,7 @@ export default function HomePage({ players }) {
         
       </div>
     
-    <div className="mb-24 mx-6 sm:mx-6 md:mx-12 xl:mx-24 flex justify-center flex-col flex-wrap sm:flex-row">
+    <div className="mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl">
     {players.map((player) => (
     <Avatar 
     statName = {player.full_name}    
