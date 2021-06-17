@@ -24,6 +24,7 @@ const Button = forwardRef((props, buttonRef) => {
     {
       [s.slim]: variant === 'slim',
       [s.onboarding]: variant === 'onboarding',
+      [s.prominent]: variant === 'prominent',
       [s.loading]: loading,
       [s.disabled]: disabled
     },

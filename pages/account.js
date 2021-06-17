@@ -141,10 +141,10 @@ export default function Account() {
       <div className="max-w-6xl mx-auto pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:flex-col sm:align-center">
         <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-              Let's Get Your Game On
+              Welcome, Hero!
             </h1>
             <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-            First, we need to get some information about you.
+            Why don't you introduce yourself?
             </p>
         </div>
       </div>
@@ -247,7 +247,7 @@ export default function Account() {
         <Card>
           
           <Button className="w-full"
-                    variant="slim"
+                    variant="prominent"
                     type="submit"
                     onClick={() => updateProfile({ full_name, notion_api_secret, notion_success_plan })}
                     disabled={loading}
@@ -270,7 +270,7 @@ export default function Account() {
             {/*content*/}
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
-              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-emerald-500">
+              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                 <h3 className="text-2xl font-semibold text-white">
                 🕺 Woohoo! We've saved your details!
                 </h3>
@@ -288,7 +288,7 @@ export default function Account() {
               <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                 <Link href='/notion-api-validator'>
               <Button className="w-full" onClick={() => setLoading(true)}
-                    variant="slim"
+                    variant="prominent"
                     >Test Connection
           </Button>
           </Link>

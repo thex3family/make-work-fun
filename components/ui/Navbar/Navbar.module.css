@@ -1,5 +1,5 @@
 .root {
-  @apply sticky top-0 bg-primary z-40 transition-all duration-150;
+  @apply sticky top-0 bg-gray-900 z-40 transition-all duration-150 bg-opacity-50 backdrop-filter backdrop-blur;
 }
 
 .link {
@@ -11,7 +11,7 @@
 }
 
 .link:focus {
-  @apply outline-none text-accents-8 ring-2 bg-emerald-500 ring-emerald-500 ring-opacity-50;
+  @apply outline-none text-accents-8 bg-gradient-to-r from-emerald-500 to-blue-500;
 }
 
 .logo {

@@ -57,7 +57,7 @@ export default function Avatar({
 <div className="px-8 mt-10 w-full sm:w-1/2 md:1/2 lg:w-1/3 xl:w-1/4">
 <div className="bg-primary-2 rounded mx-auto">
   <div className="rounded-tr-md rounded-tl-md w-auto bg-cover bg-player-pattern">
-    <div className ="rounded bg-black bg-opacity-80">
+    <div className ="bg-black bg-opacity-80">
     {/* {avatarUrl ? (
         <img
           className="avatar image m-auto py-5 h-60"

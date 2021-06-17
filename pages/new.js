@@ -97,7 +97,7 @@ export default function updates() {
           </div>
           <a href="https://toolbox.co-x3.com/family-connection/?utm_source=family-connection" target="_blank" className="mx-auto">
           <Button className="w-auto mx-auto my-10"
-              variant="slim"
+              variant="prominent"
               >
               Explore The Roadmap 🚀
           </Button>

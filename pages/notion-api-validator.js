@@ -64,7 +64,7 @@ return (
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-emerald-500">
+                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
 
       
 
@@ -81,7 +81,7 @@ return (
                 </div>
                 </div>
                 {/*body*/}
-                <p className="text-black my-6 mx-6">When you connect your Notion database, we look for the following properties to calculate rewards for your wins. The properties are case and type sensitive, so use this page to check if you have everything you need to get started and learn more about the data we use!</p>
+                <p className="text-black my-6 mx-6">When you connect your Notion database, we look for the following properties to calculate rewards for your wins. The properties are <i>case and type sensitive</i>, so use this page to check if you have everything you need to get started and learn more about the data we use!</p>
                 <div className="flex flex-col md:flex-row my-6 mx-6 gap-3">
         <div className="md:w-1/3 scroll-tab-header">
           <ul
@@ -341,7 +341,7 @@ return (
                     Recommended Type: Checkbox
                   </p>
                   <p>
-                    We use this property to determine what wins we should read from your database. Keep this property unchecked for any entries you want to keep private.
+                    We use this property to determine what wins we should read from your database. Think of it like a send email button - check this when you are ready to share your win with the world. Keep this property unchecked for any entries you want to keep private.
                     <br /><br />
                     <i>The app won't read wins until both <span className="font-semibold">Status = Complete</span> and <span className="font-semibold">Share With Family? = ✔</span></i>
                   </p>
@@ -389,7 +389,7 @@ return (
                     Recommended Type: Date
                   </p>
                   <p>
-                    We use this property to check when you started the quest. This will be matched with the <span className="font-semibold">Closing Date</span> to determine your punctuality and show you trends.
+                    We use this property to check when you started the quest, and should not be confused with the Due Date. This will be matched with the <span className="font-semibold">Closing Date</span> to determine your punctuality and show you trends.
                     <br /><br />
                     <i>If you don't have this property or leave it blank, it will default to the day you share the win.</i>
                   </p>
@@ -456,7 +456,7 @@ return (
             {/*content*/}
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
-              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-emerald-500">
+              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                 <h3 className="text-2xl font-semibold text-white">
                 🚀 We're Connected And Your Wins Are In!
                 </h3>
@@ -497,7 +497,7 @@ return (
             {/*content*/}
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
-              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-emerald-500">
+              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                 <h3 className="text-2xl font-semibold text-white">
                 ⚔ The Requirements Have Been Met
                 </h3>
