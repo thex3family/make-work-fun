@@ -79,7 +79,7 @@ export default function Player() {
   const [avatar_url, setAvatarUrl] = useState(null);
   
   const [showModal, setShowModal] = React.useState(false);
-  const [showIntroModal, setShowIntroModal] = React.useState(false);
+  // const [showIntroModal, setShowIntroModal] = React.useState(false);
 
   const [activeType, setActiveType] = React.useState(null);
   const [activeName, setActiveName] = React.useState(null);
@@ -136,15 +136,14 @@ export default function Player() {
     if (userOnboarding) initializePlayer()
   }, [userOnboarding])
 
-  // Checks what state the user is in, and then shows intro/loads them into the application
+  // Checks if the user is ready to load
 
   function initializePlayer() {
     try {
-        if(userOnboarding.onboarding_state.includes('1') || userOnboarding.onboarding_state.includes('2') || userOnboarding.onboarding_state.includes('3')){
-          setShowIntroModal(true);
-          setLoading(false);
-        } else {
+        if(userOnboarding.onboarding_state.includes('4')){
           loadPlayer();
+        } else {
+          router.replace('/account');
         }
       } catch (error) {
           alert(error.message)
@@ -310,97 +309,97 @@ export default function Player() {
     );
   }
 
-  if (showIntroModal) {
-    return (
-      <div className="h-screen flex justify-center">
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-            // onClick={() => setShowModal(false)}
-          >
-            <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
-              {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-emerald-500">
-                  <h3 className="text-2xl font-semibold text-white">
-                  👋 Welcome. Let's get you all set up!
-                  </h3>
+  // if (showIntroModal) {
+  //   return (
+  //     <div className="h-screen flex justify-center">
+  //         <div
+  //           className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+  //           // onClick={() => setShowModal(false)}
+  //         >
+  //           <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+  //             {/*content*/}
+  //             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+  //               {/*header*/}
+  //               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-emerald-500">
+  //                 <h3 className="text-2xl font-semibold text-white">
+  //                 👋 Welcome. Let's get you all set up!
+  //                 </h3>
                   
-                  <button
-                    className="p-1 ml-auto bg-transparent border-0 float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => router.reload(window.location.pathname)}
-                  >
-                    <i className="fas fa-sync-alt"></i>
-                  </button>
-                </div>
-                {/*body*/}
-                <div className="relative p-6 text-blueGray-500">
-                  <div className="my-2 flex flex-col">
-                  {userOnboarding ? userOnboarding.onboarding_state.includes('1') ?
-                  <div>
-                  <Link href="/account">
-                  <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
-                  <i className={"fas fa-link mr-3"}></i>
-                  Connect To Notion
-                  </Button>
-                  </Link>
-                  </div> 
-                  : userOnboarding.onboarding_state.includes('2') ?
-                  <div>
-                  <Link href="/account">
-                  <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
-                  <i className={"fas fa-link mr-3"}></i>
-                  Connect To Notion
-                  </Button>
-                  </Link>
-                  <Link href="/account">
-                  <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
-                  <i className={"fas fa-link mr-3"}></i>
-                  Connect Your Database
-                  </Button>
-                  </Link>
-                  </div>
-                  :
-                  <div>
-                  <Link href="/account">
-                  <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
-                  <i className={"fas fa-link mr-3"}></i>
-                  Connect To Notion
-                  </Button>
-                  </Link>
-                  <Link href="/account">
-                  <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
-                  <i className={"fas fa-link mr-3"}></i>
-                  Connect Your Database
-                  </Button>
-                  </Link>
-                  <a href="https://notion.so/" target="_blank">
-                  <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold w-full">
-                  <i className={"fas fa-check-square mr-3"}></i>
-                  Share A Win With Our Family
-                  </Button>
-                  </a>
-                  </div>
-                  :
-                  <div></div>
-                  }
-                  </div>
-                </div>
-                {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <a href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection?utm_source=family-connection"target="_blank"
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  >
-                    Troubleshoot
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-          </div>
-    );
-  }
+  //                 <button
+  //                   className="p-1 ml-auto bg-transparent border-0 float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
+  //                   onClick={() => router.reload(window.location.pathname)}
+  //                 >
+  //                   <i className="fas fa-sync-alt"></i>
+  //                 </button>
+  //               </div>
+  //               {/*body*/}
+  //               <div className="relative p-6 text-blueGray-500">
+  //                 <div className="my-2 flex flex-col">
+  //                 {userOnboarding ? userOnboarding.onboarding_state.includes('1') ?
+  //                 <div>
+  //                 <Link href="/account">
+  //                 <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+  //                 <i className={"fas fa-link mr-3"}></i>
+  //                 Connect To Notion
+  //                 </Button>
+  //                 </Link>
+  //                 </div> 
+  //                 : userOnboarding.onboarding_state.includes('2') ?
+  //                 <div>
+  //                 <Link href="/account">
+  //                 <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+  //                 <i className={"fas fa-link mr-3"}></i>
+  //                 Connect To Notion
+  //                 </Button>
+  //                 </Link>
+  //                 <Link href="/account">
+  //                 <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+  //                 <i className={"fas fa-link mr-3"}></i>
+  //                 Connect Your Database
+  //                 </Button>
+  //                 </Link>
+  //                 </div>
+  //                 :
+  //                 <div>
+  //                 <Link href="/account">
+  //                 <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+  //                 <i className={"fas fa-link mr-3"}></i>
+  //                 Connect To Notion
+  //                 </Button>
+  //                 </Link>
+  //                 <Link href="/account">
+  //                 <Button variant="onboarding" disabled={true} className="text-lg leading-none text-primary-2 font-bold mb-2 w-full">
+  //                 <i className={"fas fa-link mr-3"}></i>
+  //                 Connect Your Database
+  //                 </Button>
+  //                 </Link>
+  //                 <a href="https://notion.so/" target="_blank">
+  //                 <Button variant="onboarding" className="text-lg leading-none text-primary-2 font-bold w-full">
+  //                 <i className={"fas fa-check-square mr-3"}></i>
+  //                 Share A Win With Our Family
+  //                 </Button>
+  //                 </a>
+  //                 </div>
+  //                 :
+  //                 <div></div>
+  //                 }
+  //                 </div>
+  //               </div>
+  //               {/*footer*/}
+  //               <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+  //                 <a href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection?utm_source=family-connection"target="_blank"
+  //                   className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+  //                 >
+  //                   Troubleshoot
+  //                 </a>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //         <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+  //         </div>
+  //   );
+  // }
 
   return (
   
@@ -410,7 +409,7 @@ export default function Player() {
       <div className="pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:flex-col align-center">
           <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
-            Welcome, <span className="text-emerald-500">{playerName ? (
+            Welcome, <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">{playerName ? (
               `${playerName ?? 'Player 1'}`
             ) : (
                 <LoadingDots />

@@ -6,12 +6,10 @@ import LoadingDots from '@/components/ui/LoadingDots';
 import Button from '@/components/ui/Button';
 import { useUser } from '@/utils/useUser';
 import { postData } from '@/utils/helpers';
-
 import Input from '@/components/ui/Input';
 
 import { supabase } from '../utils/supabase-client';
 
-import Avatar from '@/components/avatar';
 
 function Card({ title, description, footer, children }) {
   return (
@@ -29,13 +27,13 @@ function Card({ title, description, footer, children }) {
 }
 
 export default function Account() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [full_name, setName] = useState(null);
   const [notion_api_secret, setNotionAPISecret] = useState(null);
   const [notion_success_plan, setNotionSuccessPlan] = useState(null);
   const { userLoaded, user, session, userDetails, subscription } = useUser();
-  const [avatar_url, setAvatarUrl] = useState(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
 
   useEffect(() => {
     if (!user) router.replace('/signin');
@@ -53,7 +51,7 @@ export default function Account() {
 
       let { data, error, status } = await supabase
         .from('users')
-        .select(`full_name, notion_api_secret, notion_success_plan, avatar_url`)
+        .select(`full_name, notion_api_secret, notion_success_plan`)
         .eq('id', user.id)
         .single()
 
@@ -65,7 +63,7 @@ export default function Account() {
         setName(data.full_name)
         setNotionAPISecret(data.notion_api_secret)
         setNotionSuccessPlan(data.notion_success_plan)
-        setAvatarUrl(data.avatar_url)
+
       }
     } catch (error) {
       alert(error.message)
@@ -74,19 +72,25 @@ export default function Account() {
     }
   }
 
-  async function updateProfile({ full_name, notion_api_secret, notion_success_plan, avatar_url }) {
+
+
+  async function updateProfile({ full_name, notion_api_secret, notion_success_plan}) {
     try {
       setLoading(true)
       const user = supabase.auth.user()
-
+      if(!notion_success_plan.includes('-')) {
+      const url = notion_success_plan;
+      const url2 = url.split('?')[0]
+      const url3 = url2.substring(url.lastIndexOf("/") + 1);
+      notion_success_plan = url3.substr(0,8) + '-' + url3.substr(8, 4) + '-' + url3.substr(12, 4) + '-' + url3.substr(16, 4) + '-' + url3.substr(20);
+      }
 
       let { error } =   await supabase
       .from('users')
       .update({
         full_name: full_name,
         notion_api_secret: notion_api_secret,
-        notion_success_plan: notion_success_plan,
-        avatar_url: avatar_url
+        notion_success_plan: notion_success_plan
       })
       .eq('id', user.id);
 
@@ -96,6 +100,7 @@ export default function Account() {
     } catch (error) {
       alert(error.message)
     } finally {
+      setShowSaveModal(true)
       setLoading(false)
     }
   }
@@ -121,20 +126,30 @@ export default function Account() {
       minimumFractionDigits: 0
     }).format(subscription.prices.unit_amount / 100);
 
+
+  if (loading) {
+    return (
+        <div className="h-screen flex justify-center">
+          <LoadingDots/>
+        </div>
+    );
+  }
+
   return (
+    <>
     <section className="bg-black mb-32">
       <div className="max-w-6xl mx-auto pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:flex-col sm:align-center">
-          <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
-            Account
-          </h1>
-          <p className="mt-5 text-xl text-accents-6 sm:text-center sm:text-2xl max-w-2xl m-auto">
-            Fill out this page to get started.
-          </p>
+        <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+              Let's Get Your Game On
+            </h1>
+            <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
+            First, we need to get some information about you.
+            </p>
         </div>
       </div>
       <div className="p-4">
-        <Card
+        {/* <Card
           title="Your Plan"
           description={
             subscriptionName &&
@@ -177,11 +192,11 @@ export default function Account() {
             <p className="text-xl mt-8 mb-4 font-semibold">
               {user ? user.email : undefined}
             </p>
-        </Card>
+        </Card> */}
         <div className="form-widget">
         <Card
           title="Your Name"
-          description="Please enter your full name, or a display name you are comfortable with."
+          description="Please enter your first name, or a display name you are comfortable with."
           footer={<p>Please use 64 characters at maximum.</p>}
         >
           
@@ -194,11 +209,11 @@ export default function Account() {
         </Card>
         <Card
           title="Your Notion Credentials"
-          description="Gives the application access to your Notion database."
+          description="Gives the application access to your workspace to start rewarding you for your wins."
           footer={
             <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
               <p className="pb-4 sm:pb-0">
-              <a className="text-emerald-600" href="https://academy.co-x3.com/en/articles/5263453-how-to-connect-to-the-co-x3-api-server/?utm_source=family-connection" target="_blank">IMPORTANT! This is required for this application to work properly. Click here for detailed instructions.</a>
+              We take your data protection and privacy seriously. In the next step, you'll be walked through how our application will use your data. By continuing, you are agreeing to our privacy policy and terms of use.
               </p>
               {/* <Button className="w-full sm:w-auto"
                 variant="slim"
@@ -208,17 +223,23 @@ export default function Account() {
             </div>
           }
         >
-        <p className="mt-4 font-semibold">Notion API Secret</p>
+        <div className="mt-4 flex flex-row justify-between">
+        <p className="font-semibold">Notion API Secret</p><a className="text-right font-semibold text-emerald-500" href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_a887bad862" target="_blank">Where do I find this?</a>
+        </div>
         <Input className="text-xl mb-4 font-semibold rounded"
           id="notion_api_secret"
           type="varchar"
+          placeholder="secret_•••"
           value={notion_api_secret || ''}
           onChange={setNotionAPISecret}
         />
-        <p className="mt-4 font-semibold">Success Plan Database ID</p>
+        <div className="mt-2 flex flex-row justify-between">
+        <p className="font-semibold">Success Plan Database ID</p><a className="text-right font-semibold text-emerald-500" href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246" target="_blank">Where do I find this?</a>
+        </div>
         <Input className="text-xl mb-4 font-semibold rounded"
           id="notion_success_plan"
           type="varchar"
+          placeholder="https://www.notion.so/•••"
           value={notion_success_plan || ''}
           onChange={setNotionSuccessPlan}
         />
@@ -231,11 +252,55 @@ export default function Account() {
                     onClick={() => updateProfile({ full_name, notion_api_secret, notion_success_plan })}
                     disabled={loading}
                     >
-                      {loading ? 'Loading ...' : 'Update All'}
+                      {loading ? 'Loading ...' : 'Save & Test Connection'}
           </Button></Card>
           
           </div>
       </div>
     </section>
+
+    {showSaveModal ? (
+      <>
+        <div className="h-screen flex justify-center">
+        <div
+          className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          // onClick={() => setShowModal(false)}
+        >
+          <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+            {/*content*/}
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              {/*header*/}
+              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-emerald-500">
+                <h3 className="text-2xl font-semibold text-white">
+                🕺 Woohoo! We've saved your details!
+                </h3>
+              </div>
+              {/*body*/}
+              <div className="relative p-6 text-blueGray-500">
+                <img src="img/hi-five.gif" height="auto" className="w-3/4 mx-auto pb-2" />
+              <div className="text-center">
+                  <p className="text-xl mt-5 text-primary-2 font-semibold">
+                    No time to waste - let's connect to your database!
+                  </p>
+                  </div>
+              </div>
+              {/*footer*/}
+              <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                <Link href='/notion-api-validator'>
+              <Button className="w-full" onClick={() => setLoading(true)}
+                    variant="slim"
+                    >Test Connection
+          </Button>
+          </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </div>
+        </>
+        ) : null}
+        </>
+    
   );
 }

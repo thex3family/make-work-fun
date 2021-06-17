@@ -12,10 +12,10 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPasswordInput, setShowPasswordInput] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ type: '', content: '' });
   const router = useRouter();
-  const { user, signIn } = useUser();
+  const { user, signIn, userOnboarding } = useUser();
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -46,10 +46,34 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      router.replace('/player');
+    if (userOnboarding) initializePlayer()
+  }, [userOnboarding])
+
+  useEffect(() => {
+    if (!user) setLoading(false)
+  }, [user])
+
+  function initializePlayer() {
+    try {
+        if(userOnboarding.onboarding_state.includes('4')){
+          router.replace('/player');
+        } else {
+          router.replace('/account');
+        }
+      } catch (error) {
+          alert(error.message)
+      } finally {
+        console.log("InitializedPlayer")
+      }
     }
-  }, [user]);
+
+  if (loading) {
+    return (
+        <div className="h-screen flex justify-center">
+          <LoadingDots/>
+        </div>
+    );
+  }
 
   if (!user)
     return (

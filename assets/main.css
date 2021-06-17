@@ -22,3 +22,7 @@
 .timeline {
     position:relative;
 }
+
+.scroll-tab-header {
+    max-width: 90vw;
+}
