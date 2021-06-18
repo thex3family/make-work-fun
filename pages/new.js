@@ -17,6 +17,23 @@ export default function updates() {
           <div className="timeline z-10 grid grid-cols-3">
             {/* start  */}
             
+          {/* right card start */}
+          <div className="col-start-1 col-end-4 text-center z-10">
+            <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+  June, 18, 2021
+</span>
+</div>
+          <div className="sm:col-start-1 col-span-3 md:col-start-2 col-end-4 my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
+            <h2 className="text-3xl font-bold mb-3 text-white">Table Magic</h2>
+            <p className="text-xl mb-5">We've beautified your recent win table. Easily view your latest 10 wins and look back into historical entries to visualize how you've been trending!
+            </p>
+            <img
+            className="mb-4 m-auto"
+            src='updates/0.05.PNG'
+            />
+            <p className="text-sm font-semibold text-right mr-4">v.05</p>
+          </div>
+          {/* right card end */}
           {/* left card start */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
@@ -30,12 +47,14 @@ export default function updates() {
             Required and optional properties have been revamped and all task management databases can now easily connect to our app.            
             </p>
             <img
-            className="m-auto"
+            className="mb-4 m-auto"
             src='updates/0.04.png'
             />
             <p className="text-sm font-semibold text-right mr-4">v.04</p>
           </div>
           {/* left card end */}
+
+          {/* right card start */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
   June, 14, 2021
@@ -51,6 +70,8 @@ export default function updates() {
             />
             <p className="text-sm font-semibold text-right mr-4">v.03</p>
           </div>
+          {/* right card end */}
+
           {/* left card start */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
@@ -68,6 +89,8 @@ export default function updates() {
             <p className="text-sm font-semibold text-right mr-4">v.02</p>
           </div>
           {/* left card end */}
+
+          
           <div className="col-start-1 col-end-4 text-center">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
   June, 12, 2021

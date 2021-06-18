@@ -1,9 +1,9 @@
 .root {
-  @apply bg-secondary text-accents-0 cursor-pointer inline-flex px-5 lg:px-6 rounded-sm leading-6  transition ease-in-out duration-150 shadow-sm font-semibold text-center justify-center uppercase py-4 border border-transparent items-center;
+  @apply bg-accents-0 text-accents-0 cursor-pointer inline-flex px-5 lg:px-6 rounded-sm leading-6  transition ease-in-out duration-150 shadow-sm font-semibold text-center justify-center uppercase py-4 border border-transparent items-center;
 }
 
 .root:hover {
-  @apply bg-accents-0 text-primary border border-secondary;
+  @apply bg-none bg-accents-0 text-primary border border-secondary;
 }
 
 .root:focus {

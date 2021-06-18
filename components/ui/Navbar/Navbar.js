@@ -101,13 +101,13 @@ const Navbar = () => {
                         
             {user ? (
               <Link href="#">
-                <a className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9" onClick={() => signOut()}>
+                <a className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9 hover:border-blue-500" onClick={() => signOut()}>
                   Sign out
                 </a>
               </Link>
             ) : (
               <Link href="/signin">
-                <a className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9">Sign in</a>
+                <a className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9 hover:border-blue-500">Sign in</a>
               </Link>
             )}
          

@@ -170,7 +170,7 @@ const SignIn = () => {
             </span>
           </div>
 
-          <div className="flex items-center my-6">
+          {/* <div className="flex items-center my-6">
             <div
               className="border-t border-accents-2 flex-grow mr-3"
               aria-hidden="true"
@@ -180,9 +180,9 @@ const SignIn = () => {
               className="border-t border-accents-2 flex-grow ml-3"
               aria-hidden="true"
             ></div>
-          </div>
+          </div> */}
 
-          <Button
+          {/* <Button
             variant="slim"
             type="submit"
             disabled={loading}
@@ -190,7 +190,7 @@ const SignIn = () => {
           >
             <GitHub />
             <span className="ml-2">Continue with GitHub</span>
-          </Button>
+          </Button> */}
         </div>
       </div>
     );
