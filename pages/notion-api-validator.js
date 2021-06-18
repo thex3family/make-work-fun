@@ -68,16 +68,15 @@ return (
 
       
 
-                  <Button
+                  <button
                     className="p-1 ml-auto bg-transparent border-0 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => loadAndRefresh()}
                     disabled={loading}
                     loading={loading}
-                    variant='slim'
                     >
                       {loading ? 'Loading' : 'Click here to refresh'}
                     <i className="ml-3 fas fa-sync-alt"></i>
-                  </Button>
+                  </button>
                 </div>
                 </div>
                 {/*body*/}
@@ -458,24 +457,30 @@ return (
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                 <h3 className="text-2xl font-semibold text-white">
-                🚀 We're Connected And Your Wins Are In!
+                🚀 Your avatar is ready!
                 </h3>
               </div>
               {/*body*/}
               <div className="relative p-6 text-blueGray-500">
                 <img src="img/default_avatar.png" height="auto" className="w-3/4 mx-auto pb-2" />
+              <div className="text-center">
+                  <p className="text-lg text-primary-2 font-semibold mx-0 sm:mx-10">
+                    We've connected to your database successfully and retrieved your wins.
+                  </p>
+                  
+                </div>
               </div>
               {/*footer*/}
               <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                 <Link href='/player'>
               <Button className="w-full"
-                    variant="slim"
+                    variant="prominent"
                     >Start Playing
           </Button>
           </Link>
               </div><div className="text-center mb-6">
                   <button className="text-md font-semibold text-red-600" onClick={() => setShowReadyModal(false)}>
-                    I'll check it out later, I want to keep adjusting my properties.
+                    I'll do this later!
                   </button>
                   </div>
             </div>
@@ -498,8 +503,8 @@ return (
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
-                <h3 className="text-2xl font-semibold text-white">
-                ⚔ The Requirements Have Been Met
+                <h3 className="text-xl sm:text-2xl font-semibold text-white">
+                ⚔ You've Met The Requirements
                 </h3>
               </div>
               {/*body*/}
@@ -509,14 +514,14 @@ return (
                   <p className="text-xl text-primary-2 font-semibold">
                     It's time to hand in your first quest!
                   </p>
-                  <ol className="text-lg text-black text-left sm:text-lg max-w-2xl m-auto px-8 pt-6">
-                    <li>1. Make sure the required properties are filled in</li>
-                    <li>2. Utilize optional properties if you'd like</li>
+                  <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
+                    <li>1. Make sure the required properties have been set</li>
+                    <li>2. Utilize optional properties to get more value</li>
                     <li>3. Mark quest as <span className="px-1.5 py-0.5 bg-emerald-200 rounded text-black font-semibold">Complete</span> and <span className="font-semibold">✔ Share With Family</span></li>
                   </ol>
                 </div>
               </div>
-              <iframe width="560" height="315" 
+              <iframe width="auto" height="315" 
                 src="https://www.loom.com/embed/e5eaaa19fcf64297b2859ed7c64171ad" 
                 title="How To Hand In Quests" 
                 frameborder="0" 
@@ -533,7 +538,7 @@ return (
               <div className="flex items-center p-6 border-t border-solid border-blueGray-200 rounded-b">
               <div className="text-center mx-auto">
                   <button className="text-md font-semibold text-red-600" onClick={() => setShowRequiredModal(false)}>
-                    I'll check it out later, I want to keep adjusting my properties.
+                    I'll do this later!
                   </button>
               </div>
                   </div>
@@ -564,6 +569,7 @@ export async function getServerSideProps({ req }) {
   
   return { props: { response } };
 } catch (error) {
+  console.log(error)
   return {
     redirect: {
       destination: '/credentials-invalid',

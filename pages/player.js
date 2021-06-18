@@ -19,6 +19,7 @@ import CardLineChart from "components/Cards/CardLineChart.js";
 import HeaderStats from "components/Headers/HeaderStats.js";
 import DataTable from 'react-data-table-component';
 import NotificationDropdown from '@/components/Dropdowns/TableDropdown';
+import { yellow } from 'tailwindcss/colors';
 
 function Card({ title, description, footer, children }) {
   return (
@@ -51,8 +52,14 @@ createTheme('game', {
   divider: {
     default: '#ffffff',
   },
+  button: {
+    default: '#FFFFFF',
+    focus: 'rgba(255, 255, 255, .54)',
+    hover: 'rgba(255, 255, 255, .12)',
+    disabled: 'rgba(255, 255, 255, .18)',
+  },
   highlightOnHover: {
-    default: "#10b981",
+    default: "#9CA3AF15",
     text: 'rgba(255, 255, 255, 1)',
   },
   sortFocus: {
@@ -91,36 +98,77 @@ export default function Player() {
   
   const[weekWins, setWeekWins] = useState([])
 
+  const NameCustom = row => <div className="truncateWrapper"><p className="font-semibold text-sm mb-1 truncate">{row.name}</p><p className="text-sm px-2 inline-flex font-semibold rounded bg-emerald-100 text-emerald-800">{row.type}</p></div>
+  const RewardCustom = row => <div><p className="font-semibold text-sm">+{row.gold_reward} 💰</p><p>+{row.exp_reward} XP</p></div>
+  const TrendCustom = row => <i
+  className={
+    row.trend === "up" ? "fas fa-arrow-up text-emerald-600"
+      : row.trend === "down" ? "fas fa-arrow-down text-red-600"
+      : row.trend === "check" ? "fas fa-check text-emerald-600"
+      : ""
+  }
+    />
+
+  
+
   const columns = [
     {
-      name: 'NAME',
-      selector: 'name'
-    },
-    {
-      name: 'TYPE',
-      selector: 'type'
+      name: 'RECENT WINS',
+      selector: 'name',
+      cell: row => < NameCustom {...row} />,
+      grow: 2
     },
     {
       name: 'COMPLETED',
       selector: 'closing_date',
+      right: true,
+      maxWidth: '10px',
       sortable: true
     },
     {
       name: 'TREND',
       selector: 'trend',
-      sortable: true
+      center: true,
+      maxWidth: '25px',
+      cell: row => < TrendCustom {...row} />
     },
     {
-      name: 'GOLD REWARD',
-      selector: 'gold_reward',
-      sortable: true
-    },
-    {
-      name: 'EXP REWARD',
-      selector: 'exp_reward',
-      sortable: true
+      name: 'REWARDS',
+      sortable: true,
+      right: true,
+      maxWidth: '25px',
+      cell: row => < RewardCustom {...row} />
     },
   ];
+
+  const customStyles = {
+    headRow: {
+      style: {
+        backgroundColor: 'red',
+        backgroundImage: 'linear-gradient(to right, #10b981, #3b82f6)',
+        minHeight: '48px',
+        borderRadius: '6px 6px 0 0',
+        paddingLeft: '8px',
+        paddingRight: '8px',
+        
+      },
+    },
+    headCells: {
+      style: {
+        fontSize: '14px',
+        fontWeight: 600,
+        paddingLeft: '16px',
+        paddingRight: '16px',
+      },
+    },
+    rows: {
+      style: {
+        minHeight: '72px', // override the row height
+        paddingLeft: '8px',
+        paddingRight: '8px',
+      }
+    },
+  }
 
 
   // Redirects user to sign in if they are not logged in yet
@@ -223,6 +271,8 @@ export default function Player() {
       .from('success_plan')
       .select('name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend')
       .eq('player', user.id)
+      .order('closing_date', { ascending: false })
+      .order('entered_on', { ascending: false })
       
       setWins(data)
 
@@ -434,19 +484,23 @@ export default function Player() {
         />
       <div className="flex flex-wrap mt-4">
         <div className="w-full mb-12 px-4">
+        
+
         {/* <CardTable color="dark" data={wins} /> */}
-        <DataTable className="border"
+        <DataTable className=""
           title="Recent Wins 👀"
+          noHeader
           columns={columns}
           data={wins}
           onRowClicked={modalHandler}
           highlightOnHover={true}
           pointerOnHover={true}
           fixedHeader={true}
-          defaultSortField="closing_date"
-          defaultSortAsc={false}
+          customStyles={customStyles}
+          pagination={true}
           theme="game"
         />
+        {/* <TailwindTable wins={wins} /> */}
         </div>
       </div>
       </div>

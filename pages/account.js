@@ -280,15 +280,14 @@ export default function Account() {
                 <img src="img/hi-five.gif" height="auto" className="w-3/4 mx-auto pb-2" />
               <div className="text-center">
                   <p className="text-xl mt-5 text-primary-2 font-semibold">
-                    No time to waste - let's connect to your database!
+                    No time to waste - let's connect!
                   </p>
                   </div>
               </div>
               {/*footer*/}
               <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                 <Link href='/notion-api-validator'>
-              <Button className="w-full" onClick={() => setLoading(true)}
-                    variant="prominent"
+              <Button className="w-full" variant="prominent" onClick={() => setLoading(true)}
                     >Test Connection
           </Button>
           </Link>
