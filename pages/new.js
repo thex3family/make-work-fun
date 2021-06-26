@@ -16,11 +16,27 @@ export default function updates() {
           </div>
           <div className="timeline z-10 grid grid-cols-3">
             {/* start  */}
-            
+            {/* left card start */}
+          <div className="col-start-1 col-end-4 text-center z-10">
+            <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+            June 26, 2021
+          </span>
+          </div>
+          <div className="sm:col-start-1 col-span-3 md:col-start-1 md:col-end-3 col-end-4  my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
+            <h2 className="text-3xl font-bold mb-3 text-white">Celebrate Your Wins</h2>
+            <p className="text-xl mb-5">Every time you accomplish a win, a randomized gif will spawn! Remember to share your wins to get support and start meaningful discussions.      
+            </p>
+            <img
+            className="mb-4 m-auto"
+            src='updates/0.06.png'
+            />
+            <p className="text-sm font-semibold text-right mr-4">v.06</p>
+          </div>
+          {/* left card end */}
           {/* right card start */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-  June, 18, 2021
+  June 18, 2021
 </span>
 </div>
           <div className="sm:col-start-1 col-span-3 md:col-start-2 col-end-4 my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
@@ -37,7 +53,7 @@ export default function updates() {
           {/* left card start */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-            June, 17, 2021
+            June 17, 2021
           </span>
           </div>
           <div className="sm:col-start-1 col-span-3 md:col-start-1 md:col-end-3 col-end-4  my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
@@ -48,7 +64,7 @@ export default function updates() {
             </p>
             <img
             className="mb-4 m-auto"
-            src='updates/0.04.png'
+            src='updates/0.05.png'
             />
             <p className="text-sm font-semibold text-right mr-4">v.04</p>
           </div>
@@ -57,7 +73,7 @@ export default function updates() {
           {/* right card start */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-  June, 14, 2021
+  June 14, 2021
 </span>
 </div>
           <div className="sm:col-start-1 col-span-3 md:col-start-2 col-end-4 my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
@@ -75,7 +91,7 @@ export default function updates() {
           {/* left card start */}
           <div className="col-start-1 col-end-4 text-center z-10">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-            June, 13, 2021
+            June 13, 2021
           </span>
           </div>
           <div className="sm:col-start-1 col-span-3 md:col-start-1 md:col-end-3 col-end-4  my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
@@ -93,7 +109,7 @@ export default function updates() {
           
           <div className="col-start-1 col-end-4 text-center">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-  June, 12, 2021
+  June 12, 2021
 </span>
 </div>
           <div className="col-start-1 col-end-4 my-4 p-8 bg-primary-2 rounded">
