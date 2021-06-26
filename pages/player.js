@@ -10,6 +10,9 @@ import { postData } from '@/utils/helpers';
 import { supabase } from '../utils/supabase-client';
 import Datatable, { createTheme } from 'react-data-table-component';
 
+import { GiphyFetch } from '@giphy/js-fetch-api';
+import { Gif } from '@giphy/react-components';
+
 import React from "react";
 
 // components
@@ -83,7 +86,9 @@ export default function Player() {
   const[playerName, setPlayerName] = React.useState(null);
   const[playerGold, setPlayerGold] = React.useState(null);
   const[playerEXP, setPlayerEXP] = React.useState(null);
-  const [avatar_url, setAvatarUrl] = useState(null);
+  const[playerRank, setPlayerRank] = React.useState(null);
+  const[nextRank, setNextRank] = React.useState(null);
+  const[avatar_url, setAvatarUrl] = useState(null);
   
   const [showModal, setShowModal] = React.useState(false);
   // const [showIntroModal, setShowIntroModal] = React.useState(false);
@@ -94,8 +99,10 @@ export default function Player() {
   const [activeDate, setActiveDate] = React.useState(null);
   const [activeGold, setActiveGold] = React.useState(null);
   const [activeEXP, setActiveEXP] = React.useState(null);
-
+  const [activeSlug, setActiveSlug] = React.useState(null);
   
+  const [randomGIF, setRandomGIF] = React.useState(null);
+
   const[weekWins, setWeekWins] = useState([])
 
   const NameCustom = row => <div className="truncateWrapper"><p className="font-semibold text-sm mb-1 truncate">{row.name}</p><p className="text-sm px-2 inline-flex font-semibold rounded bg-emerald-100 text-emerald-800">{row.type}</p></div>
@@ -109,7 +116,7 @@ export default function Player() {
   }
     />
 
-  
+  const gf = new GiphyFetch(process.env.NEXT_PUBLIC_GIPHY_API)
 
   const columns = [
     {
@@ -134,6 +141,7 @@ export default function Player() {
     },
     {
       name: 'REWARDS',
+      selector: 'gold_reward',
       sortable: true,
       right: true,
       maxWidth: '25px',
@@ -183,6 +191,78 @@ export default function Player() {
   useEffect(() => {
     if (userOnboarding) initializePlayer()
   }, [userOnboarding])
+
+
+  // checks if should send win to guilded
+
+  async function sendWebhook() {
+    console.log(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK)
+fetch(
+  process.env.NEXT_PUBLIC_GUILDED_WEBHOOK,
+  {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      content:
+        null,
+      // embeds to be sent
+      
+      embeds: [
+        {
+          // decimal number colour of the side of the embed
+          color: null,
+          author: {
+            name: `🎉 ${playerName} completed a ${activeType}!`,
+          },
+          // author
+          // - icon next to text at top (text is a link)
+          // embed title
+          // - link on 2nd row
+          title: `${activeName}`,
+          url:
+            `https://www.notion.so/${activeSlug}`,
+          // thumbnail
+          thumbnail: {
+            url:
+              `${randomGIF.image_original_url}`,
+          },
+          // embed description
+          // - text on 3rd row
+          description: `Completed On: ${activeDate}`,
+          // custom embed fields: bold title/name, normal content/value below title
+          // - located below description, above image.
+          fields: [
+            {
+              name: '🏆 Leaderboard Position',
+              value: `#${playerRank} (${nextRank} EXP to next rank)`,
+            },
+          ],
+          // image
+          // - picture below description(and fields) - this needs to be the gif that we fetch from random whatever.
+          // image: {
+          //   url:
+          //     'http://makework.fun/img/celebratory-cat.gif',
+          // },
+          // footer
+          // - icon next to text at bottom
+          footer: {
+            text: `+${activeGold} 💰 | +${activeEXP} XP | ${activeUpstream}`,
+          },
+        },
+        {
+          color: null,
+          author: {
+            name: '💬 Start a discussion!',
+            // url: 'https://toolbox.co-x3.com/family-connection/?utm_source=guilded',
+          },
+        },
+      ],
+    }),
+  }
+);
+    }
 
   // Checks if the user is ready to load
 
@@ -252,6 +332,8 @@ export default function Player() {
       setPlayerGold(data.total_gold);
       setPlayerEXP(data.total_exp);
       setAvatarUrl(data.avatar_url);  
+      setPlayerRank(data.player_rank);  
+      setNextRank(data.next_rank);
 
     if (error && status !== 406) {
             throw error
@@ -269,7 +351,7 @@ export default function Player() {
       
       const { data, error } = await supabase
       .from('success_plan')
-      .select('name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend')
+      .select('name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id')
       .eq('player', user.id)
       .order('closing_date', { ascending: false })
       .order('entered_on', { ascending: false })
@@ -292,19 +374,22 @@ export default function Player() {
       
       const { data, error } = await supabase
       .from('success_plan')
-      .select('name, type, closing_date, gold_reward, exp_reward, entered_on, upstream')
+      .select('name, type, closing_date, gold_reward, exp_reward, entered_on, upstream, notion_id')
       .eq('player', user.id) 
       .order('entered_on', { ascending: false })
       .limit(1)
       .single()
       
-      setShowModal(true);
+      initiateModal();
       setActiveType(data.type);
       setActiveName(data.name);
       setActiveUpstream(data.upstream);
       setActiveDate(data.closing_date);
       setActiveGold(data.gold_reward);
       setActiveEXP(data.exp_reward);
+
+      const slug = data.notion_id.replace(/-/g, '');
+      setActiveSlug(slug)
 
     if (error && status !== 406) {
             throw error
@@ -342,14 +427,25 @@ export default function Player() {
   }
 
   const modalHandler = (wins) => {
-    setShowModal(true);
+    initiateModal();
     setActiveType(wins.type);
     setActiveName(wins.name);
     setActiveUpstream(wins.upstream);
     setActiveDate(wins.closing_date);
     setActiveGold(wins.gold_reward);
     setActiveEXP(wins.exp_reward);
-  }  
+    
+    const slug = wins.notion_id.replace(/-/g, '');
+    setActiveSlug(slug)
+  }
+  
+  async function initiateModal(){
+    const { data: gifs } = await gf.random({ tag: 'excited dog cat', rating: 'g' })
+    setRandomGIF(gifs);
+    setShowModal(true);
+    console.log(randomGIF);
+  }
+  
 
   if (loading) {
     return (
@@ -549,8 +645,9 @@ export default function Player() {
                     </tr>
                     </tbody>
                   </table>
-                <img src="img/celebratory-cat.gif" height="auto" className="w-3/4 mx-auto pb-2" />
-                It's time to celebrate! 😄
+                {/* <img src="img/celebratory-cat.gif" height="auto" className="w-3/4 mx-auto pb-2" /> */}
+                <Gif className="w-3/4 mx-auto justify-center" gif={randomGIF} hideAttribution={true} noLink={true} width={300} />
+                <p className="mt-2">It's time to celebrate! 😄</p>
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -561,13 +658,15 @@ export default function Player() {
                   >
                     Close
                   </button>
+                  <a href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat" target="_blank">
                   <button
                     className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => sendWebhook()}
                   >
                     Share With Family
                   </button>
+                  </a>
                 </div>
               </div>
             </div>
