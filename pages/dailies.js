@@ -1,13 +1,14 @@
 import Link from "next/link";
 //import Button from '@/components/ui/Button';
+import React from "react";
 
 function habit_progress_statement(on_streak, streak_duration) {
   return on_streak ? "🔥 You're on a " + ( streak_duration > 9 ? "9+ " : streak_duration + " Day " ) +  "Streak!" : "✊ You got this!";
 }
 
-function habitSquare(habit_title, on_streak, streak_duration) {
+function habitSquare(habit_id, habit_title, on_streak, streak_duration, is_completed, habit_handler) {
   return (
-    <div className="my-4 mb-12 p-8 bg-primary-2 rounded z-10 square">
+    <div onClick={ () => habit_handler(habit_id) } className={`my-4 mb-12 p-8 ${is_completed ? `bg-green` : `bg-primary-2`} rounded z-10 square`}>
       <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" />
       <h2 className="text-xl font-bold mb-3 text-center text-white">
         { habit_title }
@@ -19,7 +20,7 @@ function habitSquare(habit_title, on_streak, streak_duration) {
   );
 }
 
-function time_period_routine_section(time_period_name, associated_habits) {
+function time_period_routine_section(time_period_name, associated_habits, habit_handler) {
   return (
     <div>
       <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
@@ -27,10 +28,28 @@ function time_period_routine_section(time_period_name, associated_habits) {
       </h1>
       <div className="flex flex-row gap-5 overflow-x-scroll flex-nowrap">
         {/* start */}
-        { associated_habits.map(h => habitSquare(h.title, h.on_streak, h.streak_duration)) }
+        { associated_habits.map(h => habitSquare(h.id, h.title, h.on_streak, h.streak_duration, h.is_completed, habit_handler)) }
       </div>
     </div>
   );
+}
+
+function generate_time_period_sections(habit_map, time_periods, habit_handler) {
+  var currentHabitKey = null;
+  var generated_time_period_sections = [];
+  
+  var habit_iterator = habit_map.keys();
+
+  currentHabitKey = habit_iterator.next().value;
+
+  do {
+    generated_time_period_sections.push(time_period_routine_section(time_periods[currentHabitKey], habit_map.get(currentHabitKey), habit_handler));
+
+    currentHabitKey = habit_iterator.next().value;
+  }
+  while (currentHabitKey != null)
+
+  return generated_time_period_sections;
 }
 
 function generate_habit_map(habits) {
@@ -52,41 +71,37 @@ function generate_habit_map(habits) {
   return habit_map;
 }
 
-function generate_time_period_sections(habit_map, time_periods) {
-  var currentHabitKey = null;
-  var generated_time_period_sections = [];
-  
-  var habit_iterator = habit_map.keys();
-
-  currentHabitKey = habit_iterator.next().value;
-
-  do {
-    generated_time_period_sections.push(time_period_routine_section(time_periods[currentHabitKey], habit_map.get(currentHabitKey)));
-
-    currentHabitKey = habit_iterator.next().value;
-  }
-  while (currentHabitKey != null)
-
-  return generated_time_period_sections;
-}
-
 export default function dallies() {
+
+  //console.log("dallies");
 
   const mock_time_periods = [ "Morning", "Afternoon", "Evening" ];
 
+  // will replace with a fetch to the backend
   const mock_active_habits = [ // streak stuff is temporary - Don't know what's the plan with that
-    { title: "Habit 1", habits_time_period: 0, on_streak: true, streak_duration: 7 }, 
-    { title: "Habit 2", habits_time_period: 0, on_streak: false, streak_duration: 0 }, 
-    { title: "Habit 3", habits_time_period: 0, on_streak: true, streak_duration: 9 }, 
-    { title: "Habit 4", habits_time_period: 0, on_streak: true, streak_duration: 10 },
-    { title: "Habit 5", habits_time_period: 0, on_streak: true, streak_duration: 10 },
-    { title: "Habit 6", habits_time_period: 0, on_streak: true, streak_duration: 10 },
-    { title: "Habit 7", habits_time_period: 0, on_streak: true, streak_duration: 10 },
-    { title: "Habit 1", habits_time_period: 1, on_streak: true, streak_duration: 10 },
-    { title: "Habit 1", habits_time_period: 2, on_streak: true, streak_duration: 10 }
+    { id: 0, title: "Habit 1", habits_time_period: 0, on_streak: true, streak_duration: 7, is_completed: false }, 
+    { id: 1, title: "Habit 2", habits_time_period: 0, on_streak: false, streak_duration: 0, is_completed: false  }, 
+    { id: 2, title: "Habit 3", habits_time_period: 0, on_streak: true, streak_duration: 9, is_completed: false }, 
+    { id: 3, title: "Habit 4", habits_time_period: 0, on_streak: true, streak_duration: 10, is_completed: false },
+    { id: 4, title: "Habit 5", habits_time_period: 0, on_streak: true, streak_duration: 10, is_completed: false },
+    { id: 5, title: "Habit 6", habits_time_period: 0, on_streak: true, streak_duration: 10, is_completed: false },
+    { id: 6, title: "Habit 7", habits_time_period: 0, on_streak: true, streak_duration: 10, is_completed: false },
+    { id: 7, title: "Habit 1", habits_time_period: 1, on_streak: true, streak_duration: 10, is_completed: false },
+    { id: 8, title: "Habit 1", habits_time_period: 2, on_streak: true, streak_duration: 10, is_completed: false }
   ];
 
-  const habit_map = generate_habit_map(mock_active_habits);
+  const [ mock_active_habit_state, updateMockHabits ] = React.useState(mock_active_habits);
+
+  const habit_map = generate_habit_map(mock_active_habit_state);
+
+  function handleHabitCompletionStatusChange(habit_id) {
+    //console.log("handleHabitCompletionStatusChange");
+
+    var updatedHabitList = mock_active_habit_state;
+    updatedHabitList[habit_id].is_completed = !updatedHabitList[habit_id].is_completed;
+
+    updateMockHabits( [ ...updatedHabitList ]);
+  }
 
   return (
     <section className="justify-center">
@@ -100,7 +115,7 @@ export default function dallies() {
           </p>
         </div>
         <div>
-        { generate_time_period_sections(habit_map, mock_time_periods) }
+        { generate_time_period_sections(habit_map, mock_time_periods, handleHabitCompletionStatusChange) }
         </div>
         <div className="pt-10">
           <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
