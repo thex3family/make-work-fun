@@ -8,7 +8,7 @@ function habit_progress_statement(on_streak, streak_duration) {
 
 function habitSquare(habit_id, habit_title, on_streak, streak_duration, is_completed, habit_handler) {
   return (
-    <div onClick={ () => habit_handler(habit_id) } className={`my-4 mb-12 p-8 ${is_completed ? `bg-green` : `bg-primary-2`} rounded z-10 square`}>
+    <div key={ habit_id } onClick={ () => habit_handler(habit_id) } className={`my-4 mb-12 p-8 ${is_completed ? `bg-green` : `bg-primary-2`} rounded z-10 square`}>
       <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" />
       <h2 className="text-xl font-bold mb-3 text-center text-white">
         { habit_title }
@@ -22,7 +22,7 @@ function habitSquare(habit_id, habit_title, on_streak, streak_duration, is_compl
 
 function time_period_routine_section(time_period_name, associated_habits, habit_handler) {
   return (
-    <div>
+    <div key={ time_period_name } >
       <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
         { time_period_name } Routines
       </h1>
