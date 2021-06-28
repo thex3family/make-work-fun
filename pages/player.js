@@ -112,21 +112,21 @@ export default function Player() {
   const [weekWins, setWeekWins] = useState([]);
 
   const NameCustom = (row) => (
-    <div className="truncateWrapper">
-      <p className="font-semibold text-sm mb-1 truncate">{row.name}</p>
-      <p className="text-sm px-2 inline-flex font-semibold rounded bg-emerald-100 text-emerald-800">
+    <div data-tag="allowRowEvents" className="truncateWrapper">
+      <p data-tag="allowRowEvents" className="font-semibold text-sm mb-1 truncate">{row.name}</p>
+      <p data-tag="allowRowEvents" className="text-sm px-2 inline-flex font-semibold rounded bg-emerald-100 text-emerald-800">
         {row.type}
       </p>
     </div>
   );
   const RewardCustom = (row) => (
-    <div>
-      <p className="font-semibold text-sm">+{row.gold_reward} 💰</p>
-      <p>+{row.exp_reward} XP</p>
+    <div data-tag="allowRowEvents">
+      <p data-tag="allowRowEvents" className="font-semibold text-sm">+{row.gold_reward} 💰</p>
+      <p data-tag="allowRowEvents">+{row.exp_reward} XP</p>
     </div>
   );
   const TrendCustom = (row) => (
-    <i
+    <i data-tag="allowRowEvents"
       className={
         row.trend === 'up'
           ? 'fas fa-arrow-up text-emerald-600'
