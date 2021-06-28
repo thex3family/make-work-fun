@@ -63,7 +63,7 @@ export default function updates() {
             title="Compare Your Growth"
             desc="Graphs are now functional! Visualize your wins from the last week
             and compare your stats to how you're doing this week."
-            img_url="updates/0.03.png"
+            img_url="updates/0.03.PNG"
             button_url="/player"
             version="v.03"
           />
