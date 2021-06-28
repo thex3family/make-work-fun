@@ -12,9 +12,9 @@ export default function CardLUpdate({ date, title, desc, desc2, img_url, button_
         </span>
       </div>
       <div className="sm:col-start-1 col-span-3 md:col-start-1 md:col-end-3 col-end-4  my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">
-        <h2 className="text-3xl font-bold mb-3 text-white">{title}</h2>
-        <p className="text-xl mb-5">{desc}</p>
-        <p className="text-xl mb-5">{desc2}</p>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-white">{title}</h2>
+        <p className="text-lg sm:text-xl mb-5">{desc}</p>
+        <p className="text-lg sm:text-xl mb-5">{desc2}</p>
         <img className="mb-4 m-auto" src={img_url} />
         {button_url ? <div className="text-center"><Link href={button_url}><Button className="w-auto mx-auto" variant="prominent">See it in action!</Button></Link></div> : ""}
         <p className="text-sm font-semibold text-right mr-4">{version}</p>
