@@ -1,6 +1,10 @@
 import Link from "next/link";
 //import Button from '@/components/ui/Button';
 import React from "react";
+import { supabase } from '../utils/supabase-client';
+import { useState, useEffect } from 'react';
+import { useUser } from '@/utils/useUser';
+import { useRouter } from 'next/router';
 
 function habit_progress_statement(on_streak, streak_duration) {
   return on_streak ? "🔥 You're on a " + ( streak_duration > 9 ? "9+ " : streak_duration + " Day " ) +  "Streak!" : "✊ You got this!";
@@ -72,6 +76,61 @@ function generate_habit_map(habits) {
 }
 
 export default function dallies() {
+  const[habits, setHabits] = useState([])
+  const [loading, setLoading] = useState(true);
+  const { userLoaded, user, session, userDetails, userOnboarding, subscription } = useUser();
+
+  useEffect(() => {
+    if (userOnboarding) initializePlayer()
+  }, [userOnboarding])
+
+  function initializePlayer() {
+    try {
+        if(userOnboarding.onboarding_state.includes('4')){
+          loadPlayer();
+        } else {
+          router.replace('/account');
+        }
+      } catch (error) {
+          alert(error.message)
+      } finally {
+        console.log("InitializedPlayer")
+      }
+      
+    }
+
+  // If player is ready to load, go for it!
+
+  async function loadPlayer(){
+    console.log('Loading Player')
+    fetchDailies();
+  }
+
+  async function fetchDailies() {
+    try {
+      const user = supabase.auth.user()
+
+      const { data, error } = await supabase
+      .from('habits')
+      .select('*')
+      .eq('player', user.id)
+      
+      if(data){
+      setHabits(data)
+      console.log(habits)
+      }
+      
+
+    if (error && status !== 406) {
+            throw error
+    }
+
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   //console.log("dallies");
 
@@ -114,6 +173,7 @@ export default function dallies() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
           </p>
         </div>
+        <button onClick={() => fetchDailies()} >Get Habits</button>
         <div>
         { generate_time_period_sections(habit_map, mock_time_periods, handleHabitCompletionStatusChange) }
         </div>
