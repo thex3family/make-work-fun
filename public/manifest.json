@@ -3,7 +3,7 @@
     "short_name": "Make Work Fun",
     "theme_color": "#FFD669",
     "background_color": "#000000",
-    "display": "minimal-ui",
+    "display": "fullscreen",
     "orientation": "portrait",
     "scope": "/",
     "start_url": "/",
