@@ -42,7 +42,7 @@ export default function updates() {
             desc="We've beautified your recent win table. Easily view your latest 10
             wins and look back into historical entries to visualize how you've
             been trending!"
-            img_url="updates/0.05.png"
+            img_url="updates/0.05.PNG"
             button_url="/player"
             version="v.05"
           />
