@@ -19,8 +19,8 @@ export default function map() {
         <h1 className="text-3xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
           Plaza
         </h1>
-        <p className="text-xl text-accents-6">
-          Chat and voice channels to meet up with your friends.
+        <p className="text-lg sm:text-xl text-accents-6">
+          Join chat and voice channels to meet and make new friends on your journey.
         </p>
           <div className="mt-6 grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
             <CardMap
@@ -45,7 +45,7 @@ export default function map() {
         <h1 className="text-3xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
           City Hall
         </h1>
-        <p className="text-xl text-accents-6">
+        <p className="text-lg sm:text-xl text-accents-6">
           Share knowledge and action with the community to level up together.
         </p>
           <div className="mt-6 grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
