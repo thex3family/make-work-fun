@@ -34,3 +34,8 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+
+a:active, a:focus {
+    outline: 0;
+    -moz-outline-style: none;
+  }
