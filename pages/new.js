@@ -18,6 +18,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="June 29, 2021"
+            title="Seasonal Leaderboard Rankings"
+            desc="Season 1 is coming! Every season will last 3 months, and the levels earned in each season will be displayed seperately on the leaderboard."
+            img_url="updates/0.08.png"
+            button_url="/"
+            version="v.08"
+          />
           <CardRUpdate
             date="June 28, 2021"
             title="Grow Together With Family"
