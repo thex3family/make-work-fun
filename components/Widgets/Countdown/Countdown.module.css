@@ -1,0 +1,28 @@
+.Countdown{
+    margin: 10px auto;
+    padding-bottom: 20px;
+  }
+  
+  .Countdowncol{
+    display: inline-block;
+  }
+  
+  .Countdowncolelement{
+    display: inline-block;
+    margin: 5px 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Countdowncolelement strong{
+    font-size: 2em;
+    padding: .75em 0.25em;
+    background: white;
+    border-radius: 5px;
+    color: black;
+    box-shadow: 5px 8px #3b82f6;
+  }
+  .Countdowncolformat {
+    margin-top: 10px;
+    font-weight: 600;
+  }

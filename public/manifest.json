@@ -1,8 +1,8 @@
 {
     "name": "Make Work Fun, Get Stuff Done",
     "short_name": "Make Work Fun",
-    "theme_color": "#FFD669",
-    "background_color": "#000000",
+    "theme_color": "#2e3537",
+    "background_color": "#2e3537",
     "display": "fullscreen",
     "orientation": "portrait",
     "scope": "/",

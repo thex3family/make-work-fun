@@ -562,7 +562,7 @@ export default function Player() {
 
   return (
     <>
-      <section className="bg-black bg-player-pattern bg-fixed">
+      <section className="bg-player-pattern bg-fixed">
         <div className="bg-black max-w-6xl mx-auto pb-32 bg-opacity-90">
           <div className="pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:flex-col align-center">
