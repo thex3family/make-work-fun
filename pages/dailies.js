@@ -1,38 +1,68 @@
-import Link from "next/link";
+import Link from 'next/link';
 //import Button from '@/components/ui/Button';
-import React from "react";
+import React from 'react';
 import { supabase } from '../utils/supabase-client';
 import { useState, useEffect } from 'react';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 
 function habit_progress_statement(on_streak, streak_duration) {
-  return on_streak ? "🔥 You're on a " + ( streak_duration > 9 ? "9+ " : streak_duration + " Day " ) +  "Streak!" : "✊ You got this!";
+  return on_streak
+    ? "🔥 You're on a " +
+        (streak_duration > 9 ? '9+ ' : streak_duration + ' Day ') +
+        'Streak!'
+    : '✊ You got this!';
 }
 
-function habitSquare(habit_id, habit_title, on_streak, streak_duration, is_completed, habit_handler) {
+function habitSquare(
+  habit_id,
+  habit_title,
+  on_streak,
+  streak_duration,
+  is_completed,
+  habit_handler
+) {
   return (
-    <div key={ habit_id } onClick={ () => habit_handler(habit_id) } className={`my-4 mb-12 p-8 ${is_completed ? `bg-green` : `bg-primary-2`} rounded z-10 square`}>
+    <div
+      key={habit_id}
+      onClick={() => habit_handler(habit_id)}
+      className={`my-4 mb-12 p-8 ${
+        is_completed ? `bg-green` : `bg-primary-2`
+      } rounded z-10 square`}
+    >
       <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" />
       <h2 className="text-xl font-bold mb-3 text-center text-white">
-        { habit_title }
+        {habit_title}
       </h2>
       <p className="text-md mb-5 text-center">
-        { habit_progress_statement(on_streak, streak_duration) }
+        {habit_progress_statement(on_streak, streak_duration)}
       </p>
     </div>
   );
 }
 
-function time_period_routine_section(time_period_name, associated_habits, habit_handler) {
+function time_period_routine_section(
+  time_period_name,
+  associated_habits,
+  habit_handler
+) {
   return (
-    <div key={ time_period_name } >
+    <div key={time_period_name}>
       <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-        { time_period_name } Routines
+        {time_period_name} Routines
       </h1>
       <div className="flex flex-row gap-5 overflow-x-scroll flex-nowrap">
         {/* start */}
-        { associated_habits.map(h => habitSquare(h.id, h.title, h.on_streak, h.streak_duration, h.is_completed, habit_handler)) }
+        {associated_habits.map((h) =>
+          habitSquare(
+            h.id,
+            h.title,
+            h.on_streak,
+            h.streak_duration,
+            h.is_completed,
+            habit_handler
+          )
+        )}
       </div>
     </div>
   );
@@ -41,34 +71,39 @@ function time_period_routine_section(time_period_name, associated_habits, habit_
 function generate_time_period_sections(habit_map, time_periods, habit_handler) {
   var currentHabitKey = null;
   var generated_time_period_sections = [];
-  
+
   var habit_iterator = habit_map.keys();
 
   currentHabitKey = habit_iterator.next().value;
 
   do {
-    generated_time_period_sections.push(time_period_routine_section(time_periods[currentHabitKey], habit_map.get(currentHabitKey), habit_handler));
+    generated_time_period_sections.push(
+      time_period_routine_section(
+        time_periods[currentHabitKey],
+        habit_map.get(currentHabitKey),
+        habit_handler
+      )
+    );
 
     currentHabitKey = habit_iterator.next().value;
-  }
-  while (currentHabitKey != null)
+  } while (currentHabitKey != null);
 
   return generated_time_period_sections;
 }
 
 function generate_habit_map(habits) {
   var habit_map = new Map();
-  
+
   for (var i = 0; i < habits.length; i++) {
     if (habit_map.get(habits[i].habits_time_period) == null) {
-
-      habit_map.set(habits[i].habits_time_period, [ habits[i] ]);
-
+      habit_map.set(habits[i].habits_time_period, [habits[i]]);
     } else {
-
       var currentHabits = habit_map.get(habits[i].habits_time_period);
-      
-      habit_map.set(habits[i].habits_time_period, [ ...currentHabits, habits[i]]);
+
+      habit_map.set(habits[i].habits_time_period, [
+        ...currentHabits,
+        habits[i]
+      ]);
     }
   }
 
@@ -76,80 +111,149 @@ function generate_habit_map(habits) {
 }
 
 export default function dallies() {
-  const[habits, setHabits] = useState([])
+  const [habits, setHabits] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { userLoaded, user, session, userDetails, userOnboarding, subscription } = useUser();
+  const {
+    userLoaded,
+    user,
+    session,
+    userDetails,
+    userOnboarding,
+    subscription
+  } = useUser();
 
   useEffect(() => {
-    if (userOnboarding) initializePlayer()
-  }, [userOnboarding])
+    if (userOnboarding) initializePlayer();
+  }, [userOnboarding]);
 
   function initializePlayer() {
     try {
-        if(userOnboarding.onboarding_state.includes('4')){
-          loadPlayer();
-        } else {
-          router.replace('/account');
-        }
-      } catch (error) {
-          alert(error.message)
-      } finally {
-        console.log("InitializedPlayer")
+      if (userOnboarding.onboarding_state.includes('4')) {
+        loadPlayer();
+      } else {
+        router.replace('/account');
       }
-      
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      console.log('InitializedPlayer');
     }
+  }
 
   // If player is ready to load, go for it!
 
-  async function loadPlayer(){
-    console.log('Loading Player')
+  async function loadPlayer() {
+    console.log('Loading Player');
     fetchDailies();
   }
 
   async function fetchDailies() {
     try {
-      const user = supabase.auth.user()
+      const user = supabase.auth.user();
 
       const { data, error } = await supabase
-      .from('habits')
-      .select('*')
-      .eq('player', user.id)
-      
-      if(data){
-      setHabits(data)
-      console.log(habits)
+        .from('dailies')
+        .select('*')
+        .eq('player', user.id)
+        .eq('is_active', true)
+
+      setHabits(data);
+
+      if (error && status !== 406) {
+        throw error;
       }
-      
-
-    if (error && status !== 406) {
-            throw error
-    }
-
     } catch (error) {
       // alert(error.message)
     } finally {
-      setLoading(false)
+      setLoading(false);
+      console.log(habits);
     }
   }
 
   //console.log("dallies");
 
-  const mock_time_periods = [ "Morning", "Afternoon", "Evening" ];
+  const mock_time_periods = ['Morning', 'Afternoon', 'Evening'];
 
   // will replace with a fetch to the backend
-  const mock_active_habits = [ // streak stuff is temporary - Don't know what's the plan with that
-    { id: 0, title: "Habit 1", habits_time_period: 0, on_streak: true, streak_duration: 7, is_completed: false }, 
-    { id: 1, title: "Habit 2", habits_time_period: 0, on_streak: false, streak_duration: 0, is_completed: false  }, 
-    { id: 2, title: "Habit 3", habits_time_period: 0, on_streak: true, streak_duration: 9, is_completed: false }, 
-    { id: 3, title: "Habit 4", habits_time_period: 0, on_streak: true, streak_duration: 10, is_completed: false },
-    { id: 4, title: "Habit 5", habits_time_period: 0, on_streak: true, streak_duration: 10, is_completed: false },
-    { id: 5, title: "Habit 6", habits_time_period: 0, on_streak: true, streak_duration: 10, is_completed: false },
-    { id: 6, title: "Habit 7", habits_time_period: 0, on_streak: true, streak_duration: 10, is_completed: false },
-    { id: 7, title: "Habit 1", habits_time_period: 1, on_streak: true, streak_duration: 10, is_completed: false },
-    { id: 8, title: "Habit 1", habits_time_period: 2, on_streak: true, streak_duration: 10, is_completed: false }
+  const mock_active_habits = [
+    // streak stuff is temporary - Don't know what's the plan with that
+    {
+      id: 0,
+      title: 'Habit 1',
+      habits_time_period: 0,
+      on_streak: true,
+      streak_duration: 7,
+      is_completed: false
+    },
+    {
+      id: 1,
+      title: 'Habit 2',
+      habits_time_period: 0,
+      on_streak: false,
+      streak_duration: 0,
+      is_completed: false
+    },
+    {
+      id: 2,
+      title: 'Habit 3',
+      habits_time_period: 0,
+      on_streak: true,
+      streak_duration: 9,
+      is_completed: false
+    },
+    {
+      id: 3,
+      title: 'Habit 4',
+      habits_time_period: 0,
+      on_streak: true,
+      streak_duration: 10,
+      is_completed: false
+    },
+    {
+      id: 4,
+      title: 'Habit 5',
+      habits_time_period: 0,
+      on_streak: true,
+      streak_duration: 10,
+      is_completed: false
+    },
+    {
+      id: 5,
+      title: 'Habit 6',
+      habits_time_period: 0,
+      on_streak: true,
+      streak_duration: 10,
+      is_completed: false
+    },
+    {
+      id: 6,
+      title: 'Habit 7',
+      habits_time_period: 0,
+      on_streak: true,
+      streak_duration: 10,
+      is_completed: false
+    },
+    {
+      id: 7,
+      title: 'Habit 1',
+      habits_time_period: 1,
+      on_streak: true,
+      streak_duration: 10,
+      is_completed: false
+    },
+    {
+      id: 8,
+      title: 'Habit 1',
+      habits_time_period: 2,
+      on_streak: true,
+      streak_duration: 10,
+      is_completed: false
+    }
   ];
 
-  const [ mock_active_habit_state, updateMockHabits ] = React.useState(mock_active_habits);
+  const [mock_active_habit_state, updateMockHabits] = React.useState(
+    mock_active_habits
+  );
 
   const habit_map = generate_habit_map(mock_active_habit_state);
 
@@ -157,9 +261,10 @@ export default function dallies() {
     //console.log("handleHabitCompletionStatusChange");
 
     var updatedHabitList = mock_active_habit_state;
-    updatedHabitList[habit_id].is_completed = !updatedHabitList[habit_id].is_completed;
+    updatedHabitList[habit_id].is_completed = !updatedHabitList[habit_id]
+      .is_completed;
 
-    updateMockHabits( [ ...updatedHabitList ]);
+    updateMockHabits([...updatedHabitList]);
   }
 
   return (
@@ -170,12 +275,17 @@ export default function dallies() {
             Dailies
           </h1>
           <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore.
           </p>
         </div>
-        <button onClick={() => fetchDailies()} >Get Habits</button>
+        <button onClick={() => console.log(habits)}>Push me to check if data is pulled properly</button>
         <div>
-        { generate_time_period_sections(habit_map, mock_time_periods, handleHabitCompletionStatusChange) }
+          {generate_time_period_sections(
+            habit_map,
+            mock_time_periods,
+            handleHabitCompletionStatusChange
+          )}
         </div>
         <div className="pt-10">
           <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
