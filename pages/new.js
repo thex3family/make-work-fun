@@ -21,7 +21,7 @@ export default function updates() {
           <CardLUpdate
             date="June 29, 2021"
             title="Seasonal Leaderboard Rankings"
-            desc="Season 1 is coming! Every season will last 3 months, and the levels earned in each season will be displayed seperately on the leaderboard."
+            desc="Season 1 is coming! Every season will last 3 months, and exp / levels earned will be ranked seperately on the leaderboard for fair and friendly competition."
             img_url="updates/0.08.png"
             button_url="/"
             version="v.08"
