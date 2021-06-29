@@ -5,6 +5,7 @@ import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '@/components/ui/LoadingDots';
 
 export default function Avatar({
+  statRank,
   statName,
   statLevel,
   statEXP,
@@ -86,12 +87,12 @@ export default function Avatar({
             </div>
           </div>
           <div className="p-8 rounded-bl-md rounded-br-md">
-            <div className="flex flex-wrap">
+            <div className="relative flex flex-wrap">
               <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
                 <h5 className="text-emerald-400 uppercase font-bold text-xs">
                   {statTitle}
                 </h5>
-                <p className="font-semibold text-xl text-white-700 truncate">
+                <p className="font-semibold text-xl text-white-700 truncate w-3/4">
                   {statName}
                 </p>
                 <span className="font-semibold text-l text-white-700">
@@ -102,16 +103,42 @@ export default function Avatar({
                 </span>
               </div>
 
-              {/* <div className="relative w-auto pl-4 flex-initial">
-              <button 
-                className={
-                  "text-white p-3 text-center inline-flex items-center justify-center w-10 h-10 border shadow-lg rounded-full " +
-                  statIconColor
-                }
-              >
-                <i className={statIconName}></i>
-              </button>
-            </div> */}
+              <div className="absolute right-0 w-auto pl-4 flex-initial">
+                {statRank === 1 ? (
+                  <div
+                    className={
+                      'text-yellow-700 p-3 bg-yellow-400 text-center inline-flex items-center justify-center w-4 h-4 border-4 border-yellow-600 shadow-lg rounded-full font-bold'
+                    }
+                  >
+                    {statRank}
+                  </div>
+                ) : statRank === 2 ? (
+                  <div
+                    className={
+                      'text-gray-600 p-3 bg-gray-300 text-center inline-flex items-center justify-center w-4 h-4 border-4 border-gray-500 shadow-lg rounded-full font-bold'
+                    }
+                  >
+                    {statRank}
+                  </div>
+                ) : statRank === 3 ? (
+                  <div
+                    className={
+                      'text-yellow-800 p-3 bg-yellow-500 text-center inline-flex items-center justify-center w-4 h-4 border-4 border-yellow-700 shadow-lg rounded-full font-bold'
+                    }
+                  >
+                    {statRank}
+                  </div>
+                ) : (
+                  ""
+                  // <div
+                  //   className={
+                  //     'text-gray-400 border-gray-400 p-3 text-center inline-flex items-center justify-center w-8 h-8 border-2 shadow-lg rounded-full font-bold'
+                  //   }
+                  // >
+                  //   {statRank}
+                  // </div>
+                )}
+              </div>
             </div>
             <div className="font-semibold text-sm text-right -mt-3">
               {statEXP} / {statLevelEXP} XP

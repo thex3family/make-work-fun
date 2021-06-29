@@ -24,6 +24,7 @@ export default function HomePage({ players }) {
         {players.map((player, i) => (
           <Avatar
             key={i}
+            statRank={player.player_rank}
             statName={player.full_name}
             statLevel={player.total_level}
             statEXP={player.total_exp}
