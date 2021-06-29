@@ -36,8 +36,6 @@ export const getLeaderboardStats = async () => {
     .from('leaderboard')
     .select('*')
     .order('total_exp', { ascending: false })
-
-    console.log(data)
   if (error) {
     console.log(error.message);
     throw error;
