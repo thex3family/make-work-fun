@@ -18,10 +18,18 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="June 30, 2021"
+            title="Real Time Rewards"
+            desc="You don't need to refresh anymore - keep your app open to see your wins announced in real time with a random loot box! Click on it to unlock an unique celebratory gif - try to collect them all!"
+            img_url="updates/0.09.png"
+            button_url="/player"
+            version="v.09"
+          />
           <CardLUpdate
             date="June 29, 2021"
             title="Seasonal Leaderboard Rankings"
-            desc="Season 1 is coming! Every season will last 3 months, and exp / levels earned will be ranked separately on the leaderboard for fair and friendly competition."
+            desc="Season 1 is coming! Every season will last 3 months, and exp / levels earned within each season and overall will be ranked separately on the leaderboard for fair and friendly competition."
             img_url="updates/0.08.png"
             button_url="/"
             version="v.08"
