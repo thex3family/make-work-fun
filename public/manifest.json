@@ -1,6 +1,7 @@
 {
-    "name": "Make Work Fun, Get Stuff Done",
+    "name": "Make Work Fun",
     "short_name": "Make Work Fun",
+    "description": "Make Work Fun, Get Stuff Done",
     "theme_color": "#2e3537",
     "background_color": "#2e3537",
     "display": "fullscreen",
