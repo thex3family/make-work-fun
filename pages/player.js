@@ -106,8 +106,7 @@ export default function Player() {
   const [activeGold, setActiveGold] = React.useState(null);
   const [activeEXP, setActiveEXP] = React.useState(null);
   const [activeSlug, setActiveSlug] = React.useState(null);
-
-  const [randomGIF, setRandomGIF] = React.useState(null);
+  const [activeGIF, setActiveGIF] = React.useState(null);
 
   const [weekWins, setWeekWins] = useState([]);
 
@@ -250,7 +249,7 @@ export default function Player() {
             url: `https://www.notion.so/${activeSlug}`,
             // thumbnail
             thumbnail: {
-              url: `${randomGIF.image_original_url}`
+              url: `${activeGIF}`
             },
             // embed description
             // - text on 3rd row
@@ -371,7 +370,7 @@ export default function Player() {
       const { data, error } = await supabase
         .from('success_plan')
         .select(
-          'name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id'
+          'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url'
         )
         .eq('player', user.id)
         .order('closing_date', { ascending: false })
@@ -393,35 +392,49 @@ export default function Player() {
   async function fetchLatestWin() {
     try {
       const user = supabase.auth.user();
-
       const { data, error } = await supabase
         .from('success_plan')
-        .on('INSERT', payload => {
-          console.log('New Win Incoming!', payload, payload.new.player)
+        .on('INSERT', async (payload) => {
+          console.log('New Win Incoming!', payload, payload.new.player);
 
           // checking if the win is assigned to the current user
 
-          if(payload.new.player === user.id) {
-            initiateModal();
+          if (payload.new.player === user.id) {
             setActiveType(payload.new.type);
             setActiveName(payload.new.name);
             setActiveUpstream(payload.new.upstream);
             setActiveDate(payload.new.closing_date);
             setActiveGold(payload.new.gold_reward);
             setActiveEXP(payload.new.exp_reward);
-      
             const slug = payload.new.notion_id.replace(/-/g, '');
             setActiveSlug(slug);
+
+            // generate a random GIF
+            const { data: gifs } = await gf.random({
+              tag: 'excited dog cat',
+              rating: 'g'
+            });
+            setActiveGIF(gifs.image_original_url);
+
+            // update the row
+
+            const { data, error } = await supabase
+            .from('success_plan')
+            .update({ gif_url: gifs.image_original_url })
+            .eq('id', payload.new.id);
+
+            // shows the modal
+
+            setShowModal(true);
 
             // updates the rest of the stats
 
             fetchPlayerStats();
             fetchWins();
             fetchWeekWins();
-
           }
         })
-        .subscribe()
+        .subscribe();
 
       if (error && status !== 406) {
         throw error;
@@ -457,25 +470,44 @@ export default function Player() {
     }
   }
 
-  const modalHandler = (wins) => {
-    initiateModal();
+  async function modalHandler(wins) {
     setActiveType(wins.type);
     setActiveName(wins.name);
     setActiveUpstream(wins.upstream);
     setActiveDate(wins.closing_date);
     setActiveGold(wins.gold_reward);
     setActiveEXP(wins.exp_reward);
-
     const slug = wins.notion_id.replace(/-/g, '');
     setActiveSlug(slug);
-  };
 
-  async function initiateModal() {
-    const { data: gifs } = await gf.random({
-      tag: 'excited dog cat',
-      rating: 'g'
-    });
-    setRandomGIF(gifs);
+    // check if there is a GIF in the database
+
+    if (wins.gif_url) {
+      setActiveGIF(wins.gif_url);
+
+    } else {
+      
+      // generate a random GIF
+      const { data: gifs } = await gf.random({
+        tag: 'excited dog cat',
+        rating: 'g'
+      });    
+      setActiveGIF(gifs.image_original_url);
+
+      // update the row
+      
+      const { data, error } = await supabase
+      .from('success_plan')
+      .update({ gif_url: gifs.image_original_url })
+      .eq('id', wins.id);
+
+      // refresh table
+      fetchWins();
+
+    }
+    
+    // show modal
+
     setShowModal(true);
   }
 
@@ -678,14 +710,14 @@ export default function Player() {
                         </tr>
                       </tbody>
                     </table>
-                    {/* <img src="img/celebratory-cat.gif" height="auto" className="w-3/4 mx-auto pb-2" /> */}
-                    <Gif
+                    <img src={activeGIF} height="auto" className="w-3/4 mx-auto pb-2" />
+                    {/* <Gif
                       className="w-3/4 mx-auto justify-center"
-                      gif={randomGIF}
+                      gif={activeGIF}
                       hideAttribution={true}
                       noLink={true}
                       width={300}
-                    />
+                    /> */}
                     <p className="mt-2">It's time to celebrate! 😄</p>
                   </div>
                   {/*footer*/}

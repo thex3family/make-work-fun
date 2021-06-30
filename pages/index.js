@@ -21,8 +21,13 @@ export default function HomePage() {
   const [activeGold, setActiveGold] = useState(null);
   const [activeEXP, setActiveEXP] = useState(null);
   const [activeSlug, setActiveSlug] = useState(null);
-  const [randomGIF, setRandomGIF] = useState(null);
+  const [activeGIF, setActiveGIF] = useState(null);
   const [players, setPlayers] = useState([]);
+
+  const [playerName, setPlayerName] = useState(null);
+  const [playerRank, setPlayerRank] = useState(null);
+  const [nextRank, setNextRank] = useState(null);
+
 
   useEffect(() => {
     getLeaderboardStats();
@@ -73,7 +78,7 @@ export default function HomePage() {
     try {
       const { data, error } = await supabase
         .from('success_plan')
-        .on('INSERT', (payload) => {
+        .on('INSERT', async (payload) => {
           console.log('New Win Incoming!', payload, payload.new.player);
           // Updating all stats
           getLeaderboardStats();
@@ -82,9 +87,9 @@ export default function HomePage() {
 
           if (userOnboarding) {
             if (userOnboarding.onboarding_state.includes('4')) {
+              fetchPlayerStats();
               const user = supabase.auth.user();
               if (payload.new.player === user.id) {
-                initiateModal();
                 setActiveType(payload.new.type);
                 setActiveName(payload.new.name);
                 setActiveUpstream(payload.new.upstream);
@@ -94,6 +99,24 @@ export default function HomePage() {
 
                 const slug = payload.new.notion_id.replace(/-/g, '');
                 setActiveSlug(slug);
+
+                // generate a random GIF
+                const { data: gifs } = await gf.random({
+                  tag: 'excited dog cat',
+                  rating: 'g'
+                });
+                setActiveGIF(gifs.image_original_url);
+
+                // update the row
+
+                const { data, error } = await supabase
+                  .from('success_plan')
+                  .update({ gif_url: gifs.image_original_url })
+                  .eq('id', payload.new.id);
+
+                // show the modal
+
+                setShowModal(true);
               }
             }
           }
@@ -109,13 +132,91 @@ export default function HomePage() {
     }
   }
 
-  async function initiateModal() {
-    const { data: gifs } = await gf.random({
-      tag: 'excited dog cat',
-      rating: 'g'
+  async function fetchPlayerStats() {
+    try {
+      const user = supabase.auth.user();
+
+      const { data, error } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .eq('player', user.id)
+        .single();
+
+      setPlayerName(data.full_name);
+      setPlayerRank(data.player_rank);
+      setNextRank(data.next_rank);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+    }
+  }
+
+  // checks if should send win to guilded
+
+  async function sendWebhook() {
+    fetch(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        content: null,
+        // embeds to be sent
+
+        embeds: [
+          {
+            // decimal number colour of the side of the embed
+            color: null,
+            author: {
+              name: `🎉 ${playerName} completed a ${activeType}!`
+            },
+            // author
+            // - icon next to text at top (text is a link)
+            // embed title
+            // - link on 2nd row
+            title: `${activeName}`,
+            url: `https://www.notion.so/${activeSlug}`,
+            // thumbnail
+            thumbnail: {
+              url: `${activeGIF}`
+            },
+            // embed description
+            // - text on 3rd row
+            description: `Completed On: ${activeDate}`,
+            // custom embed fields: bold title/name, normal content/value below title
+            // - located below description, above image.
+            fields: [
+              {
+                name: '🏆 Leaderboard Position',
+                value: `#${playerRank} (${nextRank} EXP to next rank)`
+              }
+            ],
+            // image
+            // - picture below description(and fields) - this needs to be the gif that we fetch from random whatever.
+            // image: {
+            //   url:
+            //     'http://makework.fun/img/celebratory-cat.gif',
+            // },
+            // footer
+            // - icon next to text at bottom
+            footer: {
+              text: `+${activeGold} 💰 | +${activeEXP} XP | ${activeUpstream}`
+            }
+          },
+          {
+            color: null,
+            author: {
+              name: '💬 Start a discussion!'
+              // url: 'https://toolbox.co-x3.com/family-connection/?utm_source=guilded',
+            }
+          }
+        ]
+      })
     });
-    setRandomGIF(gifs);
-    setShowModal(true);
   }
 
   return (
@@ -373,13 +474,10 @@ export default function HomePage() {
                         </tr>
                       </tbody>
                     </table>
-                    {/* <img src="img/celebratory-cat.gif" height="auto" className="w-3/4 mx-auto pb-2" /> */}
-                    <Gif
-                      className="w-3/4 mx-auto justify-center"
-                      gif={randomGIF}
-                      hideAttribution={true}
-                      noLink={true}
-                      width={300}
+                    <img
+                      src={activeGIF}
+                      height="auto"
+                      className="w-3/4 mx-auto pb-2"
                     />
                     <p className="mt-2">It's time to celebrate! 😄</p>
                   </div>
