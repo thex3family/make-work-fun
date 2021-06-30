@@ -14,6 +14,7 @@ module.exports = {
       colors: {
         primary: 'var(--primary)',
         'primary-2': 'var(--primary-2)',
+        'primary-3': 'var(--primary-3)',
         secondary: 'var(--secondary)',
         'secondary-2': 'var(--secondary-2)',
         hover: 'var(--hover)',
