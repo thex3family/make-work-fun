@@ -30,16 +30,3 @@ export const updateUserName = async (user, name) => {
     })
     .eq('id', user.id);
 };
-
-export const getLeaderboardStats = async () => {
-  const { data, error } = await supabase
-    .from('leaderboard')
-    .select('*')
-    .order('total_exp', { ascending: false })
-  if (error) {
-    console.log(error.message);
-    throw error;
-  }
-
-  return data || [];
-};

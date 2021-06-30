@@ -113,20 +113,31 @@ export default function Player() {
 
   const NameCustom = (row) => (
     <div data-tag="allowRowEvents" className="truncateWrapper">
-      <p data-tag="allowRowEvents" className="font-semibold text-sm mb-1 truncate">{row.name}</p>
-      <p data-tag="allowRowEvents" className="text-sm px-2 inline-flex font-semibold rounded bg-emerald-100 text-emerald-800">
+      <p
+        data-tag="allowRowEvents"
+        className="font-semibold text-sm mb-1 truncate"
+      >
+        {row.name}
+      </p>
+      <p
+        data-tag="allowRowEvents"
+        className="text-sm px-2 inline-flex font-semibold rounded bg-emerald-100 text-emerald-800"
+      >
         {row.type}
       </p>
     </div>
   );
   const RewardCustom = (row) => (
     <div data-tag="allowRowEvents">
-      <p data-tag="allowRowEvents" className="font-semibold text-sm">+{row.gold_reward} 💰</p>
+      <p data-tag="allowRowEvents" className="font-semibold text-sm">
+        +{row.gold_reward} 💰
+      </p>
       <p data-tag="allowRowEvents">+{row.exp_reward} XP</p>
     </div>
   );
   const TrendCustom = (row) => (
-    <i data-tag="allowRowEvents"
+    <i
+      data-tag="allowRowEvents"
       className={
         row.trend === 'up'
           ? 'fas fa-arrow-up text-emerald-600'
@@ -215,7 +226,6 @@ export default function Player() {
   // checks if should send win to guilded
 
   async function sendWebhook() {
-    console.log(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK);
     fetch(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK, {
       method: 'post',
       headers: {
@@ -299,8 +309,8 @@ export default function Player() {
     console.log('Loading Player');
     fetchPlayerStats();
     fetchWins();
-    fetchLatestWin();
     fetchWeekWins();
+    fetchLatestWin();
   }
 
   async function fetchWeekWins() {
@@ -378,30 +388,40 @@ export default function Player() {
     }
   }
 
+  // check if there is a win (only works when the app is open)
+
   async function fetchLatestWin() {
     try {
       const user = supabase.auth.user();
 
       const { data, error } = await supabase
         .from('success_plan')
-        .select(
-          'name, type, closing_date, gold_reward, exp_reward, entered_on, upstream, notion_id'
-        )
-        .eq('player', user.id)
-        .order('entered_on', { ascending: false })
-        .limit(1)
-        .single();
+        .on('INSERT', payload => {
+          console.log('New Win Incoming!', payload, payload.new.player)
 
-      initiateModal();
-      setActiveType(data.type);
-      setActiveName(data.name);
-      setActiveUpstream(data.upstream);
-      setActiveDate(data.closing_date);
-      setActiveGold(data.gold_reward);
-      setActiveEXP(data.exp_reward);
+          // checking if the win is assigned to the current user
 
-      const slug = data.notion_id.replace(/-/g, '');
-      setActiveSlug(slug);
+          if(payload.new.player === user.id) {
+            initiateModal();
+            setActiveType(payload.new.type);
+            setActiveName(payload.new.name);
+            setActiveUpstream(payload.new.upstream);
+            setActiveDate(payload.new.closing_date);
+            setActiveGold(payload.new.gold_reward);
+            setActiveEXP(payload.new.exp_reward);
+      
+            const slug = payload.new.notion_id.replace(/-/g, '');
+            setActiveSlug(slug);
+
+            // updates the rest of the stats
+
+            fetchPlayerStats();
+            fetchWins();
+            fetchWeekWins();
+
+          }
+        })
+        .subscribe()
 
       if (error && status !== 406) {
         throw error;
@@ -457,7 +477,6 @@ export default function Player() {
     });
     setRandomGIF(gifs);
     setShowModal(true);
-    console.log(randomGIF);
   }
 
   if (loading) {
