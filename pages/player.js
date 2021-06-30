@@ -419,9 +419,9 @@ export default function Player() {
             // update the row
 
             const { data, error } = await supabase
-            .from('success_plan')
-            .update({ gif_url: gifs.image_original_url })
-            .eq('id', payload.new.id);
+              .from('success_plan')
+              .update({ gif_url: gifs.image_original_url })
+              .eq('id', payload.new.id);
 
             // shows the modal
 
@@ -485,30 +485,47 @@ export default function Player() {
     if (wins.gif_url) {
       setActiveGIF(wins.gif_url);
 
-    } else {
+      // hide the box
+      setBoxClass('hide-box');
+
+      // show modal
+      setShowModal(true);
       
+      } else {
+      
+      // show modal (early because I will have to load the gif anyways)
+      setShowModal(true);
+
       // generate a random GIF
       const { data: gifs } = await gf.random({
         tag: 'excited dog cat',
         rating: 'g'
-      });    
+      });
       setActiveGIF(gifs.image_original_url);
 
       // update the row
-      
+
       const { data, error } = await supabase
-      .from('success_plan')
-      .update({ gif_url: gifs.image_original_url })
-      .eq('id', wins.id);
+        .from('success_plan')
+        .update({ gif_url: gifs.image_original_url })
+        .eq('id', wins.id);
 
       // refresh table
       fetchWins();
-
     }
-    
-    // show modal
 
-    setShowModal(true);
+  }
+
+
+  const [boxClass, setBoxClass] = useState("");
+
+  function openBox() {
+    boxClass != 'hide-box' ? setBoxClass('open-box') : '';
+  }
+
+  function closeModal() {
+    setShowModal(false);
+    setBoxClass('');
   }
 
   if (loading) {
@@ -710,7 +727,24 @@ export default function Player() {
                         </tr>
                       </tbody>
                     </table>
-                    <img src={activeGIF} height="auto" className="w-3/4 mx-auto pb-2" />
+
+                    <div className="w-full">
+                      <div className="box">
+                        <a onClick={openBox} className="box-container">
+                          <div className={`${boxClass} box-body`}>
+                            <div className={`${boxClass} box-lid`}>
+                              <div className={`${boxClass} box-bowtie`}></div>
+                            </div>
+                          </div>
+
+                          <img
+                            src={activeGIF}
+                            className={`${boxClass} absolute box-image`}
+                          />
+                        </a>
+                      </div>
+                    </div>
+
                     {/* <Gif
                       className="w-3/4 mx-auto justify-center"
                       gif={activeGIF}
@@ -725,7 +759,7 @@ export default function Player() {
                     <button
                       className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
-                      onClick={() => setShowModal(false)}
+                      onClick={() => closeModal()}
                     >
                       Close
                     </button>

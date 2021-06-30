@@ -28,7 +28,6 @@ export default function HomePage() {
   const [playerRank, setPlayerRank] = useState(null);
   const [nextRank, setNextRank] = useState(null);
 
-
   useEffect(() => {
     getLeaderboardStats();
     fetchLatestWin();
@@ -100,6 +99,9 @@ export default function HomePage() {
                 const slug = payload.new.notion_id.replace(/-/g, '');
                 setActiveSlug(slug);
 
+                // show modal (early because I will have to load the gif anyways)
+                setShowModal(true);
+
                 // generate a random GIF
                 const { data: gifs } = await gf.random({
                   tag: 'excited dog cat',
@@ -113,10 +115,6 @@ export default function HomePage() {
                   .from('success_plan')
                   .update({ gif_url: gifs.image_original_url })
                   .eq('id', payload.new.id);
-
-                // show the modal
-
-                setShowModal(true);
               }
             }
           }
@@ -130,6 +128,17 @@ export default function HomePage() {
       alert(error.message);
     } finally {
     }
+  }
+
+  const [boxClass, setBoxClass] = useState("");
+
+  function openBox() {
+    boxClass != 'hide-box' ? setBoxClass('open-box') : '';
+  }
+
+  function closeModal() {
+    setShowModal(false);
+    setBoxClass('');
   }
 
   async function fetchPlayerStats() {
@@ -474,11 +483,24 @@ export default function HomePage() {
                         </tr>
                       </tbody>
                     </table>
-                    <img
-                      src={activeGIF}
-                      height="auto"
-                      className="w-3/4 mx-auto pb-2"
-                    />
+                    
+                    <div className="w-full">
+                      <div className="box">
+                        <a onClick={openBox} className="box-container">
+                          <div className={`${boxClass} box-body`}>
+                            <div className={`${boxClass} box-lid`}>
+                              <div className={`${boxClass} box-bowtie`}></div>
+                            </div>
+                          </div>
+
+                          <img
+                            src={activeGIF}
+                            className={`${boxClass} absolute box-image`}
+                          />
+                        </a>
+                      </div>
+                    </div>
+
                     <p className="mt-2">It's time to celebrate! 😄</p>
                   </div>
                   {/*footer*/}
@@ -486,7 +508,7 @@ export default function HomePage() {
                     <button
                       className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
-                      onClick={() => setShowModal(false)}
+                      onClick={() => closeModal()}
                     >
                       Close
                     </button>
