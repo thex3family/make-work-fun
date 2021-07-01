@@ -96,7 +96,7 @@ const SignIn = () => {
             )}
 
             {!showPasswordInput && (
-              <form onSubmit={handleSignin} className="flex flex-col space-y-4">
+              <form onSubmit={handleSignin} className="animate-fade-in-up flex flex-col space-y-4">
                 <Input
                   type="email"
                   placeholder="Email"
@@ -116,7 +116,7 @@ const SignIn = () => {
             )}
 
             {showPasswordInput && (
-              <form onSubmit={handleSignin} className="flex flex-col space-y-4">
+              <form onSubmit={handleSignin} className="animate-fade-in-up flex flex-col space-y-4">
                 <Input
                   type="email"
                   placeholder="Email"
