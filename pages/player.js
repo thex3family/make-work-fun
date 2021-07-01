@@ -88,25 +88,28 @@ export default function Player() {
 
   const [wins, setWins] = useState([]);
 
-  const [playerLevel, setPlayerLevel] = React.useState(null);
-  const [playerName, setPlayerName] = React.useState(null);
-  const [playerGold, setPlayerGold] = React.useState(null);
-  const [playerEXP, setPlayerEXP] = React.useState(null);
-  const [playerRank, setPlayerRank] = React.useState(null);
-  const [nextRank, setNextRank] = React.useState(null);
+  const [playerRank, setPlayerRank] = useState(null);
+  const [playerLevel, setPlayerLevel] = useState(null);
+  const [playerName, setPlayerName] = useState(null);
+
+  const [playerEXP, setPlayerEXP] = useState(null);
+  const [playerEXPProgress, setPlayerEXPProgress] = useState(null);
+  const [playerLevelEXP, setPlayerLevelEXP] = useState(null);
+  const [playerGold, setPlayerGold] = useState(null);
+  const [nextRank, setNextRank] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
 
-  const [showModal, setShowModal] = React.useState(false);
-  // const [showIntroModal, setShowIntroModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
+  // const [showIntroModal, setShowIntroModal] = useState(false);
 
-  const [activeType, setActiveType] = React.useState(null);
-  const [activeName, setActiveName] = React.useState(null);
-  const [activeUpstream, setActiveUpstream] = React.useState(null);
-  const [activeDate, setActiveDate] = React.useState(null);
-  const [activeGold, setActiveGold] = React.useState(null);
-  const [activeEXP, setActiveEXP] = React.useState(null);
-  const [activeSlug, setActiveSlug] = React.useState(null);
-  const [activeGIF, setActiveGIF] = React.useState(null);
+  const [activeType, setActiveType] = useState(null);
+  const [activeName, setActiveName] = useState(null);
+  const [activeUpstream, setActiveUpstream] = useState(null);
+  const [activeDate, setActiveDate] = useState(null);
+  const [activeGold, setActiveGold] = useState(null);
+  const [activeEXP, setActiveEXP] = useState(null);
+  const [activeSlug, setActiveSlug] = useState(null);
+  const [activeGIF, setActiveGIF] = useState(null);
 
   const [weekWins, setWeekWins] = useState([]);
 
@@ -346,12 +349,14 @@ export default function Player() {
         .eq('player', user.id)
         .single();
 
+      setPlayerRank(data.player_rank)
       setPlayerName(data.full_name);
-      setPlayerLevel(data.total_level);
-      setPlayerGold(data.total_gold);
+      setPlayerLevel(data.current_level);
       setPlayerEXP(data.total_exp);
+      setPlayerEXPProgress(data.exp_progress)
+      setPlayerLevelEXP(data.level_exp)
+      setPlayerGold(data.total_gold);
       setAvatarUrl(data.avatar_url);
-      setPlayerRank(data.player_rank);
       setNextRank(data.next_rank);
 
       if (error && status !== 406) {
@@ -408,6 +413,11 @@ export default function Player() {
             setActiveEXP(payload.new.exp_reward);
             const slug = payload.new.notion_id.replace(/-/g, '');
             setActiveSlug(slug);
+            
+            // shows the modal
+
+            setShowModal(true);
+
 
             // generate a random GIF
             const { data: gifs } = await gf.random({
@@ -422,10 +432,6 @@ export default function Player() {
               .from('success_plan')
               .update({ gif_url: gifs.image_original_url })
               .eq('id', payload.new.id);
-
-            // shows the modal
-
-            setShowModal(true);
 
             // updates the rest of the stats
 
@@ -648,10 +654,13 @@ export default function Player() {
           </div>
           <div className="max-w-6xl px-4 md:px-10 mx-auto w-full -m-24">
             <HeaderStats
+              player_rank={playerRank}
               full_name={playerName}
               total_level={playerLevel}
-              total_gold={playerGold}
               total_exp={playerEXP}
+              exp_progress={playerEXPProgress}
+              level_exp={playerLevelEXP}
+              total_gold={playerGold}
               avatar_url={avatar_url}
               setAvatarUrl={setAvatarUrl}
               updateProfile={updateProfile}

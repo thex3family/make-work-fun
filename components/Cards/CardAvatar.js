@@ -9,6 +9,8 @@ export default function Avatar({
   statName,
   statLevel,
   statEXP,
+  statEXPProgress,
+  statLevelEXP,
   statGold,
   statWinName,
   statWinType,
@@ -43,8 +45,7 @@ export default function Avatar({
 
   const statTitle = 'Newbie';
   const statMaxLevel = '100';
-  const statLevelEXP = 500 * (statLevel + 1);
-  const statEXPPercent = Math.round(((statEXP - statLevel * 500) / 500) * 100);
+  const statEXPPercent = Math.floor(statEXPProgress / statLevelEXP * 100);
   const statArrow = 'up';
   const statPercent = '0';
   const statPercentColor = 'text-white';
@@ -141,7 +142,7 @@ export default function Avatar({
               </div>
             </div>
             <div className="font-semibold text-sm text-right -mt-3">
-              {statEXP} / {statLevelEXP} XP
+              {statEXP} / {statLevelEXP - statEXPProgress + statEXP} XP
             </div>
             <div className="flex flex-wrap">
               <div className="relative w-full max-w-full flex-grow flex-1">

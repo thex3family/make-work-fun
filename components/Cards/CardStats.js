@@ -9,6 +9,7 @@ export default function CardStats({
   statLevel,
   statMaxLevel,
   statEXP,
+  statEXPProgress,
   statLevelEXP,
   statEXPPercent,
   statGold,
@@ -53,7 +54,7 @@ export default function CardStats({
               </Link>
             </div>
           </div>
-          <div className="font-semibold text-sm text-right -mt-3">{statEXP} / {statLevelEXP} XP</div>
+          <div className="font-semibold text-sm text-right -mt-3">{statEXP} / {statLevelEXP - statEXPProgress + statEXP} XP</div>
           <div className="flex flex-wrap">
             <div className="relative w-full max-w-full flex-grow flex-1">
               <div className="flex items-center">
