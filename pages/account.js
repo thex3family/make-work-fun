@@ -28,6 +28,7 @@ function Card({ title, description, footer, children }) {
 
 export default function Account() {
   const [loading, setLoading] = useState(true);
+  const [saveLoading, setSaveLoading] = useState(false);
   const router = useRouter();
   const [full_name, setName] = useState(null);
   const [notion_api_secret, setNotionAPISecret] = useState(null);
@@ -76,7 +77,7 @@ export default function Account() {
 
   async function updateProfile({ full_name, notion_api_secret, notion_success_plan}) {
     try {
-      setLoading(true)
+      setSaveLoading(true)
       const user = supabase.auth.user()
       if(!notion_success_plan.includes('-')) {
       const url = notion_success_plan;
@@ -250,9 +251,9 @@ export default function Account() {
                     variant="prominent"
                     type="submit"
                     onClick={() => updateProfile({ full_name, notion_api_secret, notion_success_plan })}
-                    disabled={loading}
+                    disabled={saveLoading}
                     >
-                      {loading ? 'Loading ...' : 'Save & Test Connection'}
+                      {saveLoading ? 'Loading ...' : 'Save & Test Connection'}
           </Button></Card>
           
           </div>
@@ -272,15 +273,15 @@ export default function Account() {
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                 <h3 className="text-2xl font-semibold text-white">
-                🕺 Woohoo! One quest down!
+                🕺 Woohoo! You're almost there!
                 </h3>
               </div>
               {/*body*/}
               <div className="relative p-6 text-blueGray-500">
-                <img src="img/hi-five.gif" height="auto" className="w-3/4 mx-auto pb-2" />
+                <img src="img/hi-five.gif" height="auto" className="h-96 mx-auto pb-2" />
               <div className="text-center">
                   <p className="text-xl mt-5 text-primary-2 font-semibold">
-                    No time to waste - let's connect!
+                    There's no time to waste - let's connect!
                   </p>
                   </div>
               </div>

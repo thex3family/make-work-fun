@@ -51,7 +51,7 @@ const SignUp = () => {
         <div className="flex justify-center pb-12 ">
             <img src="logo-white.svg"  width="64px" height="64px" />
         </div>
-        <form onSubmit={handleSignup} className="flex flex-col space-y-4">
+        <form onSubmit={handleSignup} className="animate-fade-in-up flex flex-col space-y-4">
           {message.content && (
             <div
               className={`${

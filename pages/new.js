@@ -18,8 +18,16 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Jul 1, 2021"
+            title="It's Time To Level Up"
+            desc="Our leveling experience now follows a linear growth pattern, and you can now enjoy dynamic level up screens to help you enjoy your journey!"
+            img_url="updates/0.10.png"
+            button_url="/player"
+            version="v.10"
+          />
           <CardRUpdate
-            date="June 30, 2021"
+            date="Jun 30, 2021"
             title="Real Time Rewards"
             desc="You don't need to refresh anymore - keep your app open to see your wins announced in real time with a random loot box! Click on it to unlock an unique celebratory gif - try to collect them all!"
             img_url="updates/0.09.png"
@@ -27,7 +35,7 @@ export default function updates() {
             version="v.09"
           />
           <CardLUpdate
-            date="June 29, 2021"
+            date="Jun 29, 2021"
             title="Seasonal Leaderboard Rankings"
             desc="Season 1 is coming! Every season will last 3 months, and exp / levels earned within each season and overall will be ranked separately on the leaderboard for fair and friendly competition."
             img_url="updates/0.08.png"
@@ -35,7 +43,7 @@ export default function updates() {
             version="v.08"
           />
           <CardRUpdate
-            date="June 28, 2021"
+            date="Jun 28, 2021"
             title="Grow Together With Family"
             desc="See what your friends are up to and embark on adventures together with a community that cares about your growth journey."
             img_url="updates/0.07.png"
@@ -43,7 +51,7 @@ export default function updates() {
             version="v.07"
           />
           <CardLUpdate
-            date="June 26, 2021"
+            date="Jun 26, 2021"
             title="Celebrate Your Wins"
             desc="Every time you accomplish a win, a randomized gif will spawn!
             Remember to share your wins to get support and start meaningful
@@ -53,7 +61,7 @@ export default function updates() {
             version="v.06"
           />
           <CardRUpdate
-            date="June 18, 2021"
+            date="Jun 18, 2021"
             title="Table Magic"
             desc="We've beautified your recent win table. Easily view your latest 10
             wins and look back into historical entries to visualize how you've
@@ -63,7 +71,7 @@ export default function updates() {
             version="v.05"
           />
           <CardLUpdate
-            date="June 17, 2021"
+            date="Jun 17, 2021"
             title="Data Validation"
             desc="We want to help you understand your data easier - so we created a
             wizard that walks you through your Notion API connection and
@@ -75,7 +83,7 @@ export default function updates() {
             version="v.04"
           />
           <CardRUpdate
-            date="June 14, 2021"
+            date="Jun 14, 2021"
             title="Compare Your Growth"
             desc="Graphs are now functional! Visualize your wins from the last week
             and compare your stats to how you're doing this week."
@@ -84,7 +92,7 @@ export default function updates() {
             version="v.03"
           />
           <CardLUpdate
-            date="June 13, 2021"
+            date="Jun 13, 2021"
             title="Improved Onboarding Experience"
             desc="We wanted to make onboarding easier, so we've built a step by step
           user journey to help you get started, faster! We've also improved
@@ -95,7 +103,7 @@ export default function updates() {
           />
           <div className="col-start-1 col-end-4 text-center">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-              June 12, 2021
+              Jun 12, 2021
             </span>
           </div>
           <div className="col-start-1 col-end-4 my-4 p-8 bg-primary-2 rounded">

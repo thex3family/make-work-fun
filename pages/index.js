@@ -282,7 +282,7 @@ export default function HomePage() {
                     <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       Season 1 Starts In...
                     </h1>
-                    <h1 className="rounded-lg pt-5 w-3/4 lg:w-full mx-auto text-xl font-semibold text-center lg:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                    <h1 className=" rounded-lg pt-5 w-3/4 lg:w-full mx-auto text-xl font-semibold text-center lg:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <Countdown date="2021-07-02T21:00:00-05:00" />
                     </h1>
                     {/* <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
