@@ -8,6 +8,8 @@ import { useUser } from '@/utils/useUser';
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase-client';
 
+import ModalLevelUp from '@/components/Modals/ModalLevelUp';
+
 export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -27,6 +29,9 @@ export default function HomePage() {
   const [playerName, setPlayerName] = useState(null);
   const [playerRank, setPlayerRank] = useState(null);
   const [nextRank, setNextRank] = useState(null);
+  const [playerLevel, setPlayerLevel] = useState(null);
+
+  const [levelUp, setLevelUp] = useState(false);
 
   useEffect(() => {
     getLeaderboardStats();
@@ -79,6 +84,7 @@ export default function HomePage() {
         .from('success_plan')
         .on('INSERT', async (payload) => {
           console.log('New Win Incoming!', payload, payload.new.player);
+
           // Updating all stats
           getLeaderboardStats();
 
@@ -86,9 +92,16 @@ export default function HomePage() {
 
           if (userOnboarding) {
             if (userOnboarding.onboarding_state.includes('4')) {
-              fetchPlayerStats();
               const user = supabase.auth.user();
               if (payload.new.player === user.id) {
+                // check if the user has leveled
+
+                const player = await fetchPlayerStats();
+                if (player.current_level > player.previous_level) {
+                  // level up animation
+                  setLevelUp(true);
+                }
+
                 setActiveType(payload.new.type);
                 setActiveName(payload.new.name);
                 setActiveUpstream(payload.new.upstream);
@@ -130,7 +143,7 @@ export default function HomePage() {
     }
   }
 
-  const [boxClass, setBoxClass] = useState("");
+  const [boxClass, setBoxClass] = useState('');
 
   function openBox() {
     boxClass != 'hide-box' ? setBoxClass('open-box') : '';
@@ -153,11 +166,14 @@ export default function HomePage() {
 
       setPlayerName(data.full_name);
       setPlayerRank(data.player_rank);
+      setPlayerLevel(data.current_level);
       setNextRank(data.next_rank);
 
       if (error && status !== 406) {
         throw error;
       }
+
+      return data;
     } catch (error) {
       alert(error.message);
     } finally {
@@ -233,7 +249,7 @@ export default function HomePage() {
       <section className="justify-center">
         <div className="bg-player-pattern bg-fixed h-4/5">
           <div className="bg-black bg-opacity-90 h-4/5">
-            <div className="pt-8 md:pt-24 pb-10 max-w-7xl mx-auto">
+            <div className="animate-fade-in-up  pt-8 md:pt-24 pb-10 max-w-7xl mx-auto">
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
                   <h1 className="mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
@@ -319,11 +335,11 @@ export default function HomePage() {
           </g>
         </svg>
       </div> */}
-        <h1 className="text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 p-3 sm:p-4">
+        <h1 className="animate-fade-in-up  text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 p-3 sm:p-4">
           Leaderboard 🏆
         </h1>
         {loading ? (
-          <div className="mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl">
+          <div className="animate-fade-in-up  mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl">
             <div className="px-8 mt-10 w-full sm:w-1/2 md:1/2 lg:w-1/3 xl:w-1/4 shadow-xl">
               <div className="bg-primary-2 rounded mx-auto">
                 <div className="h-60 bg-gray-600 rounded-tr rounded-tl animate-pulse"></div>
@@ -439,22 +455,30 @@ export default function HomePage() {
           </div>
         )}
       </section>
+
+      {/* level up modal */}
+      <ModalLevelUp
+        levelUp={levelUp}
+        playerLevel={playerLevel}
+        setLevelUp={setLevelUp}
+      />
+
       {/* // Modal Section */}
       {showModal ? (
         <>
           <div className="h-screen flex justify-center">
             <div
-              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none"
               // onClick={() => setShowModal(false)}
             >
-              <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+              <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
                 {/*content*/}
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
                   <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                     <h3 className="text-xl sm:text-2xl font-semibold text-white">
                       🎉 You've completed a{' '}
-                      <span className="font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+                      <span className="font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
                         {activeType}!
                       </span>
                     </h3>
@@ -485,11 +509,11 @@ export default function HomePage() {
                         </tr>
                       </tbody>
                     </table>
-                    
+
                     <div className="w-full">
                       <div className="box">
                         <a onClick={openBox} className="box-container">
-                          <div className={`${boxClass} box-body`}>
+                          <div className={`${boxClass} box-body animate-wiggle`}>
                             <div className={`${boxClass} box-lid`}>
                               <div className={`${boxClass} box-bowtie`}></div>
                             </div>
@@ -540,7 +564,7 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+            <div className="opacity-25 fixed inset-0 z-30 bg-black"></div>
           </div>
         </>
       ) : null}
