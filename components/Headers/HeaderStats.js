@@ -9,10 +9,13 @@ import CardLineChart from "components/Cards/CardLineChart.js";
 import Avatar from '@/components/avatar';
 
 export default function HeaderStats({
+  player_rank,
   full_name,
   total_level,
-  total_gold,
   total_exp,
+  exp_progress,
+  level_exp,
+  total_gold,
   avatar_url,
   setAvatarUrl,
   updateProfile,
@@ -21,8 +24,7 @@ export default function HeaderStats({
 
 {
 
-  const level_exp = 500*(total_level+1);
-  const exp_percent =  Math.round(((total_exp - (total_level * 500)) / 500)*100);
+  const exp_percent =  Math.floor(exp_progress / level_exp * 100);
 
   return (
     <>
@@ -50,6 +52,7 @@ export default function HeaderStats({
                   statMaxLevel={100}
                   statEXP={total_exp}
                   statLevelEXP={level_exp}
+                  statEXPProgress={exp_progress}
                   statEXPPercent={exp_percent}
                   statGold={total_gold}
                   statArrow="up"

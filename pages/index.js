@@ -424,8 +424,10 @@ export default function HomePage() {
                 key={i}
                 statRank={player.player_rank}
                 statName={player.full_name}
-                statLevel={player.total_level}
+                statLevel={player.current_level}
                 statEXP={player.total_exp}
+                statEXPProgress={player.exp_progress}
+                statLevelEXP={player.level_exp}
                 statGold={player.total_gold}
                 statWinName={player.name}
                 statWinType={player.type}
