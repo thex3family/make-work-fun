@@ -1,13 +1,13 @@
-const colors = require('tailwindcss/colors')
+const colors = require('tailwindcss/colors');
 
 module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      backgroundImage: theme => ({
+      backgroundImage: (theme) => ({
         'player-pattern': "url('/background/cityscape.jpg')",
-        'first-place': "url('/img/first-place.svg')",
-       }),
+        'first-place': "url('/img/first-place.svg')"
+      }),
       maxWidth: {
         '8xl': '1920px'
       },
@@ -40,7 +40,7 @@ module.exports = {
         emerald: colors.emerald,
         blueGray: colors.blueGray,
         lightBlue: colors.lightBlue,
-        blue: colors.blue,
+        blue: colors.blue
       },
       textColor: {
         base: 'var(--text-base)',
@@ -57,6 +57,68 @@ module.exports = {
       },
       letterSpacing: {
         widest: '0.3em'
+      },
+      animation: {
+        wiggle: 'wiggle 0.5s ease-in-out infinite',
+        'fade-in-down': 'fade-in-down 0.5s ease-out',
+        'fade-out-down': 'fade-out-down 0.5s ease-out',
+        'fade-in-up': 'fade-in-up 0.5s ease-out',
+        'fade-out-up': 'fade-out-up 0.5s ease-out',
+        'soft-bounce': 'soft-bounce 1.25s linear infinite',
+      },
+      keyframes: {
+        'soft-bounce': {
+          '0%, 100%' : {
+            transform: 'translateY(-10%)',
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)' },
+          '50%' : {
+            transform: 'translateY(0)',
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' }
+        },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-1deg)' },
+          '50%': { transform: 'rotate(1deg)' }
+        },
+        'fade-in-down': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(-10px)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          }
+        },
+        'fade-out-down': {
+          from: {
+            opacity: '1',
+            transform: 'translateY(0px)'
+          },
+          to: {
+            opacity: '0',
+            transform: 'translateY(10px)'
+          }
+        },
+        'fade-in-up': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(10px)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          }
+        },
+        'fade-out-up': {
+          from: {
+            opacity: '1',
+            transform: 'translateY(0px)'
+          },
+          to: {
+            opacity: '0',
+            transform: 'translateY(10px)'
+          }
+        }
       }
     }
   }

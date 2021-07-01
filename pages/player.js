@@ -13,6 +13,8 @@ import Datatable, { createTheme } from 'react-data-table-component';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 
+import ModalLevelUp from '@/components/Modals/ModalLevelUp';
+
 import React from 'react';
 
 // components
@@ -90,8 +92,8 @@ export default function Player() {
 
   const [playerRank, setPlayerRank] = useState(null);
   const [playerLevel, setPlayerLevel] = useState(null);
+  const [playerPrevLevel, setPlayerPrevLevel] = useState(null);
   const [playerName, setPlayerName] = useState(null);
-
   const [playerEXP, setPlayerEXP] = useState(null);
   const [playerEXPProgress, setPlayerEXPProgress] = useState(null);
   const [playerLevelEXP, setPlayerLevelEXP] = useState(null);
@@ -99,8 +101,9 @@ export default function Player() {
   const [nextRank, setNextRank] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
 
+  const [levelUp, setLevelUp] = useState(false);
+
   const [showModal, setShowModal] = useState(false);
-  // const [showIntroModal, setShowIntroModal] = useState(false);
 
   const [activeType, setActiveType] = useState(null);
   const [activeName, setActiveName] = useState(null);
@@ -349,12 +352,13 @@ export default function Player() {
         .eq('player', user.id)
         .single();
 
-      setPlayerRank(data.player_rank)
+      setPlayerRank(data.player_rank);
       setPlayerName(data.full_name);
       setPlayerLevel(data.current_level);
+      setPlayerPrevLevel(data.previous_level);
       setPlayerEXP(data.total_exp);
-      setPlayerEXPProgress(data.exp_progress)
-      setPlayerLevelEXP(data.level_exp)
+      setPlayerEXPProgress(data.exp_progress);
+      setPlayerLevelEXP(data.level_exp);
       setPlayerGold(data.total_gold);
       setAvatarUrl(data.avatar_url);
       setNextRank(data.next_rank);
@@ -362,6 +366,8 @@ export default function Player() {
       if (error && status !== 406) {
         throw error;
       }
+
+      return data;
     } catch (error) {
       alert(error.message);
     } finally {
@@ -405,6 +411,19 @@ export default function Player() {
           // checking if the win is assigned to the current user
 
           if (payload.new.player === user.id) {
+            // updates the rest of the stats asynchronously
+            const player = await fetchPlayerStats();
+            fetchWins();
+            fetchWeekWins();
+
+            // check if user leveled up
+            if (player.current_level > player.previous_level) {
+              // level up animation
+              setLevelUp(true);
+            }
+
+            // continue
+
             setActiveType(payload.new.type);
             setActiveName(payload.new.name);
             setActiveUpstream(payload.new.upstream);
@@ -413,11 +432,10 @@ export default function Player() {
             setActiveEXP(payload.new.exp_reward);
             const slug = payload.new.notion_id.replace(/-/g, '');
             setActiveSlug(slug);
-            
+
             // shows the modal
 
             setShowModal(true);
-
 
             // generate a random GIF
             const { data: gifs } = await gf.random({
@@ -432,12 +450,6 @@ export default function Player() {
               .from('success_plan')
               .update({ gif_url: gifs.image_original_url })
               .eq('id', payload.new.id);
-
-            // updates the rest of the stats
-
-            fetchPlayerStats();
-            fetchWins();
-            fetchWeekWins();
           }
         })
         .subscribe();
@@ -496,9 +508,7 @@ export default function Player() {
 
       // show modal
       setShowModal(true);
-      
-      } else {
-      
+    } else {
       // show modal (early because I will have to load the gif anyways)
       setShowModal(true);
 
@@ -519,11 +529,9 @@ export default function Player() {
       // refresh table
       fetchWins();
     }
-
   }
 
-
-  const [boxClass, setBoxClass] = useState("");
+  const [boxClass, setBoxClass] = useState('');
 
   function openBox() {
     boxClass != 'hide-box' ? setBoxClass('open-box') : '';
@@ -638,7 +646,7 @@ export default function Player() {
     <>
       <section className="bg-player-pattern bg-fixed">
         <div className="bg-black max-w-6xl mx-auto pb-32 bg-opacity-90">
-          <div className="pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
+          <div className="animate-fade-in-up pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:flex-col align-center">
               <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
                 Welcome,{' '}
@@ -652,7 +660,7 @@ export default function Player() {
               </p>
             </div>
           </div>
-          <div className="max-w-6xl px-4 md:px-10 mx-auto w-full -m-24">
+          <div className="animate-fade-in-up max-w-6xl px-4 md:px-10 mx-auto w-full -m-24">
             <HeaderStats
               player_rank={playerRank}
               full_name={playerName}
@@ -690,22 +698,29 @@ export default function Player() {
         </div>
       </section>
 
+      {/* level up modal */}
+      <ModalLevelUp
+        levelUp={levelUp}
+        playerLevel={playerLevel}
+        setLevelUp={setLevelUp}
+      />
+
       {/* // Modal Section */}
       {showModal ? (
         <>
           <div className="h-screen flex justify-center">
             <div
-              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none"
               // onClick={() => setShowModal(false)}
             >
-              <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+              <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
                 {/*content*/}
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
                   <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                     <h3 className="text-xl sm:text-2xl font-semibold text-white">
                       🎉 You've completed a{' '}
-                      <span className="font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+                      <span className="font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
                         {activeType}!
                       </span>
                     </h3>
@@ -740,7 +755,9 @@ export default function Player() {
                     <div className="w-full">
                       <div className="box">
                         <a onClick={openBox} className="box-container">
-                          <div className={`${boxClass} box-body`}>
+                          <div
+                            className={`${boxClass} box-body animate-wiggle`}
+                          >
                             <div className={`${boxClass} box-lid`}>
                               <div className={`${boxClass} box-bowtie`}></div>
                             </div>
@@ -788,7 +805,7 @@ export default function Player() {
                 </div>
               </div>
             </div>
-            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+            <div className="opacity-25 fixed inset-0 z-30 bg-black"></div>
           </div>
         </>
       ) : null}
