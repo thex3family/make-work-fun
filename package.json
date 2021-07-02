@@ -22,6 +22,7 @@
     "@supabase/supabase-js": "^1.15.0",
     "@supabase/ui": "^0.27.2",
     "@tailwindcss/forms": "0.2.1",
+    "airtable": "^0.11.1",
     "chart.js": "2.9.4",
     "classnames": "2.2.6",
     "gulp": "4.0.2",
