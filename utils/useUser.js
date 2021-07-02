@@ -79,6 +79,7 @@ export const UserContextProvider = (props) => {
     userProfile,
     userLoaded,
     subscription,
+    passwordReset: (options) => supabase.auth.api.resetPasswordForEmail(options),
     signIn: (options) => supabase.auth.signIn(options),
     signUp: (options) => supabase.auth.signUp(options),
     signOut: () => {

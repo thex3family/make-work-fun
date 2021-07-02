@@ -10,8 +10,10 @@ import { supabase } from '../utils/supabase-client';
 
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
+import RecoverPassword from '@/components/Auth/RecoverPassword';
 
 export default function HomePage() {
+  const [recoveryToken, setRecoveryToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const gf = new GiphyFetch(process.env.NEXT_PUBLIC_GIPHY_API);
@@ -33,6 +35,27 @@ export default function HomePage() {
   const [playerLevel, setPlayerLevel] = useState(null);
 
   const [levelUp, setLevelUp] = useState(false);
+
+  // Redirects user to reset password
+
+  useEffect(() => {
+    /* Recovery url is of the form
+     * <SITE_URL>#access_token=x&refresh_token=y&expires_in=z&token_type=bearer&type=recovery
+     * Read more on https://supabase.io/docs/reference/javascript/reset-password-email#notes
+     */
+    let url = window.location.hash;
+    let query = url.substr(1);
+    let result = {};
+
+    query.split('&').forEach((part) => {
+      const item = part.split('=');
+      result[item[0]] = decodeURIComponent(item[1]);
+    });
+
+    if (result.type === 'recovery') {
+      setRecoveryToken(result.access_token);
+    }
+  }, []);
 
   useEffect(() => {
     getLeaderboardStats();
@@ -245,6 +268,10 @@ export default function HomePage() {
     });
   }
 
+  if (recoveryToken) {
+    return <RecoverPassword token={recoveryToken} setRecoveryToken={setRecoveryToken} />
+  }
+
   return (
     <>
       <section className="justify-center">
@@ -341,18 +368,18 @@ export default function HomePage() {
         </h1>
         {loading ? (
           <div className="animate-fade-in-up  mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl">
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
-            < CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
+            <CardAvatarSkeleton />
           </div>
         ) : (
           <div className="mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl">
@@ -434,7 +461,9 @@ export default function HomePage() {
                     <div className="w-full">
                       <div className="box">
                         <a onClick={openBox} className="box-container">
-                          <div className={`${boxClass} box-body animate-wiggle`}>
+                          <div
+                            className={`${boxClass} box-body animate-wiggle`}
+                          >
                             <div className={`${boxClass} box-lid`}>
                               <div className={`${boxClass} box-bowtie`}></div>
                             </div>
