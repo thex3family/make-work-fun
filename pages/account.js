@@ -36,6 +36,7 @@ export default function Account({ initialPurchaseRecord }) {
   const { userLoaded, user, session, userDetails, subscription } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
+  console.log(initialPurchaseRecord)
   useEffect(() => {
     if (!user) router.replace('/signin');
   }, [user]);
@@ -231,7 +232,7 @@ export default function Account({ initialPurchaseRecord }) {
                   <div className="h-12 mb-6">
                     <LoadingDots />
                   </div>
-                ) : initialPurchaseRecord ? (
+                ) : initialPurchaseRecord.length != 0 ? (
                   initialPurchaseRecord.map((purchase) => (
                     <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
@@ -243,7 +244,7 @@ export default function Account({ initialPurchaseRecord }) {
                           {purchase.fields.purchase_date.split('T')[0]}
                         </p>
                         {purchase.fields.streak ? (
-                          <p className="text-sm font-regular">Streak: {Array.from({ length: purchase.fields.streak }, (_, i) => <span key={i}>🔥</span>)}</p>
+                          <p className="text-sm font-regular">Streak: {Array.from({ length: purchase.fields.streak }, (_, i) => <span key={i}>⭐</span>)}</p>
                         ) : (
                           ''
                         )}
@@ -262,11 +263,9 @@ export default function Account({ initialPurchaseRecord }) {
                     </div>
                   ))
                 ) : (
-                  <Link href="/">
-                    <a className="text-emerald-500">
+                    <div className="text-emerald-500">
                       You haven't unlocked any resources yet. Let's change that.
-                    </a>
-                  </Link>
+                    </div>
                 )}
               </div>
             </Card>
@@ -492,7 +491,7 @@ export async function getServerSideProps({ req }) {
     console.log(error);
     return {
       redirect: {
-        destination: '/credentials-invalid',
+        destination: '/signin',
         permanent: false
       }
     };
