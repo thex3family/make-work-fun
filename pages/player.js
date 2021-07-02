@@ -381,7 +381,7 @@ export default function Player() {
       const { data, error } = await supabase
         .from('success_plan')
         .select(
-          'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url'
+          'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on'
         )
         .eq('player', user.id)
         .order('closing_date', { ascending: false })
