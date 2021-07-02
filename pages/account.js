@@ -152,7 +152,7 @@ export default function Account({ initialPurchaseRecord }) {
               Welcome, Hero!
             </h1>
             <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-              Why don't you introduce yourself?
+              Access all your goodies and set up your app here.
             </p>
           </div>
         </div>
@@ -203,20 +203,6 @@ export default function Account({ initialPurchaseRecord }) {
         </Card> */}
           <div className="form-widget">
             <Card
-              title="Your Name"
-              description="Please enter your first name, or a display name you are comfortable with."
-              footer={<p>Please use 64 characters at maximum.</p>}
-            >
-              <Input
-                htmlFor="full_name"
-                className="text-xl mt-8 mb-4 font-semibold rounded"
-                id="full_name"
-                type="text"
-                value={full_name || ''}
-                onChange={setName}
-              />
-            </Card>
-            <Card
               title="Your Toolbox Purchases"
               description="Your one-stop dashboard to accessing all of your resources."
               footer={
@@ -250,7 +236,7 @@ export default function Account({ initialPurchaseRecord }) {
                       <p className="sm:pb-0 pb-3">
                         {purchase.fields.product_name}
                         <p className="text-sm font-regular">
-                          Purchased On: {purchase.fields.purchase_date}
+                          Purchased On: {purchase.fields.purchase_date.split("T")[0]}
                         </p>
                       </p>
                       <a
@@ -259,7 +245,7 @@ export default function Account({ initialPurchaseRecord }) {
                       >
                         <Button
                           className="w-full sm:w-auto text-sm"
-                          variant="prominent"
+                          variant="incognito"
                           loading={loading}
                         >
                           Access
@@ -272,22 +258,41 @@ export default function Account({ initialPurchaseRecord }) {
                 ) : (
                   <Link href="/">
                     <a className="text-emerald-500">
-                      You don't have any purchases yet. Let's change that.
+                      You haven't unlocked any resources yet. Let's change that.
                     </a>
                   </Link>
                 )}
               </div>
             </Card>
+            <div className="mx-auto max-w-3xl pt-5">
+            <h1 className="text-3xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+          Let's adventure together.
+        </h1>
+        <p className="text-lg sm:text-xl text-accents-6">
+          Make the best use of your productivity software by integrating it into our application. 
+        </p>
+        </div>
+        <Card
+              title="Your Name"
+              description="Please enter your first name, or a display name you are comfortable with."
+              footer={<p>Please use 64 characters at maximum.</p>}
+            >
+              <Input
+                htmlFor="full_name"
+                className="text-xl mt-8 mb-4 font-semibold rounded"
+                id="full_name"
+                type="text"
+                value={full_name || ''}
+                onChange={setName}
+              />
+            </Card>
             <Card
-              title="Your Notion Credentials"
-              description="Connect your workspace to start earning rewards for your wins."
+              title="Connect To Notion"
+              description="Integrate your task management database to start earning rewards for your wins."
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
                   <p className="pb-4 sm:pb-0">
-                    We take your data protection and privacy seriously. In the
-                    next step, you'll be walked through how our application will
-                    use your data. By continuing, you are agreeing to our
-                    privacy policy and terms of use.
+                  We take your data protection and privacy seriously. After saving, we will describe in detail how our application will use your data.
                   </p>
                   {/* <Button className="w-full sm:w-auto"
                 variant="slim"
@@ -297,6 +302,7 @@ export default function Account({ initialPurchaseRecord }) {
                 </div>
               }
             >
+                          
               <div className="mt-4 flex flex-row justify-between">
                 <p className="font-semibold">Notion API Secret</p>
                 <a
@@ -316,7 +322,7 @@ export default function Account({ initialPurchaseRecord }) {
                 onChange={setNotionAPISecret}
               />
               <div className="mt-2 flex flex-row justify-between">
-                <p className="font-semibold">Success Plan (ID)</p>
+                <p className="font-semibold">Database ID</p>
                 <a
                   className="text-right font-semibold text-emerald-500"
                   href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246"
@@ -333,8 +339,39 @@ export default function Account({ initialPurchaseRecord }) {
                 value={notion_success_plan || ''}
                 onChange={setNotionSuccessPlan}
               />
+              <div className="text-xs">Works best with success plan from <a className="text-emerald-500 font-semibold" href="https://toolbox.co-x3.com/L-CTRL" target="_blank">L-CTRL</a> or <a className="text-emerald-500 font-semibold" href="https://toolbox.co-x3.com/gamify-life" target="_blank">Gamify Your Life!</a></div>
             </Card>
-            <Card>
+            <Card
+              title="Connect Other Productivity Softwares"
+              description="Airtable, Clickup, Asana, and more."
+              footer={
+                <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                  <p className="pb-4 sm:pb-0">
+                  Coming soon!
+                  </p>
+                  {/* <Button className="w-full sm:w-auto"
+                variant="slim"
+              >
+                Learn More
+              </Button> */}
+                </div>
+              }
+            ></Card>
+            <Card
+            
+            footer={
+              <div className="text-center">
+              <p className="pb-4 sm:pb-0">
+              By continuing, you are agreeing to our
+              privacy policy and terms of use.
+              </p>
+              {/* <Button className="w-full sm:w-auto"
+            variant="slim"
+          >
+            Learn More
+          </Button> */}
+            </div>
+            }>
               <Button
                 className="w-full"
                 variant="prominent"
@@ -350,6 +387,7 @@ export default function Account({ initialPurchaseRecord }) {
               >
                 {saveLoading ? 'Loading ...' : 'Save & Test Connection'}
               </Button>
+              
             </Card>
           </div>
         </div>
