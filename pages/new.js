@@ -18,6 +18,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Jul 02, 2021"
+            title="Toolbox Purchases Dashboard"
+            desc="For the very first time, we have a dedicated dashboard to show you all of your available toolbox resources. Re-download your templates with ease."
+            img_url="updates/0.11.png"
+            button_url="/account"
+            version="v.11"
+          />
           <CardLUpdate
             date="Jul 1, 2021"
             title="It's Time To Level Up"
