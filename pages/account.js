@@ -208,7 +208,8 @@ export default function Account({ initialPurchaseRecord }) {
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
                   <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
-                    Not seeing everything? Your purchases are tied to your email. You are currently logged in as <b>{user.email}</b>
+                    Not seeing everything? Your resources are tied to your
+                    email. You are currently logged in as <b>{user.email}</b>
                   </p>
                   <a
                     href="https://toolbox.co-x3.com/?utm_source=makeworkfun"
@@ -236,24 +237,29 @@ export default function Account({ initialPurchaseRecord }) {
                       <p className="sm:pb-0 pb-3">
                         {purchase.fields.product_name}
                         <p className="text-sm font-regular">
-                          Purchased On: {purchase.fields.purchase_date.split("T")[0]}
+                          {purchase.fields.type == 'One Off'
+                            ? 'Purchased On: '
+                            : 'Joined On: '}
+                          {purchase.fields.purchase_date.split('T')[0]}
                         </p>
+                        {purchase.fields.streak ? (
+                          <p className="text-sm font-regular">Streak: {Array.from({ length: purchase.fields.streak }, (_, i) => <span key={i}>🔥</span>)}</p>
+                        ) : (
+                          ''
+                        )}
                       </p>
-                      <a
-                        href={purchase.fields.download_url}
-                        target="_blank"
-                      >
-                        <Button
-                          className="w-full sm:w-auto text-sm"
-                          variant="incognito"
-                          loading={loading}
-                        >
-                          Access
-                        </Button>
-                      </a>
-                      </div>
-                
-                    
+                      {
+                        <a href={purchase.fields.download_url} target="_blank">
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                            loading={loading}
+                          >
+                            Download Template
+                          </Button>
+                        </a>
+                      }
+                    </div>
                   ))
                 ) : (
                   <Link href="/">
@@ -265,14 +271,15 @@ export default function Account({ initialPurchaseRecord }) {
               </div>
             </Card>
             <div className="mx-auto max-w-3xl pt-5">
-            <h1 className="text-3xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-          Let's adventure together.
-        </h1>
-        <p className="text-lg sm:text-xl text-accents-6">
-          Make the best use of your productivity software by integrating it into our application. 
-        </p>
-        </div>
-        <Card
+              <h1 className="text-3xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+                Let's adventure together.
+              </h1>
+              <p className="text-lg sm:text-xl text-accents-6">
+                Make the best use of your productivity software by integrating
+                it into our application.
+              </p>
+            </div>
+            <Card
               title="Your Name"
               description="Please enter your first name, or a display name you are comfortable with."
               footer={<p>Please use 64 characters at maximum.</p>}
@@ -292,7 +299,9 @@ export default function Account({ initialPurchaseRecord }) {
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
                   <p className="pb-4 sm:pb-0">
-                  We take your data protection and privacy seriously. After saving, we will describe in detail how our application will use your data.
+                    We take your data protection and privacy seriously. After
+                    saving, we will describe in detail how our application will
+                    use your data.
                   </p>
                   {/* <Button className="w-full sm:w-auto"
                 variant="slim"
@@ -302,7 +311,6 @@ export default function Account({ initialPurchaseRecord }) {
                 </div>
               }
             >
-                          
               <div className="mt-4 flex flex-row justify-between">
                 <p className="font-semibold">Notion API Secret</p>
                 <a
@@ -339,16 +347,33 @@ export default function Account({ initialPurchaseRecord }) {
                 value={notion_success_plan || ''}
                 onChange={setNotionSuccessPlan}
               />
-              <div className="text-xs">Works best with success plan from <a className="text-emerald-500 font-semibold" href="https://toolbox.co-x3.com/L-CTRL" target="_blank">L-CTRL</a> or <a className="text-emerald-500 font-semibold" href="https://toolbox.co-x3.com/gamify-life" target="_blank">Gamify Your Life!</a></div>
+              <div className="text-xs">
+                Works best with success plan from{' '}
+                <a
+                  className="text-emerald-500 font-semibold"
+                  href="https://toolbox.co-x3.com/L-CTRL"
+                  target="_blank"
+                >
+                  L-CTRL
+                </a>{' '}
+                or{' '}
+                <a
+                  className="text-emerald-500 font-semibold"
+                  href="https://toolbox.co-x3.com/gamify-life"
+                  target="_blank"
+                >
+                  Gamify Your Life!
+                </a>
+              </div>
             </Card>
             <Card
               title="Connect Other Productivity Softwares"
               description="Airtable, Clickup, Asana, and more."
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                  <p className="pb-4 sm:pb-0">
-                  Coming soon!
-                  </p>
+                  <p className="pb-4 sm:pb-0">Coming soon! Vote on which ones you want us to focus on <a className="text-emerald-500 font-semibold"
+                  href="https://toolbox.co-x3.com/family-connection"
+                  target="_blank">here.</a></p>
                   {/* <Button className="w-full sm:w-auto"
                 variant="slim"
               >
@@ -358,20 +383,20 @@ export default function Account({ initialPurchaseRecord }) {
               }
             ></Card>
             <Card
-            
-            footer={
-              <div className="text-center">
-              <p className="pb-4 sm:pb-0">
-              By continuing, you are agreeing to our
-              privacy policy and terms of use.
-              </p>
-              {/* <Button className="w-full sm:w-auto"
+              footer={
+                <div className="text-center">
+                  <p className="pb-4 sm:pb-0">
+                    By continuing, you are agreeing to our privacy policy and
+                    terms of use.
+                  </p>
+                  {/* <Button className="w-full sm:w-auto"
             variant="slim"
           >
             Learn More
           </Button> */}
-            </div>
-            }>
+                </div>
+              }
+            >
               <Button
                 className="w-full"
                 variant="prominent"
@@ -387,7 +412,6 @@ export default function Account({ initialPurchaseRecord }) {
               >
                 {saveLoading ? 'Loading ...' : 'Save & Test Connection'}
               </Button>
-              
             </Card>
           </div>
         </div>
@@ -456,7 +480,7 @@ export async function getServerSideProps({ req }) {
       .select({
         filterByFormula: `{customer_email} = '${user.email}'`,
         view: 'App - Purchase List',
-        sort: [{field: "value", direction: "desc"}]
+        sort: [{ field: 'value', direction: 'desc' }]
       })
       .firstPage();
     return {
