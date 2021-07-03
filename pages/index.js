@@ -28,6 +28,7 @@ export default function HomePage() {
   const [activeSlug, setActiveSlug] = useState(null);
   const [activeGIF, setActiveGIF] = useState(null);
   const [players, setPlayers] = useState([]);
+  const [s1Players, setS1Players] = useState([]);
 
   const [playerName, setPlayerName] = useState(null);
   const [playerRank, setPlayerRank] = useState(null);
@@ -35,6 +36,7 @@ export default function HomePage() {
   const [playerLevel, setPlayerLevel] = useState(null);
 
   const [levelUp, setLevelUp] = useState(false);
+  const [openTab, setOpenTab] = useState(1);
 
   // Redirects user to reset password
 
@@ -63,6 +65,24 @@ export default function HomePage() {
   }, []);
 
   async function getLeaderboardStats() {
+    try {
+      const { data, error } = await supabase
+        .from('s1_leaderboard')
+        .select('*')
+        .order('total_exp', { ascending: false });
+
+      if (data) {
+        setS1Players(data);
+      }
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+    }
     try {
       const { data, error } = await supabase
         .from('leaderboard')
@@ -121,7 +141,7 @@ export default function HomePage() {
                 // check if the user has leveled
 
                 const player = await fetchPlayerStats();
-                if (player.current_level > player.previous_level) {
+                if (s1Player.current_level > s1Player.previous_level) {
                   // level up animation
                   setLevelUp(true);
                 }
@@ -269,7 +289,12 @@ export default function HomePage() {
   }
 
   if (recoveryToken) {
-    return <RecoverPassword token={recoveryToken} setRecoveryToken={setRecoveryToken} />
+    return (
+      <RecoverPassword
+        token={recoveryToken}
+        setRecoveryToken={setRecoveryToken}
+      />
+    );
   }
 
   return (
@@ -382,24 +407,104 @@ export default function HomePage() {
             <CardAvatarSkeleton />
           </div>
         ) : (
-          <div className="mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl">
-            {players.map((player, i) => (
-              <Avatar
-                key={i}
-                statRank={player.player_rank}
-                statName={player.full_name}
-                statLevel={player.current_level}
-                statEXP={player.total_exp}
-                statEXPProgress={player.exp_progress}
-                statLevelEXP={player.level_exp}
-                statGold={player.total_gold}
-                statWinName={player.name}
-                statWinType={player.type}
-                statWinGold={player.gold_reward}
-                statWinEXP={player.exp_reward}
-                url={player.avatar_url}
-              />
-            ))}
+          <div className="flex flex-wrap">
+            <div className="w-full">
+              <ul
+                className="max-w-screen-lg mx-auto flex mb-0 mt-6 list-none flex-wrap pt-3 pb-4 flex-row"
+                role="tablist"
+              >
+                <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                  <a
+                    className={
+                      'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                      (openTab === 1
+                        ? 'text-white bg-gradient-to-r from-emerald-500 to-blue-500'
+                        : 'text-blueGray-600 bg-white')
+                    }
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setOpenTab(1);
+                    }}
+                    data-toggle="tab"
+                    href="#link1"
+                    role="tablist"
+                  >
+                    Season 1
+                  </a>
+                </li>
+                <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                  <a
+                    className={
+                      'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                      (openTab === 2
+                        ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                        : 'text-blueGray-600 bg-white')
+                    }
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setOpenTab(2);
+                    }}
+                    data-toggle="tab"
+                    href="#link2"
+                    role="tablist"
+                  >
+                    All Time
+                  </a>
+                </li>
+              </ul>
+              <div
+                className={
+                  openTab === 1
+                    ? 'mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl'
+                    : 'hidden'
+                }
+                id="link1"
+              >
+                {s1Players.map((player, i) => (
+                  <Avatar
+                    key={i}
+                    statRank={player.player_rank}
+                    statName={player.full_name}
+                    statLevel={player.current_level}
+                    statEXP={player.total_exp}
+                    statEXPProgress={player.exp_progress}
+                    statLevelEXP={player.level_exp}
+                    statGold={player.total_gold}
+                    statWinName={player.name}
+                    statWinType={player.type}
+                    statWinGold={player.gold_reward}
+                    statWinEXP={player.exp_reward}
+                    url={player.avatar_url}
+                  />
+                ))}
+              </div>
+              <div
+                className={
+                  openTab === 2
+                    ? 'mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl'
+                    : 'hidden'
+                }
+                id="link2"
+              >
+                {players.map((player, i) => (
+                  <Avatar
+                    key={i}
+                    statRank={player.player_rank}
+                    statName={player.full_name}
+                    statLevel={player.current_level}
+                    statEXP={player.total_exp}
+                    statEXPProgress={player.exp_progress}
+                    statLevelEXP={player.level_exp}
+                    statGold={player.total_gold}
+                    statWinName={player.name}
+                    statWinType={player.type}
+                    statWinGold={player.gold_reward}
+                    statWinEXP={player.exp_reward}
+                    url={player.avatar_url}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </section>
