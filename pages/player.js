@@ -352,16 +352,21 @@ export default function Player() {
         .eq('player', user.id)
         .single();
 
-      setPlayerRank(data.player_rank);
-      setPlayerName(data.full_name);
-      setPlayerLevel(data.current_level);
-      setPlayerPrevLevel(data.previous_level);
-      setPlayerEXP(data.total_exp);
-      setPlayerEXPProgress(data.exp_progress);
-      setPlayerLevelEXP(data.level_exp);
-      setPlayerGold(data.total_gold);
-      setAvatarUrl(data.avatar_url);
-      setNextRank(data.next_rank);
+      if (data) {
+        setPlayerRank(data.player_rank);
+        setPlayerName(data.full_name);
+        setPlayerLevel(data.current_level);
+        setPlayerPrevLevel(data.previous_level);
+        setPlayerEXP(data.total_exp);
+        setPlayerEXPProgress(data.exp_progress);
+        setPlayerLevelEXP(data.level_exp);
+        setPlayerGold(data.total_gold);
+        setAvatarUrl(data.avatar_url);
+        setNextRank(data.next_rank);
+      } else {
+        setPlayerName(null);
+      }
+      
 
       if (error && status !== 406) {
         throw error;
@@ -546,6 +551,17 @@ export default function Player() {
     return (
       <div className="h-screen flex justify-center">
         <LoadingDots />
+      </div>
+    );
+  }
+
+  if (!playerName) {
+    return (
+      <div className="h-screen flex flex-col justify-center">
+        <div className="mx-auto">
+        <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">Waiting for a win this season</h1>
+        <LoadingDots/>
+        </div>
       </div>
     );
   }
