@@ -237,14 +237,14 @@ export default function Account({ initialPurchaseRecord }) {
                     <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
                         {purchase.fields.product_name}
-                        <p className="text-sm font-regular">
+                        <p className="text-accents-5 text-sm">
                           {purchase.fields.type == 'One Off'
                             ? 'Purchased On: '
                             : 'Joined On: '}
                           {purchase.fields.purchase_date.split('T')[0]}
                         </p>
                         {purchase.fields.streak ? (
-                          <p className="text-sm font-regular">Streak: {Array.from({ length: purchase.fields.streak }, (_, i) => <span key={i}>⭐</span>)}</p>
+                          <p className="text-accents-5 text-sm">Streak: {Array.from({ length: purchase.fields.streak }, (_, i) => <span key={i}>⭐</span>)}</p>
                         ) : (
                           ''
                         )}
@@ -263,8 +263,32 @@ export default function Account({ initialPurchaseRecord }) {
                     </div>
                   ))
                 ) : (
-                    <div className="text-emerald-500">
+                  <div>
+                    <a href="https://toolbox.co-x3.com/?utm_source=makeworkfun" target="_blank" className="text-emerald-500">
                       You haven't unlocked any resources yet. Let's change that.
+                    </a>
+                    <div
+                    className="border-t border-accents-2 my-5 flex-grow mr-3"
+                    aria-hidden="true"
+                  ></div>
+                  <p className="mb-3">Or start with...</p>
+                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="sm:pb-0 pb-3">
+                        Gamify Your Life (FREE Notion Template)
+                        <p className="text-accents-5 text-sm">Task management, habit tracking, and more.</p>
+                      </p>
+                      {
+                        <a href="http://makeworkfun.club/personal/?utm_source=makeworkfun" target="_blank">
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                            loading={loading}
+                          >
+                            Get Template
+                          </Button>
+                        </a>
+                      }
+                    </div>
                     </div>
                 )}
               </div>

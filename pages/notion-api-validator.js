@@ -57,7 +57,7 @@ export default function NotionWizard({ response }) {
 
   return (
     <>
-      <section>
+      <section className="animate-fade-in-up">
         <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col h-auto justify-center">
           <div className="pb-10">
             <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
@@ -964,7 +964,7 @@ export default function NotionWizard({ response }) {
               className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
               // onClick={() => setShowModal(false)}
             >
-              <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+              <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
                 {/*content*/}
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
@@ -1018,7 +1018,7 @@ export default function NotionWizard({ response }) {
               className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
               // onClick={() => setShowModal(false)}
             >
-              <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+              <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
                 {/*content*/}
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
