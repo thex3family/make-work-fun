@@ -429,7 +429,17 @@ export default function HomePage() {
                     href="#link1"
                     role="tablist"
                   >
-                    Season 1
+                    Season One
+                    <div
+                      className={
+                        'text-white p-3 ml-1 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
+                        (openTab === 1
+                          ? 'border-white'
+                          : 'text-blueGray-600 border-blueGray-600')
+                      }
+                    >
+                      {s1Players.length}
+                    </div>
                   </a>
                 </li>
                 <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
@@ -448,7 +458,17 @@ export default function HomePage() {
                     href="#link2"
                     role="tablist"
                   >
-                    All Time
+                    All Time{' '}
+                    <div
+                      className={
+                        'text-white p-3 ml-1 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
+                        (openTab === 2
+                          ? 'border-white'
+                          : 'text-blueGray-600 border-blueGray-600')
+                      }
+                    >
+                      {players.length}
+                    </div>
                   </a>
                 </li>
               </ul>
