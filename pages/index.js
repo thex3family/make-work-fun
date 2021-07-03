@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import Avatar from '@/components/Cards/CardAvatar';
 import Countdown from '@/components/Widgets/Countdown/countdown';
+import LeaderboardStatistics from '@/components/Widgets/Statistics/LeaderboardStatistics';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 import { useUser } from '@/utils/useUser';
@@ -330,6 +331,10 @@ export default function HomePage() {
                     </Link>
                   </div>
                 </div>
+
+                
+                {/*  countdown for seasons
+
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl md:w-3/4 lg:w-full xl:w-3/4 mx-auto py-8 px-4 sm:px-6 lg:px-8 my-auto flex flex-col bg-black bg-opacity-50 rounded-lg">
                     <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
@@ -338,14 +343,22 @@ export default function HomePage() {
                     <h1 className=" rounded-lg pt-5 w-3/4 lg:w-full mx-auto text-xl font-semibold text-center lg:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <Countdown date="2021-07-02T21:00:00-05:00" />
                     </h1>
-                    {/* <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-          Unlock multiplayer for personal development.
-        </p> */}
-                    {/* <Link href="/player">
-          <Button className="w-auto mx-auto my-10" variant="prominent">
-            Get Started 🚀
-          </Button>
-        </Link> */}
+                  </div>
+                </div> */}
+
+                <div className="w-full md:w-3/5 py-6 text-center">
+                  <div className="max-w-6xl md:w-3/4 lg:w-full xl:w-3/4 mx-auto py-8 px-4 sm:px-6 lg:px-8 my-auto flex flex-col bg-black bg-opacity-50 rounded-lg">
+                    <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                      Season 1 Statistics
+                    </h1>
+                    <p className="text-sm text-accents-3 font-semibold">July 1 - August 31</p>
+                    <h1 className=" rounded-lg pt-5 w-3/4 lg:w-full mx-auto text-xl font-semibold text-center lg:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                      <LeaderboardStatistics 
+                      players = {s1Players.length}
+                      levels_earned = {s1Players.reduce((a,v) =>  a = a + v.current_level , 0 ) - s1Players.length}
+                        exp_earned = {s1Players.reduce((a,v) =>  a = a + v.total_exp , 0 )}
+                      />
+                    </h1>
                   </div>
                 </div>
               </div>
