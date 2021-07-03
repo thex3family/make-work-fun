@@ -366,7 +366,6 @@ export default function Player() {
       } else {
         setPlayerName(null);
       }
-      
 
       if (error && status !== 406) {
         throw error;
@@ -374,7 +373,7 @@ export default function Player() {
 
       return data;
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
     } finally {
     }
   }
@@ -391,8 +390,9 @@ export default function Player() {
         .eq('player', user.id)
         .order('closing_date', { ascending: false })
         .order('entered_on', { ascending: false });
-
-      setWins(data);
+      if (data) {
+        setWins(data);
+      }
 
       if (error && status !== 406) {
         throw error;
@@ -558,9 +558,13 @@ export default function Player() {
   if (!playerName) {
     return (
       <div className="h-screen flex flex-col justify-center">
-        <div className="mx-auto">
-        <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">Waiting for a win this season</h1>
-        <LoadingDots/>
+        <div className="-mt-40 mx-auto">
+          <h1 className="mb-5 text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+            Waiting for a win this season
+          </h1>
+          <div className="flex justify-center">
+          <LoadingDots />
+          </div>
         </div>
       </div>
     );
