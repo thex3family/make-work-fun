@@ -6,8 +6,14 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 
-function habit_progress_statement(on_streak, streak_duration) {
-  return on_streak
+function wasHabitCompletedToday(streak_end) {
+  return streak_end
+    ? new Date(streak_end).getUTCDate() == new Date().getUTCDate()
+    : false;
+}
+
+function habit_progress_statement(streak_duration) {
+  return (streak_duration != 0) & (streak_duration != null)
     ? "🔥 You're on a " +
         (streak_duration > 9 ? '9+ ' : streak_duration + ' Day ') +
         'Streak!'
@@ -17,9 +23,10 @@ function habit_progress_statement(on_streak, streak_duration) {
 function habitSquare(
   habit_id,
   habit_title,
-  on_streak,
+  habit_description,
   streak_duration,
-  is_completed,
+  streak_start,
+  streak_end,
   habit_handler
 ) {
   return (
@@ -27,7 +34,7 @@ function habitSquare(
       key={habit_id}
       onClick={() => habit_handler(habit_id)}
       className={`my-4 mb-12 p-8 ${
-        is_completed ? `bg-green` : `bg-primary-2`
+        wasHabitCompletedToday(streak_end) ? `bg-green` : `bg-primary-2`
       } rounded z-10 square`}
     >
       <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" />
@@ -35,31 +42,32 @@ function habitSquare(
         {habit_title}
       </h2>
       <p className="text-md mb-5 text-center">
-        {habit_progress_statement(on_streak, streak_duration)}
+        {habit_progress_statement(streak_duration)}
       </p>
     </div>
   );
 }
 
-function time_period_routine_section(
-  time_period_name,
+function habit_group_routine_section(
+  habit_group_name,
   associated_habits,
   habit_handler
 ) {
   return (
-    <div key={time_period_name}>
+    <div key={habit_group_name}>
       <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-        {time_period_name} Routines
+        {habit_group_name} Routines
       </h1>
       <div className="flex flex-row gap-5 overflow-x-scroll flex-nowrap">
         {/* start */}
         {associated_habits.map((h) =>
           habitSquare(
             h.id,
-            h.title,
-            h.on_streak,
+            h.habit,
+            h.description,
             h.streak_duration,
-            h.is_completed,
+            h.streak_start,
+            h.streak_end,
             habit_handler
           )
         )}
@@ -68,18 +76,18 @@ function time_period_routine_section(
   );
 }
 
-function generate_time_period_sections(habit_map, time_periods, habit_handler) {
+function generate_habit_group_sections(habit_map, habit_handler) {
   var currentHabitKey = null;
-  var generated_time_period_sections = [];
+  var generated_habit_group_sections = [];
 
   var habit_iterator = habit_map.keys();
 
   currentHabitKey = habit_iterator.next().value;
 
   do {
-    generated_time_period_sections.push(
-      time_period_routine_section(
-        time_periods[currentHabitKey],
+    generated_habit_group_sections.push(
+      habit_group_routine_section(
+        currentHabitKey,
         habit_map.get(currentHabitKey),
         habit_handler
       )
@@ -88,22 +96,19 @@ function generate_time_period_sections(habit_map, time_periods, habit_handler) {
     currentHabitKey = habit_iterator.next().value;
   } while (currentHabitKey != null);
 
-  return generated_time_period_sections;
+  return generated_habit_group_sections;
 }
 
 function generate_habit_map(habits) {
   var habit_map = new Map();
 
   for (var i = 0; i < habits.length; i++) {
-    if (habit_map.get(habits[i].habits_time_period) == null) {
-      habit_map.set(habits[i].habits_time_period, [habits[i]]);
+    if (habit_map.get(habits[i].habit_group) == null) {
+      habit_map.set(habits[i].habit_group, [habits[i]]);
     } else {
-      var currentHabits = habit_map.get(habits[i].habits_time_period);
+      var currentHabits = habit_map.get(habits[i].habit_group);
 
-      habit_map.set(habits[i].habits_time_period, [
-        ...currentHabits,
-        habits[i]
-      ]);
+      habit_map.set(habits[i].habit_group, [...currentHabits, habits[i]]);
     }
   }
 
@@ -111,7 +116,7 @@ function generate_habit_map(habits) {
 }
 
 export default function dallies() {
-  const [habits, setHabits] = useState([]);
+  const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const {
     userLoaded,
@@ -155,7 +160,7 @@ export default function dallies() {
         .from('dailies')
         .select('*')
         .eq('player', user.id)
-        .eq('is_active', true)
+        .eq('is_active', true);
 
       setHabits(data);
 
@@ -172,99 +177,45 @@ export default function dallies() {
 
   //console.log("dallies");
 
-  const mock_time_periods = ['Morning', 'Afternoon', 'Evening'];
+  var habit_groups = [];
+  var habit_map = null;
 
-  // will replace with a fetch to the backend
-  const mock_active_habits = [
-    // streak stuff is temporary - Don't know what's the plan with that
-    {
-      id: 0,
-      title: 'Habit 1',
-      habits_time_period: 0,
-      on_streak: true,
-      streak_duration: 7,
-      is_completed: false
-    },
-    {
-      id: 1,
-      title: 'Habit 2',
-      habits_time_period: 0,
-      on_streak: false,
-      streak_duration: 0,
-      is_completed: false
-    },
-    {
-      id: 2,
-      title: 'Habit 3',
-      habits_time_period: 0,
-      on_streak: true,
-      streak_duration: 9,
-      is_completed: false
-    },
-    {
-      id: 3,
-      title: 'Habit 4',
-      habits_time_period: 0,
-      on_streak: true,
-      streak_duration: 10,
-      is_completed: false
-    },
-    {
-      id: 4,
-      title: 'Habit 5',
-      habits_time_period: 0,
-      on_streak: true,
-      streak_duration: 10,
-      is_completed: false
-    },
-    {
-      id: 5,
-      title: 'Habit 6',
-      habits_time_period: 0,
-      on_streak: true,
-      streak_duration: 10,
-      is_completed: false
-    },
-    {
-      id: 6,
-      title: 'Habit 7',
-      habits_time_period: 0,
-      on_streak: true,
-      streak_duration: 10,
-      is_completed: false
-    },
-    {
-      id: 7,
-      title: 'Habit 1',
-      habits_time_period: 1,
-      on_streak: true,
-      streak_duration: 10,
-      is_completed: false
-    },
-    {
-      id: 8,
-      title: 'Habit 1',
-      habits_time_period: 2,
-      on_streak: true,
-      streak_duration: 10,
-      is_completed: false
+  if (habits != null) {
+    if (habits.length != 0) {
+      //console.log('Habits have been fetched');
+      //console.log('Habits: ', habits);
+
+      for (var i = 0; i < habits.length; i++) {
+        if (!(habits[i].habit_group in habit_groups)) {
+          habit_groups.push(habits[i].habit_group);
+        }
+      }
+
+      //console.log('Habit Groups from the retrieved habits: ', habit_groups);
+
+      habit_map = generate_habit_map(habits);
+
+      //console.log('Habit Map: ', habit_map);
+
+    } else if (habits.length == 0) {
+      console.log("User doesn't have any active habits");
+      console.log('Habits: ', habits);
     }
-  ];
-
-  const [mock_active_habit_state, updateMockHabits] = React.useState(
-    mock_active_habits
-  );
-
-  const habit_map = generate_habit_map(mock_active_habit_state);
+  } else {
+    console.log('Habits are being fetched');
+    console.log('Habits: ', habits);
+  }
 
   function handleHabitCompletionStatusChange(habit_id) {
-    //console.log("handleHabitCompletionStatusChange");
+    console.log('handleHabitCompletionStatusChange');
 
+    /*
     var updatedHabitList = mock_active_habit_state;
     updatedHabitList[habit_id].is_completed = !updatedHabitList[habit_id]
       .is_completed;
 
     updateMockHabits([...updatedHabitList]);
+    */
   }
 
   return (
@@ -279,13 +230,19 @@ export default function dallies() {
             eiusmod tempor incididunt ut labore.
           </p>
         </div>
-        <button onClick={() => console.log(habits)}>Push me to check if data is pulled properly</button>
+        <button onClick={() => console.log(habits)}>
+          Push me to check if data is pulled properly
+        </button>
         <div>
-          {generate_time_period_sections(
-            habit_map,
-            mock_time_periods,
-            handleHabitCompletionStatusChange
-          )}
+          {habits != null
+            ? habits.length != 0
+              ? generate_habit_group_sections(
+                  habit_map,
+                  habit_groups,
+                  handleHabitCompletionStatusChange
+                )
+              : 'You have no active habits'
+            : null}
         </div>
         <div className="pt-10">
           <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
