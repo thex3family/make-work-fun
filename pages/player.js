@@ -347,7 +347,7 @@ export default function Player() {
       const user = supabase.auth.user();
 
       const { data, error } = await supabase
-        .from('leaderboard')
+        .from('s1_leaderboard')
         .select('*')
         .eq('player', user.id)
         .single();
