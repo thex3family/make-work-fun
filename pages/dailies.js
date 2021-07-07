@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 
 function wasHabitCompletedToday(streak_end) {
   return streak_end
-    ? new Date(streak_end).getUTCDate() == new Date().getUTCDate()
+    ? new Date(streak_end).getDay() == new Date().getDay()
     : false;
 }
 
@@ -175,6 +175,40 @@ export default function dallies() {
     }
   }
 
+  async function postCompletedDaily(habit_id) {
+    try {
+      const user = supabase.auth.user();
+
+      const { data, error } = await supabase
+        .from('completed_habits')
+        .insert([
+          { player: user.id, closing_date: new Date().toISOString(), exp_reward: 25, habit: habit_id }
+        ]);
+
+      setLoading(true);      
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleHabitCompletionStatusChange(habit_id) {
+    console.log('handleHabitCompletionStatusChange');
+
+    // TODO: Check if the associated habit has been completed today
+
+    // (first if condition) If the habit hasn't been completed today
+    postCompletedDaily(habit_id).then(result => setLoading(false));
+    
+    // (second if condition) If the habit has been completed today
+    // add a removeCompletedDaily method
+  }
+
   //console.log("dallies");
 
   var habit_groups = [];
@@ -206,18 +240,6 @@ export default function dallies() {
     console.log('Habits: ', habits);
   }
 
-  function handleHabitCompletionStatusChange(habit_id) {
-    console.log('handleHabitCompletionStatusChange');
-
-    /*
-    var updatedHabitList = mock_active_habit_state;
-    updatedHabitList[habit_id].is_completed = !updatedHabitList[habit_id]
-      .is_completed;
-
-    updateMockHabits([...updatedHabitList]);
-    */
-  }
-
   return (
     <section className="justify-center">
       <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
@@ -238,7 +260,6 @@ export default function dallies() {
             ? habits.length != 0
               ? generate_habit_group_sections(
                   habit_map,
-                  habit_groups,
                   handleHabitCompletionStatusChange
                 )
               : 'You have no active habits'
