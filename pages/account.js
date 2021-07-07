@@ -236,12 +236,20 @@ export default function Account({ initialPurchaseRecord }) {
                   initialPurchaseRecord.map((purchase) => (
                     <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
+                        <span className="align-baseline inline-block">
                         {purchase.fields.product_name}
+                        </span>
+                        <span className="ml-2 text-xs align-middle font-semibold inline-block uppercase rounded text-accents-3">
+                          {purchase.fields.subscription_type}
+                        </span>
+                        
                         <p className="text-accents-5 text-sm">
                           {purchase.fields.type == 'One Off'
                             ? 'Purchased On: '
                             : 'Joined On: '}
+                          <span className="text-accents-3">
                           {purchase.fields.purchase_date.split('T')[0]}
+                          </span>
                         </p>
                         {purchase.fields.streak ? (
                           <p className="text-accents-5 text-sm">Streak: {Array.from({ length: purchase.fields.streak }, (_, i) => <span key={i}>⭐</span>)}</p>

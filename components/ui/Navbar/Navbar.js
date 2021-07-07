@@ -83,8 +83,10 @@ const Navbar = () => {
                     className="h-8 w-auto sm:h-10"
                     src="co-x3logo_white_full.svg"
                   />
+                  <span className="text-white ml-3 py-2 font-medium uppercase bg-gradient-to-r from-emerald-500 to-blue-500 rounded px-2">Beta</span>
+                
                 </a>
-                <div className="-mr-2 flex items-center md:hidden">
+                  <div className="-mr-2 flex items-center md:hidden">
                   <Popover.Button className="bg-primary-2 rounded-md p-2 inline-flex items-center justify-center text-white hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500">
                     <span className="sr-only">Open main menu</span>
                     <MenuIcon className="h-6 w-6" aria-hidden="true" />
