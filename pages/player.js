@@ -231,6 +231,11 @@ export default function Player() {
   // checks if should send win to guilded
 
   async function sendWebhook() {
+    let textNextRank = '';
+    if (nextRank) {
+      textNextRank = `(${nextRank} EXP to next rank)`
+    }
+
     fetch(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK, {
       method: 'post',
       headers: {
@@ -265,7 +270,7 @@ export default function Player() {
             fields: [
               {
                 name: '🏆 Leaderboard Position',
-                value: `#${playerRank} (${nextRank} EXP to next rank)`
+                value: `#${playerRank} ${textNextRank}` //// 
               }
             ],
             // image
