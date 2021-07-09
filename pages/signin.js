@@ -32,8 +32,8 @@ const SignIn = () => {
         type: 'note',
         content: 'Check your email for the magic link.'
       });
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handlePasswordReset = async (e) => {
