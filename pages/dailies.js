@@ -5,10 +5,15 @@ import { supabase } from '../utils/supabase-client';
 import { useState, useEffect } from 'react';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
+import { data } from 'autoprefixer';
 
 function wasHabitCompletedToday(streak_end) {
+  //console.log("Received Date(streak_end): " + streak_end); // The issue is that I'm not getting a timezone.
+  //console.log("Received Day: " + new Date(streak_end).getDay());
+  //console.log("Current Day: " + new Date().getDay());
+
   return streak_end
-    ? new Date(streak_end).getDay() == new Date().getDay()
+    ? (new Date(streak_end).getDay() + 1) == new Date().getDay() // Note: Adding + 1 is a temporary solution until the timezone is saved correctly in supabase
     : false;
 }
 
@@ -175,41 +180,82 @@ export default function dallies() {
     }
   }
 
-  async function postCompletedDaily(habit_id) {
+  function getDateStr(date_obj) {
+    return date_obj.getFullYear() + '/' + (date_obj.getMonth() + 1) + '/' + date_obj.getDate();
+  }
+
+  async function toggleHabitStatus(habit_id) {
     try {
       const user = supabase.auth.user();
 
+      // See if the habit has been completed today
       const { data, error } = await supabase
         .from('completed_habits')
-        .insert([
-          { player: user.id, closing_date: new Date().toISOString(), exp_reward: 25, habit: habit_id }
-        ]);
-
-      setLoading(true);      
+        .select('*')
+        .eq('player', user.id)
+        .eq('habit', habit_id)
+        .gte('closing_date', getDateStr(new Date()));
 
       if (error && status !== 406) {
         throw error;
       }
-    } catch (error) {
-      // alert(error.message)
+
+      //console.log('toggleHabitStatus - data - ', data);
+
+      const fetchData = data;
+
+      if (fetchData.length == 0) { // if not completed, post to database (i.e. fetchData is an empty array)
+
+        let testDate = new Date();
+        let testDateStr = testDate.toJSON();
+        //console.log("testDateStr: " + testDateStr);
+        /*
+          Notes from us trying to resolve that timezone issue (supabase is still not saving the timezone)
+
+          testDate.toLocaleDateString() + " " + testDate.toLocaleTimeString(); // doesn't give the timezone
+          testDate.toString() // getting gmt 0700 not recognized
+        */
+
+        const { data, error } = await supabase
+          .from('completed_habits')
+          .insert([
+            { player: user.id, closing_date: testDateStr, exp_reward: 25, habit: habit_id }
+          ]);
+
+        if (error && status !== 406) {
+          throw error;
+        }
+
+      } else if (fetchData.length >= 1) { // if completed, remove (i.e. fetchData is an array with one element)
+
+        console.log('fetchData - second condition');
+
+        const { data, error } = await supabase
+          .from('completed_habits')
+          .delete()
+          .match({ id: fetchData[0].id });
+      
+        if (error && status !== 406) {
+          throw error;
+        }
+      }
+
+      setLoading(true);      
+
+    } catch (e) {
+      alert(e.message)
     } finally {
       setLoading(false);
     }
   }
 
   function handleHabitCompletionStatusChange(habit_id) {
-    console.log('handleHabitCompletionStatusChange');
+    //console.log('handleHabitCompletionStatusChange');
 
-    // TODO: Check if the associated habit has been completed today
-
-    // (first if condition) If the habit hasn't been completed today
-    postCompletedDaily(habit_id).then(result => setLoading(false));
-    
-    // (second if condition) If the habit has been completed today
-    // add a removeCompletedDaily method
+    toggleHabitStatus(habit_id).then(() => {
+      fetchDailies();
+    });
   }
-
-  //console.log("dallies");
 
   var habit_groups = [];
   var habit_map = null;
