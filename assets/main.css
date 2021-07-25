@@ -330,3 +330,8 @@ a:focus {
     opacity: 0;
   }
 }
+
+.square {
+    min-width: 250px;
+    min-height: 250px;
+}
