@@ -17,6 +17,8 @@ import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 
 import React from 'react';
 
+import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
+
 // components
 
 import CardTable from 'components/Cards/CardTable.js';
@@ -669,6 +671,7 @@ export default function Player() {
 
   return (
     <>
+    <BottomNavbar />
       <section className="bg-player-pattern bg-fixed">
         <div className="bg-black max-w-6xl mx-auto pb-32 bg-opacity-90">
           <div className="animate-fade-in-up pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">

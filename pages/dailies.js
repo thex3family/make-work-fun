@@ -1,19 +1,17 @@
 import Link from 'next/link';
-//import Button from '@/components/ui/Button';
+import Button from '@/components/ui/Button';
 import React from 'react';
 import { supabase } from '../utils/supabase-client';
 import { useState, useEffect } from 'react';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import { data } from 'autoprefixer';
+import moment from 'moment';
+import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
 function wasHabitCompletedToday(streak_end) {
-  //console.log("Received Date(streak_end): " + streak_end); // The issue is that I'm not getting a timezone.
-  //console.log("Received Day: " + new Date(streak_end).getDay());
-  //console.log("Current Day: " + new Date().getDay());
-
   return streak_end
-    ? (new Date(streak_end).getDay() + 1) == new Date().getDay() // Note: Adding + 1 is a temporary solution until the timezone is saved correctly in supabase
+    ? new Date(streak_end).getDay() == new Date().getDay()
     : false;
 }
 
@@ -32,23 +30,35 @@ function habitSquare(
   streak_duration,
   streak_start,
   streak_end,
-  habit_handler
+  exp_reward,
+  habit_handler,
 ) {
   return (
     <div
       key={habit_id}
       onClick={() => habit_handler(habit_id)}
-      className={`my-4 mb-12 p-8 ${
-        wasHabitCompletedToday(streak_end) ? `bg-green` : `bg-primary-2`
-      } rounded z-10 square`}
+      className={`my-4 mb-12 p-8 w-1/3 ${
+        wasHabitCompletedToday(streak_end) ? `bg-emerald-500 border-emerald-700` : `bg-dailies-light border-dailies-dark`
+      } rounded z-10 square cursor-pointer shadow-lg border-4`}
     >
       <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" />
-      <h2 className="text-xl font-bold mb-3 text-center text-white">
+      <h2 className="text-xl font-bold mb-3 text-center text-black">
         {habit_title}
       </h2>
-      <p className="text-md mb-5 text-center">
+      <p className="text-md mb-5 text-center text-black">
         {habit_progress_statement(streak_duration)}
       </p>
+      <div className="mt-6">
+              <div className="">
+                <div className="">
+                  <p className="text-xs mt-3 text-center">
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                      +{exp_reward} XP
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
     </div>
   );
 }
@@ -60,10 +70,10 @@ function habit_group_routine_section(
 ) {
   return (
     <div key={habit_group_name}>
-      <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+      <h1 className="text-3xl font-extrabold text-dailies pb-5">
         {habit_group_name} Routines
       </h1>
-      <div className="flex flex-row gap-5 overflow-x-scroll flex-nowrap">
+      <div className="flex flex-row gap-5 overflow-x-auto flex-nowrap">
         {/* start */}
         {associated_habits.map((h) =>
           habitSquare(
@@ -73,6 +83,7 @@ function habit_group_routine_section(
             h.streak_duration,
             h.streak_start,
             h.streak_end,
+            h.exp_reward,
             habit_handler
           )
         )}
@@ -123,6 +134,7 @@ function generate_habit_map(habits) {
 export default function dallies() {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [dailiesCount, setDailiesCount] = useState(0);
   const {
     userLoaded,
     user,
@@ -176,12 +188,43 @@ export default function dallies() {
       // alert(error.message)
     } finally {
       setLoading(false);
+      fetchDailiesCompletedToday();
       console.log(habits);
     }
   }
 
   function getDateStr(date_obj) {
-    return date_obj.getFullYear() + '/' + (date_obj.getMonth() + 1) + '/' + date_obj.getDate();
+    return (
+      date_obj.getFullYear() +
+      '/' +
+      (date_obj.getMonth() + 1) +
+      '/' +
+      date_obj.getDate()
+    );
+  }
+
+  
+  async function fetchDailiesCompletedToday() {
+    try {
+      const user = supabase.auth.user();
+
+      const { data, error } = await supabase
+        .from('completed_habits')
+        .select('*')
+        .eq('player', user.id)
+        .gte('closing_date', moment().startOf('day').utc().format());
+
+        console.log(data.length);
+        setDailiesCount(data.length);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function toggleHabitStatus(habit_id) {
@@ -194,7 +237,7 @@ export default function dallies() {
         .select('*')
         .eq('player', user.id)
         .eq('habit', habit_id)
-        .gte('closing_date', getDateStr(new Date()));
+        .gte('closing_date', moment().startOf('day').utc().format());
 
       if (error && status !== 406) {
         throw error;
@@ -204,11 +247,11 @@ export default function dallies() {
 
       const fetchData = data;
 
-      if (fetchData.length == 0) { // if not completed, post to database (i.e. fetchData is an empty array)
+      if (fetchData.length == 0) {
+        // if not completed, post to database (i.e. fetchData is an empty array)
 
-        let testDate = new Date();
-        let testDateStr = testDate.toJSON();
-        //console.log("testDateStr: " + testDateStr);
+        let testDateStr = new Date();
+        console.log("testDateStr: " + testDateStr);
         /*
           Notes from us trying to resolve that timezone issue (supabase is still not saving the timezone)
 
@@ -219,14 +262,19 @@ export default function dallies() {
         const { data, error } = await supabase
           .from('completed_habits')
           .insert([
-            { player: user.id, closing_date: testDateStr, exp_reward: 25, habit: habit_id }
+            {
+              player: user.id,
+              closing_date: testDateStr,
+              exp_reward: 25,
+              habit: habit_id
+            }
           ]);
 
         if (error && status !== 406) {
           throw error;
         }
-
-      } else if (fetchData.length >= 1) { // if completed, remove (i.e. fetchData is an array with one element)
+      } else if (fetchData.length >= 1) {
+        // if completed, remove (i.e. fetchData is an array with one element)
 
         console.log('fetchData - second condition');
 
@@ -234,18 +282,18 @@ export default function dallies() {
           .from('completed_habits')
           .delete()
           .match({ id: fetchData[0].id });
-      
+
         if (error && status !== 406) {
           throw error;
         }
       }
 
-      setLoading(true);      
-
+      setLoading(true);
     } catch (e) {
-      alert(e.message)
+      alert(e.message);
     } finally {
       setLoading(false);
+      fetchDailiesCompletedToday();
     }
   }
 
@@ -276,7 +324,6 @@ export default function dallies() {
       habit_map = generate_habit_map(habits);
 
       //console.log('Habit Map: ', habit_map);
-
     } else if (habits.length == 0) {
       console.log("User doesn't have any active habits");
       console.log('Habits: ', habits);
@@ -287,37 +334,53 @@ export default function dallies() {
   }
 
   return (
-    <section className="justify-center">
-      <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-        <div className="pb-10">
-          <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-            Dailies
-          </h1>
-          <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore.
-          </p>
-        </div>
-        <button onClick={() => console.log(habits)}>
+    <section className="justify-center bg-dailies-pattern bg-fixed">
+    <BottomNavbar/>
+      <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+        <div className="bg-dailies-default rounded p-10 opacity-95">
+          <div className="pb-5">
+            <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
+              Dailies
+            </h1>
+            <div className="text-center mb-5">
+              <div className="font-semibold text-dailies text-xl mb-3">
+                Complete 4 comissions daily to receive bonus rewards!{' '}
+              </div>
+              <div className="w-24 h-24 border-4 border-dailies-dark shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
+                {dailiesCount}/4
+              </div>
+              <div className="text-3xl">{Array.from({ length: dailiesCount }, (_, i) => <span key={i}>⭐</span>)}</div>
+              
+              <div className="mt-4">
+              <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
+                      +50 💰{' '}
+                    </span>
+                    </div>
+            </div>
+          </div>
+           {/* <button onClick={() => console.log(habits)}>
           Push me to check if data is pulled properly
-        </button>
-        <div>
-          {habits != null
-            ? habits.length != 0
-              ? generate_habit_group_sections(
-                  habit_map,
-                  handleHabitCompletionStatusChange
-                )
-              : 'You have no active habits'
-            : null}
-        </div>
-        <div className="pt-10">
-          <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-            Get Work Done
-          </h1>
-          <p className="text-xl text-accents-6 sm:text-2xl max-w-2xl">
-            Get productive with us.
-          </p>
+        </button>  */}
+          <div>
+            {habits != null
+              ? habits.length != 0
+                ? generate_habit_group_sections(
+                    habit_map,
+                    handleHabitCompletionStatusChange,
+                  )
+                : 'You have no active habits'
+              : null}
+          </div>
+          
+          <div className="text-center my-5">
+            <Link href="/dailies/edit">
+              <button
+                className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded"
+              >
+                Edit Dailies
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
