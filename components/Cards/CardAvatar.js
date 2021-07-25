@@ -194,14 +194,14 @@ export default function Avatar({
                   </p>
                   <p className="text-white text-sm truncate">{statWinName}</p>
                   <p className="text-xs mt-3 text-right">
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-lightBlue-700 bg-lightBlue-200 uppercase last:mr-0 mr-1">
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-lightBlue-700 bg-lightBlue-200 last:mr-0 mr-1">
                       {statWinType}
                     </span>
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 uppercase last:mr-0 mr-1">
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
                       +{statWinGold} 💰{' '}
                     </span>
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-                      +{statWinEXP}XP
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                      +{statWinEXP} XP
                     </span>
                   </p>
                 </div>

@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       backgroundImage: (theme) => ({
         'player-pattern': "url('/background/cityscape.jpg')",
+        'dailies-pattern': "url('/background/dailies.jpg')",
         'first-place': "url('/img/first-place.svg')"
       }),
       maxWidth: {
@@ -40,12 +41,18 @@ module.exports = {
         emerald: colors.emerald,
         blueGray: colors.blueGray,
         lightBlue: colors.lightBlue,
-        blue: colors.blue
+        blue: colors.blue,
+        dailies: {
+          default: '#EEE7DD',
+          light: '#fffaf4',
+          dark: '#8e745e'
+        }
       },
       textColor: {
         base: 'var(--text-base)',
         primary: 'var(--text-primary)',
-        secondary: 'var(--text-secondary)'
+        secondary: 'var(--text-secondary)',
+        dailies: '#8e745e'
       },
       boxShadow: {
         'outline-2': '0 0 0 2px var(--accents-2)',
@@ -64,16 +71,18 @@ module.exports = {
         'fade-out-down': 'fade-out-down 0.5s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out',
         'fade-out-up': 'fade-out-up 0.5s ease-out',
-        'soft-bounce': 'soft-bounce 1.25s linear infinite',
+        'soft-bounce': 'soft-bounce 1.25s linear infinite'
       },
       keyframes: {
         'soft-bounce': {
-          '0%, 100%' : {
+          '0%, 100%': {
             transform: 'translateY(-10%)',
-            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)' },
-          '50%' : {
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'
+          },
+          '50%': {
             transform: 'translateY(0)',
-            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' }
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
+          }
         },
         wiggle: {
           '0%, 100%': { transform: 'rotate(-1deg)' },
