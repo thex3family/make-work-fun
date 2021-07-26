@@ -168,7 +168,7 @@ function EditableCell({
 export default function edit() {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [icon, setIcon] = useState('');
+  
   const {
     userLoaded,
     user,
@@ -183,8 +183,8 @@ export default function edit() {
       title: 'Icon',
       dataIndex: 'icon',
       width: '10%',
-      render: (_, record) => (
-        <IconPicker value={icon} onChange={(v) => setIcon(v)} />
+      render: (icon) => (
+        <IconPicker value={icon} onChange={(v) => console.log(v)} />
       )
     },
     {
@@ -258,7 +258,8 @@ export default function edit() {
       const { data, error } = await supabase
         .from('habits')
         .select('*')
-        .eq('player', user.id);
+        .eq('player', user.id)
+        .order('group', { ascending: true });
 
       setHabits(data);
 
@@ -280,13 +281,16 @@ export default function edit() {
 
   function handleAdd() {
     const newData = {
-      id: habits.length + 1,
-      name: 'New Habit',
-      player: user.id,
-      is_active: true,
       description: null,
       exp_reward: 25,
       group: 1,
+      icon: 'FaMeteor',
+      id: habits.length + 1,
+      is_active: true,
+      name: 'New Habit',
+      player: user.id,
+      type: 1,
+
     };
     setHabits([...habits, newData]);
   }

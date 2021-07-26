@@ -1,0 +1,38 @@
+.Countdown{
+    margin: 10px auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .Countdowncol{
+    display: inline-block;
+  }
+  
+  .Countdowncolelement{
+    display: inline-block;
+    margin: 5px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .Countdowncolelement strong{
+    font-size: 1.25em;
+    padding: .25em 0.25em;
+    background: white;
+    border-radius: 5px;
+    color: black;
+    box-shadow: 5px 8px #8e745e;
+  }
+  .Countdowncolformat {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #8e745e;
+  }
+  .Countdowndesc {
+    margin-top: 5px;
+    margin-bottom:10px;
+    font-weight: 600;
+    color: #8e745e;
+    text-align: center;
+  }
