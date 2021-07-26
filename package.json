@@ -23,6 +23,7 @@
     "@supabase/ui": "^0.27.2",
     "@tailwindcss/forms": "0.2.1",
     "airtable": "^0.11.1",
+    "antd": "^4.16.8",
     "chart.js": "2.9.4",
     "classnames": "2.2.6",
     "gulp": "4.0.2",
