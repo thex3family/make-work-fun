@@ -19,6 +19,8 @@ import React from 'react';
 
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
+import Confetti from '@/components/Widgets/confetti'
+
 // components
 
 import CardTable from 'components/Cards/CardTable.js';
@@ -671,8 +673,8 @@ export default function Player() {
 
   return (
     <>
-    <BottomNavbar />
       <section className="bg-player-pattern bg-fixed">
+  <BottomNavbar />  
         <div className="bg-black max-w-6xl mx-auto pb-32 bg-opacity-90">
           <div className="animate-fade-in-up pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:flex-col align-center">
