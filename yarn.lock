@@ -2904,6 +2904,11 @@
     "@types/node" "*"
     "@types/responselike" "*"
 
+"@types/canvas-confetti@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@types/canvas-confetti/-/canvas-confetti-1.4.0.tgz#22127a1a9ed9d456e626d6e2b9a4d3b0a240e18b"
+  integrity sha512-Neq4mvVecrHmTdyo98EY5bnKCjkZGQ6Ma7VyOrxIcMHEZPmt4kfquccqfBMrpNrdryMHgk3oGQi7XtpZacltnw==
+
 "@types/eslint@^7.2.6":
   version "7.2.13"
   resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-7.2.13.tgz#e0ca7219ba5ded402062ad6f926d491ebb29dd53"
@@ -4715,6 +4720,11 @@ caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.300011
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001158.tgz#fce86d321369603c2bc855ee0e901a7f49f8310b"
   integrity sha512-s5loVYY+yKpuVA3HyW8BarzrtJvwHReuzugQXlv1iR3LKSReoFXRm86mT6hT7PEF5RxW+XQZg+6nYjlywYzQ+g==
 
+canvas-confetti@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/canvas-confetti/-/canvas-confetti-1.4.0.tgz#840f6db4a566f8f32abe28c00dcd82acf39c92bd"
+  integrity sha512-S18o4Y9PqI/uabdlT/jI3MY7XBJjNxnfapFIkjkMwpz6qNxLFZOm2b22OMf4ZYDL9lpNWI+Ih4fEMVPwO1KHFQ==
+
 capture-exit@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/capture-exit/-/capture-exit-2.0.0.tgz#fb953bfaebeb781f62898239dabb426d08a509a4"
@@ -5680,7 +5690,7 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
-csstype@^2.5.7:
+csstype@^2.5.7, csstype@^2.6.10:
   version "2.6.17"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.17.tgz#4cf30eb87e1d1a005d8b6510f95292413f6a1c0e"
   integrity sha512-u1wmTI1jJGzCJzWndZo8mk4wnPTZd1eOIYTYvuEyOQGfmDl3TrabCCfKnOC86FZwW/9djqTl933UF/cS425i9A==
@@ -12191,6 +12201,14 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
+react-canvas-confetti@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-canvas-confetti/-/react-canvas-confetti-1.2.1.tgz#22ac64cbc478cf57cb5f61c130322e359b35389d"
+  integrity sha512-onNjQNkhQjrB2JVCeRpJW7o8VlBNJvo3Eht9zlQlofNLVvvOd1+PzBLU5Ev8n5sFBkTbKJmIUVG0eZnkAl5cpg==
+  dependencies:
+    "@types/canvas-confetti" "1.4.0"
+    canvas-confetti "1.4.0"
+
 react-data-table-component@^6.11.7:
   version "6.11.7"
   resolved "https://registry.yarnpkg.com/react-data-table-component/-/react-data-table-component-6.11.7.tgz#112761005ceb13ae09732e1c1125eeacbda9e21d"
@@ -12243,6 +12261,22 @@ react-error-overlay@^6.0.9:
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
   integrity sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==
+
+react-fa-icon-picker@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-fa-icon-picker/-/react-fa-icon-picker-1.0.3.tgz#6610a832d484cbcd5966f9bd4f783b6770959055"
+  integrity sha512-udLWWQnWBTYltI940DJtGWiBcTIUWrDBgOmmRPctJ8OksZPj/0etwB+RRS6NfSdujhMxYXwTnHJrrO8Lbnorow==
+  dependencies:
+    csstype "^2.6.10"
+    react-icons "^3.10.0"
+    styled-components "^5.1.1"
+
+react-icons@^3.10.0:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.11.0.tgz#2ca2903dfab8268ca18ebd8cc2e879921ec3b254"
+  integrity sha512-JRgiI/vdF6uyBgyZhVyYJUZAop95Sy4XDe/jmT3R/bKliFWpO/uZBwvSjWEdxwzec7SYbEPNPck0Kff2tUGM2Q==
+  dependencies:
+    camelcase "^5.0.0"
 
 react-is@16.13.1, react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
@@ -13760,7 +13794,7 @@ style-loader@1.3.0:
     loader-utils "^2.0.0"
     schema-utils "^2.7.0"
 
-styled-components@^5.3.0:
+styled-components@^5.1.1, styled-components@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-5.3.0.tgz#e47c3d3e9ddfff539f118a3dd0fd4f8f4fb25727"
   integrity sha512-bPJKwZCHjJPf/hwTJl6TbkSZg/3evha+XPEizrZUGb535jLImwDUdjTNxXqjjaASt2M4qO4AVfoHJNe3XB/tpQ==

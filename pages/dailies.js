@@ -17,10 +17,10 @@ function wasHabitCompletedToday(streak_end) {
 
 function habit_progress_statement(streak_duration) {
   return (streak_duration != 0) & (streak_duration != null)
-    ? "🔥 You're on a " +
-        (streak_duration > 9 ? '9+ ' : streak_duration + ' Day ') +
-        'Streak!'
-    : '✊ You got this!';
+    ? "You're on a " +
+        (streak_duration > 9 ? '9+ ' : streak_duration + ' day ') +
+        'Streak! 🔥'
+    : 'You got this! ✊';
 }
 
 function habitSquare(
@@ -32,15 +32,21 @@ function habitSquare(
   streak_end,
   exp_reward,
   habit_handler,
+  saving
 ) {
   return (
     <div
       key={habit_id}
-      onClick={() => habit_handler(habit_id)}
-      className={`my-4 mb-12 p-8 w-1/3 ${
-        wasHabitCompletedToday(streak_end) ? `bg-emerald-500 border-emerald-700` : `bg-dailies-light border-dailies-dark`
+      onClick={saving ? null : () => habit_handler(habit_id)}
+      className={`my-4 mb-12 p-6 w-1/3 ${
+        wasHabitCompletedToday(streak_end)
+          ? `bg-emerald-500 border-emerald-700`
+          : `bg-dailies-light border-dailies-dark`
       } rounded z-10 square cursor-pointer shadow-lg border-4`}
     >
+      {saving ? <div className="relative"><div className="absolute right-0 top-0 text-xs font-semibold py-1 px-2 uppercase rounded text-gray-600 bg-gray-200">
+                Saving...
+              </div></div> : <div></div>}
       <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" />
       <h2 className="text-xl font-bold mb-3 text-center text-black">
         {habit_title}
@@ -49,16 +55,16 @@ function habitSquare(
         {habit_progress_statement(streak_duration)}
       </p>
       <div className="mt-6">
-              <div className="">
-                <div className="">
-                  <p className="text-xs mt-3 text-center">
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
-                      +{exp_reward} XP
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
+        <div className="">
+          <div className="">
+            <p className="text-xs mt-3 text-center">
+              <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                +{exp_reward} XP
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -66,11 +72,12 @@ function habitSquare(
 function habit_group_routine_section(
   habit_group_name,
   associated_habits,
-  habit_handler
+  habit_handler,
+  saving
 ) {
   return (
-    <div key={habit_group_name}>
-      <h1 className="text-3xl font-extrabold text-dailies pb-5">
+    <div className="animate-fade-in-up" key={habit_group_name}>
+      <h1 className="text-2xl md:text-3xl font-extrabold text-dailies pb-5">
         {habit_group_name} Routines
       </h1>
       <div className="flex flex-row gap-5 overflow-x-auto flex-nowrap">
@@ -84,7 +91,8 @@ function habit_group_routine_section(
             h.streak_start,
             h.streak_end,
             h.exp_reward,
-            habit_handler
+            habit_handler,
+            saving
           )
         )}
       </div>
@@ -92,7 +100,7 @@ function habit_group_routine_section(
   );
 }
 
-function generate_habit_group_sections(habit_map, habit_handler) {
+function generate_habit_group_sections(habit_map, habit_handler, saving) {
   var currentHabitKey = null;
   var generated_habit_group_sections = [];
 
@@ -105,7 +113,8 @@ function generate_habit_group_sections(habit_map, habit_handler) {
       habit_group_routine_section(
         currentHabitKey,
         habit_map.get(currentHabitKey),
-        habit_handler
+        habit_handler,
+        saving
       )
     );
 
@@ -134,7 +143,9 @@ function generate_habit_map(habits) {
 export default function dallies() {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [dailiesCount, setDailiesCount] = useState(0);
+  const [dailyBonus, setDailyBonus] = useState(null);
   const {
     userLoaded,
     user,
@@ -193,17 +204,68 @@ export default function dallies() {
     }
   }
 
-  function getDateStr(date_obj) {
-    return (
-      date_obj.getFullYear() +
-      '/' +
-      (date_obj.getMonth() + 1) +
-      '/' +
-      date_obj.getDate()
-    );
+  async function dailyBonusButtons() {
+    try {
+      const user = supabase.auth.user();
+
+      // See if bonus has already been claimed
+      const { data, error } = await supabase
+        .from('success_plan')
+        .select('*')
+        .eq('player', user.id)
+        .eq('name', 'Daily Quest Bonus Reward')
+        .gte('entered_on', moment().startOf('day').utc().format());
+
+      if (error && status !== 406) {
+        throw error;
+      }
+      console.log(data);
+      const fetchData = data;
+
+      if (fetchData.length == 0) {
+        setDailyBonus(true);
+      } else {
+        setDailyBonus(false);
+      }
+
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      // How do I show the null state?
+    }
   }
 
-  
+  async function claimDailyBonus() {
+    try {
+      const user = supabase.auth.user();
+
+      let testDateStr = new Date();
+      console.log('testDateStr: ' + testDateStr);
+
+      const { data, error } = await supabase.from('success_plan').insert([
+        {
+          player: user.id,
+          difficulty: 1,
+          do_date: testDateStr,
+          closing_date: testDateStr,
+          trend: 'check',
+          type: 'Bonus',
+          punctuality: 0,
+          exp_reward: 100,
+          gold_reward: 50,
+          name: 'Daily Quest Bonus Reward'
+        }
+      ]);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setDailyBonus(false);
+    }
+  }
+
   async function fetchDailiesCompletedToday() {
     try {
       const user = supabase.auth.user();
@@ -214,8 +276,9 @@ export default function dallies() {
         .eq('player', user.id)
         .gte('closing_date', moment().startOf('day').utc().format());
 
-        console.log(data.length);
-        setDailiesCount(data.length);
+      console.log(data.length);
+      setDailiesCount(data.length);
+      dailyBonusButtons();
 
       if (error && status !== 406) {
         throw error;
@@ -224,10 +287,12 @@ export default function dallies() {
       // alert(error.message)
     } finally {
       setLoading(false);
+      setSaving(false);
     }
   }
 
   async function toggleHabitStatus(habit_id) {
+    setSaving(true);
     try {
       const user = supabase.auth.user();
 
@@ -251,7 +316,7 @@ export default function dallies() {
         // if not completed, post to database (i.e. fetchData is an empty array)
 
         let testDateStr = new Date();
-        console.log("testDateStr: " + testDateStr);
+        console.log('testDateStr: ' + testDateStr);
         /*
           Notes from us trying to resolve that timezone issue (supabase is still not saving the timezone)
 
@@ -259,16 +324,14 @@ export default function dallies() {
           testDate.toString() // getting gmt 0700 not recognized
         */
 
-        const { data, error } = await supabase
-          .from('completed_habits')
-          .insert([
-            {
-              player: user.id,
-              closing_date: testDateStr,
-              exp_reward: 25,
-              habit: habit_id
-            }
-          ]);
+        const { data, error } = await supabase.from('completed_habits').insert([
+          {
+            player: user.id,
+            closing_date: testDateStr,
+            exp_reward: 25,
+            habit: habit_id
+          }
+        ]);
 
         if (error && status !== 406) {
           throw error;
@@ -292,8 +355,8 @@ export default function dallies() {
     } catch (e) {
       alert(e.message);
     } finally {
-      setLoading(false);
       fetchDailiesCompletedToday();
+      setLoading(false);
     }
   }
 
@@ -335,9 +398,9 @@ export default function dallies() {
 
   return (
     <section className="justify-center bg-dailies-pattern bg-fixed">
-    <BottomNavbar/>
+      <BottomNavbar />
       <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-        <div className="bg-dailies-default rounded p-10 opacity-95">
+        <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-95">
           <div className="pb-5">
             <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
               Dailies
@@ -349,16 +412,73 @@ export default function dallies() {
               <div className="w-24 h-24 border-4 border-dailies-dark shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
                 {dailiesCount}/4
               </div>
-              <div className="text-3xl">{Array.from({ length: dailiesCount }, (_, i) => <span key={i}>⭐</span>)}</div>
-              
+              {/* {Array.from({ length: dailiesCount }, (_, i) => <span key={i}><i className="text-yellow-400 fas fa-star"/></span>)} */}
+              {dailiesCount >= 4 ? (
+                <div>
+                  <div className="text-3xl">
+                    <i className="text-yellow-400 fas fa-star" />
+                    <i className="text-yellow-400 fas fa-star" />
+                    <i className="text-yellow-400 fas fa-star" />
+                    <i className="text-yellow-400 fas fa-star" />
+                  </div>
+                  {dailyBonus ? (
+                    <Button
+                      variant="prominent"
+                      className="animate-fade-in-up mt-5 text-center font-bold"
+                      onClick={() => claimDailyBonus()}
+                    >
+                      Claim Rewards
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="prominent"
+                      disabled={true}
+                      className="animate-fade-in-up mt-5 text-center font-bold"
+                    >
+                      Rewards Claimed!
+                    </Button>
+                  )}
+                  </div>
+              ) : dailiesCount >= 3 ? (
+                <div className="text-3xl">
+                  <i className="text-yellow-400 fas fa-star" />
+                  <i className="text-yellow-400 fas fa-star" />
+                  <i className="text-yellow-400 fas fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                </div>
+              ) : dailiesCount >= 2 ? (
+                <div className="text-3xl">
+                  <i className="text-yellow-400 fas fa-star" />
+                  <i className="text-yellow-400 fas fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                </div>
+              ) : dailiesCount >= 1 ? (
+                <div className="text-3xl">
+                  <i className="text-yellow-400 fas fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                </div>
+              ) : (
+                <div className="text-3xl">
+                  <i className="text-gray-800 far fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                  <i className="text-gray-800 far fa-star" />
+                </div>
+              )}
               <div className="mt-4">
-              <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
-                      +50 💰{' '}
-                    </span>
-                    </div>
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-2">
+                  +50 💰{' '}
+                </span>
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                  +100 XP
+                </span>
+              </div>
             </div>
           </div>
-           {/* <button onClick={() => console.log(habits)}>
+          {/* <button onClick={() => console.log(habits)}>
           Push me to check if data is pulled properly
         </button>  */}
           <div>
@@ -367,16 +487,15 @@ export default function dallies() {
                 ? generate_habit_group_sections(
                     habit_map,
                     handleHabitCompletionStatusChange,
+                    saving
                   )
                 : 'You have no active habits'
               : null}
           </div>
-          
+
           <div className="text-center my-5">
             <Link href="/dailies/edit">
-              <button
-                className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded"
-              >
+              <button className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded">
                 Edit Dailies
               </button>
             </Link>
