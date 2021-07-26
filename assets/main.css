@@ -35,10 +35,20 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.link:active,
+.link:focus {
+  outline: none;
+  border: none;
+  -moz-outline-style: none;
+  box-shadow: none;
+}
+
 a:active,
 a:focus {
-  outline: 0;
+  outline: none;
+  border: none;
   -moz-outline-style: none;
+  box-shadow: none;
 }
 
 .box {

@@ -8,6 +8,8 @@ import { useRouter } from 'next/router';
 import { data } from 'autoprefixer';
 import moment from 'moment';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
+import Countdown from '@/components/Widgets/DailiesCountdown/countdown';
+import { IconPickerItem } from 'react-fa-icon-picker'
 
 function wasHabitCompletedToday(streak_end) {
   return streak_end
@@ -17,9 +19,9 @@ function wasHabitCompletedToday(streak_end) {
 
 function habit_progress_statement(streak_duration) {
   return (streak_duration != 0) & (streak_duration != null)
-    ? "You're on a " +
+    ? "" +
         (streak_duration > 9 ? '9+ ' : streak_duration + ' day ') +
-        'Streak! 🔥'
+        'streak! 🔥'
     : 'You got this! ✊';
 }
 
@@ -31,6 +33,7 @@ function habitSquare(
   streak_start,
   streak_end,
   exp_reward,
+  habit_icon,
   habit_handler,
   saving
 ) {
@@ -38,7 +41,7 @@ function habitSquare(
     <div
       key={habit_id}
       onClick={saving ? null : () => habit_handler(habit_id)}
-      className={`my-4 mb-12 p-6 w-1/3 ${
+      className={`my-4 mb-12 p-6 w-64 ${
         wasHabitCompletedToday(streak_end)
           ? `bg-emerald-500 border-emerald-700`
           : `bg-dailies-light border-dailies-dark`
@@ -47,7 +50,10 @@ function habitSquare(
       {saving ? <div className="relative"><div className="absolute right-0 top-0 text-xs font-semibold py-1 px-2 uppercase rounded text-gray-600 bg-gray-200">
                 Saving...
               </div></div> : <div></div>}
-      <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" />
+              <div className="flex justify-center mb-6 m-auto w-full">
+              <IconPickerItem className="" icon={habit_icon} size={100} color="#000"/>
+              </div>
+      {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
       <h2 className="text-xl font-bold mb-3 text-center text-black">
         {habit_title}
       </h2>
@@ -91,6 +97,7 @@ function habit_group_routine_section(
             h.streak_start,
             h.streak_end,
             h.exp_reward,
+            h.icon,
             habit_handler,
             saving
           )
@@ -146,6 +153,8 @@ export default function dallies() {
   const [saving, setSaving] = useState(false);
   const [dailiesCount, setDailiesCount] = useState(0);
   const [dailyBonus, setDailyBonus] = useState(null);
+  
+  const router = useRouter();
   const {
     userLoaded,
     user,
@@ -154,6 +163,12 @@ export default function dallies() {
     userOnboarding,
     subscription
   } = useUser();
+
+ // Redirects user to sign in if they are not logged in yet
+
+ useEffect(() => {
+  if (!user) router.replace('/signin');
+}, [user]);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -406,9 +421,10 @@ export default function dallies() {
               Dailies
             </h1>
             <div className="text-center mb-5">
-              <div className="font-semibold text-dailies text-xl mb-3">
+              {/* <div className="font-semibold text-dailies text-xl mb-3">
                 Complete 4 comissions daily to receive bonus rewards!{' '}
-              </div>
+              </div> */}
+              
               <div className="w-24 h-24 border-4 border-dailies-dark shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
                 {dailiesCount}/4
               </div>
@@ -440,42 +456,51 @@ export default function dallies() {
                   )}
                   </div>
               ) : dailiesCount >= 3 ? (
+                <div>
                 <div className="text-3xl">
                   <i className="text-yellow-400 fas fa-star" />
                   <i className="text-yellow-400 fas fa-star" />
                   <i className="text-yellow-400 fas fa-star" />
                   <i className="text-gray-800 far fa-star" />
                 </div>
+                <Countdown date={moment().endOf('day').utc().format()} />
+                </div>
+                
               ) : dailiesCount >= 2 ? (
+                <div>
                 <div className="text-3xl">
                   <i className="text-yellow-400 fas fa-star" />
                   <i className="text-yellow-400 fas fa-star" />
                   <i className="text-gray-800 far fa-star" />
                   <i className="text-gray-800 far fa-star" />
+                </div>
+                
+                <Countdown date={moment().endOf('day').utc().format()} />
                 </div>
               ) : dailiesCount >= 1 ? (
+                <div>
                 <div className="text-3xl">
                   <i className="text-yellow-400 fas fa-star" />
                   <i className="text-gray-800 far fa-star" />
                   <i className="text-gray-800 far fa-star" />
                   <i className="text-gray-800 far fa-star" />
                 </div>
+                
+                <Countdown date={moment().endOf('day').utc().format()} />
+                </div>
               ) : (
+                <div>
                 <div className="text-3xl">
                   <i className="text-gray-800 far fa-star" />
                   <i className="text-gray-800 far fa-star" />
                   <i className="text-gray-800 far fa-star" />
                   <i className="text-gray-800 far fa-star" />
                 </div>
+                <Countdown date={moment().endOf('day').utc().format()} />
+                </div>
               )}
-              <div className="mt-4">
-                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-2">
-                  +50 💰{' '}
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
-                  +100 XP
-                </span>
-              </div>
+              
+              
             </div>
           </div>
           {/* <button onClick={() => console.log(habits)}>
