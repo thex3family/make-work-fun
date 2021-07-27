@@ -167,8 +167,10 @@ function EditableCell({
 
 export default function edit() {
   const [habits, setHabits] = useState(null);
+  const [groups, setGroups] = useState(null);
+  const [types, setTypes] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   const {
     userLoaded,
     user,
@@ -183,8 +185,8 @@ export default function edit() {
       title: 'Icon',
       dataIndex: 'icon',
       width: '10%',
-      render: (icon) => (
-        <IconPicker value={icon} onChange={(v) => console.log(v)} />
+      render: (icon, record) => (
+        <IconPicker value={icon} onChange={(v) => handleEdit(v, record)} />
       )
     },
     {
@@ -197,13 +199,16 @@ export default function edit() {
       title: 'Group',
       dataIndex: 'group',
       width: '35%',
-      editable: true
+      editable: true,
+      render: (group) =>
+        (<div>{groups!= null ? groups.at(group-1).name : group}</div>)
     },
     {
       title: 'Type',
       dataIndex: 'type',
-      width: '35%',
-      editable: true
+      width: '10%',
+      render: (type) =>
+        (<div>{types!= null ? types.at(type-1).name : type}</div>)
     },
     {
       title: 'Status',
@@ -272,6 +277,36 @@ export default function edit() {
       setLoading(false);
       console.log('fetchHabits - finally - ', habits);
     }
+
+    try {
+      const { data, error } = await supabase.from('habit_group').select('*').order('id', { ascending: true });
+
+      setGroups(data);
+      console.log('groupData -', data);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+    }
+
+    try {
+      const { data, error } = await supabase.from('habit_type').select('*').order('id', { ascending: true });
+
+      setTypes(data);
+      console.log('typeData -', data);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleDelete(id) {
@@ -279,20 +314,60 @@ export default function edit() {
     setHabits(dataSource.filter((item) => item.id !== id));
   }
 
-  function handleAdd() {
-    const newData = {
+  async function handleEdit(v, row) {
+    console.log('habits - ', v);
+    console.log('row.id - ', row.id);
+
+    const newData = [...habits];
+    const index = newData.findIndex((item) => row.id === item.id);
+    const item = newData[index];
+    newData.splice(index, 1, { ...item, icon: v });
+    setHabits(newData);
+    // need to update the database
+
+    try {
+      const user = supabase.auth.user();
+
+      const { data, error } = await supabase.from('habits').upsert(newData);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+
+    console.log(newData);
+  }
+
+  async function handleAdd() {
+    const newRow = {
       description: null,
       exp_reward: 25,
       group: 1,
       icon: 'FaMeteor',
-      id: habits.length + 1,
       is_active: true,
       name: 'New Habit',
       player: user.id,
-      type: 1,
-
+      type: 1
     };
-    setHabits([...habits, newData]);
+
+    try {
+      const user = supabase.auth.user();
+
+      const { data, error } = await supabase.from('habits').insert(newRow);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+      fetchHabits();
+    }
   }
 
   async function handleSave(row) {
@@ -306,15 +381,13 @@ export default function edit() {
     try {
       const user = supabase.auth.user();
 
-      const { data, error } = await supabase
-        .from('habits')
-        .upsert(newData)
+      const { data, error } = await supabase.from('habits').upsert(newData);
 
       if (error && status !== 406) {
         throw error;
       }
     } catch (error) {
-      alert(error.message)
+      alert(error.message);
     } finally {
       setLoading(false);
     }

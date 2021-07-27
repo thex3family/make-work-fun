@@ -81,7 +81,7 @@ const Navbar = () => {
                   <span className="sr-only">Workflow</span>
                   <img
                     className="h-8 w-auto sm:h-10"
-                    src="co-x3logo_white_full.svg"
+                    src="../co-x3logo_white_full.svg"
                   />
                   <span className="text-white ml-3 py-2 font-medium uppercase bg-gradient-to-r from-emerald-500 to-blue-500 rounded px-2">Beta</span>
                 
