@@ -118,6 +118,25 @@ export default function Player() {
 
   const [weekWins, setWeekWins] = useState([]);
 
+  const currentHour = new Date().getHours();
+  const greetingMessage =
+  currentHour >= 4 && currentHour < 12 ? // after 4:00AM and before 12:00PM
+  'Morning' :
+  currentHour >= 12 && currentHour <= 17 ? // after 12:00PM and before 6:00pm
+  'Afternoon' :
+  currentHour > 17 || currentHour < 4 ? // after 5:59pm or before 4:00AM (to accommodate night owls)
+  'Evening' : // if for some reason the calculation didn't work
+  'Welcome'
+
+  const greetingBlurb =
+  currentHour >= 4 && currentHour < 12 ? // after 4:00AM and before 12:00PM
+  'Are you ready for your next adventure?' :
+  currentHour >= 12 && currentHour <= 17 ? // after 12:00PM and before 6:00pm
+  'Keep it up - you can do it!' :
+  currentHour > 17 || currentHour < 4 ? // after 5:59pm or before 4:00AM (to accommodate night owls)
+  'Remember to take a breather to relax.' : // if for some reason the calculation didn't work
+  'Are you ready for your next adventure?'
+
   const NameCustom = (row) => (
     <div data-tag="allowRowEvents" className="truncateWrapper">
       <p
@@ -677,14 +696,14 @@ export default function Player() {
           <div className="animate-fade-in-up pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:flex-col align-center">
               <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
-                Welcome,{' '}
+                {greetingMessage}{' '}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                   {playerName ? `${playerName ?? 'Player 1'}` : <LoadingDots />}
                   !
                 </span>
               </h1>
               <p className="mt-5 text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-                Are you ready for your next adventure?
+               {greetingBlurb}
               </p>
             </div>
           </div>

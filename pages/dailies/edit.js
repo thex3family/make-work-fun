@@ -507,7 +507,7 @@ export default function edit() {
             </h1>
             <div className="font-semibold text-dailies text-xl">
               Add your own daily quests and customize your day!
-              <div  className="lg:invisible text-sm mt-2">More options available on desktop.</div>
+              <div  className="lg:invisible text-sm font-medium mt-2">More options available on desktop.</div>
             </div>
             
           </div>

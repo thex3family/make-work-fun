@@ -71,8 +71,8 @@ export default function CardStats({
             </div>
           </div>
           <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-0 sm:gap-4">
-            <Button variant="slim" disabled={true} className="mt-4 w-full sm:w-2/5">{statGold} 💰</Button>
-            <Button disabled={true} variant="slim" className="mt-4 w-full sm:w-3/5">
+            <Button variant="slim" disabled={true} className="mt-4 w-full">{statGold} 💰</Button>
+            {/* <Button disabled={true} variant="slim" className="mt-4 w-full sm:w-3/5">
               <span className={statPercentColor + " mr-2"}>
                 <i
                   className={
@@ -86,7 +86,7 @@ export default function CardStats({
                 {statPercent}%
               </span>
               <span className="whitespace-nowrap">{statDescription}</span>
-            </Button>
+            </Button> */}
         </div>
         </div>
       </div>
