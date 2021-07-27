@@ -29,11 +29,11 @@ export default class Fireworks extends React.Component {
 
   getAnimationSettings(originXA, originXB) {
     return {
-      startVelocity: 30,
-      spread: 360,
+      startVelocity: 25,
+      spread: 480,
       ticks: 60,
       zIndex: 0,
-      particleCount: 150,
+      particleCount: 75,
       origin: {
         x: randomInRange(originXA, originXB),
         y: Math.random() - 0.2
@@ -49,7 +49,7 @@ export default class Fireworks extends React.Component {
   startAnimation() {
     if (!this.isAnimationEnabled) {
       this.isAnimationEnabled = true;
-      this.intervalId = setInterval(this.nextTickAnimation, 400);
+      this.intervalId = setInterval(this.nextTickAnimation, 800);
     }
   }
 
