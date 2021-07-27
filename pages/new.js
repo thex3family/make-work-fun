@@ -18,6 +18,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Jul 27, 2021"
+            title="Dailies You Get To Do"
+            desc="Create your own quests to do each day, and try to build up a streak. Complete 4 quests to get a bonus reward (resets daily!)"
+            img_url="updates/0.12.png"
+            button_url="/dailies"
+            version="v.12"
+          />
           <CardRUpdate
             date="Jul 02, 2021"
             title="Toolbox Purchases Dashboard"
