@@ -729,7 +729,7 @@ export default function dallies() {
             {/* <button onClick={() => console.log(habits)}>
           Push me to check if data is pulled properly
         </button>  */}
-            <div>
+            <div className="text-center">
               {habits != null
                 ? habits.length != 0
                   ? generate_habit_group_sections(
@@ -737,7 +737,7 @@ export default function dallies() {
                       handleHabitCompletionStatusChange,
                       saving
                     )
-                  : 'You have no active habits'
+                  : <span className="text-center text-dailies font-semibold text-md">You have no active habits...let's change that!</span>
                 : null}
             </div>
 
