@@ -1,3 +1,5 @@
+import Confetti from '@/components/Widgets/confetti';
+
 const ModalLevelUp = ({ levelUp, playerLevel, setLevelUp }) => {
     
   return (
@@ -5,6 +7,7 @@ const ModalLevelUp = ({ levelUp, playerLevel, setLevelUp }) => {
       {levelUp === true ? (
         <>
           <div className="h-screen flex justify-center">
+            <Confetti/>
             <div
               className="justify-center items-center flex flex-col overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-90"
               onClick={() => setLevelUp(false)}

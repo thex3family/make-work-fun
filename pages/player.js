@@ -19,8 +19,6 @@ import React from 'react';
 
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
-import Confetti from '@/components/Widgets/confetti'
-
 // components
 
 import CardTable from 'components/Cards/CardTable.js';
@@ -237,7 +235,7 @@ export default function Player() {
   async function sendWebhook() {
     let textNextRank = '';
     if (nextRank) {
-      textNextRank = `(${nextRank} EXP to next rank)`
+      textNextRank = `(${nextRank} EXP to next rank)`;
     }
 
     fetch(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK, {
@@ -274,7 +272,7 @@ export default function Player() {
             fields: [
               {
                 name: '🏆 Leaderboard Position',
-                value: `#${playerRank} ${textNextRank}` //// 
+                value: `#${playerRank} ${textNextRank}` ////
               }
             ],
             // image
@@ -572,7 +570,7 @@ export default function Player() {
             Waiting for a win this season
           </h1>
           <div className="flex justify-center">
-          <LoadingDots />
+            <LoadingDots />
           </div>
         </div>
       </div>
@@ -674,7 +672,7 @@ export default function Player() {
   return (
     <>
       <section className="bg-player-pattern bg-fixed">
-  <BottomNavbar />  
+        <BottomNavbar />
         <div className="bg-black max-w-6xl mx-auto pb-32 bg-opacity-90">
           <div className="animate-fade-in-up pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:flex-col align-center">

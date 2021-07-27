@@ -86,13 +86,14 @@ export default class Fireworks extends React.Component {
   }
 
   render() {
+      this.handlerClickStart();
     return (
       <>
-        <div>
+        {/* <div>
           <button onClick={this.handlerClickStart}>Start</button>
           <button onClick={this.handlerClickPause}>Pause</button>
           <button onClick={this.handlerClickStop}>Stop</button>
-        </div>
+        </div> */}
         <ReactCanvasConfetti refConfetti={this.getInstance} style={canvasStyles}/>
       </>
     );
