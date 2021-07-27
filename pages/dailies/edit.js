@@ -74,8 +74,6 @@ function generateTable(
         bordered
         dataSource={dataSource}
         columns={cols}
-        className=""
-        scroll={{ x: 700 }}
       />
     </div>
   );
@@ -204,7 +202,8 @@ export default function edit() {
     {
       title: 'Group',
       dataIndex: 'group',
-      width: '20%',
+      width: '15%',
+      responsive: ['md'],
       // editable: true,
       // render: (group) =>
       //   (<div>{groups!= null ? groups.at(group-1).name : group}</div>)
@@ -237,12 +236,14 @@ export default function edit() {
       title: 'Sort',
       dataIndex: 'sort',
       width: '5%',
+      responsive: ['lg'],
       editable: true
     },
     {
       title: 'Type',
       dataIndex: 'type',
       width: '10%',
+      responsive: ['lg'],
       render: (type) => (
         <div>{types != null ? types.at(type - 1).name : type}</div>
       )
@@ -250,6 +251,7 @@ export default function edit() {
     {
       title: 'Status',
       dataIndex: 'is_active',
+      responsive: ['md'],
       // editable: true,
       width: '10%',
       // render: (is_active) => <div>{is_active ? 'Active' : 'Inactive'}</div>
@@ -264,21 +266,22 @@ export default function edit() {
         );
       }
     },
-    {
-      title: 'Action',
-      dataIndex: 'action',
-      width: '5%',
-      align: 'center',
-      render: (_, record) =>
-        habits.length >= 1 ? (
-          <Popconfirm
-            title="Are you sure?"
-            onConfirm={() => handleDelete(record.id)}
-          >
-            <i className="fas fa-trash cursor-pointer" />
-          </Popconfirm>
-        ) : null
-    }
+    // {
+    //   title: 'Action',
+    //   dataIndex: 'action',
+    //   width: '5%',
+    //   align: 'center',
+    //   responsive: ['md'],
+    //   render: (_, record) =>
+    //     habits.length >= 1 ? (
+    //       <Popconfirm
+    //         title="Are you sure?"
+    //         onConfirm={() => handleDelete(record.id)}
+    //       >
+    //         <i className="fas fa-trash cursor-pointer" />
+    //       </Popconfirm>
+    //     ) : null
+    // }
   ];
 
   useEffect(() => {
@@ -370,6 +373,8 @@ export default function edit() {
   function handleDelete(id) {
     const dataSource = [...habits];
     setHabits(dataSource.filter((item) => item.id !== id));
+
+    // delete doesn't actually remove anything from the database
   }
 
   async function handleEdit(v, row, column) {
@@ -500,9 +505,11 @@ export default function edit() {
             <h1 className="text-4xl font-extrabold sm:text-6xl text-dailies pb-5">
               Edit Dailies
             </h1>
-            <div className="font-semibold text-dailies text-xl mb-3">
-              Add in your own daily quests and customize your day!
+            <div className="font-semibold text-dailies text-xl">
+              Add your own daily quests and customize your day!
+              <div  className="lg:invisible text-sm mt-2">More options available on desktop.</div>
             </div>
+            
           </div>
           <div className="text-center my-5">
             {habits
