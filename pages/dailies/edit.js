@@ -75,7 +75,7 @@ function generateTable(
         dataSource={dataSource}
         columns={cols}
         className=""
-        scroll={{x: 700}} 
+        scroll={{ x: 700 }}
       />
     </div>
   );
@@ -194,7 +194,7 @@ export default function edit() {
           onChange={(v) => handleEdit(v, record, 'icon')}
         />
       )
-    },  
+    },
     {
       title: 'Habit',
       dataIndex: 'name',
@@ -227,18 +227,18 @@ export default function edit() {
                 </Option>
               ))
             ) : (
-              <div/>
+              <div />
             )}
           </Select>
         );
       }
-    }, 
+    },
     {
-     title: 'Sort',
-     dataIndex: 'sort',
-     width: '5%',
-     editable: true
-   },
+      title: 'Sort',
+      dataIndex: 'sort',
+      width: '5%',
+      editable: true
+    },
     {
       title: 'Type',
       dataIndex: 'type',
@@ -467,9 +467,29 @@ export default function edit() {
   return (
     <section className="justify-center bg-dailies-pattern bg-fixed bg-cover">
       {saving ? (
-        <div className="fixed left-0 bottom-0 ml-4 mb-4 text-md font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 z-50">
+        <span className="fixed inline-flex left-0 bottom-0 ml-2 mb-24 sm:ml-4 sm:mb-4 text-md font-semibold py-3 px-4 uppercase rounded text-emerald-600 bg-emerald-200 z-50">
+          <svg
+            className="animate-spin -ml-1 mr-3 h-5 w-5 text-emerald-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
           Saving...
-        </div>
+        </span>
       ) : (
         <div></div>
       )}
