@@ -75,6 +75,7 @@ function generateTable(
         dataSource={dataSource}
         columns={cols}
         className=""
+        scroll={{x: 700}} 
       />
     </div>
   );
@@ -464,7 +465,7 @@ export default function edit() {
   }
 
   return (
-    <section className="justify-center bg-dailies-pattern bg-fixed">
+    <section className="justify-center bg-dailies-pattern bg-fixed bg-cover">
       {saving ? (
         <div className="fixed left-0 bottom-0 ml-4 mb-4 text-md font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 z-50">
           Saving...
