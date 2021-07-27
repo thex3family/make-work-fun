@@ -41,7 +41,7 @@ function habitSquare(
     <div
       key={habit_id}
       onClick={saving ? null : () => habit_handler(habit_id)}
-      className={`my-4 mb-12 p-6 w-64 ${
+      className={`my-4 mb-8 p-6 w-64 ${
         wasHabitCompletedToday(streak_end)
           ? `bg-emerald-500 border-emerald-700`
           : `bg-dailies-light border-dailies-dark`
@@ -86,7 +86,7 @@ function habit_group_routine_section(
       <h1 className="text-2xl md:text-3xl font-extrabold text-dailies pb-5">
         {habit_group_name} Routines
       </h1>
-      <div className="flex flex-row gap-5 overflow-x-auto flex-nowrap">
+      <div className="flex flex-row gap-5 overflow-x-auto flex-nowrap mb-10">
         {/* start */}
         {associated_habits.map((h) =>
           habitSquare(

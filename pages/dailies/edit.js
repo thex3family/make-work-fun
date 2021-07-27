@@ -5,7 +5,7 @@ import { supabase } from '../../utils/supabase-client';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, Select, Switch } from 'antd';
 import 'antd/dist/antd.css';
 
 import { IconPicker } from 'react-fa-icon-picker';
@@ -74,6 +74,7 @@ function generateTable(
         bordered
         dataSource={dataSource}
         columns={cols}
+        className=""
       />
     </div>
   );
@@ -170,6 +171,7 @@ export default function edit() {
   const [groups, setGroups] = useState(null);
   const [types, setTypes] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const {
     userLoaded,
@@ -184,48 +186,95 @@ export default function edit() {
     {
       title: 'Icon',
       dataIndex: 'icon',
-      width: '10%',
+      width: '5%',
       render: (icon, record) => (
-        <IconPicker value={icon} onChange={(v) => handleEdit(v, record)} />
+        <IconPicker
+          value={icon}
+          onChange={(v) => handleEdit(v, record, 'icon')}
+        />
       )
-    },
+    },  
     {
       title: 'Habit',
       dataIndex: 'name',
-      width: '15%',
+      width: '35%',
       editable: true
     },
     {
       title: 'Group',
       dataIndex: 'group',
-      width: '35%',
-      editable: true,
-      render: (group) =>
-        (<div>{groups!= null ? groups.at(group-1).name : group}</div>)
-    },
+      width: '20%',
+      // editable: true,
+      // render: (group) =>
+      //   (<div>{groups!= null ? groups.at(group-1).name : group}</div>)
+      render: (group, record) => {
+        return (
+          <Select
+            style={{ width: 200 }}
+            value={groups != null ? groups.at(group - 1).name : group}
+            onChange={(v) => handleEdit(v, record, 'group')}
+            // showSearch
+            // optionFilterProp="children"
+            // filterOption={(input, option) =>
+            //   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            // }
+          >
+            {groups != null ? (
+              groups.map((a) => (
+                <Option key={a.id} value={a.id}>
+                  {a.name}
+                </Option>
+              ))
+            ) : (
+              <div/>
+            )}
+          </Select>
+        );
+      }
+    }, 
+    {
+     title: 'Sort',
+     dataIndex: 'sort',
+     width: '5%',
+     editable: true
+   },
     {
       title: 'Type',
       dataIndex: 'type',
       width: '10%',
-      render: (type) =>
-        (<div>{types!= null ? types.at(type-1).name : type}</div>)
+      render: (type) => (
+        <div>{types != null ? types.at(type - 1).name : type}</div>
+      )
     },
     {
       title: 'Status',
       dataIndex: 'is_active',
-      editable: true,
-      render: (is_active) => <div>{is_active ? 'Active' : 'Inactive'}</div>
+      // editable: true,
+      width: '10%',
+      // render: (is_active) => <div>{is_active ? 'Active' : 'Inactive'}</div>
+      render: (is_active, record) => {
+        return (
+          <Switch
+            checked={is_active}
+            checkedChildren="Show"
+            unCheckedChildren="Hide"
+            onChange={(v) => handleEdit(v, record, 'status')}
+          />
+        );
+      }
     },
     {
-      title: 'Operation',
-      dataIndex: 'operation',
+      title: 'Action',
+      dataIndex: 'action',
+      width: '5%',
+      align: 'center',
       render: (_, record) =>
         habits.length >= 1 ? (
           <Popconfirm
             title="Are you sure?"
             onConfirm={() => handleDelete(record.id)}
           >
-            <a>Delete</a>
+            <i className="fas fa-trash cursor-pointer" />
           </Popconfirm>
         ) : null
     }
@@ -264,7 +313,9 @@ export default function edit() {
         .from('habits')
         .select('*')
         .eq('player', user.id)
-        .order('group', { ascending: true });
+        .order('group', { ascending: true })
+        .order('sort', { ascending: true })
+        .order('name', { ascending: true });
 
       setHabits(data);
 
@@ -279,7 +330,10 @@ export default function edit() {
     }
 
     try {
-      const { data, error } = await supabase.from('habit_group').select('*').order('id', { ascending: true });
+      const { data, error } = await supabase
+        .from('habit_group')
+        .select('*')
+        .order('id', { ascending: true });
 
       setGroups(data);
       console.log('groupData -', data);
@@ -294,7 +348,10 @@ export default function edit() {
     }
 
     try {
-      const { data, error } = await supabase.from('habit_type').select('*').order('id', { ascending: true });
+      const { data, error } = await supabase
+        .from('habit_type')
+        .select('*')
+        .order('id', { ascending: true });
 
       setTypes(data);
       console.log('typeData -', data);
@@ -314,14 +371,21 @@ export default function edit() {
     setHabits(dataSource.filter((item) => item.id !== id));
   }
 
-  async function handleEdit(v, row) {
+  async function handleEdit(v, row, column) {
+    setSaving(true);
     console.log('habits - ', v);
     console.log('row.id - ', row.id);
 
     const newData = [...habits];
     const index = newData.findIndex((item) => row.id === item.id);
     const item = newData[index];
-    newData.splice(index, 1, { ...item, icon: v });
+    if (column === 'icon') {
+      newData.splice(index, 1, { ...item, icon: v });
+    } else if (column === 'status') {
+      newData.splice(index, 1, { ...item, is_active: v });
+    } else if (column === 'group') {
+      newData.splice(index, 1, { ...item, group: v });
+    }
     setHabits(newData);
     // need to update the database
 
@@ -337,6 +401,7 @@ export default function edit() {
       alert(error.message);
     } finally {
       setLoading(false);
+      setSaving(false);
     }
 
     console.log(newData);
@@ -351,6 +416,7 @@ export default function edit() {
       is_active: true,
       name: 'New Habit',
       player: user.id,
+      sort: 1,
       type: 1
     };
 
@@ -371,6 +437,7 @@ export default function edit() {
   }
 
   async function handleSave(row) {
+    setSaving(true);
     const newData = [...habits];
     const index = newData.findIndex((item) => row.id === item.id);
     const item = newData[index];
@@ -390,6 +457,7 @@ export default function edit() {
       alert(error.message);
     } finally {
       setLoading(false);
+      setSaving(false);
     }
 
     console.log(newData);
@@ -397,13 +465,23 @@ export default function edit() {
 
   return (
     <section className="justify-center bg-dailies-pattern bg-fixed">
+      {saving ? (
+        <div className="fixed left-0 bottom-0 ml-4 mb-4 text-md font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 z-50">
+          Saving...
+        </div>
+      ) : (
+        <div></div>
+      )}
       <BottomNavbar />
       <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
         <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-95">
-          <div className="pb-5">
-            <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
+          <div className="pb-5 text-center">
+            <h1 className="text-4xl font-extrabold sm:text-6xl text-dailies pb-5">
               Edit Dailies
             </h1>
+            <div className="font-semibold text-dailies text-xl mb-3">
+              Add in your own daily quests and customize your day!
+            </div>
           </div>
           <div className="text-center my-5">
             {habits
