@@ -9,7 +9,7 @@ import { data } from 'autoprefixer';
 import moment from 'moment';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 import Countdown from '@/components/Widgets/DailiesCountdown/countdown';
-import { IconPickerItem } from 'react-fa-icon-picker'
+import { IconPickerItem } from 'react-fa-icon-picker';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 
@@ -23,7 +23,7 @@ function wasHabitCompletedToday(streak_end) {
 
 function habit_progress_statement(streak_duration) {
   return (streak_duration != 0) & (streak_duration != null)
-    ? "" +
+    ? '' +
         (streak_duration > 9 ? '9+ ' : streak_duration + ' day ') +
         'streak! 🔥'
     : 'You got this! ✊';
@@ -51,12 +51,17 @@ function habitSquare(
           : `bg-dailies-light border-dailies-dark`
       } rounded z-10 square cursor-pointer shadow-lg border-4`}
     >
-      {saving ? <div className="relative"><div className="absolute right-0 top-0 text-xs font-semibold py-1 px-2 uppercase rounded text-gray-600 bg-gray-200">
+      {/* {saving ? <div className="relative"><div className="absolute right-0 top-0 text-xs font-semibold py-1 px-2 uppercase rounded text-gray-600 bg-gray-200">
                 Saving...
-              </div></div> : <div></div>}
-              <div className="flex justify-center mb-6 m-auto w-full">
-              <IconPickerItem className="" icon={habit_icon} size={100} color="#000"/>
-              </div>
+              </div></div> : <div></div>} */}
+      <div className="flex justify-center mb-6 m-auto w-full">
+        <IconPickerItem
+          className=""
+          icon={habit_icon}
+          size={100}
+          color="#000"
+        />
+      </div>
       {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
       <h2 className="text-xl font-bold mb-3 text-center text-black">
         {habit_title}
@@ -177,7 +182,7 @@ export default function dallies() {
   const [playerLevel, setPlayerLevel] = useState(null);
 
   const gf = new GiphyFetch(process.env.NEXT_PUBLIC_GIPHY_API);
-  
+
   const router = useRouter();
   const {
     userLoaded,
@@ -188,11 +193,11 @@ export default function dallies() {
     subscription
   } = useUser();
 
- // Redirects user to sign in if they are not logged in yet
+  // Redirects user to sign in if they are not logged in yet
 
- useEffect(() => {
-  if (!user) router.replace('/signin');
-}, [user]);
+  useEffect(() => {
+    if (!user) router.replace('/signin');
+  }, [user]);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -244,7 +249,6 @@ export default function dallies() {
     }
   }
 
-
   // check if there is a win (only works when the app is open)
 
   async function fetchLatestWin() {
@@ -263,7 +267,7 @@ export default function dallies() {
             if (player.current_level > player.previous_level) {
               // level up animation
               setLevelUp(true);
-              console.log('You should level up here!')
+              console.log('You should level up here!');
             }
 
             // continue
@@ -345,74 +349,74 @@ export default function dallies() {
     }
   }
 
-    // checks if should send win to guilded
+  // checks if should send win to guilded
 
-    async function sendWebhook() {
-      let textNextRank = '';
-      if (nextRank) {
-        textNextRank = `(${nextRank} EXP to next rank)`;
-      }
-  
-      fetch(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          content: null,
-          // embeds to be sent
-  
-          embeds: [
-            {
-              // decimal number colour of the side of the embed
-              color: null,
-              author: {
-                name: `🎉 ${playerName} completed a ${activeType}!`
-              },
-              // author
-              // - icon next to text at top (text is a link)
-              // embed title
-              // - link on 2nd row
-              title: `${activeName}`,
-              url: `https://www.notion.so/${activeSlug}`,
-              // thumbnail
-              thumbnail: {
-                url: `${activeGIF}`
-              },
-              // embed description
-              // - text on 3rd row
-              description: `Completed On: ${activeDate}`,
-              // custom embed fields: bold title/name, normal content/value below title
-              // - located below description, above image.
-              fields: [
-                {
-                  name: '🏆 Leaderboard Position',
-                  value: `#${playerRank} ${textNextRank}` ////
-                }
-              ],
-              // image
-              // - picture below description(and fields) - this needs to be the gif that we fetch from random whatever.
-              // image: {
-              //   url:
-              //     'http://makework.fun/img/celebratory-cat.gif',
-              // },
-              // footer
-              // - icon next to text at bottom
-              footer: {
-                text: `+${activeGold} 💰 | +${activeEXP} XP | ${activeUpstream}`
-              }
-            },
-            {
-              color: null,
-              author: {
-                name: '💬 Start a discussion!'
-                // url: 'https://toolbox.co-x3.com/family-connection/?utm_source=guilded',
-              }
-            }
-          ]
-        })
-      });
+  async function sendWebhook() {
+    let textNextRank = '';
+    if (nextRank) {
+      textNextRank = `(${nextRank} EXP to next rank)`;
     }
+
+    fetch(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        content: null,
+        // embeds to be sent
+
+        embeds: [
+          {
+            // decimal number colour of the side of the embed
+            color: null,
+            author: {
+              name: `🎉 ${playerName} completed a ${activeType}!`
+            },
+            // author
+            // - icon next to text at top (text is a link)
+            // embed title
+            // - link on 2nd row
+            title: `${activeName}`,
+            url: `https://www.notion.so/${activeSlug}`,
+            // thumbnail
+            thumbnail: {
+              url: `${activeGIF}`
+            },
+            // embed description
+            // - text on 3rd row
+            description: `Completed On: ${activeDate}`,
+            // custom embed fields: bold title/name, normal content/value below title
+            // - located below description, above image.
+            fields: [
+              {
+                name: '🏆 Leaderboard Position',
+                value: `#${playerRank} ${textNextRank}` ////
+              }
+            ],
+            // image
+            // - picture below description(and fields) - this needs to be the gif that we fetch from random whatever.
+            // image: {
+            //   url:
+            //     'http://makework.fun/img/celebratory-cat.gif',
+            // },
+            // footer
+            // - icon next to text at bottom
+            footer: {
+              text: `+${activeGold} 💰 | +${activeEXP} XP | ${activeUpstream}`
+            }
+          },
+          {
+            color: null,
+            author: {
+              name: '💬 Start a discussion!'
+              // url: 'https://toolbox.co-x3.com/family-connection/?utm_source=guilded',
+            }
+          }
+        ]
+      })
+    });
+  }
 
   async function dailyBonusButtons() {
     try {
@@ -437,7 +441,6 @@ export default function dallies() {
       } else {
         setDailyBonus(false);
       }
-
     } catch (error) {
       alert(error.message);
     } finally {
@@ -608,236 +611,260 @@ export default function dallies() {
 
   return (
     <>
-    <section className="justify-center bg-dailies-pattern bg-fixed bg-cover">
-      <BottomNavbar />
-      <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-        <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-95">
-          <div className="pb-5">
-            <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
-              Dailies
-            </h1>
-            <div className="text-center mb-5">
-              {/* <div className="font-semibold text-dailies text-xl mb-3">
+      <section className="justify-center bg-dailies-pattern bg-fixed bg-cover">
+        {saving ? (
+          <span className="fixed inline-flex left-0 bottom-0 ml-2 mb-24 sm:ml-4 sm:mb-4 text-md font-semibold py-3 px-4 uppercase rounded text-emerald-600 bg-emerald-200 z-50">
+            <svg
+              className="animate-spin -ml-1 mr-3 h-5 w-5 text-emerald-600"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Saving...
+          </span>
+        ) : (
+          <div></div>
+        )}
+        <BottomNavbar />
+        <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+          <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-95">
+            <div className="pb-5">
+              <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
+                Dailies
+              </h1>
+              <div className="text-center mb-5">
+                {/* <div className="font-semibold text-dailies text-xl mb-3">
                 Complete 4 comissions daily to receive bonus rewards!{' '}
               </div> */}
-              
-              <div className="w-24 h-24 border-4 border-dailies-dark shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
-                {dailiesCount}/4
+
+                <div className="w-24 h-24 border-4 border-dailies-dark shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
+                  {dailiesCount}/4
+                </div>
+                {/* {Array.from({ length: dailiesCount }, (_, i) => <span key={i}><i className="text-yellow-400 fas fa-star"/></span>)} */}
+                {dailiesCount >= 4 ? (
+                  <div>
+                    <div className="text-3xl">
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-yellow-400 fas fa-star" />
+                    </div>
+                    {dailyBonus ? (
+                      <Button
+                        variant="prominent"
+                        className="animate-fade-in-up mt-5 text-center font-bold"
+                        onClick={() => claimDailyBonus()}
+                      >
+                        Claim Rewards
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="prominent"
+                        disabled={true}
+                        className="animate-fade-in-up mt-5 text-center font-bold"
+                      >
+                        Rewards Claimed!
+                      </Button>
+                    )}
+                  </div>
+                ) : dailiesCount >= 3 ? (
+                  <div>
+                    <div className="text-3xl">
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                    </div>
+                    <Countdown date={moment().endOf('day').utc().format()} />
+                  </div>
+                ) : dailiesCount >= 2 ? (
+                  <div>
+                    <div className="text-3xl">
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                    </div>
+
+                    <Countdown date={moment().endOf('day').utc().format()} />
+                  </div>
+                ) : dailiesCount >= 1 ? (
+                  <div>
+                    <div className="text-3xl">
+                      <i className="text-yellow-400 fas fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                    </div>
+
+                    <Countdown date={moment().endOf('day').utc().format()} />
+                  </div>
+                ) : (
+                  <div>
+                    <div className="text-3xl">
+                      <i className="text-gray-800 far fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                      <i className="text-gray-800 far fa-star" />
+                    </div>
+                    <Countdown date={moment().endOf('day').utc().format()} />
+                  </div>
+                )}
               </div>
-              {/* {Array.from({ length: dailiesCount }, (_, i) => <span key={i}><i className="text-yellow-400 fas fa-star"/></span>)} */}
-              {dailiesCount >= 4 ? (
-                <div>
-                  <div className="text-3xl">
-                    <i className="text-yellow-400 fas fa-star" />
-                    <i className="text-yellow-400 fas fa-star" />
-                    <i className="text-yellow-400 fas fa-star" />
-                    <i className="text-yellow-400 fas fa-star" />
-                  </div>
-                  {dailyBonus ? (
-                    <Button
-                      variant="prominent"
-                      className="animate-fade-in-up mt-5 text-center font-bold"
-                      onClick={() => claimDailyBonus()}
-                    >
-                      Claim Rewards
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="prominent"
-                      disabled={true}
-                      className="animate-fade-in-up mt-5 text-center font-bold"
-                    >
-                      Rewards Claimed!
-                    </Button>
-                  )}
-                  </div>
-              ) : dailiesCount >= 3 ? (
-                <div>
-                <div className="text-3xl">
-                  <i className="text-yellow-400 fas fa-star" />
-                  <i className="text-yellow-400 fas fa-star" />
-                  <i className="text-yellow-400 fas fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                </div>
-                <Countdown date={moment().endOf('day').utc().format()} />
-                </div>
-                
-              ) : dailiesCount >= 2 ? (
-                <div>
-                <div className="text-3xl">
-                  <i className="text-yellow-400 fas fa-star" />
-                  <i className="text-yellow-400 fas fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                </div>
-                
-                <Countdown date={moment().endOf('day').utc().format()} />
-                </div>
-              ) : dailiesCount >= 1 ? (
-                <div>
-                <div className="text-3xl">
-                  <i className="text-yellow-400 fas fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                </div>
-                
-                <Countdown date={moment().endOf('day').utc().format()} />
-                </div>
-              ) : (
-                <div>
-                <div className="text-3xl">
-                  <i className="text-gray-800 far fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                  <i className="text-gray-800 far fa-star" />
-                </div>
-                <Countdown date={moment().endOf('day').utc().format()} />
-                </div>
-              )}
-              
-              
             </div>
-          </div>
-          {/* <button onClick={() => console.log(habits)}>
+            {/* <button onClick={() => console.log(habits)}>
           Push me to check if data is pulled properly
         </button>  */}
-          <div>
-            {habits != null
-              ? habits.length != 0
-                ? generate_habit_group_sections(
-                    habit_map,
-                    handleHabitCompletionStatusChange,
-                    saving
-                  )
-                : 'You have no active habits'
-              : null}
-          </div>
+            <div>
+              {habits != null
+                ? habits.length != 0
+                  ? generate_habit_group_sections(
+                      habit_map,
+                      handleHabitCompletionStatusChange,
+                      saving
+                    )
+                  : 'You have no active habits'
+                : null}
+            </div>
 
-          <div className="text-center my-5">
-            <Link href="/dailies/edit">
-              <button className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded">
-                Edit Dailies
-              </button>
-            </Link>
+            <div className="text-center my-5">
+              <Link href="/dailies/edit">
+                <button className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded">
+                  Edit Dailies
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-          {/* level up modal */}
-          <ModalLevelUp
-          levelUp={levelUp}
-          playerLevel={playerLevel}
-          setLevelUp={setLevelUp}
-        />
-  
-        {/* // Modal Section */}
-        {showModal ? (
-          <>
-            <div className="h-screen flex justify-center">
-              <div
-                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none"
-                // onClick={() => setShowModal(false)}
-              >
-                <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
-                  {/*content*/}
-                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
-                      <h3 className="text-xl sm:text-2xl font-semibold text-white">
-                        🎉 You've completed a{' '}
-                        <span className="font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-                          {activeType}!
-                        </span>
-                      </h3>
-                      <button
-                        className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                        onClick={() => setShowModal(false)}
-                      >
-                        <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                          ×
-                        </span>
-                      </button>
+      </section>
+      {/* level up modal */}
+      <ModalLevelUp
+        levelUp={levelUp}
+        playerLevel={playerLevel}
+        setLevelUp={setLevelUp}
+      />
+
+      {/* // Modal Section */}
+      {showModal ? (
+        <>
+          <div className="h-screen flex justify-center">
+            <div
+              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none"
+              // onClick={() => setShowModal(false)}
+            >
+              <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+                {/*content*/}
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                  {/*header*/}
+                  <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-white">
+                      🎉 You've completed a{' '}
+                      <span className="font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+                        {activeType}!
+                      </span>
+                    </h3>
+                    <button
+                      className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                        ×
+                      </span>
+                    </button>
+                  </div>
+                  {/*body*/}
+                  <div className="relative p-6 flex-auto text-blueGray-500 text-center">
+                    <div className="my-4">
+                      <p className="text-xl sm:text-2xl leading-none text-primary-2 font-bold">
+                        {activeName}
+                        <br />
+                        <span className="text-sm">{activeUpstream}</span>
+                      </p>
+                      <p className="my-2 font-light text-sm">{activeDate}</p>
                     </div>
-                    {/*body*/}
-                    <div className="relative p-6 flex-auto text-blueGray-500 text-center">
-                      <div className="my-4">
-                        <p className="text-xl sm:text-2xl leading-none text-primary-2 font-bold">
-                          {activeName}
-                          <br />
-                          <span className="text-sm">{activeUpstream}</span>
-                        </p>
-                        <p className="my-2 font-light text-sm">{activeDate}</p>
-                      </div>
-                      <table className="w-full text-xl mb-6 border text-primary-2">
-                        <tbody>
-                          <tr>
-                            <td className="p-4 border">+{activeGold} 💰</td>
-                            <td className="p-4 border">+{activeEXP} EXP</td>
-                          </tr>
-                        </tbody>
-                      </table>
-  
-                      <div className="w-full">
-                        <div className="box">
-                          <a onClick={openBox} className="box-container">
-                            <div
-                              className={`${boxClass} box-body animate-wiggle`}
-                            >
-                              <div className={`${boxClass} box-lid`}>
-                                <div className={`${boxClass} box-bowtie`}></div>
-                              </div>
+                    <table className="w-full text-xl mb-6 border text-primary-2">
+                      <tbody>
+                        <tr>
+                          <td className="p-4 border">+{activeGold} 💰</td>
+                          <td className="p-4 border">+{activeEXP} EXP</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <div className="w-full">
+                      <div className="box">
+                        <a onClick={openBox} className="box-container">
+                          <div
+                            className={`${boxClass} box-body animate-wiggle`}
+                          >
+                            <div className={`${boxClass} box-lid`}>
+                              <div className={`${boxClass} box-bowtie`}></div>
                             </div>
-  
-                            <img
-                              src={activeGIF}
-                              className={`${boxClass} absolute box-image`}
-                            />
-                          </a>
-                        </div>
+                          </div>
+
+                          <img
+                            src={activeGIF}
+                            className={`${boxClass} absolute box-image`}
+                          />
+                        </a>
                       </div>
-  
-                      <p className="mt-2">It's time to celebrate! 😄</p>
                     </div>
-                    {/*footer*/}
-                    <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+
+                    <p className="mt-2">It's time to celebrate! 😄</p>
+                  </div>
+                  {/*footer*/}
+                  <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                    <button
+                      className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => closeModal()}
+                    >
+                      Close
+                    </button>
+                    <a
+                      href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
+                      target="_blank"
+                    >
                       <button
-                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
-                        onClick={() => closeModal()}
+                        onClick={() => sendWebhook()}
                       >
-                        Close
+                        Share With Family
                       </button>
-                      <a
-                        href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
-                        target="_blank"
+                    </a>
+                  </div>
+                  <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
+                    <Link href="/player">
+                      <button
+                        className="text-emerald-500 background-transparent mx-auto font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none ease-linear transition-all duration-150"
+                        type="button"
                       >
-                        <button
-                          className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                          type="button"
-                          onClick={() => sendWebhook()}
-                        >
-                          Share With Family
-                        </button>
-                      </a>
-                    </div>
-                    <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
-                      <Link href="/player">
-                        <button
-                          className="text-emerald-500 background-transparent mx-auto font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none ease-linear transition-all duration-150"
-                          type="button"
-                        >
-                          View Character Stats
-                        </button>
-                      </Link>
-                    </div>
+                        View Character Stats
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>
-              <div className="opacity-25 fixed inset-0 z-30 bg-black"></div>
             </div>
-          </>
-        ) : null}
+            <div className="opacity-25 fixed inset-0 z-30 bg-black"></div>
+          </div>
         </>
+      ) : null}
+    </>
   );
 }
