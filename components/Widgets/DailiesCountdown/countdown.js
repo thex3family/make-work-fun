@@ -93,15 +93,7 @@ class Countdown extends Component {
           </span>
         </span> */}
         
-        <div className="mt-1">
-                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-2">
-                  +50 💰{' '}
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
-                  +100 XP
-                </span>
-              </div>
-        <div className={s.Countdowndesc}>Earn bonus rewards from <br/>completing your dailies by...</div>
+        <div className={s.Countdowndesc}>Bonus Resets...</div>
         <span className={s.Countdowncol}>
           <span className={s.Countdowncolelement}>
             <strong>{this.addLeadingZeros(countDown.hours)}</strong>

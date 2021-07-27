@@ -30,9 +30,18 @@
     color: #8e745e;
   }
   .Countdowndesc {
-    margin-top: 5px;
-    margin-bottom:10px;
+    background: white;
+    border-radius: 5px;
+    color: black;
+    line-height: 18px;
+    box-shadow: 5px 8px #8e745e;
+    padding: .5em 0.5em;
+    display:inline-block;
+    vertical-align: middle;
+    width: 80px;
     font-weight: 600;
     color: #8e745e;
-    text-align: center;
+    text-align: left;
+    margin: 5px 10px;
+    font-size:1em;
   }

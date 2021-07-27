@@ -195,9 +195,9 @@ export default function dallies() {
 
   // Redirects user to sign in if they are not logged in yet
 
-  useEffect(() => {
-    if (!user) router.replace('/signin');
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) router.replace('/signin');
+  // }, [user]);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -664,6 +664,7 @@ export default function dallies() {
                       <i className="text-yellow-400 fas fa-star" />
                     </div>
                     {dailyBonus ? (
+                      <div>
                       <Button
                         variant="prominent"
                         className="animate-fade-in-up mt-5 text-center font-bold"
@@ -671,7 +672,18 @@ export default function dallies() {
                       >
                         Claim Rewards
                       </Button>
+                      
+        <div className="mt-3 animate-fade-in-up">
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-2">
+                  +50 💰{' '}
+                </span>
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                  +100 XP
+                </span>
+              </div>
+                      </div>
                     ) : (
+                      <div>
                       <Button
                         variant="prominent"
                         disabled={true}
@@ -679,6 +691,15 @@ export default function dallies() {
                       >
                         Rewards Claimed!
                       </Button>
+        <div className="mt-3 animate-fade-in-up">
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-2">
+                  +50 💰{' '}
+                </span>
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1">
+                  +100 XP
+                </span>
+              </div>
+                      </div>
                     )}
                   </div>
                 ) : dailiesCount >= 3 ? (
