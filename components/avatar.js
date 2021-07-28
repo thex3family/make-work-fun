@@ -144,7 +144,7 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload }
       <div
         ref={popoverDropdownRef}
         className={
-          (dropdownPopoverShow ? 'block ' : 'hidden ') +
+          (dropdownPopoverShow ? 'absolute ' : 'hidden ') +
           'bg-blueGray-900 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 w-1/3'
         }
       >
@@ -156,12 +156,9 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload }
             {uploading ? 'Uploading ...' : 'Avatar'}
           </label>
           <input
-            style={{
-              visibility: 'hidden',
-              position: 'absolute'
-            }}
             type="file"
             id="avatar"
+            className="hidden"
             accept="image/*"
             onChange={uploadAvatar}
             disabled={uploading}
@@ -175,12 +172,9 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload }
             {uploading ? 'Uploading ...' : 'Background'}
           </label>
           <input
-            style={{
-              visibility: 'hidden',
-              position: 'absolute'
-            }}
             type="file"
             id="background"
+            className="hidden"
             accept="image/*"
             onChange={uploadBackground}
             disabled={uploading}
