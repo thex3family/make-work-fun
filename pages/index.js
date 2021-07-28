@@ -509,7 +509,8 @@ export default function HomePage() {
                     statWinType={player.type}
                     statWinGold={player.gold_reward}
                     statWinEXP={player.exp_reward}
-                    url={player.avatar_url}
+                    avatar_url={player.avatar_url}
+                    background_url={player.background_url}
                   />
                 ))}
               </div>
@@ -535,7 +536,8 @@ export default function HomePage() {
                     statWinType={player.type}
                     statWinGold={player.gold_reward}
                     statWinEXP={player.exp_reward}
-                    url={player.avatar_url}
+                    avatar_url={player.avatar_url}
+                    background_url={player.background_url}
                   />
                 ))}
               </div>

@@ -4,6 +4,10 @@ module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      borderRadius: ['hover', 'focus'],
+      zIndex: {
+        '-10': '-10',
+       },
       backgroundColor: ['active'],
       backgroundImage: (theme) => ({
         'player-pattern': "url('/background/cityscape.jpg')",
