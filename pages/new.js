@@ -18,6 +18,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Jul 28, 2021"
+            title="More Personalization Options"
+            desc="Make your dashboard your own! Set your own custom background for your player page and show it off in the leaderboard."
+            img_url="updates/0.13.png"
+            button_url="/player"
+            version="v.13"
+          />
           <CardLUpdate
             date="Jul 27, 2021"
             title="Dailies You Get To Do"
