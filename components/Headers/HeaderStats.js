@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
 
 // components
 
-import CardStats from "components/Cards/CardStats.js";
-import CardLineChart from "components/Cards/CardLineChart.js";
+import CardStats from 'components/Cards/CardStats.js';
+import CardLineChart from 'components/Cards/CardLineChart.js';
 import Avatar from '@/components/avatar';
 
 export default function HeaderStats({
@@ -18,13 +18,11 @@ export default function HeaderStats({
   total_gold,
   avatar_url,
   setAvatarUrl,
+  fetchPlayerBackground,
   updateProfile,
-  weekWins,
-})
-
-{
-
-  const exp_percent =  Math.floor(exp_progress / level_exp * 100);
+  weekWins
+}) {
+  const exp_percent = Math.floor((exp_progress / level_exp) * 100);
 
   return (
     <>
@@ -35,14 +33,17 @@ export default function HeaderStats({
             {/* Card stats */}
             <div className="flex flex-wrap md:flex-nowrap items-center gap-5">
               <div className="w-full mx-auto pb-5 xs:w-1/4 sm:w-2/3 lg:w-1/2 h-full text-center relative">
-                
-      <Avatar
-        url={avatar_url}
-        onUpload={(url) => {
-          setAvatarUrl(url)
-          updateProfile({ avatar_url: url })
-        }}
-      />
+                <Avatar
+                  url={avatar_url}
+                  onAvatarUpload={(url) => {
+                    setAvatarUrl(url);
+                    updateProfile({ image_url: url, type: "avatar" });
+                  }}
+                  onBackgroundUpload={(url) => {
+                    fetchPlayerBackground(url);
+                    updateProfile({ image_url: url, type: "background" });
+                  }}
+                />
               </div>
               <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full">
                 <CardStats
@@ -69,10 +70,10 @@ export default function HeaderStats({
                 See Leaderboard 🏆
               </Button>
               </Link> */}
-              
-              <div className="w-full pt-6">
-              <CardLineChart weekWins={weekWins}/>
-              </div>
+
+                <div className="w-full pt-6">
+                  <CardLineChart weekWins={weekWins} />
+                </div>
               </div>
             </div>
           </div>

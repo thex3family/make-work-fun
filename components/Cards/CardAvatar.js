@@ -16,36 +16,50 @@ export default function Avatar({
   statWinType,
   statWinGold,
   statWinEXP,
-  url
+  avatar_url,
+  background_url
 }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
+  const [backgroundUrl, setBackgroundUrl] = useState('/background/cityscape.jpg');
 
   useEffect(() => {
-    if (url) downloadImage(url);
-    if (!url) setAvatarStatus('Missing');
-  }, [url]);
+    if (avatar_url) downloadImage(avatar_url, "avatar");
+    if (background_url) downloadImage(background_url, "background");
+    if (!avatar_url) setAvatarStatus('Missing');
+  }, []);
 
-  async function downloadImage(path) {
+  async function downloadImage(path, type) {
     try {
-      const { data, error } = await supabase.storage
-        .from('avatars')
-        .download(path);
-      if (error) {
-        throw error;
+      if (type === 'avatar') {
+        const { data, error } = await supabase.storage
+          .from('avatars')
+          .download(path);
+        if (error) {
+          throw error;
+        }
+        const url = URL.createObjectURL(data);
+        setAvatarUrl(url);
+        setAvatarStatus('Exists');
+      } else if (type === 'background') {
+        const { data, error } = await supabase.storage
+          .from('backgrounds')
+          .download(path);
+        if (error) {
+          throw error;
+        }
+        const url = URL.createObjectURL(data);
+        setBackgroundUrl(url);
       }
-      const url = URL.createObjectURL(data);
-      setAvatarUrl(url);
     } catch (error) {
       console.log('Error downloading image: ', error.message);
     } finally {
-      setAvatarStatus('Exists');
     }
   }
 
   const statTitle = 'Newbie';
   const statMaxLevel = '100';
-  const statEXPPercent = Math.floor(statEXPProgress / statLevelEXP * 100);
+  const statEXPPercent = Math.floor((statEXPProgress / statLevelEXP) * 100);
   const statArrow = 'up';
   const statPercent = '0';
   const statPercentColor = 'text-white';
@@ -56,7 +70,7 @@ export default function Avatar({
     <>
       <div className="px-8 mt-10 w-full sm:w-1/2 md:1/2 lg:w-1/3 xl:w-1/4 shadow-xl">
         <div className="bg-primary-2 rounded mx-auto">
-          <div className="rounded-tr-md rounded-tl-md w-auto bg-cover bg-player-pattern">
+          <div className="rounded-tr-md rounded-tl-md w-auto bg-cover" style={{ backgroundImage: `url(${backgroundUrl})` }}>
             <div className="bg-black bg-opacity-80">
               {/* {avatarUrl ? (
         <img
@@ -130,7 +144,7 @@ export default function Avatar({
                     {statRank}
                   </div>
                 ) : (
-                  ""
+                  ''
                   // <div
                   //   className={
                   //     'text-gray-400 border-gray-400 p-3 text-center inline-flex items-center justify-center w-8 h-8 border-2 shadow-lg rounded-full font-bold'

@@ -102,6 +102,7 @@ export default function Player() {
   const [playerGold, setPlayerGold] = useState(null);
   const [nextRank, setNextRank] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
+  const [background_url, setBackgroundUrl] = useState('/background/cityscape.jpg');
 
   const [levelUp, setLevelUp] = useState(false);
 
@@ -120,22 +121,22 @@ export default function Player() {
 
   const currentHour = new Date().getHours();
   const greetingMessage =
-  currentHour >= 4 && currentHour < 12 ? // after 4:00AM and before 12:00PM
-  'Morning' :
-  currentHour >= 12 && currentHour <= 17 ? // after 12:00PM and before 6:00pm
-  'Afternoon' :
-  currentHour > 17 || currentHour < 4 ? // after 5:59pm or before 4:00AM (to accommodate night owls)
-  'Evening' : // if for some reason the calculation didn't work
-  'Welcome'
+    currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
+      ? 'Morning'
+      : currentHour >= 12 && currentHour <= 17 // after 12:00PM and before 6:00pm
+      ? 'Afternoon'
+      : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
+      ? 'Evening' // if for some reason the calculation didn't work
+      : 'Welcome';
 
   const greetingBlurb =
-  currentHour >= 4 && currentHour < 12 ? // after 4:00AM and before 12:00PM
-  'Are you ready for your next adventure?' :
-  currentHour >= 12 && currentHour <= 17 ? // after 12:00PM and before 6:00pm
-  'Keep it up - you can do it!' :
-  currentHour > 17 || currentHour < 4 ? // after 5:59pm or before 4:00AM (to accommodate night owls)
-  'Remember to take a breather to relax.' : // if for some reason the calculation didn't work
-  'Are you ready for your next adventure?'
+    currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
+      ? 'Are you ready for your next adventure?'
+      : currentHour >= 12 && currentHour <= 17 // after 12:00PM and before 6:00pm
+      ? 'Keep it up - you can do it!'
+      : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
+      ? 'Remember to take a breather to relax.' // if for some reason the calculation didn't work
+      : 'Are you ready for your next adventure?';
 
   const NameCustom = (row) => (
     <div data-tag="allowRowEvents" className="truncateWrapper">
@@ -344,6 +345,24 @@ export default function Player() {
     fetchLatestWin();
   }
 
+  async function fetchPlayerBackground(path){
+    if(path){
+    try {
+      const { data, error } = await supabase.storage
+        .from('backgrounds')
+        .download(path);
+      if (error) {
+        throw error;
+      }
+      const url = URL.createObjectURL(data);
+      setBackgroundUrl(url);
+    } catch (error) {
+      console.log('Error downloading image: ', error.message);
+    } finally {
+    }
+  }
+  }
+
   async function fetchWeekWins() {
     try {
       const user = supabase.auth.user();
@@ -388,6 +407,7 @@ export default function Player() {
         setPlayerLevelEXP(data.level_exp);
         setPlayerGold(data.total_gold);
         setAvatarUrl(data.avatar_url);
+        fetchPlayerBackground(data.background_url);
         setNextRank(data.next_rank);
       } else {
         setPlayerName(null);
@@ -496,20 +516,32 @@ export default function Player() {
 
   // specific update for avatar URL, and other stuff late
 
-  async function updateProfile({ avatar_url }) {
+  async function updateProfile({ image_url, type }) {
     try {
       setLoading(true);
       if (userDetails) {
         const user = supabase.auth.user();
-        let { error } = await supabase
-          .from('users')
-          .update({
-            avatar_url: avatar_url
-          })
-          .eq('id', user.id);
+        if (type === 'avatar') {
+          let { error } = await supabase
+            .from('users')
+            .update({
+              avatar_url: image_url
+            })
+            .eq('id', user.id);
+          if (error) {
+            throw error;
+          }
+        } else if (type === 'background') {
+          let { error } = await supabase
+            .from('users')
+            .update({
+              background_url: image_url
+            })
+            .eq('id', user.id);
 
-        if (error) {
-          throw error;
+          if (error) {
+            throw error;
+          }
         }
       }
     } catch (error) {
@@ -690,20 +722,28 @@ export default function Player() {
 
   return (
     <>
-      <section className="bg-player-pattern bg-fixed bg-cover">
+      {/* <section className="bg-player-pattern bg-fixed bg-cover"> */}
+      <section
+        className="bg-fixed bg-cover"
+        style={{ backgroundImage: `url(${background_url})` }}
+      >
         <BottomNavbar />
         <div className="bg-black max-w-6xl mx-auto pb-32 bg-opacity-90">
           <div className="animate-fade-in-up pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:flex-col align-center">
               <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
-                {greetingMessage}{' '}
+                {greetingMessage},{' '}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                  {playerName ? `${playerName ?? 'Player 1'}` : <LoadingDots />}
+                  {playerName ? (
+                    `${playerName ?? 'Adventurer'}`
+                  ) : (
+                    <LoadingDots />
+                  )}
                   !
                 </span>
               </h1>
               <p className="mt-5 text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-               {greetingBlurb}
+                {greetingBlurb}
               </p>
             </div>
           </div>
@@ -718,6 +758,7 @@ export default function Player() {
               total_gold={playerGold}
               avatar_url={avatar_url}
               setAvatarUrl={setAvatarUrl}
+              fetchPlayerBackground={fetchPlayerBackground}
               updateProfile={updateProfile}
               weekWins={weekWins}
             />
