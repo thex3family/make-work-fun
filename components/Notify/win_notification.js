@@ -1,5 +1,7 @@
 export default function notifyMe(type, details) {
   function sendNotification(title, options) {
+    let link = 'https://makework.fun/player';
+
     // Let's check if the browser supports notifications
     if (!('Notification' in window)) {
       console.log('This browser does not support desktop notification');
@@ -8,25 +10,28 @@ export default function notifyMe(type, details) {
     // Let's check whether notification permissions have already been granted
     else if (Notification.permission === 'granted') {
       // If it's okay let's create a notification
-      var notification = new Notification(title, options);
-      notification.onclick = function (event) {
-        event.preventDefault(); // prevent the browser from focusing the Notification's tab
-        window.open(link, '_blank');
-      };
+    //   var notification = new Notification(title, options);
+    //   notification.onclick = function (event) {
+    //     event.preventDefault(); // prevent the browser from focusing the Notification's tab
+    //     window.open(link, '_blank');
+    //   };
 
-      setTimeout(notification.close.bind(notification), 7000);
-    }
+    //   setTimeout(notification.close.bind(notification), 7000);
+        
+    navigator.serviceWorker.getRegistration().then(function(reg) {
+        reg.showNotification(title, options);
+      });
+
+}
 
     // Otherwise, we need to ask the user for permission
     else if (Notification.permission !== 'denied') {
       Notification.requestPermission().then(function (permission) {
         // If the user accepts, let's create a notification
         if (permission === 'granted') {
-          var notification = new Notification(title, options);
-          notification.onclick = function (event) {
-            event.preventDefault(); // prevent the browser from focusing the Notification's tab
-            window.open(link, '_blank');
-          };
+            navigator.serviceWorker.getRegistration().then(function(reg) {
+                reg.showNotification(title, options);
+              });
         }
       });
     }
@@ -35,31 +40,45 @@ export default function notifyMe(type, details) {
     // want to be respectful there is no need to bother them any more.
   }
 
-  let img = '../co-x3logo_white_full.svg';
-  let link = 'https://makework.fun/player';
+    
+  let img = '/img/co-x3logo_white.png';
 
   if (type == 'win') {
     let title = "🎉 You've completed a " + details.toUpperCase() + '!';
-    let text = "It's time to celebrate! Open your gift.";
+    let text = "Keep up the good work!";
     let vibe = [200, 100, 200];
     var options = {
       body: text,
       icon: img,
       badge: img,
-      image: img,
-      vibrate: vibe
+      vibrate: vibe,
+      tag: type,
+      renotify: true,
+    //   data: {
+    //     dateOfArrival: Date.now(),
+    //     primaryKey: 1
+    //   },
     };
     sendNotification(title, options);
   } else if (type == 'level') {
     let title = "🌟 You've leveled up to " + details + '!';
-    let text = "It's time to celebrate! Check out your progress.";
+    let text = "It's time to celebrate!";
     let vibe = [400];
     var options = {
       body: text,
       icon: img,
       badge: img,
-      image: img,
-      vibrate: vibe
+      vibrate: vibe,
+      tag: type,
+      renotify: true,
+    //   data: {
+    //     dateOfArrival: Date.now(),
+    //     primaryKey: 1
+    //   },
+    //   actions: [
+    //     {action: 'explore', title: 'View Player'},
+    //     {action: 'close', title: 'Dismiss'},
+    //   ]
     };
     sendNotification(title, options);
   }

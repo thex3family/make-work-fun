@@ -148,7 +148,6 @@ export default function HomePage() {
                 if (s1Player.current_level > s1Player.previous_level) {
                   // level up animation
                   setLevelUp(true);
-                  window.navigator.vibrate([400]);
                   notifyMe('level', player.current_level);
                 }
 
