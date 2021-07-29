@@ -19,6 +19,8 @@ import React from 'react';
 
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
+import notifyMe from '@/components/Notify/win_notification'
+
 // components
 
 import CardTable from 'components/Cards/CardTable.js';
@@ -474,6 +476,7 @@ export default function Player() {
               // level up animation
               setLevelUp(true);
               window.navigator.vibrate([400]);
+              notifyMe('level', player.current_level);
             }
 
             // continue
@@ -491,6 +494,7 @@ export default function Player() {
 
             setShowModal(true);
             window.navigator.vibrate([200, 100, 200]);
+            notifyMe('win', payload.new.type);
 
             // generate a random GIF
             const { data: gifs } = await gf.random({

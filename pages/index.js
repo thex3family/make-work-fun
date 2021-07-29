@@ -14,6 +14,8 @@ import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
+import notifyMe from '@/components/Notify/win_notification'
+
 export default function HomePage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -147,6 +149,7 @@ export default function HomePage() {
                   // level up animation
                   setLevelUp(true);
                   window.navigator.vibrate([400]);
+                  notifyMe('level', player.current_level);
                 }
 
                 setActiveType(payload.new.type);
@@ -162,6 +165,7 @@ export default function HomePage() {
                 // show modal (early because I will have to load the gif anyways)
                 setShowModal(true);
                 window.navigator.vibrate([200, 100, 200]);
+                notifyMe('win', payload.new.type);
                 
 
                 // generate a random GIF

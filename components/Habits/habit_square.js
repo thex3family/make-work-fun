@@ -25,10 +25,11 @@ export default function HabitSquare({
   }, [streak_end]);
 
   function wasHabitCompletedToday(streak_end) {
-    const habitCompletedToday = new Date(streak_end).getDay() == new Date().getDay()
-    if(habitCompletedToday){
+    const habitCompletedToday =
+      new Date(streak_end).getDay() == new Date().getDay();
+    if (habitCompletedToday) {
       setHabitCompletedToday(habitCompletedToday);
-      setHabitCounter(v => [...v, 'Complete']);
+      setHabitCounter((v) => [...v, 'Complete']);
     }
   }
 
@@ -95,9 +96,8 @@ export default function HabitSquare({
           .delete()
           .match({ id: fetchData[0].id });
 
-        
-      setHabitCompletedToday(false);
-      setHabitCounter(v => v.splice(0,v.length-1));
+        setHabitCompletedToday(false);
+        setHabitCounter((v) => v.splice(0, v.length - 1));
 
         if (error && status !== 406) {
           throw error;
@@ -117,7 +117,7 @@ export default function HabitSquare({
   function handleHabitCompletionStatusChange(habit_id) {
     //console.log('handleHabitCompletionStatusChange');
     toggleHabitStatus(habit_id).then(() => {
-      fetchDailies();
+      fetchDailies('click');
     });
   }
 
@@ -133,31 +133,30 @@ export default function HabitSquare({
           : `bg-dailies-light border-dailies-dark`
       } rounded z-10 square cursor-pointer shadow-lg border-4`}
     >
-      
       {saving ? (
         <div className="inline-flex absolute top-0 right-0 mt-2 mr-2 text-xs font-semibold py-2 px-3 uppercase rounded text-white bg-gradient-to-r from-emerald-500 to-blue-500 border-emerald-500 z-50">
-        <svg
-          className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            stroke-width="4"
-          ></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-        Saving...
-      </div>
+          <svg
+            className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Saving...
+        </div>
       ) : (
         <div></div>
       )}
@@ -175,12 +174,12 @@ export default function HabitSquare({
         </div>
         {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
         <div className="flex-col text-left sm:text-center w-3/4 sm:w-full">
-        <h2 className="text-lg sm:text-xl font-bold sm:mb-3 text-black">
-          {habit_title}
-        </h2>
-        <p className="text-md sm:mb-2 text-black">
-          {habit_progress_statement(streak_duration)}
-        </p>
+          <h2 className="text-lg sm:text-xl font-bold sm:mb-3 text-black">
+            {habit_title}
+          </h2>
+          <p className="text-md sm:mb-2 text-black">
+            {habit_progress_statement(streak_duration)}
+          </p>
           <div className="">
             <div className="">
               <p className="text-xs mt-3">
@@ -189,7 +188,7 @@ export default function HabitSquare({
                 </span>
               </p>
             </div>
-        </div>
+          </div>
         </div>
       </div>
     </div>

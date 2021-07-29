@@ -15,6 +15,7 @@ import { Gif } from '@giphy/react-components';
 import HabitGroups from '@/components/Habits/habit_groups'
 
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
+import notifyMe from '@/components/Notify/win_notification'
 
 export default function dallies() {
   const [habits, setHabits] = useState(null);
@@ -84,7 +85,7 @@ export default function dallies() {
     fetchLatestWin();
   }
 
-  async function fetchDailies() {
+  async function fetchDailies(click) {
     try {
       const user = supabase.auth.user();
 
@@ -96,12 +97,15 @@ export default function dallies() {
 
       setHabits(data);
 
+      if(click === 'click'){
       const player = await fetchPlayerStats();
       // check if user leveled up
       if (player.current_level > player.previous_level) {
         // level up animation
         setLevelUp(true);
         window.navigator.vibrate([400]);
+        notifyMe('level', player.current_level);
+      }
       }
 
       if (error && status !== 406) {
@@ -152,6 +156,7 @@ export default function dallies() {
 
             setShowModal(true);
             window.navigator.vibrate([200, 100, 200]);
+            notifyMe('win', payload.new.type);
 
             // generate a random GIF
             const { data: gifs } = await gf.random({
