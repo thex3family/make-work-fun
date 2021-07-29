@@ -18,6 +18,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Jul 29, 2021"
+            title="Notifications and Vibrations!"
+            desc="Keep your app open to get timely notifications when you accomplish wins and celebrate them with your friends!"
+            img_url="updates/0.14.png"
+            button_url="/player"
+            version="v.14"
+          />
           <CardRUpdate
             date="Jul 28, 2021"
             title="More Personalization Options"
