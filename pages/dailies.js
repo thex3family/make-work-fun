@@ -54,9 +54,9 @@ export default function dallies() {
 
   // Redirects user to sign in if they are not logged in yet
 
-  // useEffect(() => {
-  //   if (!user) router.replace('/signin');
-  // }, [user]);
+  useEffect(() => {
+    if (!user) router.replace('/signin');
+  }, [user]);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
