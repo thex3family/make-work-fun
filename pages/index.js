@@ -146,6 +146,7 @@ export default function HomePage() {
                 if (s1Player.current_level > s1Player.previous_level) {
                   // level up animation
                   setLevelUp(true);
+                  window.navigator.vibrate([400]);
                 }
 
                 setActiveType(payload.new.type);
@@ -160,6 +161,8 @@ export default function HomePage() {
 
                 // show modal (early because I will have to load the gif anyways)
                 setShowModal(true);
+                window.navigator.vibrate([200, 100, 200]);
+                
 
                 // generate a random GIF
                 const { data: gifs } = await gf.random({
