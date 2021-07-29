@@ -96,6 +96,14 @@ export default function dallies() {
 
       setHabits(data);
 
+      const player = await fetchPlayerStats();
+      // check if user leveled up
+      if (player.current_level > player.previous_level) {
+        // level up animation
+        setLevelUp(true);
+        console.log('You should level up here!');
+      }
+
       if (error && status !== 406) {
         throw error;
       }
