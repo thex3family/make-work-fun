@@ -618,7 +618,7 @@ export default function Player() {
       <div className="h-screen flex flex-col justify-center">
         <div className="-mt-40 mx-auto">
           <h1 className="mb-5 text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-            Waiting for a win this season
+            Loading Wins This Season...
           </h1>
           <div className="flex justify-center">
             <LoadingDots />
@@ -728,9 +728,9 @@ export default function Player() {
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <BottomNavbar />
-        <div className="bg-black max-w-6xl mx-auto pb-32 bg-opacity-90">
-          <div className="animate-fade-in-up pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
-            <div className="sm:flex sm:flex-col align-center">
+        <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+          <div className="animate-fade-in-up bg-black rounded opacity-95">
+            <div className="pt-10 pb-5">
               <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
                 {greetingMessage},{' '}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
@@ -746,7 +746,6 @@ export default function Player() {
                 {greetingBlurb}
               </p>
             </div>
-          </div>
           <div className="animate-fade-in-up max-w-6xl px-4 md:px-10 mx-auto w-full -m-24">
             <HeaderStats
               player_rank={playerRank}
@@ -763,7 +762,7 @@ export default function Player() {
               weekWins={weekWins}
             />
             <div className="flex flex-wrap mt-4">
-              <div className="w-full mb-12 px-4">
+              <div className="w-full pb-36 px-4">
                 {/* <CardTable color="dark" data={wins} /> */}
                 <DataTable
                   className=""
@@ -782,6 +781,7 @@ export default function Player() {
                 {/* <TailwindTable wins={wins} /> */}
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>
