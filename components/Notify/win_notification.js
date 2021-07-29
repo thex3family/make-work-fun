@@ -39,7 +39,7 @@ export default function notifyMe(type, details) {
   let link = 'https://makework.fun/player';
 
   if (type == 'win') {
-    let title = "🎉 You've completed a " + details + '!';
+    let title = "🎉 You've completed a " + details.toUpperCase() + '!';
     let text = "It's time to celebrate! Open your gift.";
     let vibe = [200, 100, 200];
     var options = {
