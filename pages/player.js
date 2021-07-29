@@ -475,7 +475,6 @@ export default function Player() {
             if (player.current_level > player.previous_level) {
               // level up animation
               setLevelUp(true);
-              window.navigator.vibrate([400]);
               notifyMe('level', player.current_level);
             }
 
