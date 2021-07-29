@@ -1,5 +1,5 @@
 import HabitSquare from '@/components/Habits/habit_square';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function RoutineSection({
   habit_group_name,
@@ -7,15 +7,62 @@ export default function RoutineSection({
   fetchDailies,
   fetchDailiesCompletedToday
 }) {
+  const [showHide, setShowHide] = useState(true);
+  const [habitCounter, setHabitCounter] = useState([]);
+  console.log(associated_habits)
 
-  const [showHide, setShowHide] = useState(false);
+  
+  useEffect(() => {
+    if(habitCounter.length!==0){determineShowHide();}
+  }, [habitCounter]);
+
+  function determineShowHide(){
+    console.log(habitCounter.length)
+    if(associated_habits.length - habitCounter.length === 0){
+      setShowHide(false)
+    } else {
+      setShowHide(true)
+    }
+  }
 
   return (
     <div className="animate-fade-in-up" key={habit_group_name}>
-      <h1 className="text-2xl md:text-3xl font-extrabold text-dailies pb-5">
-        {habit_group_name} Routines
-      </h1>
-      <div className="flex flex-row gap-5 overflow-x-auto flex-nowrap mb-10">
+      <div className="flex items-center">
+        <div
+          className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
+          aria-hidden="true"
+        ></div>
+
+        <div
+          className="text-xl sm:text-2xl md:text-3xl font-extrabold text-dailies pb-5 cursor-pointer inline-block"
+          onClick={() => {
+            showHide ? setShowHide(false) : setShowHide(true);
+          }}
+        >
+          {habit_group_name} Routines <span
+                    className={
+                      'text-dailies p-3 text-sm align-middle mb-1 bg-dailies-light text-center inline-flex items-center justify-center w-4 h-4 border-2 sm:border-4 border-dailies-dark shadow-lg rounded-full font-bold'
+                    }
+                  >
+                    {associated_habits.length - habitCounter.length}
+                  </span>{' '}
+          <i
+            className={
+              (showHide ? 'fas fa-chevron-up' : 'fas fa-chevron-down ') + ''
+            }
+          />
+        </div>
+        <div
+          className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 ml-3"
+          aria-hidden="true"
+        ></div>
+      </div>
+      <div
+        className={
+          (showHide ? '' : 'hidden ') +
+          'flex flex-col sm:flex-row gap-3 sm:gap-5 overflow-x-auto flex-nowrap mb-10'
+        }
+      >
         {/* start */}
         {associated_habits.map((h) => (
           <HabitSquare
@@ -29,6 +76,8 @@ export default function RoutineSection({
             habit_icon={h.icon}
             fetchDailies={fetchDailies}
             fetchDailiesCompletedToday={fetchDailiesCompletedToday}
+            habitCounter={habitCounter}
+            setHabitCounter={setHabitCounter}
           />
         ))}
       </div>
