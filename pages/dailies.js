@@ -101,7 +101,7 @@ export default function dallies() {
       if (player.current_level > player.previous_level) {
         // level up animation
         setLevelUp(true);
-        console.log('You should level up here!');
+        window.navigator.vibrate([400]);
       }
 
       if (error && status !== 406) {
@@ -151,6 +151,7 @@ export default function dallies() {
             // shows the modal
 
             setShowModal(true);
+            window.navigator.vibrate([200, 100, 200]);
 
             // generate a random GIF
             const { data: gifs } = await gf.random({
