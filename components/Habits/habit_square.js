@@ -116,7 +116,7 @@ export default function HabitSquare({
 
   function handleHabitCompletionStatusChange(habit_id) {
     //console.log('handleHabitCompletionStatusChange');
-
+    navigator.vibrate(200);
     toggleHabitStatus(habit_id).then(() => {
       fetchDailies();
     });
