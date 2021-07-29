@@ -473,6 +473,7 @@ export default function Player() {
             if (player.current_level > player.previous_level) {
               // level up animation
               setLevelUp(true);
+              window.navigator.vibrate([400]);
             }
 
             // continue
@@ -489,6 +490,7 @@ export default function Player() {
             // shows the modal
 
             setShowModal(true);
+            window.navigator.vibrate([200, 100, 200]);
 
             // generate a random GIF
             const { data: gifs } = await gf.random({
