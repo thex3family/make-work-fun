@@ -102,7 +102,7 @@ export default function Player() {
   const [playerGold, setPlayerGold] = useState(null);
   const [nextRank, setNextRank] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
-  const [background_url, setBackgroundUrl] = useState('/background/cityscape.jpg');
+  const [background_url, setBackgroundUrl] = useState('/');
 
   const [levelUp, setLevelUp] = useState(false);
 
@@ -360,6 +360,8 @@ export default function Player() {
       console.log('Error downloading image: ', error.message);
     } finally {
     }
+  } else {
+    setBackgroundUrl('background/cityscape.jpg');
   }
   }
 
@@ -724,7 +726,7 @@ export default function Player() {
     <>
       {/* <section className="bg-player-pattern bg-fixed bg-cover"> */}
       <section
-        className="bg-fixed bg-cover"
+        className="animate-slow-fade-in bg-fixed bg-cover "
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <BottomNavbar />

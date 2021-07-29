@@ -76,7 +76,8 @@ module.exports = {
         'fade-out-down': 'fade-out-down 0.5s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out',
         'fade-out-up': 'fade-out-up 0.5s ease-out',
-        'soft-bounce': 'soft-bounce 1.25s linear infinite'
+        'soft-bounce': 'soft-bounce 1.25s linear infinite',
+        'slow-fade-in': 'fade-in 2s ease-out'
       },
       keyframes: {
         'soft-bounce': {
@@ -121,6 +122,14 @@ module.exports = {
           '100%': {
             opacity: '1',
             transform: 'translateY(0)'
+          }
+        },
+        'fade-in': {
+          '0%': {
+            opacity: '0',
+          },
+          '100%': {
+            opacity: '1',
           }
         },
         'fade-out-up': {
