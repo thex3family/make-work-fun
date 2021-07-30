@@ -115,7 +115,7 @@ export default function dallies() {
     } finally {
       setLoading(false);
       fetchDailiesCompletedToday();
-      console.log(habits);
+      // console.log(habits);
     }
   }
 
@@ -208,7 +208,7 @@ export default function dallies() {
       setPlayerRank(data.player_rank);
       setPlayerLevel(data.current_level);
       setNextRank(data.next_rank);
-      console.log(data);
+      // console.log(data);
 
       if (error && status !== 406) {
         throw error;
@@ -325,7 +325,7 @@ export default function dallies() {
       const user = supabase.auth.user();
 
       let testDateStr = new Date();
-      console.log('testDateStr: ' + testDateStr);
+      // console.log('testDateStr: ' + testDateStr);
 
       const { data, error } = await supabase.from('success_plan').insert([
         {
@@ -361,7 +361,7 @@ export default function dallies() {
         .eq('player', user.id)
         .gte('closing_date', moment().startOf('day').utc().format());
 
-      console.log(data.length);
+      // console.log(data.length);
       setDailiesCount(data.length);
       dailyBonusButtons();
 

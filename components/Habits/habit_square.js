@@ -66,7 +66,7 @@ export default function HabitSquare({
         // if not completed, post to database (i.e. fetchData is an empty array)
 
         let testDateStr = new Date();
-        console.log('testDateStr: ' + testDateStr);
+        // console.log('testDateStr: ' + testDateStr);
         /*
                 Notes from us trying to resolve that timezone issue (supabase is still not saving the timezone)
       
@@ -89,7 +89,7 @@ export default function HabitSquare({
       } else if (fetchData.length >= 1) {
         // if completed, remove (i.e. fetchData is an array with one element)
 
-        console.log('fetchData - second condition');
+        // console.log('fetchData - second condition');
 
         const { data, error } = await supabase
           .from('completed_habits')
