@@ -553,11 +553,13 @@ export default function HomePage() {
       </section>
 
       {/* level up modal */}
+      {levelUp ?
       <ModalLevelUp
         levelUp={levelUp}
         playerLevel={playerLevel}
         setLevelUp={setLevelUp}
-      />
+      /> : <div></div>
+      }
 
       {/* // Modal Section */}
       {showModal ? (
