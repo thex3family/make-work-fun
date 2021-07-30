@@ -1,10 +1,12 @@
 import Confetti from '@/components/Widgets/confetti';
+import { useState, useEffect } from 'react';
+import Quotes from "@/utils/quotes.json";
+let quote = Quotes[(Quotes.length * Math.random()) << 0];
 
 const ModalLevelUp = ({ levelUp, playerLevel, setLevelUp }) => {
+
   return (
     <>
-      {levelUp === true ? (
-        <>
           <div className="h-screen flex justify-center">
             <div className="confetti">
               <Confetti />
@@ -23,16 +25,12 @@ const ModalLevelUp = ({ levelUp, playerLevel, setLevelUp }) => {
                   </div>
                 </div>
                 <p className="text-sm sm:text-lg font-regular sm:font-medium mt-5 mb-3 italic px-5">
-                  Finding your purpose is a lifelong adventure.
-                  <br />
-                  Enjoy the journey.
+                  {quote.text}
                 </p>
-                <p className="text-sm opacity-60">- Todd Stocker</p>
+                <p className="text-sm opacity-60">- {quote.author}</p>
               </div>
             </div>
           </div>
-        </>
-      ) : null}
     </>
   );
 };
