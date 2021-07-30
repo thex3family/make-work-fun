@@ -8,6 +8,7 @@ module.exports = withPWA({
     dest: 'public',
     disable: prod ? false : true,
     runtimeCaching,
+    importScripts: ['/worker.js']
   },
   
   // This is not required to make it into a PWA, but is a nice way to clean up your imports

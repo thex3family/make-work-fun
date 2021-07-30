@@ -9,7 +9,7 @@ export default function RoutineSection({
 }) {
   const [showHide, setShowHide] = useState(true);
   const [habitCounter, setHabitCounter] = useState([]);
-  console.log(associated_habits)
+  // console.log(associated_habits)
 
   
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function RoutineSection({
   }, [habitCounter]);
 
   function determineShowHide(){
-    console.log(habitCounter.length)
+    // console.log(habitCounter.length)
     if(associated_habits.length - habitCounter.length === 0){
       setShowHide(false)
     } else {

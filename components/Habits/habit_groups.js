@@ -39,11 +39,11 @@ export default function HabitGroups({ habits, fetchDailies, fetchDailiesComplete
       //console.log('Habit Map: ', habit_map);
     } else if (habits.length == 0) {
       console.log("User doesn't have any active habits");
-      console.log('Habits: ', habits);
+      // console.log('Habits: ', habits);
     }
   } else {
     console.log('Habits are being fetched');
-    console.log('Habits: ', habits);
+    // console.log('Habits: ', habits);
   }
 
   var currentHabitKey = null;
