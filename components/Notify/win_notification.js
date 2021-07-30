@@ -75,10 +75,10 @@ export default function notifyMe(type, details) {
     //     dateOfArrival: Date.now(),
     //     primaryKey: 1
     //   },
-    //   actions: [
-    //     {action: 'explore', title: 'View Player'},
-    //     {action: 'close', title: 'Dismiss'},
-    //   ]
+      actions: [
+        {action: 'explore', title: 'View Player'},
+        {action: 'close', title: 'Dismiss'},
+      ]
     };
     sendNotification(title, options);
   }
