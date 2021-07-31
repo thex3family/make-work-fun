@@ -1,4 +1,6 @@
-export default function notifyMe(type, details) {
+
+
+export default async function notifyMe(type, details) {
   function sendNotification(title, options) {
     let link = 'https://makework.fun/player';
 
@@ -19,7 +21,10 @@ export default function notifyMe(type, details) {
     //   setTimeout(notification.close.bind(notification), 7000);
         
     navigator.serviceWorker.getRegistration().then(function(reg) {
-        reg.showNotification(title, options);
+        if(reg) {reg.showNotification(title, options);
+        }else{
+          console.log('Registration missing')
+        }
       });
 
 }
@@ -30,7 +35,10 @@ export default function notifyMe(type, details) {
         // If the user accepts, let's create a notification
         if (permission === 'granted') {
             navigator.serviceWorker.getRegistration().then(function(reg) {
-                reg.showNotification(title, options);
+              if(reg) {reg.showNotification(title, options);
+            }else{
+              console.log('Registration missing')
+            }
               });
         }
       });

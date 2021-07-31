@@ -9,20 +9,14 @@ import CardLineChart from 'components/Cards/CardLineChart.js';
 import Avatar from '@/components/avatar';
 
 export default function HeaderStats({
-  player_rank,
-  full_name,
-  total_level,
-  total_exp,
-  exp_progress,
-  level_exp,
-  total_gold,
+  playerStats,
   avatar_url,
   setAvatarUrl,
   fetchPlayerBackground,
   updateProfile,
   weekWins
 }) {
-  const exp_percent = Math.floor((exp_progress / level_exp) * 100);
+  const exp_percent = Math.floor((playerStats.exp_progress / playerStats.level_exp) * 100);
 
   return (
     <>
@@ -36,11 +30,11 @@ export default function HeaderStats({
                 <Avatar
                   url={avatar_url}
                   onAvatarUpload={(url) => {
-                    setAvatarUrl(url);
+                    setAvatarUrl(url)
                     updateProfile({ image_url: url, type: "avatar" });
                   }}
                   onBackgroundUpload={(url) => {
-                    fetchPlayerBackground(url);
+                    fetchPlayerBackground(url)
                     updateProfile({ image_url: url, type: "background" });
                   }}
                 />
@@ -48,14 +42,14 @@ export default function HeaderStats({
               <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full">
                 <CardStats
                   statTitle="Newbie"
-                  statName={full_name}
-                  statLevel={total_level}
+                  statName={playerStats.full_name}
+                  statLevel={playerStats.current_level}
                   statMaxLevel={100}
-                  statEXP={total_exp}
-                  statLevelEXP={level_exp}
-                  statEXPProgress={exp_progress}
+                  statEXP={playerStats.total_exp}
+                  statLevelEXP={playerStats.level_exp}
+                  statEXPProgress={playerStats.exp_progress}
                   statEXPPercent={exp_percent}
-                  statGold={total_gold}
+                  statGold={playerStats.total_gold}
                   statArrow="up"
                   statPercent="0"
                   statPercentColor="text-white"
