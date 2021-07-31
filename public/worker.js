@@ -8,7 +8,7 @@ self.addEventListener('notificationclick', function(e) {
       notification.close();
       console.log('Closed Notification')
     } else {
-      clients.openWindow('https://makework.fun/player');
+      clients.openWindow('https://makework.fun/player?utm_source=notification');
       notification.close();
     }
   });
