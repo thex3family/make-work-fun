@@ -1,4 +1,4 @@
-import { generateGIF } from '@/components/Widgets/generateGif';
+import { generateGIF } from '@/components/Widgets/generateGIF';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase-client';
 import Link from 'next/link';
