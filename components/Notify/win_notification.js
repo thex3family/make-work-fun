@@ -1,8 +1,6 @@
-
-
 export default async function notifyMe(type, details) {
   function sendNotification(title, options) {
-    let link = 'https://makework.fun/player';
+    let link = 'https://makework.fun/player?utm_source=notification';
 
     // Let's check if the browser supports notifications
     if (!('Notification' in window)) {
