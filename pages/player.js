@@ -83,19 +83,12 @@ export default function Player() {
   } = useUser();
 
   const [wins, setWins] = useState([]);
-
   const [playerStats, setPlayerStats] = useState(null);
-
   const [avatar_url, setAvatarUrl] = useState(null);
   const [background_url, setBackgroundUrl] = useState('/');
-
   const [levelUp, setLevelUp] = useState(false);
-
   const [showWinModal, setShowWinModal] = useState(false);
-
   const [activeModalStats, setActiveModalStats] = useState(null);
-  const [activeGIF, setActiveGIF] = useState(null);
-
   const [weekWins, setWeekWins] = useState([]);
 
   const currentHour = new Date().getHours();
@@ -155,8 +148,6 @@ export default function Player() {
       }
     />
   );
-
-  const gf = new GiphyFetch(process.env.NEXT_PUBLIC_GIPHY_API);
 
   const columns = [
     {
@@ -506,7 +497,7 @@ export default function Player() {
       {/* level up modal */}
       {levelUp ? (
         <ModalLevelUp
-          playerLevel={playerStats.current_level}
+          playerLevel={levelUp}
           setLevelUp={setLevelUp}
         />
       ) : (
