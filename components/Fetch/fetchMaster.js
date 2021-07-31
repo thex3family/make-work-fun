@@ -1,7 +1,13 @@
 import { supabase } from '@/utils/supabase-client';
-import notifyMe from '@/components/Notify/win_notification'
+import notifyMe from '@/components/Notify/win_notification';
 
-export async function fetchLatestWin(setActiveModalStats, refreshStats, setLevelUp, triggerWinModal, setShowWinModal) {
+export async function fetchLatestWin(
+  setActiveModalStats,
+  refreshStats,
+  setLevelUp,
+  triggerWinModal,
+  setShowWinModal
+) {
   try {
     // check if there is any win (only works when the app is open) - future will move it to a server
 
@@ -12,27 +18,27 @@ export async function fetchLatestWin(setActiveModalStats, refreshStats, setLevel
         console.log('New Win Incoming!', payload, payload.new.player);
 
         // checking if the win is assigned to the current user
+        if (user) {
+          if (payload.new.player === user.id) {
+            // Get the latest updated stats of the user
+            const player = await fetchPlayerStats();
 
-        if (payload.new.player === user.id) {
+            // check if user leveled up
 
-          // Get the latest updated stats of the user
-          const player = await fetchPlayerStats();
-          refreshStats();
+            if (player.current_level > player.previous_level) {
+              // level up animation
+              setLevelUp(player.current_level);
+              notifyMe('level', player.current_level);
+            }
 
-          // check if user leveled up
-
-          if (player.current_level > player.previous_level) {
-            // level up animation
-            setLevelUp(player.current_level);
-            notifyMe('level', player.current_level);
-          }
-
-          // If win is from success plan, set up the modal
-          // if(payload.new.type !== 'Daily Quest'){
+            // If win is from success plan, set up the modal
+            // if(payload.new.type !== 'Daily Quest'){
             triggerWinModal(setActiveModalStats, setShowWinModal, payload.new);
             notifyMe('win', payload.new.type);
-          // }
+            // }
+          }
         }
+        refreshStats();
       })
       .subscribe();
 
@@ -57,7 +63,9 @@ export async function fetchPlayerStats(setAvatarUrl) {
       .single();
 
     if (data) {
-      if(setAvatarUrl){ setAvatarUrl(data.avatar_url)}
+      if (setAvatarUrl) {
+        setAvatarUrl(data.avatar_url);
+      }
       return data;
     }
 
@@ -67,7 +75,6 @@ export async function fetchPlayerStats(setAvatarUrl) {
   } catch (error) {
     // alert(error.message);
   } finally {
-    
   }
 }
 
@@ -116,5 +123,48 @@ export async function fetchWeekWins() {
   } catch (error) {
     // alert(error.message)
   } finally {
+  }
+}
+
+export async function fetchLeaderboardStats(
+  setS1Players,
+  setPlayers,
+  setLoading
+) {
+  try {
+    const { data, error } = await supabase
+      .from('s1_leaderboard')
+      .select('*')
+      .order('total_exp', { ascending: false });
+
+    if (data) {
+      setS1Players(data);
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+    setLoading(false);
+  }
+  try {
+    const { data, error } = await supabase
+      .from('leaderboard')
+      .select('*')
+      .order('total_exp', { ascending: false });
+
+    if (data) {
+      setPlayers(data);
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+    setLoading(false);
   }
 }

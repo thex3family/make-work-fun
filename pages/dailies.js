@@ -354,7 +354,7 @@ export default function dallies() {
           setLevelUp={setLevelUp}
         />
       ) : (
-        <div></div>
+        null
       )}
 
       {/* // Modal Section */}

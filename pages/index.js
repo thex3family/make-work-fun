@@ -1,45 +1,37 @@
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import Avatar from '@/components/Cards/CardAvatar';
-import Countdown from '@/components/Widgets/Countdown/countdown';
 import LeaderboardStatistics from '@/components/Widgets/Statistics/LeaderboardStatistics';
-import { GiphyFetch } from '@giphy/js-fetch-api';
-import { Gif } from '@giphy/react-components';
-import { useUser } from '@/utils/useUser';
 import { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase-client';
 
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
-import notifyMe from '@/components/Notify/win_notification'
+// functions
+
+import {
+  fetchPlayerStats,
+  fetchLatestWin,
+  fetchLeaderboardStats
+} from '@/components/Fetch/fetchMaster';
+import { triggerWinModal } from '@/components/Modals/ModalHandler';
+import WinModal from '@/components/Modals/ModalWin';
 
 export default function HomePage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const gf = new GiphyFetch(process.env.NEXT_PUBLIC_GIPHY_API);
-  const { userOnboarding } = useUser();
 
-  const [activeType, setActiveType] = useState(null);
-  const [activeName, setActiveName] = useState(null);
-  const [activeUpstream, setActiveUpstream] = useState(null);
-  const [activeDate, setActiveDate] = useState(null);
-  const [activeGold, setActiveGold] = useState(null);
-  const [activeEXP, setActiveEXP] = useState(null);
-  const [activeSlug, setActiveSlug] = useState(null);
-  const [activeGIF, setActiveGIF] = useState(null);
   const [players, setPlayers] = useState([]);
   const [s1Players, setS1Players] = useState([]);
 
-  const [playerName, setPlayerName] = useState(null);
-  const [playerRank, setPlayerRank] = useState(null);
-  const [nextRank, setNextRank] = useState(null);
-  const [playerLevel, setPlayerLevel] = useState(null);
-
   const [levelUp, setLevelUp] = useState(false);
+
+  const [showWinModal, setShowWinModal] = useState(false);
+  const [activeModalStats, setActiveModalStats] = useState(null);
+  const [playerStats, setPlayerStats] = useState(null);
+
   const [openTab, setOpenTab] = useState(1);
 
   // Redirects user to reset password
@@ -64,236 +56,19 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    getLeaderboardStats();
-    fetchLatestWin();
+    refreshStats();
+    fetchLatestWin(
+      setActiveModalStats,
+      refreshStats,
+      setLevelUp,
+      triggerWinModal,
+      setShowWinModal
+    );
   }, []);
 
-  async function getLeaderboardStats() {
-    try {
-      const { data, error } = await supabase
-        .from('s1_leaderboard')
-        .select('*')
-        .order('total_exp', { ascending: false });
-
-      if (data) {
-        setS1Players(data);
-      }
-
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      // alert(error.message)
-    } finally {
-      setLoading(false);
-    }
-    try {
-      const { data, error } = await supabase
-        .from('leaderboard')
-        .select('*')
-        .order('total_exp', { ascending: false });
-
-      if (data) {
-        setPlayers(data);
-      }
-
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      // alert(error.message)
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (userOnboarding) initializePlayer();
-  }, [userOnboarding]);
-
-  function initializePlayer() {
-    try {
-      if (userOnboarding.onboarding_state.includes('4')) {
-        fetchLatestWin();
-      }
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      console.log('InitializedPlayer');
-    }
-  }
-
-  // check if there is a win (only works when the app is open)
-
-  async function fetchLatestWin() {
-    console.log('Fetching Latest Win');
-    try {
-      const { data, error } = await supabase
-        .from('success_plan')
-        .on('INSERT', async (payload) => {
-          console.log('New Win Incoming!', payload, payload.new.player);
-
-          // Updating all stats
-          getLeaderboardStats();
-
-          // checking if the win is assigned to the current user (only if logged in)
-
-          if (userOnboarding) {
-            if (userOnboarding.onboarding_state.includes('4')) {
-              const user = supabase.auth.user();
-              if (payload.new.player === user.id) {
-                // check if the user has leveled
-
-                const player = await fetchPlayerStats();
-                if (player.current_level > player.previous_level) {
-                  // level up animation
-                  setLevelUp(true);
-                  notifyMe('level', player.current_level);
-                }
-
-                setActiveType(payload.new.type);
-                setActiveName(payload.new.name);
-                setActiveUpstream(payload.new.upstream);
-                setActiveDate(payload.new.closing_date);
-                setActiveGold(payload.new.gold_reward);
-                setActiveEXP(payload.new.exp_reward);
-
-                const slug = payload.new.notion_id.replace(/-/g, '');
-                setActiveSlug(slug);
-
-                // show modal (early because I will have to load the gif anyways)
-                setShowModal(true);
-                window.navigator.vibrate([200, 100, 200]);
-                notifyMe('win', payload.new.type);
-                
-
-                // generate a random GIF
-                const { data: gifs } = await gf.random({
-                  tag: 'excited dog cat',
-                  rating: 'g'
-                });
-                setActiveGIF(gifs.image_original_url);
-
-                // update the row
-
-                const { data, error } = await supabase
-                  .from('success_plan')
-                  .update({ gif_url: gifs.image_original_url })
-                  .eq('id', payload.new.id);
-              }
-            }
-          }
-        })
-        .subscribe();
-
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      alert(error.message);
-    } finally {
-    }
-  }
-
-  const [boxClass, setBoxClass] = useState('');
-
-  function openBox() {
-    boxClass != 'hide-box' ? setBoxClass('open-box') : '';
-  }
-
-  function closeModal() {
-    setShowModal(false);
-    setBoxClass('');
-  }
-
-  async function fetchPlayerStats() {
-    try {
-      const user = supabase.auth.user();
-
-      const { data, error } = await supabase
-        .from('leaderboard')
-        .select('*')
-        .eq('player', user.id)
-        .single();
-
-      setPlayerName(data.full_name);
-      setPlayerRank(data.player_rank);
-      setPlayerLevel(data.current_level);
-      setNextRank(data.next_rank);
-
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      return data;
-    } catch (error) {
-      alert(error.message);
-    } finally {
-    }
-  }
-
-  // checks if should send win to guilded
-
-  async function sendWebhook() {
-    fetch(process.env.NEXT_PUBLIC_GUILDED_WEBHOOK, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        content: null,
-        // embeds to be sent
-
-        embeds: [
-          {
-            // decimal number colour of the side of the embed
-            color: null,
-            author: {
-              name: `🎉 ${playerName} completed a ${activeType}!`
-            },
-            // author
-            // - icon next to text at top (text is a link)
-            // embed title
-            // - link on 2nd row
-            title: `${activeName}`,
-            url: `https://www.notion.so/${activeSlug}`,
-            // thumbnail
-            thumbnail: {
-              url: `${activeGIF}`
-            },
-            // embed description
-            // - text on 3rd row
-            description: `Completed On: ${activeDate}`,
-            // custom embed fields: bold title/name, normal content/value below title
-            // - located below description, above image.
-            fields: [
-              {
-                name: '🏆 Leaderboard Position',
-                value: `#${playerRank} (${nextRank} EXP to next rank)`
-              }
-            ],
-            // image
-            // - picture below description(and fields) - this needs to be the gif that we fetch from random whatever.
-            // image: {
-            //   url:
-            //     'http://makework.fun/img/celebratory-cat.gif',
-            // },
-            // footer
-            // - icon next to text at bottom
-            footer: {
-              text: `+${activeGold} 💰 | +${activeEXP} XP | ${activeUpstream}`
-            }
-          },
-          {
-            color: null,
-            author: {
-              name: '💬 Start a discussion!'
-              // url: 'https://toolbox.co-x3.com/family-connection/?utm_source=guilded',
-            }
-          }
-        ]
-      })
-    });
+  async function refreshStats() {
+    setPlayerStats(await fetchPlayerStats());
+    fetchLeaderboardStats(setS1Players, setPlayers, setLoading);
   }
 
   if (recoveryToken) {
@@ -552,120 +327,27 @@ export default function HomePage() {
         )}
       </section>
 
+
       {/* level up modal */}
-      {levelUp ?
-      <ModalLevelUp
-        levelUp={levelUp}
-        playerLevel={playerLevel}
-        setLevelUp={setLevelUp}
-      /> : <div></div>
-      }
+      {levelUp ? (
+        <ModalLevelUp
+          playerLevel={levelUp}
+          setLevelUp={setLevelUp}
+        />
+      ) : (
+        null
+      )}
 
       {/* // Modal Section */}
-      {showModal ? (
+      {showWinModal ? (
         <>
-          <div className="h-screen flex justify-center">
-            <div
-              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none"
-              // onClick={() => setShowModal(false)}
-            >
-              <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
-                {/*content*/}
-                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                  {/*header*/}
-                  <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
-                    <h3 className="text-xl sm:text-2xl font-semibold text-white">
-                      🎉 You've completed a{' '}
-                      <span className="font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-                        {activeType}!
-                      </span>
-                    </h3>
-                    <button
-                      className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                      onClick={() => setShowModal(false)}
-                    >
-                      <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                        ×
-                      </span>
-                    </button>
-                  </div>
-                  {/*body*/}
-                  <div className="relative p-6 flex-auto text-blueGray-500 text-center">
-                    <div className="my-4">
-                      <p className="text-xl sm:text-2xl leading-none text-primary-2 font-bold">
-                        {activeName}
-                        <br />
-                        <span className="text-sm">{activeUpstream}</span>
-                      </p>
-                      <p className="my-2 font-light text-sm">{activeDate}</p>
-                    </div>
-                    <table className="w-full text-xl mb-6 border text-primary-2">
-                      <tbody>
-                        <tr>
-                          <td className="p-4 border">+{activeGold} 💰</td>
-                          <td className="p-4 border">+{activeEXP} EXP</td>
-                        </tr>
-                      </tbody>
-                    </table>
-
-                    <div className="w-full">
-                      <div className="box">
-                        <a onClick={openBox} className="box-container">
-                          <div
-                            className={`${boxClass} box-body animate-wiggle`}
-                          >
-                            <div className={`${boxClass} box-lid`}>
-                              <div className={`${boxClass} box-bowtie`}></div>
-                            </div>
-                          </div>
-
-                          <img
-                            src={activeGIF}
-                            className={`${boxClass} absolute box-image`}
-                          />
-                        </a>
-                      </div>
-                    </div>
-
-                    <p className="mt-2">It's time to celebrate! 😄</p>
-                  </div>
-                  {/*footer*/}
-                  <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                    <button
-                      className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                      onClick={() => closeModal()}
-                    >
-                      Close
-                    </button>
-                    <a
-                      href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
-                      target="_blank"
-                    >
-                      <button
-                        className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                        onClick={() => sendWebhook()}
-                      >
-                        Share With Family
-                      </button>
-                    </a>
-                  </div>
-                  <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
-                    <Link href="/player">
-                      <button
-                        className="text-emerald-500 background-transparent mx-auto font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none ease-linear transition-all duration-150"
-                        type="button"
-                      >
-                        View Character Stats
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="opacity-25 fixed inset-0 z-30 bg-black"></div>
-          </div>
+          <WinModal
+            page={'leaderboard'}
+            activeModalStats={activeModalStats}
+            setShowWinModal={setShowWinModal}
+            playerStats={playerStats}
+            refreshStats={refreshStats}
+          />
         </>
       ) : null}
     </>
