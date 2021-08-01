@@ -1,3 +1,13 @@
+function truncateString(str, num) {
+  // If the length of str is less than or equal to num
+  // just return str--don't truncate it.
+  if (str.length <= num) {
+    return str
+  }
+  // Return str truncated with '...' concatenated to the end of str.
+  return str.slice(0, num) + '...'
+}
+
 export default async function notifyMe(type, details) {
   function sendNotification(title, options) {
     let link = 'https://makework.fun/player?utm_source=notification';
@@ -50,8 +60,8 @@ export default async function notifyMe(type, details) {
   let img = '/img/co-x3logo_white.png';
 
   if (type == 'win') {
-    let title = "🎉 You've completed a " + details.toUpperCase() + '!';
-    let text = "Keep up the good work!";
+    let title = "🎉 You've completed a " + details.type.toUpperCase() + '!';
+    let text = truncateString(details.name, 178);
     let vibe = [200, 100, 200];
     var options = {
       body: text,
