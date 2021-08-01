@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import CardLUpdate from '@/components/Cards/CardLUpdate';
 import CardRUpdate from '@/components/Cards/CardRUpdate';
@@ -18,6 +17,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Aug 01, 2021"
+            title="Customize Your Daily Quests"
+            desc="You can now switch between checkbox, counter, time, location, feeling, and note for your dailies to fit all your daily needs!"
+            img_url="updates/0.15.png"
+            button_url="/dailies"
+            version="v.15"
+          />
           <CardLUpdate
             date="Jul 29, 2021"
             title="Notifications and Vibrations!"
