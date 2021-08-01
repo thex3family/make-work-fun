@@ -168,7 +168,7 @@ export default function HabitSquare({
       }
       className={`my-4 mb-0 sm:mb-8 p-4 sm:p-6 w-full sm:w-64 relative ${
         habitCompletedToday
-          ? `bg-emerald-500 border-emerald-700`
+          ? (details == 'meh' ? `bg-yellow-500 border-yellow-700` : details == 'unhappy' ? `bg-red-500 border-red-700` : `bg-emerald-500 border-emerald-700`)
           : `bg-dailies-light border-dailies-dark`
       } rounded z-10 square shadow-lg border-4 ${
         habit_type == 'Checkbox' ? `cursor-pointer` : null
@@ -240,7 +240,7 @@ export default function HabitSquare({
             <div>
               <p className="text-sm sm:text-md mb-2 text-black">How are you feeling?</p>
               <div className="flex-row flex gap-2 justify-start sm:justify-center mb-4">
-                <i
+                <button
                   className={`cursor-pointer text-4xl text-black far fa-smile ${
                     habitCompletedToday
                       ? details == 'happy'
@@ -255,8 +255,9 @@ export default function HabitSquare({
                       `${ details == 'happy' ? '' : 'happy' }`
                     )
                   }
+                  disabled={saving}
                 />
-                <i
+                <ibutton
                   className={`cursor-pointer text-4xl text-black far fa-meh ${
                     habitCompletedToday
                       ? details == 'meh'
@@ -271,8 +272,9 @@ export default function HabitSquare({
                       `${ details == 'meh' ? '' : 'meh' }`
                     )
                   }
+                  disabled={saving}
                 />
-                <i
+                <button
                   className={`cursor-pointer text-4xl text-black far fa-frown ${
                     habitCompletedToday
                       ? details == 'unhappy'
@@ -287,6 +289,7 @@ export default function HabitSquare({
                       `${ details == 'unhappy' ? '' : 'unhappy' }`
                     )
                   }
+                  disabled={saving}
                 />
               </div>
             </div>
