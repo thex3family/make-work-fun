@@ -34,7 +34,7 @@ export async function fetchLatestWin(
             // If win is from success plan, set up the modal
             // if(payload.new.type !== 'Daily Quest'){
             triggerWinModal(setActiveModalStats, setShowWinModal, payload.new);
-            notifyMe('win', payload.new.type);
+            notifyMe('win', payload.new);
             // }
           }
         }
