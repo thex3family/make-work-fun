@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase-client';
 import Input from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
+
 
 export default function HabitSquare({
   habit_id,
@@ -223,17 +223,22 @@ export default function HabitSquare({
         </div>
         {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
         <div className="flex-col text-left sm:text-center w-2/3 sm:w-full">
-          <h2 className="text-lg sm:text-xl font-bold sm:mb-3 text-black">
+          <h2 className="text-lg sm:text-xl font-bold mb-1 sm:mb-3 leading-snug text-black">
             {habit_title}
           </h2>
           {habit_type == 'Checkbox' ? (
-            <p className="text-md sm:mb-2 text-black">
+            <div>
+            <p className="text-sm sm:text-md mb-2 sm:mb-2 text-black">
               {habit_progress_statement(streak_duration)}
             </p>
+            <div className="flex justify-start sm:justify-center">
+                <i className="fas fa-check text-2xl sm:text-3xl self-center font-semibold text-black"/>
+              </div>
+            </div>
           ) : null}
           {habit_type == 'Feeling' ? (
             <div>
-              <p className="text-md sm:mb-2 text-black">How are you feeling?</p>
+              <p className="text-sm sm:text-md mb-2 text-black">How are you feeling?</p>
               <div className="flex-row flex gap-2 justify-start sm:justify-center mb-4">
                 <i
                   className={`cursor-pointer text-4xl text-black far fa-smile ${
@@ -289,7 +294,7 @@ export default function HabitSquare({
           {habit_type == 'Note' ? (
             <div className="flex flex-col">
               <Input
-                className="text-xs sm:text-sm mb-2 sm:mb-4 font-semibold rounded"
+                className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
                 variant="dailies"
                 id="Note"
                 type="varchar"
@@ -298,7 +303,7 @@ export default function HabitSquare({
                 onChange={(v) => setDetails(v)}
               />
               <button
-                className="font-semibold text-sm text-black self-end sm:self-center"
+                className="font-semibold text-sm text-black self-start sm:self-center"
                 variant="slim"
                 disabled={saving}
                 onClick={() =>
@@ -311,12 +316,12 @@ export default function HabitSquare({
           ) : null}
           {habit_type == 'Counter' ? (
             <div className="">
-              <p className="text-md sm:mb-2 text-black">
+              <p className="text-sm sm:text-md mb-1 sm:mb-2 text-black">
                 How many times?
               </p>
               <div className="flex-row flex gap-2 justify-start sm:justify-center mb-4">
-                <a
-                  className={`cursor-pointer text-4xl opacity-10 text-black far fa-minus-square ${details > 0 ? `hover:opacity-100` : `` }`}
+                <button
+                  className={`text-4xl opacity-10 text-black far fa-minus-square ${details > 0 ? `hover:opacity-100` : `` }`}
                   disabled={details > 0 ? false : true}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
@@ -329,8 +334,8 @@ export default function HabitSquare({
                 <div className="text-3xl mb-0.5 px-2 self-center font-semibold text-black">
                   {details ? details : 0}
                 </div>
-                <a
-                  className="cursor-pointer text-4xl opacity-10 text-black far fa-plus-square hover:opacity-100"
+                <button
+                  className="text-4xl opacity-10 text-black far fa-plus-square hover:opacity-100"
                   onClick={() =>
                     handleHabitCompletionStatusChange(
                       habit_id,
@@ -345,7 +350,7 @@ export default function HabitSquare({
           {habit_type == 'Location' ? (
             <div className="flex flex-col">
               <Input
-                className="text-xs sm:text-sm mb-2 sm:mb-4 font-semibold rounded"
+                className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
                 variant="dailies"
                 id="Note"
                 type="varchar"
@@ -354,7 +359,7 @@ export default function HabitSquare({
                 onChange={(v) => setDetails(v)}
               />
               <button
-                className="font-semibold text-sm text-black self-end sm:self-center"
+                className="font-semibold text-sm text-black self-start sm:self-center"
                 variant="slim"
                 disabled={saving}
                 onClick={() =>
@@ -369,17 +374,17 @@ export default function HabitSquare({
             <div className="flex flex-col">
               <div className="flex flex-row align-middle">
               <Input
-                className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
+                className="text-xs sm:text-sm mt-0.5 sm:mt-1 mb-2 sm:mb-4 font-semibold rounded"
                 variant="dailies"
                 id="Note"
                 type="varchar"
-                placeholder="Add time here!"
+                placeholder="Add duration here!"
                 value={details || ''}
                 onChange={(v) => setDetails(v)}
               />
               <div className="flex flex-col">
               <button
-                className={`font-semibold text-sm text-black ml-2 text-left ${timeDenominator=='HRS' ? `opacity-100` : `opacity-30`}`}
+                className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${timeDenominator=='HRS' ? `opacity-100` : `opacity-30`}`}
                 variant="slim"
                 disabled={timeDenominator=='HRS'}
                 onClick={() =>
@@ -389,7 +394,7 @@ export default function HabitSquare({
                 HRS
               </button>
               <button
-                className={`font-semibold text-sm text-black ml-2 text-left ${timeDenominator=='MINS' ? `opacity-100` : `opacity-30`}`}
+                className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${timeDenominator=='MINS' ? `opacity-100` : `opacity-30`}`}
                 variant="slim"
                 disabled={timeDenominator=='MINS'}
                 onClick={() =>
@@ -401,7 +406,7 @@ export default function HabitSquare({
               </div>
               </div>
               <button
-                className="font-semibold text-sm text-black self-end sm:self-center"
+                className="font-semibold text-sm text-black self-start sm:self-center"
                 variant="slim"
                 disabled={saving}
                 onClick={() =>
