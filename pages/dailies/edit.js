@@ -244,9 +244,33 @@ export default function edit() {
       dataIndex: 'type',
       width: '10%',
       responsive: ['lg'],
-      render: (type) => (
-        <div>{types != null ? types.at(type - 1).name : type}</div>
-      )
+      // render: (type) => (
+      //   <div>{types != null ? types.at(type - 1).name : type}</div>
+      // )
+      render: (type, record) => {
+        return (
+          <Select
+            style={{ width: 200 }}
+            value={types != null ? types.at(type - 1).name : type}
+            onChange={(v) => handleEdit(v, record, 'type')}
+            // showSearch
+            // optionFilterProp="children"
+            // filterOption={(input, option) =>
+            //   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            // }
+          >
+            {types != null ? (
+              types.map((a) => (
+                <Option key={a.id} value={a.id}>
+                  {a.name}
+                </Option>
+              ))
+            ) : (
+              <div />
+            )}
+          </Select>
+        );
+      }
     },
     {
       title: 'Status',
@@ -391,6 +415,8 @@ export default function edit() {
       newData.splice(index, 1, { ...item, is_active: v });
     } else if (column === 'group') {
       newData.splice(index, 1, { ...item, group: v });
+    } else if (column === 'type') {
+      newData.splice(index, 1, { ...item, type: v });
     }
     setHabits(newData);
     // need to update the database

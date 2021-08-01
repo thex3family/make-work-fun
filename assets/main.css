@@ -51,6 +51,13 @@ a:focus {
   box-shadow: none;
 }
 
+.button:focus {
+  outline: none;
+  border: none;
+  -moz-outline-style: none;
+  box-shadow: none;
+}
+
 .box {
   position: relative;
   margin: auto;
