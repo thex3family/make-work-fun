@@ -172,6 +172,8 @@ export default function edit() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  const router = useRouter();
+
   const {
     userLoaded,
     user,
@@ -307,6 +309,11 @@ export default function edit() {
     //     ) : null
     // }
   ];
+  // Redirects user to sign in if they are not logged in yet
+
+  useEffect(() => {
+    if (!user) router.replace('/signin');
+  }, [user]);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
