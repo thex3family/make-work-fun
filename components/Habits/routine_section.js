@@ -25,6 +25,7 @@ export default function RoutineSection({
     }
   }
 
+  console.log(associated_habits);
   return (
     <div className="animate-fade-in-up" key={habit_group_name}>
       <div className="flex items-center">
@@ -68,6 +69,8 @@ export default function RoutineSection({
           <HabitSquare
             habit_id={h.id}
             habit_title={h.habit}
+            habit_type={h.habit_type}
+            habit_detail={h.latest_details}
             habit_description={h.description}
             streak_duration={h.streak_duration}
             streak_start={h.streak_start}

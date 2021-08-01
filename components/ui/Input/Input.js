@@ -3,9 +3,9 @@ import cn from 'classnames';
 import s from './Input.module.css';
 
 const Input = (props) => {
-  const { className, children, onChange, ...rest } = props;
+  const { className, variant, children, onChange, ...rest } = props;
 
-  const rootClassName = cn(s.root, {}, className);
+  const rootClassName = cn(s.root, {[s.dailies]: variant === 'dailies'}, className);
 
   const handleOnChange = (e) => {
     if (onChange) {

@@ -9,3 +9,7 @@
 .clickable-row {
   @apply text-emerald-600;
 }
+
+.dailies {
+  @apply bg-white text-black py-1.5;
+}
