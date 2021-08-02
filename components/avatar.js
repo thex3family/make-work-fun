@@ -3,7 +3,7 @@ import { supabase } from '../utils/supabase-client';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { createPopper } from '@popperjs/core';
 
-export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload }) {
+export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload, showHide, setShowHide }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -106,15 +106,21 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload }
     <div>
       {avatarStatus == 'Exists' ? (
         <img
-          className="avatar image h-36 sm:h-auto m-auto"
+          className="avatar image h-36 sm:h-auto m-auto cursor-pointer"
           src={avatarUrl}
           alt="Avatar"
+          onClick={() => {
+            showHide ? setShowHide(false) : setShowHide(true);
+          }}
         />
       ) : avatarStatus == 'Missing' ? (
         <img
-          className="avatar image m-auto"
+          className="avatar image m-auto cursor-pointer"
           src="img/default_avatar.png"
           alt="Avatar"
+          onClick={() => {
+            showHide ? setShowHide(false) : setShowHide(true);
+          }}
         />
       ) : (
         <div className="flex avatar image m-auto justify-center">
