@@ -40,7 +40,7 @@ export default function RoutineSection({
             showHide ? setShowHide(false) : setShowHide(true);
           }}
         >
-          {habit_group_name} Routines <span
+          {habit_group_name == 'Uncategorized' ? habit_group_name : habit_group_name + ' Routines' }  <span
                     className={
                       'text-dailies p-3 text-sm align-middle mb-1 bg-dailies-light text-center inline-flex items-center justify-center w-4 h-4 border-2 sm:border-4 border-dailies-dark shadow-lg rounded-full font-bold'
                     }

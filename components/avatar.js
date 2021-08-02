@@ -106,7 +106,7 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload }
     <div>
       {avatarStatus == 'Exists' ? (
         <img
-          className="avatar image h-32 sm:h-auto m-auto"
+          className="avatar image h-36 sm:h-auto m-auto"
           src={avatarUrl}
           alt="Avatar"
         />

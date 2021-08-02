@@ -84,11 +84,13 @@ export default function WinModal({
               {/*body*/}
               <div className="relative p-6 flex-auto text-blueGray-500 text-center">
                 <div className="my-4">
-                  <p className="text-xl sm:text-2xl leading-none text-primary-2 font-bold">
+                  <p className="text-xl sm:text-2xl leading-none text-primary-2 font-bold mb-3">
                     {activeModalStats.name}
-                    <br />
-                    <span className="text-sm">{activeModalStats.upstream}</span>
                   </p>
+                  {activeModalStats.upstream ? <span className="text-sm bg-gray-100 border-dotted border-2 px-2 py-0.5">
+                    {activeModalStats.upstream}
+                  </span> : null}
+                  
                   <p className="my-2 font-light text-sm">
                     {activeModalStats.closing_date}
                   </p>

@@ -60,7 +60,7 @@ export default async function notifyMe(type, details) {
   let img = '/img/co-x3logo_white.png';
 
   if (type == 'win') {
-    let title = "🎉 You've completed a " + details.type.toUpperCase() + '!';
+    let title = "🎉 You've completed a " + details.type.toLowerCase() + '!';
     let text = truncateString(details.name, 178);
     let vibe = [200, 100, 200];
     var options = {
