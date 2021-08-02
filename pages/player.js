@@ -439,7 +439,7 @@ export default function Player() {
       >
         <BottomNavbar />
         <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-          <div className="animate-fade-in-up bg-black rounded opacity-95">
+          <div className="animate-fade-in-up bg-black rounded opacity-90">
             <div className="pt-10 pb-5">
               <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
                 {greetingMessage},{' '}
