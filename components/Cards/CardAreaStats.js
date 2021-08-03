@@ -2,13 +2,16 @@ import React from 'react';
 
 function LevelBar({ title, level, exp_progress, level_exp, color }) {
   const exp_percent = Math.floor((exp_progress / level_exp) * 100);
+  let bg500 = `bg-${color}-500`;
+  let bg200 = `bg-${color}-200`
+  let text500 = `text-${color}-500`
 
   return (
     <>
       <div className="mb-3">
         <div className="flex flex-row mb-1 justify-between">
           <span
-            className={`font-semibold text-l text-white-700 px-1.5 py-0.5 bg-${color}-500 rounded mr-2`}
+            className={`font-semibold text-l text-white-700 px-1.5 py-0.5 ${bg500} rounded mr-2`}
           >
             {title ? title : 'Uncategorized'}
           </span>
@@ -22,14 +25,14 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
         <div className="flex flex-wrap">
           <div className="relative w-full max-w-full flex-grow flex-1">
             <div className="flex items-center">
-              <span className={`mr-2 text-${color}-500 `}>{exp_percent}%</span>
+              <span className={`mr-2  ${text500} `}>{exp_percent}%</span>
               <div className="relative w-full">
                 <div
-                  className={`overflow-hidden h-2 text-xs flex rounded bg-${color}-200`}
+                  className={`overflow-hidden h-2 text-xs flex rounded  ${bg200}`}
                 >
                   <div
                     style={{ width: `${exp_percent}%` }}
-                    className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-${color}-500`}
+                    className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${bg500}`}
                   ></div>
                 </div>
               </div>
