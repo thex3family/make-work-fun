@@ -42,7 +42,6 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
 }
 
 export default function CardAreaStats({ areaStats }) {
-  console.log(areaStats);
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words rounded shadow-lg bg-primary-2 cursor-pointer">
