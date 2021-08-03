@@ -115,7 +115,7 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload, 
         />
       ) : avatarStatus == 'Missing' ? (
         <img
-          className="avatar image m-auto cursor-pointer"
+          className="avatar image h-36 sm:h-auto m-auto cursor-pointer"
           src="img/default_avatar.png"
           alt="Avatar"
           onClick={() => {

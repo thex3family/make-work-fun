@@ -1,6 +1,4 @@
 import React from 'react';
-import Button from '@/components/ui/Button';
-import Link from 'next/link';
 import { useState } from 'react';
 
 // components
@@ -16,7 +14,8 @@ export default function HeaderStats({
   setAvatarUrl,
   fetchPlayerBackground,
   updateProfile,
-  weekWins
+  weekWins,
+  areaStats
 }) {
   const exp_percent = Math.floor(
     (playerStats.exp_progress / playerStats.level_exp) * 100
@@ -31,19 +30,16 @@ export default function HeaderStats({
           <div>
             {/* Card stats */}
             <div className="flex flex-wrap md:flex-nowrap items-center gap-5">
-              <div className="w-full mx-auto pb-5 xs:w-1/4 sm:w-2/3 lg:w-1/2 h-full text-center relative">
-              <div
-                  className={showHide ? 'hidden' : ''}
+              <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 h-full text-center relative">
+                <div
+                  className={`${showHide ? 'hidden' : ''} animate-fade-in`}
                   onClick={() => {
                     showHide ? setShowHide(false) : setShowHide(true);
                   }}
                 >
-                <CardAreaStats
-                />
+                  <CardAreaStats areaStats={areaStats} />
                 </div>
-                <div
-                  className={showHide ? '' : 'hidden'}
-                >
+                <div className={`${showHide ? '' : 'hidden'} animate-fade-in`}>
                   <Avatar
                     url={avatar_url}
                     onAvatarUpload={(url) => {
@@ -54,12 +50,12 @@ export default function HeaderStats({
                       fetchPlayerBackground(url);
                       updateProfile({ image_url: url, type: 'background' });
                     }}
-                    showHide = {showHide}
-                    setShowHide = {setShowHide}
+                    showHide={showHide}
+                    setShowHide={setShowHide}
                   />
                 </div>
               </div>
-              <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full">
+              <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
                 <CardStats
                   statTitle="Newbie"
                   statName={playerStats.full_name}

@@ -55,7 +55,7 @@ export default function Avatar({
     } finally {
     }
   }
-
+  
   const statTitle = 'Newbie';
   const statMaxLevel = '100';
   const statEXPPercent = Math.floor((statEXPProgress / statLevelEXP) * 100);
