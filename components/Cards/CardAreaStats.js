@@ -2,16 +2,27 @@ import React from 'react';
 
 function LevelBar({ title, level, exp_progress, level_exp, color }) {
   const exp_percent = Math.floor((exp_progress / level_exp) * 100);
-  let bg500 = `bg-${color}-500`;
-  let bg200 = `bg-${color}-200`
-  let text500 = `text-${color}-500`
 
   return (
     <>
       <div className="mb-3">
         <div className="flex flex-row mb-1 justify-between">
           <span
-            className={`font-semibold text-l text-white-700 px-1.5 py-0.5 ${bg500} rounded mr-2`}
+            className={`font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
+              color == 0
+                ? 'bg-emerald-500'
+                : color == 1
+                ? 'bg-blue-500'
+                : color == 2
+                ? 'bg-red-500'
+                : color == 3
+                ? 'bg-yellow-500'
+                : color == 4
+                ? 'bg-purple-500'
+                : color == 5
+                ? 'bg-pink-500'
+                : 'gray'
+            }`}
           >
             {title ? title : 'Uncategorized'}
           </span>
@@ -25,14 +36,60 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
         <div className="flex flex-wrap">
           <div className="relative w-full max-w-full flex-grow flex-1">
             <div className="flex items-center">
-              <span className={`mr-2  ${text500} `}>{exp_percent}%</span>
+              <span
+                className={`mr-2  ${
+                  color == 0
+                    ? 'text-emerald-500'
+                    : color == 1
+                    ? 'text-blue-500'
+                    : color == 2
+                    ? 'text-red-500'
+                    : color == 3
+                    ? 'text-yellow-500'
+                    : color == 4
+                    ? 'text-purple-500'
+                    : color == 5
+                    ? 'text-pink-500'
+                    : 'gray'
+                } `}
+              >
+                {exp_percent}%
+              </span>
               <div className="relative w-full">
                 <div
-                  className={`overflow-hidden h-2 text-xs flex rounded  ${bg200}`}
+                  className={`overflow-hidden h-2 text-xs flex rounded  ${
+                    color == 0
+                      ? 'bg-emerald-200'
+                      : color == 1
+                      ? 'bg-blue-200'
+                      : color == 2
+                      ? 'bg-red-200'
+                      : color == 3
+                      ? 'bg-yellow-200'
+                      : color == 4
+                      ? 'bg-purple-200'
+                      : color == 5
+                      ? 'bg-pink-200'
+                      : 'gray'
+                  }`}
                 >
                   <div
                     style={{ width: `${exp_percent}%` }}
-                    className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${bg500}`}
+                    className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
+                      color == 0
+                        ? 'bg-emerald-500'
+                        : color == 1
+                        ? 'bg-blue-500'
+                        : color == 2
+                        ? 'bg-red-500'
+                        : color == 3
+                        ? 'bg-yellow-500'
+                        : color == 4
+                        ? 'bg-purple-500'
+                        : color == 5
+                        ? 'bg-pink-500'
+                        : 'gray'
+                    }`}
                   ></div>
                 </div>
               </div>
@@ -55,9 +112,14 @@ export default function CardAreaStats({ areaStats }) {
                 Areas
               </h5>
               <div>
-              <p className="text-left font-semibold text-xl text-white-700 mb-4">
-                Life Progression <a href="https://academy.co-x3.com" target="_blank" className="absolute ml-1.5 mt-2 text-sm fas fa-question-circle" />
-              </p>
+                <p className="text-left font-semibold text-xl text-white-700 mb-4">
+                  Life Progression{' '}
+                  <a
+                    href="https://academy.co-x3.com"
+                    target="_blank"
+                    className="absolute ml-1.5 mt-2 text-sm fas fa-question-circle"
+                  />
+                </p>
               </div>
               {areaStats.map((stat) => (
                 <LevelBar
@@ -65,21 +127,7 @@ export default function CardAreaStats({ areaStats }) {
                   level={stat.current_level}
                   exp_progress={stat.exp_progress}
                   level_exp={stat.level_exp}
-                  color={
-                    areaStats.findIndex((x) => x.area === stat.area) == 0
-                      ? 'emerald'
-                      : areaStats.findIndex((x) => x.area === stat.area) == 1
-                      ? 'blue'
-                      : areaStats.findIndex((x) => x.area === stat.area) == 2
-                      ? 'red'
-                      : areaStats.findIndex((x) => x.area === stat.area) == 3
-                      ? 'yellow'
-                      : areaStats.findIndex((x) => x.area === stat.area) == 4
-                      ? 'purple'
-                      : areaStats.findIndex((x) => x.area === stat.area) == 5
-                      ? 'pink'
-                      : 'gray'
-                  }
+                  color={areaStats.findIndex((x) => x.area === stat.area)}
                 />
               ))}
             </div>
