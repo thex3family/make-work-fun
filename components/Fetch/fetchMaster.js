@@ -168,3 +168,26 @@ export async function fetchLeaderboardStats(
     setLoading(false);
   }
 }
+
+export async function fetchAreaStats() {
+  try {
+    const user = supabase.auth.user();
+
+    const { data, error } = await supabase
+      .from('s1_area_stats')
+      .select('*')
+      .eq('player', user.id)
+      .limit(6)
+
+    if (data) {
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}

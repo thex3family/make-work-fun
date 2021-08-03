@@ -23,7 +23,8 @@ import {
   fetchPlayerStats,
   fetchWins,
   fetchWeekWins,
-  fetchLatestWin
+  fetchLatestWin,
+  fetchAreaStats
 } from '@/components/Fetch/fetchMaster';
 
 // components
@@ -86,6 +87,7 @@ export default function Player() {
   const [showWinModal, setShowWinModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
   const [weekWins, setWeekWins] = useState([]);
+  const [areaStats, setAreaStats] = useState([]);
 
   const currentHour = new Date().getHours();
   const greetingMessage =
@@ -251,6 +253,7 @@ export default function Player() {
     setPlayerStats(await fetchPlayerStats(setAvatarUrl));
     setWins(await fetchWins());
     setWeekWins(await fetchWeekWins());
+    setAreaStats(await fetchAreaStats());
     setLoading(false);
   }
 
@@ -464,6 +467,7 @@ export default function Player() {
                 fetchPlayerBackground={fetchPlayerBackground}
                 updateProfile={updateProfile}
                 weekWins={weekWins}
+                areaStats={areaStats}
               />
               <div className="flex flex-wrap mt-4">
                 <div className="w-full pb-36 px-4">

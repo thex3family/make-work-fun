@@ -38,7 +38,7 @@ module.exports = {
         'accents-9': 'var(--accents-9)',
         violet: 'var(--violet)',
         'violet-light': 'var(--violet-light)',
-        pink: 'var(--pink)',
+        pink: colors.pink,
         cyan: 'var(--cyan)',
         blue: 'var(--blue)',
         green: 'var(--green)',
@@ -77,7 +77,8 @@ module.exports = {
         'fade-in-up': 'fade-in-up 0.5s ease-out',
         'fade-out-up': 'fade-out-up 0.5s ease-out',
         'soft-bounce': 'soft-bounce 1.25s linear infinite',
-        'slow-fade-in': 'fade-in 2s ease-out'
+        'slow-fade-in': 'fade-in 2s ease-out',
+        'fade-in': 'fade-in 0.5s ease-out'
       },
       keyframes: {
         'soft-bounce': {
