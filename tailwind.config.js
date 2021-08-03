@@ -40,7 +40,6 @@ module.exports = {
         'violet-light': 'var(--violet-light)',
         pink: colors.pink,
         cyan: 'var(--cyan)',
-        blue: 'var(--blue)',
         green: 'var(--green)',
         red: colors.red,
         emerald: colors.emerald,
