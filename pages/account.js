@@ -8,8 +8,9 @@ import { useUser } from '@/utils/useUser';
 import { postData } from '@/utils/helpers';
 import Input from '@/components/ui/Input';
 
-import { supabase } from '../utils/supabase-client';
+import { supabase } from '@/utils/supabase-client';
 import { table, minifyRecords } from '@/utils/airtable';
+import ConnectNotion from '@/components/API/ConnectNotion';
 
 function Card({ title, description, footer, children }) {
   return (
@@ -31,18 +32,20 @@ export default function Account({ initialPurchaseRecord }) {
   const [saveLoading, setSaveLoading] = useState(false);
   const router = useRouter();
   const [full_name, setName] = useState(null);
-  const [notion_api_secret, setNotionAPISecret] = useState(null);
-  const [notion_success_plan, setNotionSuccessPlan] = useState(null);
+
+  const [notionCredentials, setNotionCredentials] = useState(null);
+
   const { userLoaded, user, session, userDetails, subscription } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
-  console.log(initialPurchaseRecord)
+  console.log(initialPurchaseRecord);
   useEffect(() => {
     if (!user) router.replace('/signin');
   }, [user]);
 
   useEffect(() => {
     if (user) getProfile();
+    if (user) getNotionCredentials();
   }, [session]);
 
   async function getProfile() {
@@ -52,7 +55,7 @@ export default function Account({ initialPurchaseRecord }) {
 
       let { data, error, status } = await supabase
         .from('users')
-        .select(`full_name, notion_api_secret, notion_success_plan`)
+        .select(`full_name`)
         .eq('id', user.id)
         .single();
 
@@ -62,8 +65,6 @@ export default function Account({ initialPurchaseRecord }) {
 
       if (data) {
         setName(data.full_name);
-        setNotionAPISecret(data.notion_api_secret);
-        setNotionSuccessPlan(data.notion_success_plan);
       }
     } catch (error) {
       alert(error.message);
@@ -72,36 +73,41 @@ export default function Account({ initialPurchaseRecord }) {
     }
   }
 
-  async function updateProfile({
-    full_name,
-    notion_api_secret,
-    notion_success_plan
-  }) {
+  async function getNotionCredentials() {
+    try {
+      // setLoading(true);
+      const user = supabase.auth.user();
+
+      let { data, error, status } = await supabase
+        .from('notion_credentials')
+        .select(`*`)
+        .eq('player', user.id);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+
+      if (data) {
+        console.log('notioncredentials', data);
+        console.log(data.length);
+        setNotionCredentials(data);
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      // setLoading(false);
+    }
+  }
+
+  async function updateProfile({ full_name }) {
     try {
       setSaveLoading(true);
       const user = supabase.auth.user();
-      if (!notion_success_plan.includes('-')) {
-        const url = notion_success_plan;
-        const url2 = url.split('?')[0];
-        const url3 = url2.substring(url.lastIndexOf('/') + 1);
-        notion_success_plan =
-          url3.substr(0, 8) +
-          '-' +
-          url3.substr(8, 4) +
-          '-' +
-          url3.substr(12, 4) +
-          '-' +
-          url3.substr(16, 4) +
-          '-' +
-          url3.substr(20);
-      }
 
       let { error } = await supabase
         .from('users')
         .update({
-          full_name: full_name,
-          notion_api_secret: notion_api_secret,
-          notion_success_plan: notion_success_plan
+          full_name: full_name
         })
         .eq('id', user.id);
 
@@ -111,8 +117,7 @@ export default function Account({ initialPurchaseRecord }) {
     } catch (error) {
       alert(error.message);
     } finally {
-      setShowSaveModal(true);
-      setLoading(false);
+      setSaveLoading(false);
     }
   }
 
@@ -142,6 +147,29 @@ export default function Account({ initialPurchaseRecord }) {
         <LoadingDots />
       </div>
     );
+  }
+
+  async function addCredentials() {
+    const newRow = {
+      player: user.id
+    };
+
+    try {
+      const user = supabase.auth.user();
+
+      const { data, error } = await supabase
+        .from('notion_credentials')
+        .insert(newRow);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      getNotionCredentials();
+      setLoading(false);
+    }
   }
 
   return (
@@ -237,22 +265,30 @@ export default function Account({ initialPurchaseRecord }) {
                     <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
                         <span className="align-baseline inline-block">
-                        {purchase.fields.product_name}
+                          {purchase.fields.product_name}
                         </span>
                         <span className="ml-2 text-xs align-middle font-semibold inline-block uppercase rounded text-accents-3">
                           {purchase.fields.subscription_type}
                         </span>
-                        
+
                         <p className="text-accents-5 text-sm">
                           {purchase.fields.type == 'One Off'
                             ? 'Purchased On: '
                             : 'Joined On: '}
                           <span className="text-accents-3">
-                          {purchase.fields.purchase_date.split('T')[0]}
+                            {purchase.fields.purchase_date.split('T')[0]}
                           </span>
                         </p>
                         {purchase.fields.streak ? (
-                          <p className="text-accents-5 text-sm">Streak: {Array.from({ length: purchase.fields.streak }, (_, i) => <span key={i}>⭐</span>)}</p>
+                          <p className="text-accents-5 text-sm">
+                            Streak:{' '}
+                            {Array.from(
+                              { length: purchase.fields.streak },
+                              (_, i) => (
+                                <span key={i}>⭐</span>
+                              )
+                            )}
+                          </p>
                         ) : (
                           ''
                         )}
@@ -272,21 +308,30 @@ export default function Account({ initialPurchaseRecord }) {
                   ))
                 ) : (
                   <div>
-                    <a href="https://toolbox.co-x3.com/?utm_source=makeworkfun" target="_blank" className="text-emerald-500">
+                    <a
+                      href="https://toolbox.co-x3.com/?utm_source=makeworkfun"
+                      target="_blank"
+                      className="text-emerald-500"
+                    >
                       You haven't unlocked any resources yet. Let's change that.
                     </a>
                     <div
-                    className="border-t border-accents-2 my-5 flex-grow mr-3"
-                    aria-hidden="true"
-                  ></div>
-                  <p className="mb-3">Or start with...</p>
+                      className="border-t border-accents-2 my-5 flex-grow mr-3"
+                      aria-hidden="true"
+                    ></div>
+                    <p className="mb-3">Start with...</p>
                     <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
                         Gamify Your Life (FREE Notion Template)
-                        <p className="text-accents-5 text-sm">Task management, habit tracking, and more.</p>
+                        <p className="text-accents-5 text-sm">
+                          Task management, habit tracking, and more.
+                        </p>
                       </p>
                       {
-                        <a href="http://makeworkfun.club/personal/?utm_source=makeworkfun" target="_blank">
+                        <a
+                          href="http://makeworkfun.club/personal/?utm_source=makeworkfun"
+                          target="_blank"
+                        >
                           <Button
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
@@ -297,7 +342,7 @@ export default function Account({ initialPurchaseRecord }) {
                         </a>
                       }
                     </div>
-                    </div>
+                  </div>
                 )}
               </div>
             </Card>
@@ -313,7 +358,26 @@ export default function Account({ initialPurchaseRecord }) {
             <Card
               title="Your Name"
               description="Please enter your first name, or a display name you are comfortable with."
-              footer={<p>Please use 64 characters at maximum.</p>}
+              footer={
+                <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                  <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
+                    Please use 64 characters at maximum.
+                  </p>
+                  <Button
+                    className="w-full sm:w-auto"
+                    variant="incognito"
+                    type="submit"
+                    onClick={() =>
+                      updateProfile({
+                        full_name
+                      })
+                    }
+                    disabled={saveLoading}
+                  >
+                    {saveLoading ? 'Saving ...' : 'Save'}
+                  </Button>
+                </div>
+              }
             >
               <Input
                 htmlFor="full_name"
@@ -326,59 +390,27 @@ export default function Account({ initialPurchaseRecord }) {
             </Card>
             <Card
               title="Connect To Notion"
-              description="Integrate your task management database to start earning rewards for your wins."
+              description="Integrate any database to start earning rewards for your wins."
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                  <p className="pb-4 sm:pb-0">
+                  <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
                     We take your data protection and privacy seriously. After
                     saving, we will describe in detail how our application will
                     use your data.
                   </p>
-                  {/* <Button className="w-full sm:w-auto"
-                variant="slim"
-              >
-                Learn More
-              </Button> */}
+                  <Button
+                    className="w-full sm:w-auto"
+                    variant="incognito"
+                    type="submit"
+                    onClick={() => setShowSaveModal(true)}
+                    disabled={saveLoading}
+                  >
+                    {saveLoading ? 'Loading ...' : 'Continue'}
+                  </Button>
                 </div>
               }
             >
-              <div className="mt-4 flex flex-row justify-between">
-                <p className="font-semibold">Notion API Secret</p>
-                <a
-                  className="text-right font-semibold text-emerald-500"
-                  href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_a887bad862"
-                  target="_blank"
-                >
-                  Where do I find this?
-                </a>
-              </div>
-              <Input
-                className="text-xl mb-4 font-semibold rounded"
-                id="notion_api_secret"
-                type="varchar"
-                placeholder="secret_•••"
-                value={notion_api_secret || ''}
-                onChange={setNotionAPISecret}
-              />
-              <div className="mt-2 flex flex-row justify-between">
-                <p className="font-semibold">Database ID</p>
-                <a
-                  className="text-right font-semibold text-emerald-500"
-                  href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246"
-                  target="_blank"
-                >
-                  Where do I find this?
-                </a>
-              </div>
-              <Input
-                className="text-xl mb-4 font-semibold rounded"
-                id="notion_success_plan"
-                type="varchar"
-                placeholder="https://www.notion.so/•••"
-                value={notion_success_plan || ''}
-                onChange={setNotionSuccessPlan}
-              />
-              <div className="text-xs">
+              <div className="text-xs text-accents-6 mt-1">
                 Works best with success plan from{' '}
                 <a
                   className="text-emerald-500 font-semibold"
@@ -396,15 +428,61 @@ export default function Account({ initialPurchaseRecord }) {
                   Gamify Your Life!
                 </a>
               </div>
+              {notionCredentials
+                ? notionCredentials.map((credentials) => (
+                    <ConnectNotion
+                      credentials={credentials}
+                      getNotionCredentials={getNotionCredentials}
+                    />
+                  ))
+                : null}
+              {notionCredentials ? (
+                notionCredentials.length < 1 ? (
+                  <div className="flex items-center my-6">
+                    <div
+                      className="border-t border-accents-2 flex-grow mr-3"
+                      aria-hidden="true"
+                    ></div>
+                    <button onClick={()=>addCredentials()} className="text-emerald-500 mx-auto font-semibold">
+                      {notionCredentials.length == 0
+                        ? 'Connect To A Database'
+                        : 'Connect Additional Databases'}
+                    </button>
+                    <div
+                      className="border-t border-accents-2 flex-grow ml-3"
+                      aria-hidden="true"
+                    ></div>
+                  </div>
+                ) : null
+              ) : null}
             </Card>
+            <div className="flex mx-auto items-center my-6 max-w-3xl">
+                    <div
+                      className="border-t border-accents-2 flex-grow mr-3"
+                      aria-hidden="true"
+                    ></div>
+                    <div className="text-accents-4">By continuing, you are agreeing to our privacy policy and
+                    terms of use.</div>
+                    <div
+                      className="border-t border-accents-2 flex-grow ml-3"
+                      aria-hidden="true"
+                    ></div>
+                  </div>
             <Card
               title="Connect Other Productivity Softwares"
               description="Airtable, Clickup, Asana, and more."
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                  <p className="pb-4 sm:pb-0">Coming soon! Vote on which ones you want us to focus on <a className="text-emerald-500 font-semibold"
-                  href="https://toolbox.co-x3.com/family-connection"
-                  target="_blank">here.</a></p>
+                  <p className="pb-4 sm:pb-0">
+                    Coming soon! Vote on which ones you want us to focus on{' '}
+                    <a
+                      className="text-emerald-500 font-semibold"
+                      href="https://toolbox.co-x3.com/family-connection"
+                      target="_blank"
+                    >
+                      here.
+                    </a>
+                  </p>
                   {/* <Button className="w-full sm:w-auto"
                 variant="slim"
               >
@@ -413,18 +491,13 @@ export default function Account({ initialPurchaseRecord }) {
                 </div>
               }
             ></Card>
-            <Card
+            {/* <Card
               footer={
                 <div className="text-center">
                   <p className="pb-4 sm:pb-0">
                     By continuing, you are agreeing to our privacy policy and
                     terms of use.
                   </p>
-                  {/* <Button className="w-full sm:w-auto"
-            variant="slim"
-          >
-            Learn More
-          </Button> */}
                 </div>
               }
             >
@@ -443,7 +516,7 @@ export default function Account({ initialPurchaseRecord }) {
               >
                 {saveLoading ? 'Loading ...' : 'Save & Test Connection'}
               </Button>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </section>

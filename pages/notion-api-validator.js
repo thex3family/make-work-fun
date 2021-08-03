@@ -1094,17 +1094,17 @@ export async function getServerSideProps({ req }) {
     // Get credentials from Supabase
     const { user } = await supabase.auth.api.getUserByCookie(req);
     const data = await supabase
-      .from('users')
-      .select('notion_api_secret, notion_success_plan')
-      .eq('id', user.id)
+      .from('notion_credentials')
+      .select('api_secret_key, database_id')
+      .eq('player', user.id)
       .limit(1)
       .single();
     const credentials = data.body;
 
     // Send credentials to Notion API
-    const notion = new Client({ auth: credentials.notion_api_secret });
+    const notion = new Client({ auth: credentials.api_secret_key });
     const response = await notion.databases.retrieve({
-      database_id: credentials.notion_success_plan
+      database_id: credentials.database_id
     });
 
     return { props: { response } };
