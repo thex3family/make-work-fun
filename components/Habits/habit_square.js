@@ -373,7 +373,7 @@ export default function HabitSquare({
               </button>
             </div>
           ) : null}
-          {habit_type == 'Time' ? (
+          {habit_type == 'Duration' ? (
             <div className="flex flex-col">
               <div className="flex flex-row align-middle">
               <Input
@@ -413,7 +413,7 @@ export default function HabitSquare({
                 variant="slim"
                 disabled={saving}
                 onClick={() =>
-                  handleHabitCompletionStatusChange(habit_id, 'Time', timeDenominator === 'HRS' ? getTimeInMinutes(details) : details)
+                  handleHabitCompletionStatusChange(habit_id, 'Duration', timeDenominator === 'HRS' ? getTimeInMinutes(details) : details)
                 }
               >
                 {habitCompletedToday ? 'Update' : 'Save'}
