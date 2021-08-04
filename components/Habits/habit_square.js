@@ -380,7 +380,7 @@ export default function HabitSquare({
                 className="text-xs sm:text-sm mt-0.5 sm:mt-1 mb-2 sm:mb-4 font-semibold rounded"
                 variant="dailies"
                 id="Note"
-                type="varchar"
+                type="number"
                 placeholder="Add duration here!"
                 value={details || ''}
                 onChange={(v) => setDetails(v)}
