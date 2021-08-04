@@ -82,7 +82,7 @@ export default function HeaderStats({
               </Link> */}
 
                 <div className="w-full pt-6">
-                  <CardLineChart weekWins={weekWins} />
+                  {weekWins ? <CardLineChart weekWins={weekWins} /> : null}
                 </div>
               </div>
             </div>
