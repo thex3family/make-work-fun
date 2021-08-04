@@ -47,8 +47,8 @@ export const UserContextProvider = (props) => {
   }, []);
 
   const getUserDetails = () => supabase.from('leaderboard').select('*').eq('player', user.id).single();
-  const getUserOnboarding = () => supabase.from('onboarding').select('*').eq('id', user.id).single();
-  const getUserProfile = () => supabase.from('users').select('full_name, notion_api_secret, notion_success_plan').eq('id', user.id).single();
+  const getUserOnboarding = () => supabase.from('onboarding').select('*').eq('id', user.id).single().limit(1);
+  const getUserProfile = () => supabase.from('users').select('full_name').eq('id', user.id).single();
   const getSubscription = () =>
     supabase
       .from('subscriptions')
