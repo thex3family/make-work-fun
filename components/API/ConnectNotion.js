@@ -54,7 +54,9 @@ export default function ConnectNotion({ credentials, getNotionCredentials }) {
           url3.substr(16, 4) +
           '-' +
           url3.substr(20);
+          setDatabaseID(database_id)
       }
+
 
       const { data, error } = await supabase
         .from('notion_credentials')
@@ -86,7 +88,6 @@ export default function ConnectNotion({ credentials, getNotionCredentials }) {
       </div>
       <Input
         className="text-xl mb-2 font-semibold rounded"
-        id="notion_api_secret"
         type="varchar"
         placeholder="secret_•••"
         value={secretKey || ''}
@@ -104,7 +105,6 @@ export default function ConnectNotion({ credentials, getNotionCredentials }) {
       </div>
       <Input
         className="text-xl font-semibold rounded"
-        id="notion_success_plan"
         type="varchar"
         placeholder="https://www.notion.so/•••"
         value={databaseID || ''}
