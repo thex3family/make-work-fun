@@ -413,7 +413,7 @@ export default function HabitSquare({
                 variant="slim"
                 disabled={saving}
                 onClick={() =>
-                  handleHabitCompletionStatusChange(habit_id, 'Time', getTimeInMinutes(details))
+                  handleHabitCompletionStatusChange(habit_id, 'Time', timeDenominator === 'HRS' ? getTimeInMinutes(details) : details)
                 }
               >
                 {habitCompletedToday ? 'Update' : 'Save'}
