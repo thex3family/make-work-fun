@@ -21,7 +21,7 @@ export default function updates() {
             date="Aug 08, 2021"
             title="Track Your Life Progression"
             desc="When you handing in wins, specify the area of competence it is improving. Then, click on your avatar in the player page to see your stats in real time."
-            img_url="updates/0.16.png"
+            img_url="updates/0.16.gif"
             button_url="/player"
             version="v.16"
           />

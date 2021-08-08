@@ -18,9 +18,10 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
       <div className="mb-3">
         <div className="">
           <div className="flex flex-row mb-1 justify justify-between">
-            <div className="">
-            <span
-              className={`font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
+            <div className="flex flex-row">
+              <div className="w-24 lg:w-32 text-left">
+            <div
+              className={`truncate font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
                 color == 0
                   ? 'bg-emerald-500'
                   : color == 1
@@ -36,11 +37,12 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
                   : 'gray'
               }`}
             >
-              {title ? truncateString(title, 20) : 'Uncategorized'}
-            </span>
-            <span className="text-left px-1.5 py-0.5 rounded bg-gray-700 text-sm">LVL {level}</span>
+              {title ? title : 'Uncategorized'}
             </div>
-            <div className={`font-semibold text-l text-white-700 text-sm  align-middle
+            </div>
+            <div className="whitespace-nowrap text-left px-1.5 py-0.5 rounded bg-gray-700 text-sm">LVL {level}</div>
+            </div>
+            <div className={`font-semibold text-l text-white-700 text-sm align-middle hidden lg:block
             `}>
               {exp_progress} / {level_exp} XP
             </div>
