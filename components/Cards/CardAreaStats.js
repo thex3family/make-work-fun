@@ -6,37 +6,42 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
   return (
     <>
       <div className="mb-3">
-        <div className="flex flex-row mb-1 justify-between">
-          <span
-            className={`font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
-              color == 0
-                ? 'bg-emerald-500'
-                : color == 1
-                ? 'bg-blue-500'
-                : color == 2
-                ? 'bg-red-500'
-                : color == 3
-                ? 'bg-yellow-500'
-                : color == 4
-                ? 'bg-purple-500'
-                : color == 5
-                ? 'bg-pink-500'
-                : 'gray'
-            }`}
-          >
-            {title ? title : 'Uncategorized'}
-          </span>
-          <span className="font-semibold text-l text-white-700">
-            LVL: {level}
-          </span>
-        </div>
-        {/* <div className="font-semibold text-sm text-right -mt-3">
+        <div className="">
+          <div className="flex flex-row mb-1 justify justify-between">
+            <div>
+            <span
+              className={`font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
+                color == 0
+                  ? 'bg-emerald-500'
+                  : color == 1
+                  ? 'bg-blue-500'
+                  : color == 2
+                  ? 'bg-red-500'
+                  : color == 3
+                  ? 'bg-yellow-500'
+                  : color == 4
+                  ? 'bg-purple-500'
+                  : color == 5
+                  ? 'bg-pink-500'
+                  : 'gray'
+              }`}
+            >
+              {title ? title : 'Uncategorized'}
+            </span>
+            <span className="text-left px-1.5 py-0.5 rounded bg-gray-700 text-sm align-middle">LVL {level}</span>
+            </div>
+            <div className={`font-semibold text-l text-white-700 text-sm  align-middle
+            `}>
+              {exp_progress} / {level_exp} XP
+            </div>
+          </div>
+          {/* <div className="font-semibold text-sm text-right -mt-3">
       100 / 200 XP
     </div> */}
-        <div className="flex flex-wrap">
-          <div className="relative w-full max-w-full flex-grow flex-1">
-            <div className="flex items-center">
-              <span
+          <div className="flex flex-wrap">
+            <div className="relative w-full max-w-full flex-grow flex-1">
+              <div className="flex items-center">
+                <span
                 className={`mr-2  ${
                   color == 0
                     ? 'text-emerald-500'
@@ -55,42 +60,43 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
               >
                 {exp_percent}%
               </span>
-              <div className="relative w-full">
-                <div
-                  className={`overflow-hidden h-2 text-xs flex rounded  ${
-                    color == 0
-                      ? 'bg-emerald-200'
-                      : color == 1
-                      ? 'bg-blue-200'
-                      : color == 2
-                      ? 'bg-red-200'
-                      : color == 3
-                      ? 'bg-yellow-200'
-                      : color == 4
-                      ? 'bg-purple-200'
-                      : color == 5
-                      ? 'bg-pink-200'
-                      : 'gray'
-                  }`}
-                >
+                <div className="relative w-full">
                   <div
-                    style={{ width: `${exp_percent}%` }}
-                    className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
+                    className={`overflow-hidden h-2 text-xs flex rounded mt-2 mb-1  ${
                       color == 0
-                        ? 'bg-emerald-500'
+                        ? 'bg-emerald-200'
                         : color == 1
-                        ? 'bg-blue-500'
+                        ? 'bg-blue-200'
                         : color == 2
-                        ? 'bg-red-500'
+                        ? 'bg-red-200'
                         : color == 3
-                        ? 'bg-yellow-500'
+                        ? 'bg-yellow-200'
                         : color == 4
-                        ? 'bg-purple-500'
+                        ? 'bg-purple-200'
                         : color == 5
-                        ? 'bg-pink-500'
+                        ? 'bg-pink-200'
                         : 'gray'
                     }`}
-                  ></div>
+                  >
+                    <div
+                      style={{ width: `${exp_percent}%` }}
+                      className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
+                        color == 0
+                          ? 'bg-emerald-500'
+                          : color == 1
+                          ? 'bg-blue-500'
+                          : color == 2
+                          ? 'bg-red-500'
+                          : color == 3
+                          ? 'bg-yellow-500'
+                          : color == 4
+                          ? 'bg-purple-500'
+                          : color == 5
+                          ? 'bg-pink-500'
+                          : 'gray'
+                      }`}
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
