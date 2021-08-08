@@ -38,7 +38,7 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
             >
               {title ? truncateString(title, 20) : 'Uncategorized'}
             </span>
-            <span className="text-left px-1.5 py-0.5 rounded bg-gray-700 text-sm align-middle">LVL {level}</span>
+            <span className="text-left px-1.5 py-0.5 rounded bg-gray-700 text-sm">LVL {level}</span>
             </div>
             <div className={`font-semibold text-l text-white-700 text-sm  align-middle
             `}>

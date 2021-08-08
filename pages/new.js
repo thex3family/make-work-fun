@@ -17,6 +17,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Aug 08, 2021"
+            title="Track Your Life Progression"
+            desc="When you handing in wins, specify the area of competence it is improving. Then, click on your avatar in the player page to see your stats in real time."
+            img_url="updates/0.16.png"
+            button_url="/player"
+            version="v.16"
+          />
           <CardRUpdate
             date="Aug 01, 2021"
             title="Customize Your Daily Quests"
