@@ -510,6 +510,45 @@ export default function NotionWizard({ response }) {
                       <span className="text-xs font-medium">(Optional)</span>
                     </a>
                   </li>
+
+                  <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
+                    <a
+                      className={
+                        'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
+                        (openTab === 10
+                          ? response.properties.hasOwnProperty('Area')
+                            ? response.properties.Type.type.includes('select')
+                              ? 'text-white bg-emerald-500'
+                              : 'text-white bg-red-500'
+                            : 'text-white bg-red-500'
+                          : response.properties.hasOwnProperty('Area')
+                          ? response.properties.Type.type.includes('select')
+                            ? 'text-emerald-500 bg-white'
+                            : 'text-red-500 bg-white'
+                          : 'text-red-500 bg-white')
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenTab(10);
+                      }}
+                      data-toggle="tab"
+                      href="#link10"
+                      role="tablist"
+                    >
+                      <i
+                        className={
+                          'mr-2 ' +
+                          (response.properties.hasOwnProperty('Area')
+                            ? response.properties.Type.type.includes('select')
+                              ? 'fas fa-check'
+                              : 'fas fa-exclamation-triangle'
+                            : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
+                        }
+                      />
+                      Area{' '}
+                      <span className="text-xs font-medium">(Optional)</span>
+                    </a>
+                  </li>
                 </ul>
               </div>
               <div className="flex w-full md:w-3/4 h-full">
@@ -935,6 +974,41 @@ export default function NotionWizard({ response }) {
                         <img
                           className="w-auto pt-5"
                           src="/wizard/upstream_prop.PNG"
+                        ></img>
+                      </div>
+                      <div
+                        className={openTab === 10 ? 'block' : 'hidden'}
+                        id="link10"
+                      >
+                        {response.properties.hasOwnProperty('Area') ? (
+                          response.properties.Type.type.includes('select') ? (
+                            <h2 className="text-xl text-bold text-emerald-600 mb-3">
+                              <i className="fas fa-check mr-2"></i>Your database
+                              has this property!
+                            </h2>
+                          ) : (
+                            <h2 className="text-xl text-bold text-red-600 mb-3">
+                              <i className="fas fa-exclamation-triangle mr-2"></i>
+                              Your database has this property but not the
+                              recommended type.
+                            </h2>
+                          )
+                        ) : (
+                          <h2 className="text-xl text-bold text-red-600 mb-3">
+                            <i className="fas fa-times mr-2"></i>Your database
+                            is missing this property!
+                          </h2>
+                        )}
+                        <p className="font-semibold">
+                          Recommended Type: Select
+                        </p>
+                        <p>
+                          We use this property to connect your wins with the areas of competence you are building in your life. If you hand in a quest without this property, the win will be Uncategorized.
+                         
+                        </p>
+                        <img
+                          className="w-auto pt-5"
+                          src="/wizard/area_prop.PNG"
                         ></img>
                       </div>
                     </div>
