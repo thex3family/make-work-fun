@@ -1,5 +1,15 @@
 import React from 'react';
 
+function truncateString(str, num) {
+  // If the length of str is less than or equal to num
+  // just return str--don't truncate it.
+  if (str.length <= num) {
+    return str
+  }
+  // Return str truncated with '...' concatenated to the end of str.
+  return str.slice(0, num) + '...'
+}
+
 function LevelBar({ title, level, exp_progress, level_exp, color }) {
   const exp_percent = Math.floor((exp_progress / level_exp) * 100);
 
@@ -8,7 +18,7 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
       <div className="mb-3">
         <div className="">
           <div className="flex flex-row mb-1 justify justify-between">
-            <div className="text-left">
+            <div className="">
             <span
               className={`font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
                 color == 0
@@ -26,7 +36,7 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
                   : 'gray'
               }`}
             >
-              {title ? title : 'Uncategorized'}
+              {title ? truncateString(title, 20) : 'Uncategorized'}
             </span>
             <span className="text-left px-1.5 py-0.5 rounded bg-gray-700 text-sm align-middle">LVL {level}</span>
             </div>
