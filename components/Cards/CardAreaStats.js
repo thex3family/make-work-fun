@@ -8,7 +8,7 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
       <div className="mb-3">
         <div className="">
           <div className="flex flex-row mb-1 justify justify-between">
-            <div>
+            <div className="text-left">
             <span
               className={`font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
                 color == 0
