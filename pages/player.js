@@ -109,7 +109,7 @@ export default function Player() {
       : 'Are you ready for your next adventure?';
 
   const NameCustom = (row) => (
-    <div data-tag="allowRowEvents" className="truncateWrapper">
+    <div data-tag="allowRowEvents" className="">
       <p
         data-tag="allowRowEvents"
         className="font-semibold text-sm mb-1 truncate"
