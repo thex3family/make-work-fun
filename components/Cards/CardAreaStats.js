@@ -121,7 +121,7 @@ export default function CardAreaStats({ areaStats }) {
               </h5>
               <div>
                 <p className="text-left font-semibold text-xl text-white-700 mb-4">
-                  Life Progression{' '}
+                  Overall Life Progression{' '}
                   <a
                     href="https://academy.co-x3.com/en/articles/5476321-attributing-your-wins-to-areas-of-competence/?utm_source=makeworkfun"
                     target="_blank"

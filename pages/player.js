@@ -112,7 +112,7 @@ export default function Player() {
     <div data-tag="allowRowEvents" className="">
       <p
         data-tag="allowRowEvents"
-        className="font-semibold text-sm mb-1 truncate"
+        className="font-semibold text-sm mb-1 truncate w-32 sm:w-96"
       >
         {row.name}
       </p>
