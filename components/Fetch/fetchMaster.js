@@ -174,7 +174,7 @@ export async function fetchAreaStats() {
     const user = supabase.auth.user();
 
     const { data, error } = await supabase
-      .from('s1_area_stats')
+      .from('area_stats')
       .select('*')
       .eq('player', user.id)
       .limit(6)
