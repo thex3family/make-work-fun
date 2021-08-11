@@ -393,12 +393,12 @@ export default function Account({ initialPurchaseRecord }) {
               description="Integrate any database to start earning rewards for your wins."
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                  <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
+                  <p className="pb-4 sm:pb-0 w-full">
                     We take your data protection and privacy seriously. After
                     saving, we will describe in detail how our application will
                     use your data.
                   </p>
-                  <Button
+                  {/* <Button
                     className="w-full sm:w-auto"
                     variant="incognito"
                     type="submit"
@@ -406,7 +406,7 @@ export default function Account({ initialPurchaseRecord }) {
                     disabled={saveLoading}
                   >
                     {saveLoading ? 'Loading ...' : 'Continue'}
-                  </Button>
+                  </Button> */}
                 </div>
               }
             >
@@ -433,11 +433,12 @@ export default function Account({ initialPurchaseRecord }) {
                     <ConnectNotion
                       credentials={credentials}
                       getNotionCredentials={getNotionCredentials}
+                      setShowSaveModal={setShowSaveModal}
                     />
                   ))
                 : null}
               {notionCredentials ? (
-                notionCredentials.length < 1 ? (
+                notionCredentials.length < 5 ? (
                   <div className="flex items-center my-6">
                     <div
                       className="border-t border-accents-2 flex-grow mr-3"
@@ -561,6 +562,14 @@ export default function Account({ initialPurchaseRecord }) {
                         Test Connection
                       </Button>
                     </Link>
+                  </div>
+                  <div className="text-center mb-6">
+                    <button
+                      className="text-md font-semibold text-red-600"
+                      onClick={() => setShowSaveModal(false)}
+                    >
+                      I'll do this later!
+                    </button>
                   </div>
                 </div>
               </div>
