@@ -103,7 +103,7 @@ const Navbar = () => {
               ))}
                         
             {user ? (
-              <Link href="#">
+              <Link href="/">
                 <a className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9 hover:border-blue-500" onClick={() => signOut()}>
                   Sign out
                 </a>
@@ -167,7 +167,7 @@ const Navbar = () => {
               </div>
               <Popover.Button className="w-full">
               {user ? (
-              <Link href="#">
+              <Link href="/">
                 <a className="block w-full px-5 py-3 text-center font-medium text-primary bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9" onClick={() => signOut()}>
                   Sign out
                 </a>
