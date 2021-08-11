@@ -64,7 +64,8 @@ export default function NotionWizard({ response }) {
               Let's Get You Connected
             </h1>
             <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-              Be data conscious. Get back to this page any time by testing your
+              
+           Be data conscious. Get back to this page any time by testing your
               connection from{' '}
               <span className="text-emerald-500 font-semibold">
                 <Link href="/account">account.</Link>
@@ -78,6 +79,7 @@ export default function NotionWizard({ response }) {
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
+              <div className="text-2xl font-semibold">{response.title[0].plain_text}</div>
                 <button
                   className="p-1 ml-auto bg-transparent border-0 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
                   onClick={() => loadAndRefresh()}
@@ -687,6 +689,8 @@ export default function NotionWizard({ response }) {
                           <span className="px-1.5 py-0.5 ml-1 bg-red-200 rounded text-black">
                             Task
                           </span>
+                          <br />
+                          <i>Any unsupported types will default to a task reward.</i>
                         </p>
                         <img
                           className="w-auto pt-5"
@@ -1167,10 +1171,17 @@ export async function getServerSideProps({ req }) {
   try {
     // Get credentials from Supabase
     const { user } = await supabase.auth.api.getUserByCookie(req);
+
+    const key = await supabase
+      .from('notion_credentials_validation')
+      .select('test_pair')
+      .eq('player', user.id)
+      .limit(1)
+      .single();
     const data = await supabase
       .from('notion_credentials')
       .select('api_secret_key, database_id')
-      .eq('player', user.id)
+      .eq('id', key.data.test_pair)
       .limit(1)
       .single();
     const credentials = data.body;

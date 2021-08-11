@@ -4,7 +4,11 @@ import Button from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '../ui/LoadingDots';
 
-export default function ConnectNotion({ credentials, getNotionCredentials }) {
+export default function ConnectNotion({
+  credentials,
+  getNotionCredentials,
+  setShowSaveModal
+}) {
   const [secretKey, setSecretKey] = useState(null);
   const [databaseID, setDatabaseID] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -39,7 +43,7 @@ export default function ConnectNotion({ credentials, getNotionCredentials }) {
     setSaving(true);
     try {
       const user = supabase.auth.user();
-      
+
       if (!database_id.includes('-')) {
         const url = database_id;
         const url2 = url.split('?')[0];
@@ -54,14 +58,21 @@ export default function ConnectNotion({ credentials, getNotionCredentials }) {
           url3.substr(16, 4) +
           '-' +
           url3.substr(20);
-          setDatabaseID(database_id)
+        setDatabaseID(database_id);
       }
-
 
       const { data, error } = await supabase
         .from('notion_credentials')
         .update({ api_secret_key: api_secret_key, database_id: database_id })
         .eq('id', row_id);
+
+
+      // set the test pair
+
+      const { data2, error2 } = await supabase
+        .from('notion_credentials_validation')
+        .upsert({ player: user.id, test_pair: row_id })
+        .eq('player', user.id);
 
       if (error && status !== 406) {
         throw error;
@@ -70,6 +81,7 @@ export default function ConnectNotion({ credentials, getNotionCredentials }) {
       alert(error.message);
     } finally {
       getNotionCredentials();
+      setShowSaveModal(true);
       setSaving(false);
     }
   }
@@ -116,21 +128,15 @@ export default function ConnectNotion({ credentials, getNotionCredentials }) {
           className="text-red-500 mr-5 font-semibold"
           disabled={saving}
         >
-          {saving ? <LoadingDots/> : 'Remove Credentials'}
+          {saving ? <LoadingDots /> : 'Remove Credentials'}
         </button>
         <Button
           className="w-full sm:w-auto"
           variant="incognito"
-          onClick={() =>
-            saveCredential(
-              credentials.id,
-              secretKey,
-              databaseID
-            )
-          }
+          onClick={() => saveCredential(credentials.id, secretKey, databaseID)}
           disabled={saving}
         >
-          {saving ? <LoadingDots/> : 'Save'}
+          {saving ? <LoadingDots /> : 'Save And Test'}
         </Button>
       </div>
     </div>
