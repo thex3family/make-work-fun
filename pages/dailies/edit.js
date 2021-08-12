@@ -165,7 +165,7 @@ function EditableCell({
   return <td {...restProps}>{childNode}</td>;
 }
 
-export default function edit() {
+export default function edit({user}) {
   const [habits, setHabits] = useState(null);
   const [groups, setGroups] = useState(null);
   const [types, setTypes] = useState(null);
@@ -176,7 +176,6 @@ export default function edit() {
 
   const {
     userLoaded,
-    user,
     session,
     userDetails,
     userOnboarding,
@@ -223,9 +222,9 @@ export default function edit() {
           >
             {groups != null ? (
               groups.map((a) => (
-                <Option key={a.id} value={a.id}>
+                <Select.Option key={a.id} value={a.id}>
                   {a.name}
-                </Option>
+                </Select.Option>
               ))
             ) : (
               <div />
@@ -309,11 +308,6 @@ export default function edit() {
     //     ) : null
     // }
   ];
-  // Redirects user to sign in if they are not logged in yet
-
-  useEffect(() => {
-    if (!user) router.replace('/signin');
-  }, [user]);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -568,4 +562,22 @@ export default function edit() {
       </div>
     </section>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  // Get the user's session based on the request
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { user },
+  }
 }

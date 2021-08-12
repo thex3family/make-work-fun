@@ -38,11 +38,6 @@ export default function Account({ initialPurchaseRecord }) {
   const { userLoaded, user, session, userDetails, subscription } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
-  console.log(initialPurchaseRecord);
-  useEffect(() => {
-    if (!user) router.replace('/signin');
-  }, [user]);
-
   useEffect(() => {
     if (user) getProfile();
     if (user) getNotionCredentials();
@@ -587,6 +582,15 @@ export async function getServerSideProps({ req }) {
   try {
     // Get credentials from Supabase
     const { user } = await supabase.auth.api.getUserByCookie(req);
+
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/signin',
+          permanent: false,
+        },
+      }
+    }
 
     // Check for purchases from airtable
 

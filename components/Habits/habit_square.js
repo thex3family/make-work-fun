@@ -257,7 +257,7 @@ export default function HabitSquare({
                   }
                   disabled={saving}
                 />
-                <ibutton
+                <button
                   className={`cursor-pointer text-4xl text-black far fa-meh ${
                     habitCompletedToday
                       ? details == 'meh'

@@ -22,7 +22,7 @@ import {
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 
-export default function dallies() {
+export default function dallies({ user }) {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dailiesCount, setDailiesCount] = useState(0);
@@ -37,18 +37,11 @@ export default function dallies() {
   const router = useRouter();
   const {
     userLoaded,
-    user,
     session,
     userDetails,
     userOnboarding,
     subscription
   } = useUser();
-
-  // Redirects user to sign in if they are not logged in yet
-
-  useEffect(() => {
-    if (!user) router.replace('/signin');
-  }, [user]);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -371,4 +364,22 @@ export default function dallies() {
       ) : null}
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  // Get the user's session based on the request
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { user },
+  }
 }
