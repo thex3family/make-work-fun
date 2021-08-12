@@ -67,12 +67,11 @@ createTheme('game', {
   }
 });
 
-export default function Player() {
+export default function Player({user}) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const {
     userLoaded,
-    user,
     session,
     userDetails,
     userOnboarding,
@@ -205,12 +204,6 @@ export default function Player() {
       }
     }
   };
-
-  // Redirects user to sign in if they are not logged in yet
-
-  useEffect(() => {
-    if (!user) router.replace('/signin');
-  }, [user]);
 
   // Waits until database fetches user state before loading anything
 
@@ -518,4 +511,22 @@ export default function Player() {
       ) : null}
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  // Get the user's session based on the request
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { user },
+  }
 }
