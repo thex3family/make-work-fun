@@ -519,12 +519,12 @@ export default function NotionWizard({ response }) {
                         'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
                         (openTab === 10
                           ? response.properties.hasOwnProperty('Area')
-                            ? response.properties.Type.type.includes('select')
+                            ? response.properties.Area.type.includes('select')
                               ? 'text-white bg-emerald-500'
                               : 'text-white bg-red-500'
                             : 'text-white bg-red-500'
                           : response.properties.hasOwnProperty('Area')
-                          ? response.properties.Type.type.includes('select')
+                          ? response.properties.Area.type.includes('select')
                             ? 'text-emerald-500 bg-white'
                             : 'text-red-500 bg-white'
                           : 'text-red-500 bg-white')
@@ -541,13 +541,51 @@ export default function NotionWizard({ response }) {
                         className={
                           'mr-2 ' +
                           (response.properties.hasOwnProperty('Area')
-                            ? response.properties.Type.type.includes('select')
+                            ? response.properties.Area.type.includes('select')
                               ? 'fas fa-check'
                               : 'fas fa-exclamation-triangle'
                             : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
                         }
                       />
                       Area{' '}
+                      <span className="text-xs font-medium">(Optional)</span>
+                    </a>
+                  </li>
+                  <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
+                    <a
+                      className={
+                        'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
+                        (openTab === 11
+                          ? response.properties.hasOwnProperty('Collaborators')
+                            ? response.properties.Collaborators.type.includes('people')
+                              ? 'text-white bg-emerald-500'
+                              : 'text-white bg-red-500'
+                            : 'text-white bg-red-500'
+                          : response.properties.hasOwnProperty('Collaborators')
+                          ? response.properties.Collaborators.type.includes('people')
+                            ? 'text-emerald-500 bg-white'
+                            : 'text-red-500 bg-white'
+                          : 'text-red-500 bg-white')
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenTab(11);
+                      }}
+                      data-toggle="tab"
+                      href="#link11"
+                      role="tablist"
+                    >
+                      <i
+                        className={
+                          'mr-2 ' +
+                          (response.properties.hasOwnProperty('Collaborators')
+                            ? response.properties.Collaborators.type.includes('people')
+                              ? 'fas fa-check'
+                              : 'fas fa-exclamation-triangle'
+                            : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
+                        }
+                      />
+                      Collaborators{' '}
                       <span className="text-xs font-medium">(Optional)</span>
                     </a>
                   </li>
@@ -1013,6 +1051,45 @@ export default function NotionWizard({ response }) {
                         <img
                           className="w-auto pt-5"
                           src="/wizard/area_prop.PNG"
+                        ></img>
+                      </div>
+                      <div
+                        className={openTab === 11 ? 'block' : 'hidden'}
+                        id="link11"
+                      >
+                        {response.properties.hasOwnProperty('Collaborators') ? (
+                          response.properties.Collaborators.type.includes('people') ? (
+                            <h2 className="text-xl text-bold text-emerald-600 mb-3">
+                              <i className="fas fa-check mr-2"></i>Your database
+                              has this property!
+                            </h2>
+                          ) : (
+                            <h2 className="text-xl text-bold text-red-600 mb-3">
+                              <i className="fas fa-exclamation-triangle mr-2"></i>
+                              Your database has this property but not the
+                              recommended type.
+                            </h2>
+                          )
+                        ) : (
+                          <h2 className="text-xl text-bold text-red-600 mb-3">
+                            <i className="fas fa-times mr-2"></i>Your database
+                            is missing this property!
+                          </h2>
+                        )}
+                        <p className="font-semibold">
+                          Mandatory Type: People
+                        </p>
+                        <p>
+                          We use this property to distinguish who the win should be attributed to, if more than 1 person is sharing a database. <a
+            className="text-emerald-500"
+            href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
+            target="_blank"
+          >Learn more about how to utilize this property.</a>
+                         
+                        </p>
+                        <img
+                          className="w-auto pt-5"
+                          src="/wizard/collaborators_prop.PNG"
                         ></img>
                       </div>
                     </div>

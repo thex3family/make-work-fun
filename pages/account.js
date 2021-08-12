@@ -397,7 +397,7 @@ export default function Account({ initialPurchaseRecord }) {
                   <p className="pb-4 sm:pb-0 w-full">
                     We take your data protection and privacy seriously. After
                     saving, we will describe in detail how our application will
-                    use your data.
+                    use your data and calculate your wins.
                   </p>
                   {/* <Button
                     className="w-full sm:w-auto"
