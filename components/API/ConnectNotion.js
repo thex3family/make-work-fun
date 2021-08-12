@@ -104,7 +104,9 @@ export default function ConnectNotion({
       if (collaborator.match(id)) {
         setUserMessage(null);
       } else {
-        setUserMessage('Please enter a valid user ID. Format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX');
+        setUserMessage(
+          'Please enter a valid user ID. Format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
+        );
       }
     } else {
       setUserMessage(null);
@@ -142,7 +144,11 @@ export default function ConnectNotion({
 
       const { data, error } = await supabase
         .from('notion_credentials')
-        .update({ api_secret_key: api_secret_key, database_id: database_id, collaborator: collaborator_id })
+        .update({
+          api_secret_key: api_secret_key,
+          database_id: database_id,
+          collaborator: collaborator_id
+        })
         .eq('id', row_id);
 
       // set the test pair
@@ -176,8 +182,8 @@ export default function ConnectNotion({
           </div>
         </div>
       ) : null}
-      <div className="mt-3 flex flex-row justify-between">
-        <p className="font-semibold">Notion API Secret</p>
+      <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+        <p className="font-semibold w-full sm:w-auto">Notion API Secret</p>
         <a
           className="text-right font-semibold text-emerald-500"
           href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_a887bad862"
@@ -193,8 +199,8 @@ export default function ConnectNotion({
         value={secretKey || ''}
         onChange={setSecretKey}
       />
-      <div className="mt-2 flex flex-row justify-between">
-        <p className="font-semibold">Database ID</p>
+      <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+        <p className="font-semibold w-full sm:w-auto">Database ID</p>
         <a
           className="text-right font-semibold text-emerald-500"
           href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246"
@@ -210,21 +216,31 @@ export default function ConnectNotion({
         value={databaseID || ''}
         onChange={setDatabaseID}
       />
-      <button
-        onClick={() => setShowCollaborator(!showCollaborator)}
-        className="text-yellow-500 mr-5 mt-5 font-semibold"
-        disabled={saving}
-      >
-        I'm sharing this database with other people!
-      </button>
+      <div className="flex items-center my-6">
+        <div
+          className="border-t border-yellow-500 flex-grow mr-3"
+          aria-hidden="true"
+        ></div>
+        <button
+          onClick={() => setShowCollaborator(!showCollaborator)}
+          className="text-yellow-500 font-semibold truncate"
+          disabled={saving}
+        >
+          I'm sharing this database with other users!
+        </button>
+        <div
+          className="border-t border-yellow-500 flex-grow ml-3"
+          aria-hidden="true"
+        ></div>
+      </div>
 
       <div className={`${showCollaborator ? 'block' : 'hidden'}`}>
-        <div className="mt-2 flex flex-row justify-between">
-          <p className="font-semibold">
-            Count the win ONLY if Collaborator includes the user id...
+        <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+          <p className="font-semibold w-full sm:w-auto">
+            Count the win ONLY if Collaborator includes the user ID...
           </p>
           <a
-            className="text-right font-semibold text-emerald-500"
+            className="text-right font-semibold text-yellow-500"
             href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
             target="_blank"
           >
@@ -245,7 +261,7 @@ export default function ConnectNotion({
           className="text-red-500 mr-5 font-semibold"
           disabled={saving}
         >
-          {saving ? <LoadingDots /> : 'Remove Credentials'}
+          {saving ? <LoadingDots /> : 'Remove'}
         </button>
         <Button
           className="w-full sm:w-auto"
@@ -253,7 +269,12 @@ export default function ConnectNotion({
           onClick={() =>
             saveCredential(credentials.id, secretKey, databaseID, collaborator)
           }
-          disabled={saving || APIMessage != null || databaseMessage != null || userMessage != null }
+          disabled={
+            saving ||
+            APIMessage != null ||
+            databaseMessage != null ||
+            userMessage != null
+          }
         >
           {saving ? <LoadingDots /> : 'Save And Test'}
         </Button>
