@@ -107,9 +107,9 @@ const SignIn = () => {
             {message.content && (
               <div
                 className={`${
-                  message.type === 'error' ? 'text-pink' : 'text-green'
+                  message.type === 'error' ? 'text-error' : 'text-green'
                 } border ${
-                  message.type === 'error' ? 'border-pink' : 'border-green'
+                  message.type === 'error' ? 'border-error' : 'border-green'
                 } p-3`}
               >
                 {message.content}
