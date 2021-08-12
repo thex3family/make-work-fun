@@ -81,7 +81,8 @@ export default function Account({ initialPurchaseRecord }) {
       let { data, error, status } = await supabase
         .from('notion_credentials')
         .select(`*`)
-        .eq('player', user.id);
+        .eq('player', user.id)
+        .order('id', { ascending: true })
 
       if (error && status !== 406) {
         throw error;

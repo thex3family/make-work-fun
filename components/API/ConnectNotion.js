@@ -11,12 +11,38 @@ export default function ConnectNotion({
 }) {
   const [secretKey, setSecretKey] = useState(null);
   const [databaseID, setDatabaseID] = useState(null);
+  const [collaborator, setCollaborator] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [showCollaborator, setShowCollaborator] = useState(false);
+  const [APIMessage, setAPIMessage] = useState(null);
+  const [databaseMessage, setDatabaseMessage] = useState(null);
+  const [userMessage, setUserMessage] = useState(null);
+
+  var api = /^secret_\w{43}$/;
+  var id = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
+  var notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 
   useEffect(() => {
     setSecretKey(credentials.api_secret_key);
     setDatabaseID(credentials.database_id);
+    if (credentials.collaborator) setCollaborator(credentials.collaborator);
+    if (credentials.collaborator) setShowCollaborator(true);
   }, []);
+
+  // if the secretkey changes, validate
+  useEffect(() => {
+    validateSecretKey();
+  }, [secretKey]);
+
+  // if the databaseID changes, validate
+  useEffect(() => {
+    validateDatabaseID();
+  }, [databaseID]);
+
+  // if the userID changes, validate
+  useEffect(() => {
+    validateCollaborator();
+  }, [collaborator]);
 
   async function removeCredentials(row_id) {
     setSaving(true);
@@ -39,12 +65,65 @@ export default function ConnectNotion({
     }
   }
 
-  async function saveCredential(row_id, api_secret_key, database_id) {
+  // validate secret key
+
+  function validateSecretKey() {
+    if (secretKey) {
+      if (secretKey.match(api)) {
+        setAPIMessage(null);
+      } else {
+        setAPIMessage(
+          'Secret should start with secret_ and be 50 characters in length.'
+        );
+      }
+    }
+  }
+
+  // validate database ID
+
+  function validateDatabaseID() {
+    if (databaseID) {
+      // if matches ID structure
+
+      if (databaseID.match(id)) {
+        setDatabaseMessage(null);
+
+        // if matches a LINK
+      } else if (databaseID.match(notionLink)) {
+        setDatabaseMessage(null);
+      } else {
+        setDatabaseMessage('Please enter a valid database URL.');
+      }
+    }
+  }
+
+  // validate collaborator user ID
+
+  function validateCollaborator() {
+    if (collaborator) {
+      if (collaborator.match(id)) {
+        setUserMessage(null);
+      } else {
+        setUserMessage('Please enter a valid user ID. Format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX');
+      }
+    } else {
+      setUserMessage(null);
+    }
+  }
+
+  async function saveCredential(
+    row_id,
+    api_secret_key,
+    database_id,
+    collaborator_id
+  ) {
     setSaving(true);
     try {
       const user = supabase.auth.user();
 
-      if (!database_id.includes('-')) {
+      // if matches a url, then change the format
+
+      if (database_id.match(notionLink)) {
         const url = database_id;
         const url2 = url.split('?')[0];
         const url3 = url2.substring(url.lastIndexOf('/') + 1);
@@ -63,9 +142,8 @@ export default function ConnectNotion({
 
       const { data, error } = await supabase
         .from('notion_credentials')
-        .update({ api_secret_key: api_secret_key, database_id: database_id })
+        .update({ api_secret_key: api_secret_key, database_id: database_id, collaborator: collaborator_id })
         .eq('id', row_id);
-
 
       // set the test pair
 
@@ -88,6 +166,16 @@ export default function ConnectNotion({
 
   return (
     <div className="mb-4 mt-4 border-dotted border border-gray-200 px-4 rounded">
+      {APIMessage || databaseMessage || userMessage ? (
+        <div className="flex flex-col space-y-4">
+          <div className="mt-4 text-error border border-error p-3">
+            <b>Please fix the following problems before saving:</b>
+            {APIMessage ? <div>- {APIMessage}</div> : null}
+            {databaseMessage ? <div>- {databaseMessage}</div> : null}
+            {userMessage ? <div>- {userMessage}</div> : null}
+          </div>
+        </div>
+      ) : null}
       <div className="mt-3 flex flex-row justify-between">
         <p className="font-semibold">Notion API Secret</p>
         <a
@@ -122,6 +210,35 @@ export default function ConnectNotion({
         value={databaseID || ''}
         onChange={setDatabaseID}
       />
+      <button
+        onClick={() => setShowCollaborator(!showCollaborator)}
+        className="text-yellow-500 mr-5 mt-5 font-semibold"
+        disabled={saving}
+      >
+        I'm sharing this database with other people!
+      </button>
+
+      <div className={`${showCollaborator ? 'block' : 'hidden'}`}>
+        <div className="mt-2 flex flex-row justify-between">
+          <p className="font-semibold">
+            Count the win ONLY if Collaborator includes the user id...
+          </p>
+          <a
+            className="text-right font-semibold text-emerald-500"
+            href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
+            target="_blank"
+          >
+            Where do I find this?
+          </a>
+        </div>
+        <Input
+          className="text-xl font-semibold rounded"
+          type="varchar"
+          placeholder="Leave blank to attribute all wins to yourself!"
+          value={collaborator || ''}
+          onChange={setCollaborator}
+        />
+      </div>
       <div className="flex justify-between my-4">
         <button
           onClick={() => removeCredentials(credentials.id)}
@@ -133,8 +250,10 @@ export default function ConnectNotion({
         <Button
           className="w-full sm:w-auto"
           variant="incognito"
-          onClick={() => saveCredential(credentials.id, secretKey, databaseID)}
-          disabled={saving}
+          onClick={() =>
+            saveCredential(credentials.id, secretKey, databaseID, collaborator)
+          }
+          disabled={saving || APIMessage != null || databaseMessage != null || userMessage != null }
         >
           {saving ? <LoadingDots /> : 'Save And Test'}
         </Button>
