@@ -77,7 +77,7 @@ export default function Account({ initialPurchaseRecord }) {
         .from('notion_credentials')
         .select(`*`)
         .eq('player', user.id)
-        .order('id', { ascending: true })
+        .order('id', { ascending: true });
 
       if (error && status !== 406) {
         throw error;
@@ -258,14 +258,16 @@ export default function Account({ initialPurchaseRecord }) {
                   </div>
                 ) : initialPurchaseRecord.length != 0 ? (
                   initialPurchaseRecord.map((purchase) => (
-                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <div className="pb-5 flex justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
-                        <span className="align-baseline inline-block">
-                          {purchase.fields.product_name}
-                        </span>
-                        <span className="ml-2 text-xs align-middle font-semibold inline-block uppercase rounded text-accents-3">
-                          {purchase.fields.subscription_type}
-                        </span>
+                        <div className="flex flex-row items-center">
+                          <div className="truncate">
+                            {purchase.fields.product_name}
+                          </div>
+                          <span className="ml-2 text-xs font-semibold inline-block uppercase rounded text-accents-3">
+                            {purchase.fields.subscription_type}
+                          </span>
+                        </div>
 
                         <p className="text-accents-5 text-sm">
                           {purchase.fields.type == 'One Off'
@@ -343,12 +345,12 @@ export default function Account({ initialPurchaseRecord }) {
               </div>
             </Card>
             <div className="mx-auto max-w-3xl pt-5">
-              <h1 className="text-3xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+              <h1 className="text-3xl text-center sm:text-left sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                 Let's adventure together.
               </h1>
-              <p className="text-lg sm:text-xl text-accents-6">
+              <p className="text-lg text-center sm:text-left sm:text-xl text-accents-6">
                 Make the best use of your productivity software by integrating
-                it into our application.
+                it into our app.
               </p>
             </div>
             <Card
@@ -406,7 +408,7 @@ export default function Account({ initialPurchaseRecord }) {
                 </div>
               }
             >
-              <div className="text-xs text-accents-6 mt-1">
+              <div className="hidden sm:block text-md text-accents-5 mt-1">
                 Works best with success plan from{' '}
                 <a
                   className="text-emerald-500 font-semibold"
@@ -440,7 +442,10 @@ export default function Account({ initialPurchaseRecord }) {
                       className="border-t border-accents-2 flex-grow mr-3"
                       aria-hidden="true"
                     ></div>
-                    <button onClick={()=>addCredentials()} className="text-emerald-500 mx-auto font-semibold">
+                    <button
+                      onClick={() => addCredentials()}
+                      className="text-emerald-500 mx-auto font-semibold"
+                    >
                       {notionCredentials.length == 0
                         ? 'Connect To A Database'
                         : 'Connect Additional Databases'}
@@ -454,19 +459,21 @@ export default function Account({ initialPurchaseRecord }) {
               ) : null}
             </Card>
             <div className="flex mx-auto items-center my-6 max-w-3xl">
-                    <div
-                      className="border-t border-accents-2 flex-grow mr-3"
-                      aria-hidden="true"
-                    ></div>
-                    <div className="text-accents-4">By continuing, you are agreeing to our privacy policy and
-                    terms of use.</div>
-                    <div
-                      className="border-t border-accents-2 flex-grow ml-3"
-                      aria-hidden="true"
-                    ></div>
-                  </div>
+              <div
+                className="border-t border-accents-2 flex-grow mr-3"
+                aria-hidden="true"
+              ></div>
+              <div className="text-accents-4">
+                By continuing, you are agreeing to our privacy policy and terms
+                of use.
+              </div>
+              <div
+                className="border-t border-accents-2 flex-grow ml-3"
+                aria-hidden="true"
+              ></div>
+            </div>
             <Card
-              title="Connect Other Productivity Softwares"
+              title="Connect Other Productivity Tools"
               description="Airtable, Clickup, Asana, and more."
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
@@ -587,9 +594,9 @@ export async function getServerSideProps({ req }) {
       return {
         redirect: {
           destination: '/signin',
-          permanent: false,
-        },
-      }
+          permanent: false
+        }
+      };
     }
 
     // Check for purchases from airtable
