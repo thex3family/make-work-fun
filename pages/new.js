@@ -17,6 +17,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Aug 12, 2021"
+            title="Limitless Databases Integration"
+            desc="The wait is over - integrate with multiple Notion databases to earn wins for everything you do. Additionally, connect to shared databases and specify who should earn the rewards, enhancing the multiplayer experience."
+            img_url="updates/0.17.png"
+            button_url="/account"
+            version="v.17"
+          />
           <CardLUpdate
             date="Aug 08, 2021"
             title="Track Your Life Progression"
