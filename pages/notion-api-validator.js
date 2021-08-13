@@ -86,7 +86,7 @@ export default function NotionWizard({ response }) {
                   disabled={loading}
                   loading={loading}
                 >
-                  {loading ? 'Loading' : 'Click here to refresh'}
+                  <span className="hidden md:inline-block">{loading ? 'Loading' : 'Click here to refresh'}</span>
                   <i className="ml-3 fas fa-sync-alt"></i>
                 </button>
               </div>
@@ -178,44 +178,6 @@ export default function NotionWizard({ response }) {
                         }
                       />
                       Status{' '}
-                      <span className="text-xs font-medium">(Required)</span>
-                    </a>
-                  </li>
-                  <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
-                    <a
-                      className={
-                        'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
-                        (openTab === 3
-                          ? response.properties.hasOwnProperty('Type')
-                            ? response.properties.Type.type.includes('select')
-                              ? 'text-white bg-emerald-500'
-                              : 'text-white bg-red-500'
-                            : 'text-white bg-red-500'
-                          : response.properties.hasOwnProperty('Type')
-                          ? response.properties.Type.type.includes('select')
-                            ? 'text-emerald-500 bg-white'
-                            : 'text-red-500 bg-white'
-                          : 'text-red-500 bg-white')
-                      }
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setOpenTab(3);
-                      }}
-                      data-toggle="tab"
-                      href="#link3"
-                      role="tablist"
-                    >
-                      <i
-                        className={
-                          'mr-2 ' +
-                          (response.properties.hasOwnProperty('Type')
-                            ? response.properties.Type.type.includes('select')
-                              ? 'fas fa-check'
-                              : 'fas fa-exclamation-triangle'
-                            : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
-                        }
-                      />
-                      Type{' '}
                       <span className="text-xs font-medium">(Required)</span>
                     </a>
                   </li>
@@ -320,6 +282,44 @@ export default function NotionWizard({ response }) {
                     </a>
                   </li>
                   <hr />
+                  <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
+                    <a
+                      className={
+                        'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
+                        (openTab === 3
+                          ? response.properties.hasOwnProperty('Type')
+                            ? response.properties.Type.type.includes('select')
+                              ? 'text-white bg-emerald-500'
+                              : 'text-white bg-red-500'
+                            : 'text-white bg-red-500'
+                          : response.properties.hasOwnProperty('Type')
+                          ? response.properties.Type.type.includes('select')
+                            ? 'text-emerald-500 bg-white'
+                            : 'text-red-500 bg-white'
+                          : 'text-red-500 bg-white')
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenTab(3);
+                      }}
+                      data-toggle="tab"
+                      href="#link3"
+                      role="tablist"
+                    >
+                      <i
+                        className={
+                          'mr-2 ' +
+                          (response.properties.hasOwnProperty('Type')
+                            ? response.properties.Type.type.includes('select')
+                              ? 'fas fa-check'
+                              : 'fas fa-exclamation-triangle'
+                            : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
+                        }
+                      />
+                      Type{' '}
+                      <span className="text-xs font-medium">(Optional)</span>
+                    </a>
+                  </li>
                   <li className="-mb-px mr-2 flex-auto text-left min-w-max">
                     <a
                       className={
@@ -706,7 +706,7 @@ export default function NotionWizard({ response }) {
                           </h2>
                         )}
                         <p className="font-semibold">
-                          Recommended Type: Select or Multi-Select
+                          Recommended Type: Select / Multi-Select / Formula
                         </p>
                         <p>
                           We use this property to determine how to calculate
@@ -715,18 +715,18 @@ export default function NotionWizard({ response }) {
                           <br />
                           <br />
                           <i>Currently supported: </i>
-                          <span className="px-1.5 py-0.5 bg-emerald-200 rounded text-black">
-                            Goal
-                          </span>
-                          <span className="px-1.5 py-0.5 ml-1 bg-yellow-200 rounded text-black">
-                            Key Result
-                          </span>
-                          <span className="px-1.5 py-0.5 ml-1 bg-purple-200 rounded text-black">
-                            Project
-                          </span>
-                          <span className="px-1.5 py-0.5 ml-1 bg-red-200 rounded text-black">
-                            Task
-                          </span>
+                          <div className="px-1.5 py-0.5 mb-1 bg-emerald-200 rounded text-black">
+                            Goal = 250 XP
+                          </div>
+                          <div className="px-1.5 py-0.5 mb-1 bg-yellow-200 rounded text-black">
+                            Key Result = 100 XP
+                          </div>
+                          <div className="px-1.5 py-0.5 mb-1 bg-purple-200 rounded text-black">
+                            Project = 50 XP + 50 💰
+                          </div>
+                          <div className="px-1.5 py-0.5 mb-1 bg-red-200 rounded text-black">
+                            Task = 25 XP + 25 💰
+                          </div>
                           <br />
                           <i>Any unsupported types will default to a task reward.</i>
                         </p>
@@ -863,12 +863,13 @@ export default function NotionWizard({ response }) {
                           </h2>
                         )}
                         <p className="font-semibold">
-                          Recommended Type: Select or Number
+                          Recommended Type: Select / Number / Formula
                         </p>
                         <p>
                           We use this property to reward you bonus exp and gold
                           for difficult quests. In real life, this translates to
-                          the time and effort needed to get this job done.
+                          the time and effort needed to get this job done. The number
+                          will multiply the rewards earned.
                           <br />
                           <br />
                           <i>
@@ -999,7 +1000,7 @@ export default function NotionWizard({ response }) {
                           </h2>
                         )}
                         <p className="font-semibold">
-                          Recommended Type: Formula or Text
+                          Recommended Type: Formula / Text
                         </p>
                         <p>
                           We use this property to show you the higher level
@@ -1042,7 +1043,7 @@ export default function NotionWizard({ response }) {
                           </h2>
                         )}
                         <p className="font-semibold">
-                          Recommended Type: Select
+                          Recommended Type: Select / Formula
                         </p>
                         <p>
                           We use this property to connect your wins with the areas of competence you are building in your life. If you hand in a quest without this property, the win will be Uncategorized.
