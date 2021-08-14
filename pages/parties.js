@@ -1,8 +1,111 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
+import { supabase } from '../utils/supabase-client';
+import { useUser } from '@/utils/useUser';
+import { useRouter } from 'next/router';
+import CardParty from '@/components/Cards/CardParty';
 
 export default function parties() {
+  const [activeParties, setActiveParties] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
+  const {
+    userLoaded,
+    session,
+    userDetails,
+    userOnboarding,
+    subscription
+  } = useUser();
+
+  useEffect(() => {
+    if (userOnboarding) initializePlayer();
+  }, [userOnboarding]);
+
+  function initializePlayer() {
+    try {
+      if (userOnboarding.onboarding_state.includes('4')) {
+        loadPlayer();
+      } else {
+        router.replace('/account');
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      console.log('InitializedPlayer');
+    }
+  }
+
+  // If player is ready to load, go for it!
+
+  async function loadPlayer() {
+    console.log('Loading Player');
+    fetchActiveParties();
+  }
+
+  async function getActiveParties(parties_you_are_in) {
+    var temp_active_parties = [];
+    try {
+      // get the parties that are in progress and determine which or if any of these parties are in progress
+      const { data, error } = await supabase
+        .from('party')
+        .select('*')
+        .eq('status', 2);
+
+      var in_progress_parties = data;
+
+      //console.log('In Progress Parties:', in_progress_parties);
+
+      // find the in_progress parties that you are a part of
+      if (in_progress_parties.length != 0) {
+        // compare parties you are in with in_progress parties to see which of your parties are in progress
+        for (var i = 0; i < parties_you_are_in.length; i++) {
+          for (var j = 0; j < in_progress_parties.length; j++) {
+            if (parties_you_are_in[i].party_id == in_progress_parties[j].id) {
+              temp_active_parties.push(in_progress_parties[j]);
+            }
+          }
+        }
+      }
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      //console.log('Active Parties:', temp_active_parties);
+      return temp_active_parties;
+    }
+  }
+
+  async function fetchActiveParties() {
+    try {
+      const user = supabase.auth.user();
+
+      // get the parties that the user is a part of
+      const { data, error } = await supabase
+        .from('party_members')
+        .select('*')
+        .eq('player', user.id);
+
+      var parties_you_are_in = data;
+
+      //console.log('Parties you are in:', parties_you_are_in);
+      //console.log('Player Id:', user.id);
+
+      setActiveParties(await getActiveParties(parties_you_are_in));
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <section className="animate-slow-fade-in justify-center bg-dailies-pattern bg-fixed bg-cover">
       <BottomNavbar />
@@ -15,39 +118,19 @@ export default function parties() {
           </div>
           <div className="text-center">
             <section>
-              <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies">Your Active Party</h2>
-              <div className="max-w-lg bg-white shadow-md rounded-lg overflow-hidden mx-auto mt-2">
-                <div className="py-4 px-8 mt-3">
-                  <div className="flex flex-col mb-8">
-                    <h2 className="text-gray-700 font-semibold text-2xl tracking-wide mb-2">
-                      Code Masters
-                    </h2>
-                    <p className="text-black">
-                      Let's work on our coding projects!
-                    </p>
-                    <p className="text-black">
-                      memberAvatar1 memberAvatar2 memberAvatar3
-                    </p>
-                    <div className="w-full">
-                      <div className="shadow w-full bg-grey-light mt-2">
-                        <div className="bg-green text-xs leading-none py-1 text-center text-white w-3/4 h-4"></div>
-                      </div>
-                    </div>
-                    <p className="text-black">Metrics</p>
-                  </div>
-                  <div className="mt-1">
-                    <a
-                      href="#"
-                      className="block tracking-widest uppercase text-center shadow bg-indigo-600 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
-                    >
-                      View Party
-                    </a>
-                  </div>
-                </div>
-              </div>
+              <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies">
+                Your Active Party
+              </h2>
+              {activeParties
+                ? activeParties.length != 0
+                  ? activeParties.map((party) => <CardParty key={party.id} party={party} />)
+                  : "You aren't a part of any parties."
+                : null}
             </section>
             <section>
-              <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies mt-4">Parties Recruiting</h2>
+              <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies mt-4">
+                Parties Recruiting
+              </h2>
             </section>
           </div>
         </div>
