@@ -94,9 +94,9 @@ export default function TitleModal({
                         playerStats.title == title.name ? 'prominent' : 'slim'
                       }`}
                       disabled={
-                        !playerStats.role.includes(
+                        playerStats.role ? !playerStats.role.includes(
                           title.name.slice(0, title.name.length - 3)
-                        )
+                        ) : false
                       }
                       title_name={title.name}
                       description={title.description}
