@@ -15,7 +15,9 @@ import React from 'react';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
-import WinModal from '@/components/Modals/ModalWin'
+import WinModal from '@/components/Modals/ModalWin';
+
+import TitleModal from '@/components/Modals/ModalTitle';
 
 // functions
 
@@ -24,8 +26,11 @@ import {
   fetchWins,
   fetchWeekWins,
   fetchLatestWin,
-  fetchAreaStats
+  fetchAreaStats,
+  fetchTitles
 } from '@/components/Fetch/fetchMaster';
+
+import { pushTitle } from '@/components/Push/pushMaster';
 
 // components
 
@@ -67,7 +72,7 @@ createTheme('game', {
   }
 });
 
-export default function Player({user}) {
+export default function Player({ user }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const {
@@ -84,9 +89,11 @@ export default function Player({user}) {
   const [background_url, setBackgroundUrl] = useState('/');
   const [levelUp, setLevelUp] = useState(false);
   const [showWinModal, setShowWinModal] = useState(false);
+  const [showTitleModal, setShowTitleModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
   const [weekWins, setWeekWins] = useState([]);
   const [areaStats, setAreaStats] = useState([]);
+  const [titles, setTitles] = useState([]);
 
   const currentHour = new Date().getHours();
   const greetingMessage =
@@ -215,7 +222,7 @@ export default function Player({user}) {
 
   useEffect(() => {
     if (playerStats) fetchPlayerBackground(playerStats.background_url);
-  }, (playerStats));
+  }, playerStats);
 
   // Checks if the user is ready to load
 
@@ -238,15 +245,22 @@ export default function Player({user}) {
   async function loadPlayer() {
     console.log('Loading Player');
     await refreshStats();
-    fetchLatestWin(setActiveModalStats, refreshStats, setLevelUp, triggerWinModal, setShowWinModal);
+    fetchLatestWin(
+      setActiveModalStats,
+      refreshStats,
+      setLevelUp,
+      triggerWinModal,
+      setShowWinModal
+    );
   }
 
   async function refreshStats() {
-    console.log('statsRefreshing')
+    console.log('statsRefreshing');
     setPlayerStats(await fetchPlayerStats(setAvatarUrl));
     setWins(await fetchWins());
     setWeekWins(await fetchWeekWins());
     setAreaStats(await fetchAreaStats());
+    setTitles(await fetchTitles());
     setLoading(false);
   }
 
@@ -461,6 +475,8 @@ export default function Player({user}) {
                 updateProfile={updateProfile}
                 weekWins={weekWins}
                 areaStats={areaStats}
+                setShowTitleModal={setShowTitleModal}
+                titles={titles}
               />
               <div className="flex flex-wrap mt-4">
                 <div className="w-full pb-36 px-4">
@@ -489,13 +505,8 @@ export default function Player({user}) {
 
       {/* level up modal */}
       {levelUp ? (
-        <ModalLevelUp
-          playerLevel={levelUp}
-          setLevelUp={setLevelUp}
-        />
-      ) : (
-        <div></div>
-      )}
+        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
+      ) : null}
 
       {/* // Modal Section */}
       {showWinModal ? (
@@ -509,6 +520,16 @@ export default function Player({user}) {
           />
         </>
       ) : null}
+
+      {showTitleModal ? (
+        <TitleModal
+          setShowTitleModal={setShowTitleModal}
+          titles={titles}
+          playerStats={playerStats}
+          pushTitle={pushTitle}
+          refreshStats={refreshStats}
+        />
+      ) : null}
     </>
   );
 }
@@ -521,12 +542,12 @@ export async function getServerSideProps({ req }) {
     return {
       redirect: {
         destination: '/signin',
-        permanent: false,
-      },
-    }
+        permanent: false
+      }
+    };
   }
 
   return {
-    props: { user },
-  }
+    props: { user }
+  };
 }

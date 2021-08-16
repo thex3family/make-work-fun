@@ -191,3 +191,25 @@ export async function fetchAreaStats() {
   } finally {
   }
 }
+
+export async function fetchTitles() {
+  try {
+    const user = supabase.auth.user();
+
+    const { data, error } = await supabase
+      .from('titles')
+      .select('*')
+      .eq('active', true)
+
+    if (data) {
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
