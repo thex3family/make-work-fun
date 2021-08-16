@@ -1,16 +1,12 @@
-import Button from '@/components/ui/Button';
-import { useState } from 'react';
-import LoadingDots from '@/components/ui/LoadingDots';
+import TitleButton from '@/components/Titles/TitleButton';
 
 export default function TitleModal({
   setShowTitleModal,
   titles,
   playerStats,
-  pushTitle, 
+  pushTitle,
   refreshStats
 }) {
-  const [saving, setSaving] = useState(false);
-
   return (
     <div className="h-screen flex justify-center">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none">
@@ -40,14 +36,16 @@ export default function TitleModal({
                 {titles.map((title) =>
                   playerStats.current_level - title.level_requirement > 0 &&
                   playerStats.current_level - title.level_requirement < 5 ? (
-                    <Button
-                      onClick={() => pushTitle(title.id, refreshStats, setSaving)}
-                      variant={`${ playerStats.title == title.name ? 'prominent' : 'slim' }`}
-                      className="py-2 px-4 w-full text-white font-bold border rounded"
-                    >
-                      
-                    {saving ? <LoadingDots /> : title.name}
-                    </Button>
+                    <TitleButton
+                      pushTitle={pushTitle}
+                      title_id={title.id}
+                      refreshStats={refreshStats}
+                      variant={`${
+                        playerStats.title == title.name ? 'prominent' : 'slim'
+                      }`}
+                      disabled={false}
+                      title_name={title.name}
+                    />
                   ) : null
                 )}
               </div>
@@ -58,13 +56,14 @@ export default function TitleModal({
                     <div className="text-md text-center mb-1">
                       Unlocked At Level <b>{title.level_requirement}</b>
                     </div>
-                    <Button
+                    <TitleButton
+                      pushTitle={pushTitle}
+                      title_id={title.id}
+                      refreshStats={refreshStats}
                       variant="slim"
                       disabled={true}
-                      className="w-full border font-bold py-2 px-4 rounded"
-                    >
-                      {title.name}
-                    </Button>
+                      title_name={title.name}
+                    />
                   </div>
                 ) : null
               )}
@@ -86,14 +85,23 @@ export default function TitleModal({
             <div className="grid grid-cols-2 my-3 mx-2 text-blueGray-500">
               {titles.map((title) =>
                 title.special ? (
-                  <Button
-                    onClick={() => pushTitle(title.id, refreshStats, setSaving)}
-                    variant={`${ playerStats.title == title.name ? 'prominent' : 'slim' }`}
-                    disabled={!playerStats.role.includes(title.name.slice(0, (title.name.length-3)))}
-                    className="mx-2 my-2 font-bold py-2 px-4 border rounded"
-                  >
-                    {saving ? <LoadingDots /> : title.name}
-                  </Button>
+                  <div className="mx-2 my-2">
+                    <TitleButton
+                      pushTitle={pushTitle}
+                      title_id={title.id}
+                      refreshStats={refreshStats}
+                      variant={`${
+                        playerStats.title == title.name ? 'prominent' : 'slim'
+                      }`}
+                      disabled={
+                        !playerStats.role.includes(
+                          title.name.slice(0, title.name.length - 3)
+                        )
+                      }
+                      title_name={title.name}
+                      description={title.description}
+                    />
+                  </div>
                 ) : null
               )}
             </div>
