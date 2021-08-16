@@ -80,7 +80,6 @@ export default function Player({ user }) {
     session,
     userDetails,
     userOnboarding,
-    subscription
   } = useUser();
 
   const [wins, setWins] = useState([]);

@@ -35,7 +35,7 @@ export default function Account({ initialPurchaseRecord }) {
 
   const [notionCredentials, setNotionCredentials] = useState(null);
 
-  const { userLoaded, user, session, userDetails, subscription } = useUser();
+  const { userLoaded, user, session, userDetails } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   useEffect(() => {
@@ -126,22 +126,22 @@ export default function Account({ initialPurchaseRecord }) {
     setLoading(false);
   };
 
-  const subscriptionName = subscription && subscription.prices.products.name;
-  const subscriptionPrice =
-    subscription &&
-    new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: subscription.prices.currency,
-      minimumFractionDigits: 0
-    }).format(subscription.prices.unit_amount / 100);
+  // const subscriptionName = subscription && subscription.prices.products.name;
+  // const subscriptionPrice =
+  //   subscription &&
+  //   new Intl.NumberFormat('en-US', {
+  //     style: 'currency',
+  //     currency: subscription.prices.currency,
+  //     minimumFractionDigits: 0
+  //   }).format(subscription.prices.unit_amount / 100);
 
-  if (loading) {
-    return (
-      <div className="h-screen flex justify-center">
-        <LoadingDots />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="h-screen flex justify-center">
+  //       <LoadingDots />
+  //     </div>
+  //   );
+  // }
 
   async function addCredentials() {
     const newRow = {

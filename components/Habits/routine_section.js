@@ -11,17 +11,18 @@ export default function RoutineSection({
   const [habitCounter, setHabitCounter] = useState([]);
   // console.log(associated_habits)
 
-  
   useEffect(() => {
-    if(habitCounter.length!==0){determineShowHide();}
+    if (habitCounter.length !== 0) {
+      determineShowHide();
+    }
   }, [habitCounter]);
 
-  function determineShowHide(){
+  function determineShowHide() {
     // console.log(habitCounter.length)
-    if(associated_habits.length - habitCounter.length === 0){
-      setShowHide(false)
+    if (associated_habits.length - habitCounter.length === 0) {
+      setShowHide(false);
     } else {
-      setShowHide(true)
+      setShowHide(true);
     }
   }
 
@@ -39,13 +40,16 @@ export default function RoutineSection({
             showHide ? setShowHide(false) : setShowHide(true);
           }}
         >
-          {habit_group_name == 'Uncategorized' ? habit_group_name : habit_group_name + ' Routines' }  <span
-                    className={
-                      'text-dailies p-3 text-sm align-middle mb-1 bg-dailies-light text-center inline-flex items-center justify-center w-4 h-4 border-2 sm:border-4 border-dailies-dark shadow-lg rounded-full font-bold'
-                    }
-                  >
-                    {associated_habits.length - habitCounter.length}
-                  </span>{' '}
+          {habit_group_name == 'Uncategorized'
+            ? habit_group_name
+            : habit_group_name + ' Routines'}{' '}
+          <span
+            className={
+              'text-dailies p-3 text-sm align-middle mb-1 bg-dailies-light text-center inline-flex items-center justify-center w-4 h-4 border-2 sm:border-4 border-dailies-dark shadow-lg rounded-full font-bold'
+            }
+          >
+            {associated_habits.length - habitCounter.length}
+          </span>{' '}
           <i
             className={
               (showHide ? 'fas fa-chevron-up' : 'fas fa-chevron-down ') + ''
@@ -66,6 +70,7 @@ export default function RoutineSection({
         {/* start */}
         {associated_habits.map((h) => (
           <HabitSquare
+            key={h.id}
             habit_id={h.id}
             habit_title={h.habit}
             habit_type={h.habit_type}
