@@ -17,6 +17,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Aug 16, 2021"
+            title="Choose Your Own Title!"
+            desc="Get new titles every 5 levels and proudly display your rank on your player card. Earn exclusive titles by contributing to the family!"
+            img_url="updates/0.18.png"
+            button_url="/player"
+            version="v.18"
+          />
           <CardRUpdate
             date="Aug 12, 2021"
             title="Limitless Databases Integration"
