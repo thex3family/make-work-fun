@@ -28,7 +28,6 @@ export default function WinModal({
       // hide the box
       setBoxClass('hide-box');
     } else {
-      console.log('Generate Random');
       // generate a random GIF
       const url = await generateGIF();
       setActiveGIF(url);

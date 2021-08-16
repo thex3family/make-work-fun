@@ -25,7 +25,6 @@ export default function RoutineSection({
     }
   }
 
-  console.log(associated_habits);
   return (
     <div className="animate-fade-in-up" key={habit_group_name}>
       <div className="flex items-center">

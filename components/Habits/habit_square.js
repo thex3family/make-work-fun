@@ -96,7 +96,7 @@ export default function HabitSquare({
         }
       } else if (fetchData.length >= 1) {
         // console.log('fetchData - second condition');
-        console.log('details ', inputDetails);
+        
         // if notes, just update
         if (inputDetails || inputDetails > 0) {
           const { data, error } = await supabase
