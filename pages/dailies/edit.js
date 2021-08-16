@@ -109,7 +109,6 @@ function EditableCell({
   }, [editing]);
 
   const toggleEdit = () => {
-    console.log('record: ', record);
     setEditing(!editing);
     form.setFieldsValue({
       [dataIndex]: record[dataIndex]
@@ -120,7 +119,6 @@ function EditableCell({
     try {
       const values = await form.validateFields();
       toggleEdit();
-      console.log('save - values: ', values);
       if (values.is_active) {
         handleSave({ ...record, is_active: values.is_active === 'true' });
       } else {
@@ -355,7 +353,6 @@ export default function edit({user}) {
       // alert(error.message)
     } finally {
       setLoading(false);
-      console.log('fetchHabits - finally - ', habits);
     }
 
     try {
@@ -383,7 +380,6 @@ export default function edit({user}) {
         .order('id', { ascending: true });
 
       setTypes(data);
-      console.log('typeData -', data);
 
       if (error && status !== 406) {
         throw error;
@@ -404,8 +400,6 @@ export default function edit({user}) {
 
   async function handleEdit(v, row, column) {
     setSaving(true);
-    console.log('habits - ', v);
-    console.log('row.id - ', row.id);
 
     const newData = [...habits];
     const index = newData.findIndex((item) => row.id === item.id);
@@ -492,8 +486,6 @@ export default function edit({user}) {
       setLoading(false);
       setSaving(false);
     }
-
-    console.log(newData);
   }
 
   return (

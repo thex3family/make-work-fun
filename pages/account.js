@@ -84,8 +84,6 @@ export default function Account({ initialPurchaseRecord }) {
       }
 
       if (data) {
-        console.log('notioncredentials', data);
-        console.log(data.length);
         setNotionCredentials(data);
       }
     } catch (error) {
