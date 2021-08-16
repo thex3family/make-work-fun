@@ -6,8 +6,8 @@ const postData = (url, data = {}) =>
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' }),
     credentials: 'same-origin',
-    body: JSON.stringify(data),
-  }).then((res) => res.json())
+    body: JSON.stringify(data)
+  }).then((res) => res.json());
 
 export const UserContext = createContext();
 
@@ -17,7 +17,7 @@ export const UserContextProvider = (props) => {
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [userOnboarding, setUserOnboarding] = useState(null);
-  const [subscription, setSubscription] = useState(null);
+  // const [subscription, setSubscription] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
@@ -28,16 +28,15 @@ export const UserContextProvider = (props) => {
       async (event, session) => {
         // setSession(session);
         // setUser(session?.user ?? null);
-        console.log(`Supbase auth event: ${event}`)
+        console.log(`Supbase auth event: ${event}`);
 
         // This is what forwards the session to our auth API route which sets/deletes the cookie:
         await postData('/api/auth', {
           event,
-          session: session,
-        })
-        setSession(session)
-        setUser(session?.user ?? null)
-
+          session: session
+        });
+        setSession(session);
+        setUser(session?.user ?? null);
       }
     );
 
@@ -46,28 +45,33 @@ export const UserContextProvider = (props) => {
     };
   }, []);
 
-  const getUserDetails = () => supabase.from('leaderboard').select('*').eq('player', user.id).single();
-  const getUserOnboarding = () => supabase.from('onboarding').select('*').eq('id', user.id).single().limit(1);
-  const getUserProfile = () => supabase.from('users').select('full_name').eq('id', user.id).single();
-  const getSubscription = () =>
-    supabase
-      .from('subscriptions')
-      .select('*, prices(*, products(*))')
-      .in('status', ['trialing', 'active'])
-      .single();
-
+  const getUserDetails = () =>
+    supabase.from('leaderboard').select('*').eq('player', user.id).single();
+  const getUserOnboarding = () =>
+    supabase.from('onboarding').select('*').eq('id', user.id).single().limit(1);
+  const getUserProfile = () =>
+    supabase.from('users').select('full_name').eq('id', user.id).single();
+  // const getSubscription = () =>
+  //   supabase
+  //     .from('subscriptions')
+  //     .select('*, prices(*, products(*))')
+  //     .in('status', ['trialing', 'active'])
+  //     .single();
 
   useEffect(() => {
     if (user) {
-      Promise.allSettled([getUserDetails(), getUserOnboarding(), getUserProfile(), getSubscription()]).then(
-        (results) => {
-          setUserDetails(results[0].value.data);
-          setUserOnboarding(results[1].value.data);
-          setUserProfile(results[2].value.data);
-          setSubscription(results[3].value.data);
-          setUserLoaded(true);
-        }
-      );
+      Promise.allSettled([
+        getUserDetails(),
+        getUserOnboarding(),
+        getUserProfile(),
+        // getSubscription()
+      ]).then((results) => {
+        setUserDetails(results[0].value.data);
+        setUserOnboarding(results[1].value.data);
+        setUserProfile(results[2].value.data);
+        // setSubscription(results[3].value.data);
+        setUserLoaded(true);
+      });
     }
   }, [user]);
 
@@ -78,15 +82,16 @@ export const UserContextProvider = (props) => {
     userOnboarding,
     userProfile,
     userLoaded,
-    subscription,
-    passwordReset: (options) => supabase.auth.api.resetPasswordForEmail(options),
+    // subscription,
+    passwordReset: (options) =>
+      supabase.auth.api.resetPasswordForEmail(options),
     signIn: (options) => supabase.auth.signIn(options),
     signUp: (options) => supabase.auth.signUp(options),
     signOut: () => {
       setUserDetails(null);
       setUserOnboarding(null);
       setUserProfile(null);
-      setSubscription(null);
+      // setSubscription(null);
       return supabase.auth.signOut();
     }
   };

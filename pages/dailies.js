@@ -40,7 +40,6 @@ export default function dallies({ user }) {
     session,
     userDetails,
     userOnboarding,
-    subscription
   } = useUser();
 
   useEffect(() => {
@@ -130,7 +129,6 @@ export default function dallies({ user }) {
       if (error && status !== 406) {
         throw error;
       }
-      console.log(data);
       const fetchData = data;
 
       if (fetchData.length == 0) {

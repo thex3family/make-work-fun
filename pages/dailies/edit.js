@@ -176,8 +176,7 @@ export default function edit({user}) {
     userLoaded,
     session,
     userDetails,
-    userOnboarding,
-    subscription
+    userOnboarding
   } = useUser();
 
   const columns = [

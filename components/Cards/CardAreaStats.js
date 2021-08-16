@@ -10,30 +10,34 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
           <div className="flex flex-row mb-1 justify justify-between">
             <div className="flex flex-row">
               <div className="w-32 text-left">
+                <div
+                  className={`truncate font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
+                    color == 0
+                      ? 'bg-emerald-500'
+                      : color == 1
+                      ? 'bg-blue-500'
+                      : color == 2
+                      ? 'bg-red-500'
+                      : color == 3
+                      ? 'bg-yellow-500'
+                      : color == 4
+                      ? 'bg-purple-500'
+                      : color == 5
+                      ? 'bg-pink-500'
+                      : 'gray'
+                  }`}
+                >
+                  {title ? title : 'Uncategorized'}
+                </div>
+              </div>
+              <div className="whitespace-nowrap text-left px-1.5 py-0.5 rounded bg-gray-700 text-sm">
+                LVL {level}
+              </div>
+            </div>
             <div
-              className={`truncate font-semibold text-l text-white-700 px-1.5 py-0.5 rounded mr-2 ${
-                color == 0
-                  ? 'bg-emerald-500'
-                  : color == 1
-                  ? 'bg-blue-500'
-                  : color == 2
-                  ? 'bg-red-500'
-                  : color == 3
-                  ? 'bg-yellow-500'
-                  : color == 4
-                  ? 'bg-purple-500'
-                  : color == 5
-                  ? 'bg-pink-500'
-                  : 'gray'
-              }`}
+              className={`font-semibold text-l text-white-700 text-sm align-middle hidden lg:block
+            `}
             >
-              {title ? title : 'Uncategorized'}
-            </div>
-            </div>
-            <div className="whitespace-nowrap text-left px-1.5 py-0.5 rounded bg-gray-700 text-sm">LVL {level}</div>
-            </div>
-            <div className={`font-semibold text-l text-white-700 text-sm align-middle hidden lg:block
-            `}>
               {exp_progress} / {level_exp} XP
             </div>
           </div>
@@ -44,24 +48,24 @@ function LevelBar({ title, level, exp_progress, level_exp, color }) {
             <div className="relative w-full max-w-full flex-grow flex-1">
               <div className="flex items-center">
                 <span
-                className={`mr-2  ${
-                  color == 0
-                    ? 'text-emerald-500'
-                    : color == 1
-                    ? 'text-blue-500'
-                    : color == 2
-                    ? 'text-red-500'
-                    : color == 3
-                    ? 'text-yellow-500'
-                    : color == 4
-                    ? 'text-purple-500'
-                    : color == 5
-                    ? 'text-pink-500'
-                    : 'gray'
-                } `}
-              >
-                {exp_percent}%
-              </span>
+                  className={`mr-2  ${
+                    color == 0
+                      ? 'text-emerald-500'
+                      : color == 1
+                      ? 'text-blue-500'
+                      : color == 2
+                      ? 'text-red-500'
+                      : color == 3
+                      ? 'text-yellow-500'
+                      : color == 4
+                      ? 'text-purple-500'
+                      : color == 5
+                      ? 'text-pink-500'
+                      : 'gray'
+                  } `}
+                >
+                  {exp_percent}%
+                </span>
                 <div className="relative w-full">
                   <div
                     className={`overflow-hidden h-2 text-xs flex rounded mt-2 mb-1  ${
@@ -129,8 +133,9 @@ export default function CardAreaStats({ areaStats }) {
                   />
                 </p>
               </div>
-              {areaStats.map((stat) => (
+              {areaStats.map((stat, i) => (
                 <LevelBar
+                  key={i}
                   title={stat.area}
                   level={stat.current_level}
                   exp_progress={stat.exp_progress}
