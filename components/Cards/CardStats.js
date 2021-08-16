@@ -29,7 +29,7 @@ export default function CardStats({
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
               
               <button className="text-emerald-400 uppercase font-bold text-xs" onClick={() => setShowTitleModal(true)}> 
-                {statTitle}
+                {statTitle ? statTitle : 'Newbie'}
               </button>
               <p className="font-semibold text-xl text-white-700">
                 {statName}
