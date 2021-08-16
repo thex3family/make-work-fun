@@ -292,6 +292,7 @@ export default function HomePage() {
                     statWinEXP={player.exp_reward}
                     avatar_url={player.avatar_url}
                     background_url={player.background_url}
+                    statTitle={player.title}
                   />
                 ))}
               </div>
@@ -319,6 +320,7 @@ export default function HomePage() {
                     statWinEXP={player.exp_reward}
                     avatar_url={player.avatar_url}
                     background_url={player.background_url}
+                    statTitle={player.title}
                   />
                 ))}
               </div>

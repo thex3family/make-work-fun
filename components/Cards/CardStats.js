@@ -19,6 +19,7 @@ export default function CardStats({
   statDescription,
   statIconName,
   statIconColor,
+  setShowTitleModal
 }) {
   return (
     <>
@@ -27,9 +28,9 @@ export default function CardStats({
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
               
-              <h5 className="text-emerald-400 uppercase font-bold text-xs">
+              <button className="text-emerald-400 uppercase font-bold text-xs" onClick={() => setShowTitleModal(true)}> 
                 {statTitle}
-              </h5>
+              </button>
               <p className="font-semibold text-xl text-white-700">
                 {statName}
               </p>

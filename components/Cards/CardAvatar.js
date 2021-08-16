@@ -17,7 +17,8 @@ export default function Avatar({
   statWinGold,
   statWinEXP,
   avatar_url,
-  background_url
+  background_url,
+  statTitle
 }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
@@ -55,8 +56,7 @@ export default function Avatar({
     } finally {
     }
   }
-  
-  const statTitle = 'Newbie';
+
   const statMaxLevel = '100';
   const statEXPPercent = Math.floor((statEXPProgress / statLevelEXP) * 100);
   const statArrow = 'up';
@@ -104,7 +104,7 @@ export default function Avatar({
             <div className="relative flex flex-wrap">
               <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
                 <h5 className="text-emerald-400 uppercase font-bold text-xs">
-                  {statTitle}
+                  {statTitle ? statTitle : 'Newbie'}
                 </h5>
                 <p className="font-semibold text-xl text-white-700 truncate w-3/4">
                   {statName}

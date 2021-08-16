@@ -83,6 +83,9 @@ class Countdown extends Component {
 
   render() {
     const countDown = this.state;
+    if(countDown.days == 0 && countDown.hours == 0 && countDown.min == 0 && countDown.sec == 0 ){
+      console.log("It's midnight! Refresh the page.")
+    }
 
     return (
       <div className={s.Countdown}>

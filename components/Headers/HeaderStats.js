@@ -15,13 +15,13 @@ export default function HeaderStats({
   fetchPlayerBackground,
   updateProfile,
   weekWins,
-  areaStats
+  areaStats,
+  setShowTitleModal
 }) {
   const exp_percent = Math.floor(
     (playerStats.exp_progress / playerStats.level_exp) * 100
   );
   const [showHide, setShowHide] = useState(true);
-
   return (
     <>
       {/* Header */}
@@ -57,7 +57,7 @@ export default function HeaderStats({
               </div>
               <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
                 <CardStats
-                  statTitle="Newbie"
+                  statTitle={playerStats.title}
                   statName={playerStats.full_name}
                   statLevel={playerStats.current_level}
                   statMaxLevel={100}
@@ -72,6 +72,7 @@ export default function HeaderStats({
                   statDescription="since last week"
                   statIconName="fas fa-cogs"
                   statIconColor="bg-transparent-500"
+                  setShowTitleModal={setShowTitleModal}
                 />
                 {/* <Link href="/">
               <Button className="w-full"
