@@ -96,7 +96,7 @@ export default function TitleModal({
                       disabled={
                         playerStats.role ? !playerStats.role.includes(
                           title.name.slice(0, title.name.length - 3)
-                        ) : null
+                        ) : true
                       }
                       title_name={title.name}
                       description={title.description}
