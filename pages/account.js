@@ -27,7 +27,7 @@ function Card({ title, description, footer, children }) {
   );
 }
 
-export default function Account({ initialPurchaseRecord }) {
+export default function Account({ initialPurchaseRecord, user }) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function Account({ initialPurchaseRecord }) {
 
   const [notionCredentials, setNotionCredentials] = useState(null);
 
-  const { userLoaded, user, session, userDetails } = useUser();
+  const { userLoaded, session, userDetails } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Account({ initialPurchaseRecord }) {
   async function getProfile() {
     try {
       setLoading(true);
-      const user = supabase.auth.user();
+      // const user = supabase.auth.user();
 
       let { data, error, status } = await supabase
         .from('users')
@@ -71,7 +71,7 @@ export default function Account({ initialPurchaseRecord }) {
   async function getNotionCredentials() {
     try {
       // setLoading(true);
-      const user = supabase.auth.user();
+      // const user = supabase.auth.user();
 
       let { data, error, status } = await supabase
         .from('notion_credentials')
@@ -96,7 +96,7 @@ export default function Account({ initialPurchaseRecord }) {
   async function updateProfile({ full_name }) {
     try {
       setSaveLoading(true);
-      const user = supabase.auth.user();
+      // const user = supabase.auth.user();
 
       let { error } = await supabase
         .from('users')
@@ -149,7 +149,7 @@ export default function Account({ initialPurchaseRecord }) {
     };
 
     try {
-      const user = supabase.auth.user();
+      // const user = supabase.auth.user();
 
       const { data, error } = await supabase
         .from('notion_credentials')
@@ -608,7 +608,7 @@ export async function getServerSideProps({ req }) {
       .firstPage();
     return {
       props: {
-        initialPurchaseRecord: minifyRecords(purchaseRecord)
+        initialPurchaseRecord: minifyRecords(purchaseRecord), user
       }
     };
   } catch (error) {
