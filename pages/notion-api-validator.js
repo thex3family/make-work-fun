@@ -7,6 +7,15 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Button from '@/components/ui/Button';
 
+import ModalLevelUp from '@/components/Modals/ModalLevelUp';
+import { triggerWinModal } from '@/components/Modals/ModalHandler';
+import WinModal from '@/components/Modals/ModalWin';
+
+import {
+  fetchLatestWin,
+  fetchPlayerStats
+} from '@/components/Fetch/fetchMaster';
+
 export default function NotionWizard({ response }) {
   const router = useRouter();
   const [openTab, setOpenTab] = React.useState(1);
@@ -14,14 +23,40 @@ export default function NotionWizard({ response }) {
   const [showRequiredModal, setShowRequiredModal] = useState(false);
   const [showReadyModal, setShowReadyModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  
+  const [levelUp, setLevelUp] = useState(false);
+  const [showWinModal, setShowWinModal] = useState(false);
+  const [activeModalStats, setActiveModalStats] = useState(null);
+  const [playerStats, setPlayerStats] = useState(null);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
+    if (userOnboarding) loadPlayer();
   }, [userOnboarding]);
+
+  useEffect(() => {
+    if (showWinModal) setShowRequiredModal(false);
+    if (showWinModal) setShowReadyModal(false);
+  }, [showWinModal]);
 
   function loadAndRefresh() {
     setLoading(true);
     router.reload(window.location.pathname);
+  }
+
+  async function loadPlayer() {
+    console.log('Loading Player');
+    fetchLatestWin(
+      setActiveModalStats,
+      refreshStats,
+      setLevelUp,
+      triggerWinModal,
+      setShowWinModal
+    );
+  }
+
+  async function refreshStats() {
+    setPlayerStats(await fetchPlayerStats());
   }
 
   function initializePlayer() {
@@ -29,17 +64,16 @@ export default function NotionWizard({ response }) {
       if (
         response.properties.hasOwnProperty('Name') &&
         response.properties.hasOwnProperty('Status') &&
-        response.properties.hasOwnProperty('Type') &&
         response.properties.hasOwnProperty('Share With Family?') &&
         response.properties.hasOwnProperty('Family Connection')
       ) {
         if (
           response.properties.Name.type.includes('title') &&
           response.properties.Status.type.includes('select') &&
-          response.properties.Type.type.includes('select') &&
           response.properties['Share With Family?'].type.includes('checkbox') &&
           response.properties['Family Connection'].type.includes('text')
-        ) {
+          
+        ){
           if (userOnboarding.onboarding_state.includes('4')) {
             setShowReadyModal(true);
           } else {
@@ -1239,6 +1273,24 @@ export default function NotionWizard({ response }) {
             </div>
             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </div>
+        </>
+      ) : null}
+
+      {/* level up modal */}
+      {levelUp ? (
+        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
+      ) : null}
+
+      {/* // Modal Section */}
+      {showWinModal ? (
+        <>
+          <WinModal
+            page={'validator'}
+            activeModalStats={activeModalStats}
+            setShowWinModal={setShowWinModal}
+            playerStats={playerStats}
+            refreshStats={refreshStats}
+          />
         </>
       ) : null}
     </>

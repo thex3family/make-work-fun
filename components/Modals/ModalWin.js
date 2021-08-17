@@ -86,10 +86,12 @@ export default function WinModal({
                   <p className="text-xl sm:text-2xl leading-none text-primary-2 font-bold mb-3">
                     {activeModalStats.name}
                   </p>
-                  {activeModalStats.upstream ? <span className="text-sm bg-gray-100 border-dotted border-2 px-2 py-0.5">
-                    {activeModalStats.upstream}
-                  </span> : null}
-                  
+                  {activeModalStats.upstream ? (
+                    <span className="text-sm bg-gray-100 border-dotted border-2 px-2 py-0.5">
+                      {activeModalStats.upstream}
+                    </span>
+                  ) : null}
+
                   <p className="my-2 font-light text-sm">
                     {activeModalStats.closing_date}
                   </p>
@@ -146,15 +148,21 @@ export default function WinModal({
                   href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
                   target="_blank"
                 >
-                  <button
-                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() =>
-                      shareWithGuilded(playerStats, activeModalStats, activeGIF)
-                    }
-                  >
-                    Share With Family
-                  </button>
+                  {page !== 'validator' ? (
+                    <button
+                      className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() =>
+                        shareWithGuilded(
+                          playerStats,
+                          activeModalStats,
+                          activeGIF
+                        )
+                      }
+                    >
+                      Share With Family
+                    </button>
+                  ) : null}
                 </a>
               </div>
               {page !== 'player' ? (
