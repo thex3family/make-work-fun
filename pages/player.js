@@ -8,12 +8,11 @@ import { useUser } from '@/utils/useUser';
 import { supabase } from '../utils/supabase-client';
 import Datatable, { createTheme } from 'react-data-table-component';
 
-import ModalLevelUp from '@/components/Modals/ModalLevelUp';
-
 import React from 'react';
 
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
+import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 
