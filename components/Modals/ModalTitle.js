@@ -51,7 +51,7 @@ export default function TitleModal({
               </div>
               {titles.map((title) =>
                 playerStats.current_level - title.level_requirement < 0 &&
-                playerStats.current_level - title.level_requirement > -5 ? (
+                playerStats.current_level - title.level_requirement >= -5 ? (
                   <div className="mx-2 my-2">
                     <div className="text-md text-center mb-1">
                       Unlocked At Level <b>{title.level_requirement}</b>
