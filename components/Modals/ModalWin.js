@@ -91,6 +91,7 @@ export default function WinModal({
                       {activeModalStats.upstream}
                     </span>
                   ) : null}
+                  {activeModalStats.database_nickname ? <div className="text-xs mt-2">-- {activeModalStats.database_nickname} --</div> : null }
 
                   <p className="my-2 font-light text-sm">
                     {activeModalStats.closing_date}
