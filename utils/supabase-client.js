@@ -22,11 +22,16 @@ export const getActiveProductsWithPrices = async () => {
   return data || [];
 };
 
-export const updateUserName = async (user, name) => {
-  await supabase
-    .from('users')
-    .update({
-      full_name: name
-    })
-    .eq('id', user.id);
-};
+// For some reason this doesn't work when the user isn't signed in yet...
+
+// export const updateUserName = async (user, name) => {
+//   console.log(user);
+//   console.log(name);
+//   const { data, error } = await supabase
+//     .from('users')
+//     .update({full_name: name}).eq('id', user.id);
+//     if (error) {
+//       alert(error.message);
+//       throw error;
+//     }
+// };
