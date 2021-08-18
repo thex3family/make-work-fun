@@ -6,15 +6,15 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { updateUserName } from '@/utils/supabase-client';
 import { useUser } from '@/utils/useUser';
+import { supabase } from '@/utils/supabase-client';
 
 const SignUp = () => {
-  const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  // const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
-  const router = useRouter();
+  // const router = useRouter();
   const { signUp } = useUser();
 
   const handleSignup = async (e) => {
@@ -25,33 +25,32 @@ const SignUp = () => {
     const { error, user } = await signUp({ email, password });
     if (error) {
       setMessage({ type: 'error', content: error.message });
-    } else {
-      if (user) {
-        await updateUserName(user, name);
-        setUser(user);
-      } else {
-        setMessage({
-          type: 'note',
-          content: 'Check your email for the confirmation link.'
-        });
-      }
+    } 
+    if (user) {
+      setMessage({
+        type: 'note',
+        content: "Check your email for a confirmation link from 'mail.app.supabase.io.'"
+      });
     }
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (user) {
-      router.replace('/account');
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     router.replace('/account');
+  //   }
+  // }, [user]);
 
   return (
     <div className="flex justify-center height-screen-helper">
       <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
         <div className="flex justify-center pb-12 ">
-            <img src="logo-white.svg"  width="64px" height="64px" />
+          <img src="logo-white.svg" width="64px" height="64px" />
         </div>
-        <form onSubmit={handleSignup} className="animate-fade-in-up flex flex-col space-y-4">
+        <form
+          onSubmit={handleSignup}
+          className="animate-fade-in-up flex flex-col space-y-4"
+        >
           {message.content && (
             <div
               className={`${
@@ -63,7 +62,7 @@ const SignUp = () => {
               {message.content}
             </div>
           )}
-          <Input placeholder="Name" onChange={setName} />
+          {/* <Input placeholder="Name" onChange={setName} /> */}
           <Input
             type="email"
             placeholder="Email"
