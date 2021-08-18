@@ -85,7 +85,7 @@ export async function fetchWins() {
     const { data, error } = await supabase
       .from('success_plan')
       .select(
-        'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on'
+        'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname'
       )
       .eq('player', user.id)
       .order('closing_date', { ascending: false })

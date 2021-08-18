@@ -241,7 +241,6 @@ export default function Account({ initialPurchaseRecord, user }) {
                     <Button
                       className="w-full sm:w-auto"
                       variant="incognito"
-                      loading={loading}
                     >
                       Visit Our Toolbox
                     </Button>
@@ -294,7 +293,6 @@ export default function Account({ initialPurchaseRecord, user }) {
                           <Button
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
-                            loading={loading}
                           >
                             Download Template
                           </Button>
@@ -331,7 +329,6 @@ export default function Account({ initialPurchaseRecord, user }) {
                           <Button
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
-                            loading={loading}
                           >
                             Get Template
                           </Button>

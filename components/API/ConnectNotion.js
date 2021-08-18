@@ -17,12 +17,14 @@ export default function ConnectNotion({
   const [APIMessage, setAPIMessage] = useState(null);
   const [databaseMessage, setDatabaseMessage] = useState(null);
   const [userMessage, setUserMessage] = useState(null);
+  const [nickname, setNickname] = useState(null);
 
   var api = /^secret_\w{43}$/;
   var id = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
   var notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 
   useEffect(() => {
+    setNickname(credentials.nickname);
     setSecretKey(credentials.api_secret_key);
     setDatabaseID(credentials.database_id);
     if (credentials.collaborator) setCollaborator(credentials.collaborator);
@@ -145,6 +147,7 @@ export default function ConnectNotion({
       const { data, error } = await supabase
         .from('notion_credentials')
         .update({
+          nickname: nickname,
           api_secret_key: api_secret_key,
           database_id: database_id,
           collaborator: collaborator_id
@@ -182,6 +185,16 @@ export default function ConnectNotion({
           </div>
         </div>
       ) : null}
+      <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+        <p className="font-semibold w-full sm:w-auto">Database Name (Optional)</p>
+      </div>
+      <Input
+        className="text-xl mb-2 font-semibold rounded"
+        type="varchar"
+        placeholder="Success Plan"
+        value={nickname || ''}
+        onChange={setNickname}
+      />
       <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
         <p className="font-semibold w-full sm:w-auto">Notion API Secret</p>
         <a

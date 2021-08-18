@@ -16,14 +16,14 @@ import {
   fetchPlayerStats
 } from '@/components/Fetch/fetchMaster';
 
-export default function NotionWizard({ response }) {
+export default function NotionWizard({ response, nickname }) {
   const router = useRouter();
   const [openTab, setOpenTab] = React.useState(1);
   const { userOnboarding } = useUser();
   const [showRequiredModal, setShowRequiredModal] = useState(false);
   const [showReadyModal, setShowReadyModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const [levelUp, setLevelUp] = useState(false);
   const [showWinModal, setShowWinModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
@@ -72,8 +72,7 @@ export default function NotionWizard({ response }) {
           response.properties.Status.type.includes('select') &&
           response.properties['Share With Family?'].type.includes('checkbox') &&
           response.properties['Family Connection'].type.includes('text')
-          
-        ){
+        ) {
           if (userOnboarding.onboarding_state.includes('4')) {
             setShowReadyModal(true);
           } else {
@@ -98,8 +97,7 @@ export default function NotionWizard({ response }) {
               Let's Get You Connected
             </h1>
             <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-              
-           Be data conscious. Get back to this page any time by testing your
+              Be data conscious. Get back to this page any time by testing your
               connection from{' '}
               <span className="text-emerald-500 font-semibold">
                 <Link href="/account">account.</Link>
@@ -113,14 +111,19 @@ export default function NotionWizard({ response }) {
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
-              <div className="text-2xl font-semibold">{response.title[0].plain_text}</div>
+                <div className="text-2xl font-semibold">
+                  {response.title[0].plain_text}{' '}
+                  {nickname ? `(${nickname})` : null}
+                </div>
                 <button
                   className="p-1 ml-auto bg-transparent border-0 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
                   onClick={() => loadAndRefresh()}
                   disabled={loading}
                   loading={loading}
                 >
-                  <span className="hidden md:inline-block">{loading ? 'Loading' : 'Click here to refresh'}</span>
+                  <span className="hidden md:inline-block">
+                    {loading ? 'Loading' : 'Click here to refresh'}
+                  </span>
                   <i className="ml-3 fas fa-sync-alt"></i>
                 </button>
               </div>
@@ -591,12 +594,16 @@ export default function NotionWizard({ response }) {
                         'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
                         (openTab === 11
                           ? response.properties.hasOwnProperty('Collaborators')
-                            ? response.properties.Collaborators.type.includes('people')
+                            ? response.properties.Collaborators.type.includes(
+                                'people'
+                              )
                               ? 'text-white bg-emerald-500'
                               : 'text-white bg-red-500'
                             : 'text-white bg-red-500'
                           : response.properties.hasOwnProperty('Collaborators')
-                          ? response.properties.Collaborators.type.includes('people')
+                          ? response.properties.Collaborators.type.includes(
+                              'people'
+                            )
                             ? 'text-emerald-500 bg-white'
                             : 'text-red-500 bg-white'
                           : 'text-red-500 bg-white')
@@ -613,7 +620,9 @@ export default function NotionWizard({ response }) {
                         className={
                           'mr-2 ' +
                           (response.properties.hasOwnProperty('Collaborators')
-                            ? response.properties.Collaborators.type.includes('people')
+                            ? response.properties.Collaborators.type.includes(
+                                'people'
+                              )
                               ? 'fas fa-check'
                               : 'fas fa-exclamation-triangle'
                             : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
@@ -762,7 +771,9 @@ export default function NotionWizard({ response }) {
                             Task = 25 XP + 25 💰
                           </div>
                           <br />
-                          <i>Any unsupported types will default to a task reward.</i>
+                          <i>
+                            Any unsupported types will default to a task reward.
+                          </i>
                         </p>
                         <img
                           className="w-auto pt-5"
@@ -902,8 +913,8 @@ export default function NotionWizard({ response }) {
                         <p>
                           We use this property to reward you bonus exp and gold
                           for difficult quests. In real life, this translates to
-                          the time and effort needed to get this job done. The number
-                          will multiply the rewards earned.
+                          the time and effort needed to get this job done. The
+                          number will multiply the rewards earned.
                           <br />
                           <br />
                           <i>
@@ -1080,8 +1091,10 @@ export default function NotionWizard({ response }) {
                           Recommended Type: Select / Formula
                         </p>
                         <p>
-                          We use this property to connect your wins with the areas of competence you are building in your life. If you hand in a quest without this property, the win will be Uncategorized.
-                         
+                          We use this property to connect your wins with the
+                          areas of competence you are building in your life. If
+                          you hand in a quest without this property, the win
+                          will be Uncategorized.
                         </p>
                         <img
                           className="w-auto pt-5"
@@ -1093,7 +1106,9 @@ export default function NotionWizard({ response }) {
                         id="link11"
                       >
                         {response.properties.hasOwnProperty('Collaborators') ? (
-                          response.properties.Collaborators.type.includes('people') ? (
+                          response.properties.Collaborators.type.includes(
+                            'people'
+                          ) ? (
                             <h2 className="text-xl text-bold text-emerald-600 mb-3">
                               <i className="fas fa-check mr-2"></i>Your database
                               has this property!
@@ -1111,16 +1126,18 @@ export default function NotionWizard({ response }) {
                             is missing this property!
                           </h2>
                         )}
-                        <p className="font-semibold">
-                          Mandatory Type: People
-                        </p>
+                        <p className="font-semibold">Mandatory Type: People</p>
                         <p>
-                          We use this property to distinguish who the win should be attributed to, if more than 1 person is sharing a database. <a
-            className="text-emerald-500"
-            href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
-            target="_blank"
-          >Learn more about how to utilize this property.</a>
-                         
+                          We use this property to distinguish who the win should
+                          be attributed to, if more than 1 person is sharing a
+                          database.{' '}
+                          <a
+                            className="text-emerald-500"
+                            href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
+                            target="_blank"
+                          >
+                            Learn more about how to utilize this property.
+                          </a>
                         </p>
                         <img
                           className="w-auto pt-5"
@@ -1310,11 +1327,12 @@ export async function getServerSideProps({ req }) {
       .single();
     const data = await supabase
       .from('notion_credentials')
-      .select('api_secret_key, database_id')
+      .select('nickname, api_secret_key, database_id')
       .eq('id', key.data.test_pair)
       .limit(1)
       .single();
     const credentials = data.body;
+    const nickname = data.body.nickname;
 
     // Send credentials to Notion API
     const notion = new Client({ auth: credentials.api_secret_key });
@@ -1322,7 +1340,7 @@ export async function getServerSideProps({ req }) {
       database_id: credentials.database_id
     });
 
-    return { props: { response } };
+    return { props: { response, nickname } };
   } catch (error) {
     console.log(error);
     return {
