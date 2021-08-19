@@ -125,13 +125,13 @@ export default function playerDetails() {
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <div className={style == 'dark' ? null : `bg-black ${bg_opacity}`}>
-          <div className="max-w-6xl px-4 md:px-10 mx-auto w-full">
+          <div className="px-4 md:px-10 mx-auto w-full">
             <div className="relative py-10">
               <div className="px-4 md:px-10 mx-auto w-full">
                 <div>
                   {/* Card stats */}
                   <div className="flex flex-wrap md:flex-nowrap items-center gap-5 opacity-90">
-                    <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 h-full text-center relative">
+                    <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 2xl:w-1/3 h-full text-center relative">
                       <div
                         className={`${
                           showHide ? 'hidden' : ''
@@ -173,6 +173,8 @@ export default function playerDetails() {
                       </div>
                     </div>
                     <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
+                      <div className="flex 2xl:flex-row flex-col gap-4">
+                        <div className="2xl:w-1/2 w-full">
                       <CardStats
                         statTitle={playerStats.title}
                         statName={playerStats.full_name}
@@ -194,10 +196,12 @@ export default function playerDetails() {
                         statIconColor="bg-transparent-500"
                         statPlayer={player}
                       />
-                      <div className="w-full pt-6">
+                      </div>
+                      <div className="2xl:w-1/2 w-full 2xl:pt-0">
                         {weekWins ? (
                           <CardLineChart weekWins={weekWins} />
                         ) : null}
+                      </div>
                       </div>
                     </div>
                   </div>
