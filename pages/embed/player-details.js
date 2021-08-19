@@ -25,7 +25,9 @@ export default function playerDetails() {
 
   const { player } = router.query;
   const { style } = router.query;
-  console.log(style);
+  const { opacity } = router.query;
+
+  let bg_opacity = 'bg-opacity-50'
 
   useEffect(() => {
     if (player) refreshStats();
@@ -101,71 +103,80 @@ export default function playerDetails() {
         className="animate-slow-fade-in bg-fixed bg-cover bg-dark"
         style={{ backgroundImage: `url(${background_url})` }}
       >
-        <div className="max-w-6xl px-4 md:px-10 mx-auto w-full">
-          <div className="relative py-10">
-            <div className="px-4 md:px-10 mx-auto w-full">
-              <div>
-                {/* Card stats */}
-                <div className="flex flex-wrap md:flex-nowrap items-center gap-5 opacity-90">
-                  <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 h-full text-center relative">
-                    <div
-                      className={`${showHide ? 'hidden' : ''} animate-fade-in`}
-                      onClick={() => {
-                        showHide ? setShowHide(false) : setShowHide(true);
-                      }}
-                    >
-                      <CardAreaStats areaStats={areaStats} />
+        <div className={style == 'dark' ? null : `bg-black ${bg_opacity}`}>
+          <div className="max-w-6xl px-4 md:px-10 mx-auto w-full">
+            <div className="relative py-10">
+              <div className="px-4 md:px-10 mx-auto w-full">
+                <div>
+                  {/* Card stats */}
+                  <div className="flex flex-wrap md:flex-nowrap items-center gap-5 opacity-90">
+                    <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 h-full text-center relative">
+                      <div
+                        className={`${
+                          showHide ? 'hidden' : ''
+                        } animate-fade-in`}
+                        onClick={() => {
+                          showHide ? setShowHide(false) : setShowHide(true);
+                        }}
+                      >
+                        <CardAreaStats areaStats={areaStats} />
+                      </div>
+                      <div
+                        className={`${
+                          showHide ? '' : 'hidden'
+                        } animate-fade-in`}
+                      >
+                        {avatarStatus == 'Exists' ? (
+                          <img
+                            className="avatar image h-auto m-auto cursor-pointer"
+                            src={avatar_url}
+                            alt="Avatar"
+                            onClick={() => {
+                              showHide ? setShowHide(false) : setShowHide(true);
+                            }}
+                          />
+                        ) : avatarStatus == 'Missing' ? (
+                          <img
+                            className="avatar image h-auto m-auto cursor-pointer"
+                            src="img/default_avatar.png"
+                            alt="Avatar"
+                            onClick={() => {
+                              showHide ? setShowHide(false) : setShowHide(true);
+                            }}
+                          />
+                        ) : (
+                          <div className="flex avatar image m-auto justify-center">
+                            <LoadingDots />
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div
-                      className={`${showHide ? '' : 'hidden'} animate-fade-in`}
-                    >
-                      {avatarStatus == 'Exists' ? (
-                        <img
-                          className="avatar image h-auto m-auto cursor-pointer"
-                          src={avatar_url}
-                          alt="Avatar"
-                          onClick={() => {
-                            showHide ? setShowHide(false) : setShowHide(true);
-                          }}
-                        />
-                      ) : avatarStatus == 'Missing' ? (
-                        <img
-                          className="avatar image h-auto m-auto cursor-pointer"
-                          src="img/default_avatar.png"
-                          alt="Avatar"
-                          onClick={() => {
-                            showHide ? setShowHide(false) : setShowHide(true);
-                          }}
-                        />
-                      ) : (
-                        <div className="flex avatar image m-auto justify-center">
-                          <LoadingDots />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
-                    <CardStats
-                      statTitle={playerStats.title}
-                      statName={playerStats.full_name}
-                      statLevel={playerStats.current_level}
-                      statMaxLevel={100}
-                      statEXP={playerStats.total_exp}
-                      statLevelEXP={playerStats.level_exp}
-                      statEXPProgress={playerStats.exp_progress}
-                      statEXPPercent={Math.floor(
-                        (playerStats.exp_progress / playerStats.level_exp) * 100
-                      )}
-                      statGold={playerStats.total_gold}
-                      statArrow="up"
-                      statPercent="0"
-                      statPercentColor="text-white"
-                      statDescription="since last week"
-                      statIconName="fas fa-cogs"
-                      statIconColor="bg-transparent-500"
-                    />
-                    <div className="w-full pt-6">
-                      {weekWins ? <CardLineChart weekWins={weekWins} /> : null}
+                    <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
+                      <CardStats
+                        statTitle={playerStats.title}
+                        statName={playerStats.full_name}
+                        statLevel={playerStats.current_level}
+                        statMaxLevel={100}
+                        statEXP={playerStats.total_exp}
+                        statLevelEXP={playerStats.level_exp}
+                        statEXPProgress={playerStats.exp_progress}
+                        statEXPPercent={Math.floor(
+                          (playerStats.exp_progress / playerStats.level_exp) *
+                            100
+                        )}
+                        statGold={playerStats.total_gold}
+                        statArrow="up"
+                        statPercent="0"
+                        statPercentColor="text-white"
+                        statDescription="since last week"
+                        statIconName="fas fa-cogs"
+                        statIconColor="bg-transparent-500"
+                      />
+                      <div className="w-full pt-6">
+                        {weekWins ? (
+                          <CardLineChart weekWins={weekWins} />
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 </div>
