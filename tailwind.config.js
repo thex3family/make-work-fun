@@ -51,7 +51,8 @@ module.exports = {
           default: '#EEE7DD',
           light: '#fffaf4',
           dark: '#8e745e'
-        }
+        },
+        dark: '#2F3437',
       },
       textColor: {
         base: 'var(--text-base)',

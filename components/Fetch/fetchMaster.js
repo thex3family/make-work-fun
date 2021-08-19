@@ -51,21 +51,32 @@ export async function fetchLatestWin(
   }
 }
 
-export async function fetchPlayerStats(setAvatarUrl) {
+export async function fetchPlayerStats(setAvatarUrl, player) {
   try {
     // gets the latest information about the user from the latest leaderboard
+    if (!player) {
+      const user = supabase.auth.user();
+      const { data, error } = await supabase
+        .from('s1_leaderboard')
+        .select('*')
+        .eq('player', user.id)
+        .single();
 
-    const user = supabase.auth.user();
-    const { data, error } = await supabase
-      .from('s1_leaderboard')
-      .select('*')
-      .eq('player', user.id)
-      .single();
-
-    if (data) {
-      if (setAvatarUrl) {
-        setAvatarUrl(data.avatar_url);
+      if (data) {
+        if (setAvatarUrl) {
+          setAvatarUrl(data.avatar_url);
+        }
+        return data;
       }
+    }
+
+    if (player) {
+      const { data, error } = await supabase
+        .from('s1_leaderboard')
+        .select('*')
+        .eq('player', player)
+        .single();
+
       return data;
     }
 
@@ -103,18 +114,32 @@ export async function fetchWins() {
   }
 }
 
-export async function fetchWeekWins() {
+export async function fetchWeekWins(player) {
   try {
-    const user = supabase.auth.user();
+    if(!player){
+      const user = supabase.auth.user();
 
+      const { data, error } = await supabase
+        .from('week_win_count')
+        .select('*')
+        .eq('player', user.id)
+        .single();
+  
+      if (data) {
+        return data;
+      }
+    }
+    
+    if(player){
     const { data, error } = await supabase
       .from('week_win_count')
       .select('*')
-      .eq('player', user.id)
+      .eq('player', player)
       .single();
 
     if (data) {
       return data;
+    }
     }
 
     if (error && status !== 406) {
@@ -169,18 +194,31 @@ export async function fetchLeaderboardStats(
   }
 }
 
-export async function fetchAreaStats() {
+export async function fetchAreaStats(player) {
   try {
-    const user = supabase.auth.user();
+    if (!player) {
+      const user = supabase.auth.user();
 
-    const { data, error } = await supabase
-      .from('area_stats')
-      .select('*')
-      .eq('player', user.id)
-      .limit(6)
+      const { data, error } = await supabase
+        .from('area_stats')
+        .select('*')
+        .eq('player', user.id)
+        .limit(6);
 
-    if (data) {
-      return data;
+      if (data) {
+        return data;
+      }
+    }
+    if (player) {
+      const { data, error } = await supabase
+        .from('area_stats')
+        .select('*')
+        .eq('player', player)
+        .limit(6);
+
+      if (data) {
+        return data;
+      }
     }
 
     if (error && status !== 406) {
@@ -199,7 +237,7 @@ export async function fetchTitles() {
     const { data, error } = await supabase
       .from('titles')
       .select('*')
-      .eq('active', true)
+      .eq('active', true);
 
     if (data) {
       return data;
