@@ -85,20 +85,22 @@ export default function CardStats({
                   'bg-blueGray-900 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 w-36 '
                 }
               >
-                <a
+                <Link
                   href="/embed"
                   target="_blank"
-                  className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                 >
+                  <a target="_blank" className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600">
                   Copy Embed Link
-                </a>
-                <a
+                  </a>
+                </Link>
+                <Link
                   href="/account"
                   target="_blank"
-                  className="text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                >
+                  >
+                  <a target="_blank" className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600">
                   Go To Account
-                </a>
+                  </a>
+                </Link>
               </div>
             </div>
           </div>
