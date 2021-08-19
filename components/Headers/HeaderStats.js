@@ -73,6 +73,7 @@ export default function HeaderStats({
                   statIconName="fas fa-cogs"
                   statIconColor="bg-transparent-500"
                   setShowTitleModal={setShowTitleModal}
+                  statPlayer={playerStats.player}
                 />
                 {/* <Link href="/">
               <Button className="w-full"

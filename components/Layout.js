@@ -36,9 +36,9 @@ export default function Layout({ children, meta: pageMeta }) {
         <meta name="twitter:image" content={meta.cardImage} />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       </Head>
-      <Navbar />
+      {!router.asPath.includes('embed') ? <Navbar /> : null}
       <main id="skip">{children}</main>
-      <Footer />
+      {!router.asPath.includes('embed') ? <Footer /> : null}
     </>
   );
 }
