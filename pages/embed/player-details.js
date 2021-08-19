@@ -9,8 +9,13 @@ import CardLineChart from 'components/Cards/CardLineChart.js';
 import {
   fetchPlayerStats,
   fetchAreaStats,
-  fetchWeekWins
+  fetchWeekWins,
+  fetchLatestWin,
 } from '@/components/Fetch/fetchMaster';
+
+import { triggerWinModal } from '@/components/Modals/ModalHandler';
+import WinModal from '@/components/Modals/ModalWin';
+import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 
 export default function playerDetails() {
   const router = useRouter();
@@ -29,8 +34,24 @@ export default function playerDetails() {
 
   let bg_opacity = 'bg-opacity-50';
 
+
+  // win modal stuff
+  
+  const [showWinModal, setShowWinModal] = useState(false);
+  const [levelUp, setLevelUp] = useState(false);
+  const [activeModalStats, setActiveModalStats] = useState(null);
+
+
   useEffect(() => {
     if (player) refreshStats();
+    if (player) fetchLatestWin(
+        setActiveModalStats,
+        refreshStats,
+        setLevelUp,
+        triggerWinModal,
+        setShowWinModal,
+        player
+      );
   }, [player]);
 
   async function refreshStats() {
@@ -185,6 +206,25 @@ export default function playerDetails() {
           </div>
         </div>
       </section>
+
+
+      {/* // Modal Section */}
+      {showWinModal ? (
+        <>
+          <WinModal
+            page={'player'}
+            activeModalStats={activeModalStats}
+            setShowWinModal={setShowWinModal}
+            playerStats={playerStats}
+            refreshStats={refreshStats}
+          />
+        </>
+      ) : null}
+      
+      {/* level up modal */}
+      {levelUp ? (
+        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
+      ) : null}
 
     </>
   );
