@@ -98,6 +98,7 @@ export default function playerDetails() {
   }
 
   return (
+    <>
       <section
         className="animate-slow-fade-in bg-fixed bg-cover bg-dark"
         style={{ backgroundImage: `url(${background_url})` }}
@@ -184,5 +185,7 @@ export default function playerDetails() {
           </div>
         </div>
       </section>
+
+    </>
   );
 }
