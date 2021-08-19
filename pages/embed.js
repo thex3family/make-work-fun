@@ -72,6 +72,10 @@ export default function embed({ user }) {
                   Avatar
                 </div>
                 <div className="inline-flex items-center justify-center px-2 py-2 leading-none text-emerald-700 bg-emerald-100 border-2 border-emerald-500 rounded">
+                  <i className="mr-2 mt-0.5  fas fa-check" />
+                  Areas
+                </div>
+                <div className="inline-flex items-center justify-center px-2 py-2 leading-none text-emerald-700 bg-emerald-100 border-2 border-emerald-500 rounded">
                   <i className="mr-2 mt-0.5 fas fa-check" />
                   Player Card
                 </div>
