@@ -17,6 +17,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Aug 19, 2021"
+            title="Embed Your Character Into Your Sites"
+            desc="Generate dynamic embeddable components to put into your Notion pages and websites to see your character level in real time."
+            img_url="updates/0.19.png"
+            button_url="/embed"
+            version="v.19"
+          />
           <CardLUpdate
             date="Aug 16, 2021"
             title="Choose Your Own Title!"

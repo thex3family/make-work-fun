@@ -1,6 +1,6 @@
 {
   "name": "co-x3-family-connection",
-  "version": "0.18",
+  "version": "0.19",
   "license": "MIT",
   "scripts": {
     "dev": "next",
