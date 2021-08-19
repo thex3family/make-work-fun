@@ -192,6 +192,7 @@ export default function playerDetails() {
                         statDescription="since last week"
                         statIconName="fas fa-cogs"
                         statIconColor="bg-transparent-500"
+                        statPlayer={player}
                       />
                       <div className="w-full pt-6">
                         {weekWins ? (
