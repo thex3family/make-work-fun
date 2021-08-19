@@ -24,15 +24,19 @@ export default function CardStats({
   setShowTitleModal,
   statPlayer
 }) {
-  var t = window.location.href;
-  var embed_link = `${t.substr(
-    0,
-    t.lastIndexOf('/')
-  )}/embed/player-details?player=${statPlayer}`;
+
+  // this only works when I am not in a folder
+
+  // var t = window.location.href;
+  // var embed_link = `${t.substr(
+  //   0,
+  //   t.lastIndexOf('/')
+  // )}/embed/player-details?player=${statPlayer}`;
+
+  var embed_link = `https://makework.fun/embed/player-details?player=${statPlayer}`;
 
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
-  const [copyText, setCopyText] = useState('Copy Embed Link');
   const btnDropdownRef = createRef();
   const popoverDropdownRef = createRef();
   const openDropdownPopover = () => {
@@ -45,12 +49,19 @@ export default function CardStats({
     setDropdownPopoverShow(false);
   };
 
-  async function handleEmbedLink() {
-    navigator.clipboard.writeText(embed_link);
-    setCopyText('Copied!');
-    await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 sec
-    setCopyText('Copy Embed Link');
-  }
+  // async function handleEmbedLink(style) {
+  //   console.log(style)
+  //   if (style == 'plain') {
+  //     navigator.clipboard.writeText(embed_link);
+  //   }  
+  //   if (style == 'dark'){
+  //     navigator.clipboard.writeText(`${embed_link}&style=dark`);
+  //   }
+
+    // setCopyText('Copied!');
+    // await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 sec
+    // setCopyText('Copy Embed Link');
+  //}
 
   return (
     <>
@@ -102,9 +113,17 @@ export default function CardStats({
                   href={embed_link}
                   target="_blank"
                   className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                  onClick={() => handleEmbedLink()}
+                  onClick={() => navigator.clipboard.writeText(embed_link)}
                 >
-                  {copyText}
+                  Copy Embed Link
+                </a>
+                <a
+                  href={`${embed_link}&style=dark`}
+                  target="_blank"
+                  className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                  onClick={() => navigator.clipboard.writeText(`${embed_link}&style=dark`)}
+                >
+                  Copy Embed Link (Dark Mode)
                 </a>
                 <a
                   href="/account"
