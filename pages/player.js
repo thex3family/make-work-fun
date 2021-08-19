@@ -445,9 +445,10 @@ export default function Player({ user }) {
         className="animate-slow-fade-in bg-fixed bg-cover "
         style={{ backgroundImage: `url(${background_url})` }}
       >
+        <div className="bg-black bg-opacity-70 sm:bg-opacity-0">
         <BottomNavbar />
         <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-          <div className="animate-fade-in-up bg-black rounded opacity-90">
+          <div className="animate-fade-in-up rounded sm:bg-black sm:bg-opacity-90 bg-none bg-opacity-100 opacity-95">
             <div className="pt-10 pb-5">
               <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
                 {greetingMessage},{' '}
@@ -464,7 +465,7 @@ export default function Player({ user }) {
                 {greetingBlurb}
               </p>
             </div>
-            <div className="animate-fade-in-up max-w-6xl px-4 md:px-10 mx-auto w-full -m-24">
+            <div className="animate-fade-in-up max-w-6xl px-0 sm:px-4 md:px-10 mx-auto w-full -m-24">
               <HeaderStats
                 playerStats={playerStats}
                 avatar_url={avatar_url}
@@ -498,6 +499,7 @@ export default function Player({ user }) {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </section>
 
