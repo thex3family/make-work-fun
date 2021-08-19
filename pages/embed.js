@@ -39,10 +39,10 @@ export default function embed({ user }) {
           <div className="sm:flex sm:flex-col sm:align-center">
             <div className="mb-6">
               <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                Create An Embed
+                Generate Embeddable Components
               </h1>
               <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-                Adjust your settings and generate a link!
+                Adjust your settings and generate a sharable link you can embed in Notion and your website!
               </p>
             </div>
             <div className="my-6">
