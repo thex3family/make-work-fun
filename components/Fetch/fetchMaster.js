@@ -6,22 +6,55 @@ export async function fetchLatestWin(
   refreshStats,
   setLevelUp,
   triggerWinModal,
-  setShowWinModal
+  setShowWinModal,
+  player_id
 ) {
   try {
     // check if there is any win (only works when the app is open) - future will move it to a server
+    if (!player_id){
+      const user = supabase.auth.user();
+      const { data, error } = await supabase
+        .from('success_plan')
+        .on('INSERT', async (payload) => {
+          console.log('New Win Incoming!', payload, payload.new.player);
+  
+          // checking if the win is assigned to the current user
+          if (user) {
+            if (payload.new.player === user.id) {
+              // Get the latest updated stats of the user
+              const player = await fetchPlayerStats();
+  
+              // check if user leveled up
+  
+              if (player.current_level > player.previous_level) {
+                // level up animation
+                setLevelUp(player.current_level);
+                notifyMe('level', player.current_level);
+              }
+  
+              // If win is from success plan, set up the modal
+              // if(payload.new.type !== 'Daily Quest'){
+              triggerWinModal(setActiveModalStats, setShowWinModal, payload.new);
+              notifyMe('win', payload.new);
+              // }
+            }
+          }
+          refreshStats();
+        })
+        .subscribe();
+    } 
 
-    const user = supabase.auth.user();
+    if (player_id){
     const { data, error } = await supabase
       .from('success_plan')
       .on('INSERT', async (payload) => {
         console.log('New Win Incoming!', payload, payload.new.player);
 
         // checking if the win is assigned to the current user
-        if (user) {
-          if (payload.new.player === user.id) {
+        if (player_id) {
+          if (payload.new.player === player_id) {
             // Get the latest updated stats of the user
-            const player = await fetchPlayerStats();
+            const player = await fetchPlayerStats(null, player_id);
 
             // check if user leveled up
 
@@ -41,10 +74,8 @@ export async function fetchLatestWin(
         refreshStats();
       })
       .subscribe();
-
-    if (error && status !== 406) {
-      throw error;
     }
+    
   } catch (error) {
     alert(error.message);
   } finally {

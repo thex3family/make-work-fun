@@ -4,7 +4,6 @@ import Avatar from '@/components/Cards/CardAvatar';
 import LeaderboardStatistics from '@/components/Widgets/Statistics/LeaderboardStatistics';
 import { useState, useEffect } from 'react';
 
-import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
@@ -18,6 +17,7 @@ import {
 } from '@/components/Fetch/fetchMaster';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
+import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 
 export default function HomePage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
