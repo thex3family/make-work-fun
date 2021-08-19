@@ -27,7 +27,7 @@ export default function playerDetails() {
   const { style } = router.query;
   const { opacity } = router.query;
 
-  let bg_opacity = 'bg-opacity-50'
+  let bg_opacity = 'bg-opacity-50';
 
   useEffect(() => {
     if (player) refreshStats();
@@ -98,7 +98,6 @@ export default function playerDetails() {
   }
 
   return (
-    <>
       <section
         className="animate-slow-fade-in bg-fixed bg-cover bg-dark"
         style={{ backgroundImage: `url(${background_url})` }}
@@ -185,6 +184,5 @@ export default function playerDetails() {
           </div>
         </div>
       </section>
-    </>
   );
 }
