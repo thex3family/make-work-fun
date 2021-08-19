@@ -25,16 +25,6 @@ export default function CardStats({
   statPlayer
 }) {
 
-  // this only works when I am not in a folder
-
-  // var t = window.location.href;
-  // var embed_link = `${t.substr(
-  //   0,
-  //   t.lastIndexOf('/')
-  // )}/embed/player-details?player=${statPlayer}`;
-
-  var embed_link = `https://makework.fun/embed/player-details?player=${statPlayer}`;
-
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
   const btnDropdownRef = createRef();
@@ -48,20 +38,6 @@ export default function CardStats({
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
-
-  // async function handleEmbedLink(style) {
-  //   console.log(style)
-  //   if (style == 'plain') {
-  //     navigator.clipboard.writeText(embed_link);
-  //   }  
-  //   if (style == 'dark'){
-  //     navigator.clipboard.writeText(`${embed_link}&style=dark`);
-  //   }
-
-    // setCopyText('Copied!');
-    // await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 sec
-    // setCopyText('Copy Embed Link');
-  //}
 
   return (
     <>
@@ -110,20 +86,11 @@ export default function CardStats({
                 }
               >
                 <a
-                  href={embed_link}
+                  href="/embed"
                   target="_blank"
                   className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                  onClick={() => navigator.clipboard.writeText(embed_link)}
                 >
                   Copy Embed Link
-                </a>
-                <a
-                  href={`${embed_link}&style=dark`}
-                  target="_blank"
-                  className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                  onClick={() => navigator.clipboard.writeText(`${embed_link}&style=dark`)}
-                >
-                  Copy Embed Link (Dark Mode)
                 </a>
                 <a
                   href="/account"
