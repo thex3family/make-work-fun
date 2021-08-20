@@ -42,20 +42,19 @@ const SignIn = () => {
     setLoading(true);
     setMessage({});
 
-    const { error } = await passwordReset(email)
+    const { error } = await passwordReset(email);
     if (error) {
       setMessage({ type: 'error', content: error.message });
     }
     if (!password) {
       setMessage({
         type: 'note',
-        content: 'If your account exists, you will receive an email with reset instructions.'
+        content:
+          'If your account exists, you will receive an email with reset instructions.'
       });
     }
     setLoading(false);
   };
-
-
 
   const handleOAuthSignIn = async (provider) => {
     setLoading(true);
@@ -76,11 +75,8 @@ const SignIn = () => {
 
   function initializePlayer() {
     try {
-      if (userOnboarding.onboarding_state.includes('4')) {
-        router.replace('/player');
-      } else {
-        router.replace('/account');
-      }
+      router.replace('/player');
+      console.log('Redirecting to player page');
     } catch (error) {
       alert(error.message);
     } finally {
@@ -229,14 +225,15 @@ const SignIn = () => {
                 href="#"
                 className="text-accents-7 text-accent-9 hover:underline cursor-pointer"
                 onClick={() => {
-                  if (authView) { setPassword('');
-                  setMessage({});
-                  if (authView === 'magic') {
-                    setAuthView('password');
-                  } else {
-                    setAuthView('magic')
+                  if (authView) {
+                    setPassword('');
+                    setMessage({});
+                    if (authView === 'magic') {
+                      setAuthView('password');
+                    } else {
+                      setAuthView('magic');
+                    }
                   }
-                }
                 }}
               >
                 {`Sign in with ${
@@ -283,8 +280,8 @@ const SignIn = () => {
 
   return (
     <div className="h-screen flex justify-center">
-        <LoadingDots />
-      </div>
+      <LoadingDots />
+    </div>
   );
 };
 
