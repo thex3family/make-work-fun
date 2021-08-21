@@ -75,7 +75,7 @@ const SignIn = () => {
 
   function initializePlayer() {
     try {
-      router.replace('/player');
+      router.push('/player');
       console.log('Redirecting to player page');
     } catch (error) {
       alert(error.message);
