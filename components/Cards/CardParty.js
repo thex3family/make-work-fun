@@ -1,6 +1,11 @@
 import React from 'react';
 
-export default function CardParty({ party }) {
+export default function CardParty({ party, avatar_urls }) {
+  
+  avatar_urls.then((result) => { // TODO: Use these results to populate the list of member avatars
+    console.log("CardParty -", result);
+  });
+
   var start_date = new Date(party.start_date);
   var due_date = new Date(party.due_date);
 
