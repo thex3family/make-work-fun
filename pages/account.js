@@ -551,15 +551,13 @@ export default function Account({ initialPurchaseRecord, user }) {
                   </div>
                   {/*footer*/}
                   <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                    <Link href="/notion-api-validator">
                       <Button
                         className="w-full"
                         variant="prominent"
-                        onClick={() => setLoading(true)}
+                        onClick={() => router.push('/notion-api-validator')}
                       >
                         Test Connection
                       </Button>
-                    </Link>
                   </div>
                   <div className="text-center mb-6">
                     <button
