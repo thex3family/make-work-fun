@@ -106,6 +106,28 @@ export default function parties() {
     }
   }
 
+  async function fetchPartyMemberAvatarURLs(party_id) {
+    var party_members_avatar_urls = [];
+
+    try {
+      const { data, error } = await supabase
+        .from('party_members')
+        .select('player_avatar_url: users (avatar_url)')
+        .eq('party_id', party_id);
+
+        party_members_avatar_urls = data;
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+      return party_members_avatar_urls;
+    }
+  }
+
   return (
     <section className="animate-slow-fade-in justify-center bg-dailies-pattern bg-fixed bg-cover">
       <BottomNavbar />
@@ -123,7 +145,7 @@ export default function parties() {
               </h2>
               {activeParties
                 ? activeParties.length != 0
-                  ? activeParties.map((party) => <CardParty key={party.id} party={party} />)
+                  ? activeParties.map((party) => <CardParty key={party.id} party={party} avatar_urls={fetchPartyMemberAvatarURLs(party.id)}/>)
                   : "You aren't a part of any parties."
                 : null}
             </section>
