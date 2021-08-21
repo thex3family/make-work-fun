@@ -229,7 +229,7 @@ export default function Player({ user }) {
       if (userOnboarding.onboarding_state.includes('4')) {
         loadPlayer();
       } else {
-        router.replace('/account');
+        router.push('/account');
       }
     } catch (error) {
       alert(error.message);
