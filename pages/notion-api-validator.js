@@ -63,13 +63,13 @@ export default function NotionWizard({ response, nickname }) {
     try {
       if (
         response.properties.hasOwnProperty('Name') &&
-        response.properties.hasOwnProperty('Status') &&
+        // response.properties.hasOwnProperty('Status') &&
         response.properties.hasOwnProperty('Share With Family?') &&
         response.properties.hasOwnProperty('Family Connection')
       ) {
         if (
           response.properties.Name.type.includes('title') &&
-          response.properties.Status.type.includes('select') &&
+          // response.properties.Status.type.includes('select') &&
           response.properties['Share With Family?'].type.includes('checkbox') &&
           response.properties['Family Connection'].type.includes('text')
         ) {
@@ -180,7 +180,7 @@ export default function NotionWizard({ response, nickname }) {
                       <span className="text-xs font-medium">(Required)</span>
                     </a>
                   </li>
-                  <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
+                  {/* <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
                     <a
                       className={
                         'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
@@ -217,7 +217,7 @@ export default function NotionWizard({ response, nickname }) {
                       Status{' '}
                       <span className="text-xs font-medium">(Required)</span>
                     </a>
-                  </li>
+                  </li> */}
                   <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
                     <a
                       className={
@@ -673,7 +673,7 @@ export default function NotionWizard({ response, nickname }) {
                           src="/wizard/name_prop.PNG"
                         ></img>
                       </div>
-                      <div
+                      {/* <div
                         className={openTab === 2 ? 'block' : 'hidden'}
                         id="link2"
                       >
@@ -724,7 +724,7 @@ export default function NotionWizard({ response, nickname }) {
                           className="w-auto pt-5"
                           src="/wizard/status_prop.PNG"
                         ></img>
-                      </div>
+                      </div> */}
                       <div
                         className={openTab === 3 ? 'block' : 'hidden'}
                         id="link2"
@@ -816,7 +816,7 @@ export default function NotionWizard({ response, nickname }) {
                           button - check this when you are ready to share your
                           win with the world. Keep this property unchecked for
                           any entries you want to keep private.
-                          <br />
+                          {/* <br />
                           <br />
                           <i>
                             The app won't read wins until both{' '}
@@ -827,7 +827,7 @@ export default function NotionWizard({ response, nickname }) {
                             <span className="font-semibold">
                               Share With Family? = ✔
                             </span>
-                          </i>
+                          </i> */}
                         </p>
                         <img
                           className="w-auto pt-5"
