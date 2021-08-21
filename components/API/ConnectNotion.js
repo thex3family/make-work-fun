@@ -51,6 +51,11 @@ export default function ConnectNotion({
     try {
       const user = supabase.auth.user();
 
+      await supabase
+        .from('notion_credentials_validation')
+        .delete()
+        .eq('player', user.id);
+
       const { data, error } = await supabase
         .from('notion_credentials')
         .delete()
@@ -286,7 +291,7 @@ export default function ConnectNotion({
             saving ||
             APIMessage != null ||
             databaseMessage != null ||
-            userMessage != null
+            userMessage != null || databaseID == null || secretKey == null
           }
         >
           {saving ? <LoadingDots /> : 'Save And Test'}
