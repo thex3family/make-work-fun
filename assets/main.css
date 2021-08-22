@@ -63,7 +63,7 @@ a:focus {
 .box-image {
   opacity: 0;
   z-index: 0;
-  height: 300px;
+  height: 250px;
   width: auto;
   top: 50%;
   left: 50%;
@@ -71,8 +71,8 @@ a:focus {
 }
 .box-body {
   position: relative;
-  height: 200px;
-  width: 300px;
+  height: 150px;
+  width: 250px;
   margin-top: 123.3333333333px;
   background-color: #cc231e;
   border-bottom-left-radius: 5%;
@@ -133,8 +133,7 @@ a:focus {
   bottom: 90%;
   height: 40px;
   background-color: #cc231e;
-  height: 40px;
-  width: 320px;
+  width: 270px;
   border-radius: 5%;
   box-shadow: 0 8px 4px -4px rgba(0, 0, 0, 0.3);
 }
