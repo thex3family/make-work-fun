@@ -58,30 +58,30 @@ export default function WinModal({
 
   return (
     <>
-      <div className="h-screen flex justify-center">
+      <div className="flex justify-center">
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none">
-          <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+          <div className="animate-fade-in-up relative my-6 mx-auto max-w-xl lg: max-w-4xl xl:max-w-5xl max-h-screen border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none align-middle">
             {/*content*/}
-            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-              {/*header*/}
-              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
-                <h3 className="text-xl sm:text-2xl font-semibold text-white">
-                  🎉 You've completed a{' '}
-                  <span className="font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
-                    {activeModalStats.type}!
-                  </span>
-                </h3>
-                <button
-                  className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                  onClick={() => closeModal()}
-                >
-                  <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                    ×
-                  </span>
-                </button>
-              </div>
-              {/*body*/}
-              <div className="relative p-6 flex-auto text-blueGray-500 text-center">
+            {/*header*/}
+            <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500 w-full">
+              <h3 className="text-xl sm:text-2xl font-semibold text-white">
+                🎉 You've completed a{' '}
+                <span className="font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+                  {activeModalStats.type}!
+                </span>
+              </h3>
+              <button
+                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                onClick={() => closeModal()}
+              >
+                <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                  ×
+                </span>
+              </button>
+            </div>
+            {/*body*/}
+            <div className="p-6 lg:grid lg:grid-cols-2 lg:gap-10 text-blueGray-500 text-center w-full items-center">
+              <div className="flex flex-col">
                 <div className="my-4">
                   <p className="text-xl sm:text-2xl leading-none text-primary-2 font-bold mb-3">
                     {activeModalStats.name}
@@ -91,7 +91,11 @@ export default function WinModal({
                       {activeModalStats.upstream}
                     </span>
                   ) : null}
-                  {activeModalStats.database_nickname ? <div className="text-xs mt-2">-- {activeModalStats.database_nickname} --</div> : null }
+                  {activeModalStats.database_nickname ? (
+                    <div className="text-xs mt-2">
+                      -- {activeModalStats.database_nickname} --
+                    </div>
+                  ) : null}
 
                   <p className="my-2 font-light text-sm">
                     {activeModalStats.closing_date}
@@ -109,7 +113,8 @@ export default function WinModal({
                     </tr>
                   </tbody>
                 </table>
-
+              </div>
+              <div>
                 <div className="w-full">
                   <div className="box">
                     <a onClick={openBox} className="box-container">
@@ -126,59 +131,47 @@ export default function WinModal({
                     </a>
                   </div>
                 </div>
-
-                {/* <Gif
-                      className="w-3/4 mx-auto justify-center"
-                      gif={activeGIF}
-                      hideAttribution={true}
-                      noLink={true}
-                      width={300}
-                    /> */}
                 <p className="mt-2">It's time to celebrate! 😄</p>
               </div>
-              {/*footer*/}
-              <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                <button
-                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  type="button"
-                  onClick={() => closeModal()}
-                >
-                  Close
-                </button>
-                <a
-                  href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
-                  target="_blank"
-                >
-                  {page !== 'validator' ? (
-                    <button
-                      className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                      onClick={() =>
-                        shareWithGuilded(
-                          playerStats,
-                          activeModalStats,
-                          activeGIF
-                        )
-                      }
-                    >
-                      Share With Family
-                    </button>
-                  ) : null}
-                </a>
-              </div>
-              {page !== 'player' ? (
-                <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
-                  <Link href="/player">
-                    <button
-                      className="text-emerald-500 background-transparent mx-auto font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none ease-linear transition-all duration-150"
-                      type="button"
-                    >
-                      View Character Stats
-                    </button>
-                  </Link>
-                </div>
-              ) : null}
             </div>
+            {/*footer*/}
+            <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+              <button
+                className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="button"
+                onClick={() => closeModal()}
+              >
+                Close
+              </button>
+              <a
+                href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
+                target="_blank"
+              >
+                {page !== 'validator' ? (
+                  <button
+                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() =>
+                      shareWithGuilded(playerStats, activeModalStats, activeGIF)
+                    }
+                  >
+                    Share With Family
+                  </button>
+                ) : null}
+              </a>
+            </div>
+            {page !== 'player' ? (
+              <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
+                <Link href="/player">
+                  <button
+                    className="text-emerald-500 background-transparent mx-auto font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none ease-linear transition-all duration-150"
+                    type="button"
+                  >
+                    View Character Stats
+                  </button>
+                </Link>
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="opacity-25 fixed inset-0 z-30 bg-black"></div>
