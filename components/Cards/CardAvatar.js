@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Button from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '@/components/ui/LoadingDots';
+import { createPopper } from '@popperjs/core';
 
 export default function Avatar({
   statRank,
@@ -18,7 +19,9 @@ export default function Avatar({
   statWinEXP,
   avatar_url,
   background_url,
-  statTitle
+  statTitle,
+  statEXPEarnedToday,
+  statGoldEarnedToday
 }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
@@ -60,11 +63,25 @@ export default function Avatar({
 
   const statMaxLevel = '100';
   const statEXPPercent = Math.floor((statEXPProgress / statLevelEXP) * 100);
+
   const statArrow = 'up';
   const statPercent = '0';
   const statPercentColor = 'text-white';
   const statIconName = 'fas fa-chevron-up';
   const statIconColor = 'bg-transparent-500';
+
+  const [popoverShow, setPopoverShow] = React.useState(false);
+  const btnRef = React.createRef();
+  const popoverRef = React.createRef();
+  const openTooltip = () => {
+    createPopper(btnRef.current, popoverRef.current, {
+      placement: 'bottom'
+    });
+    setPopoverShow(true);
+  };
+  const closeTooltip = () => {
+    setPopoverShow(false);
+  };
 
   return (
     <>
@@ -175,31 +192,45 @@ export default function Avatar({
                 </div>
               </div>
             </div>
-            <div className="flex flex-row items-center gap-4">
+            <div className="flex flex-row items-center gap-4" onMouseEnter={openTooltip} onMouseLeave={closeTooltip} ref={btnRef}> 
               <div
                 variant="slim"
                 className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
               >
-                {statGold} 💰
-              </div>
-              <div
-                variant="slim"
-                className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
-              >
-                <span className={statPercentColor + ' mr-2'}>
-                  <i
+                <i
                     className={
-                      statArrow === 'up'
-                        ? 'fas fa-arrow-up'
-                        : statArrow === 'down'
-                        ? 'fas fa-arrow-down'
-                        : ''
+                      statGoldEarnedToday > 0
+                        ? 'fas fa-arrow-up text-emerald-500'
+                        : 'fas fa-grip-lines text-red-500'
                     }
                   ></i>{' '}
-                  {statPercent}%
-                </span>
+                {statGoldEarnedToday ? +statGoldEarnedToday : 0} 💰
+              </div>
+              <div
+                variant="slim"
+                className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
+              >
+                  <i
+                    className={
+                      statEXPEarnedToday > 0
+                        ? 'fas fa-arrow-up text-emerald-500'
+                        : 'fas fa-grip-lines text-red-500'
+                    }
+                  ></i>{' '}
+                  {statEXPEarnedToday ? +statEXPEarnedToday : 0} XP
               </div>
             </div>
+            <div
+            className={
+              (popoverShow ? '' : 'hidden ') +
+              'bg-primary-3 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg'
+            }
+            ref={popoverRef}
+          >
+            <div>
+              <div className="text-white p-3">⭐ Today's Earnings!</div>
+            </div>
+          </div>
             <div className="mt-6">
               <div className="">
                 <div className="">
