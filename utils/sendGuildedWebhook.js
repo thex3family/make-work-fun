@@ -25,7 +25,8 @@ export async function shareWithGuilded(playerStats, activeModalStats, activeGIF)
             // embed title
             // - link on 2nd row
             title: `${activeModalStats.name}`,
-            url: `${activeModalStats.notion_id ? `https://www.notion.so/${activeModalStats.notion_id.replace(/-/g, '')}` : `https://makework.fun/dailies/`}`,
+            // url: `${activeModalStats.notion_id ? `https://www.notion.so/${activeModalStats.notion_id.replace(/-/g, '')}` : `https://makework.fun/dailies/`}`,
+            url: `https://makework.fun/player?utm_source=notification&win_id=${activeModalStats.id}`,
             // thumbnail
             thumbnail: {
               url: `${activeGIF}`
