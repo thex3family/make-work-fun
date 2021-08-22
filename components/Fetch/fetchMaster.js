@@ -145,6 +145,34 @@ export async function fetchWins() {
   }
 }
 
+export async function fetchSpecificWin(win_id) {
+  try {
+    const user = supabase.auth.user();
+
+    const { data, error } = await supabase
+      .from('success_plan')
+      .select(
+        'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname'
+      )
+      .eq('player', user.id)
+      .eq('id', win_id)
+      .order('closing_date', { ascending: false })
+      .order('entered_on', { ascending: false })
+      .single()
+
+    if (data) {
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    console.log('No specific win found!');
+  } finally {
+  }
+}
+
 export async function fetchWeekWins(player) {
   try {
     if(!player){

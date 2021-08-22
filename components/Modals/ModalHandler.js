@@ -3,6 +3,7 @@ export async function triggerWinModal(
   setShowWinModal,
   wins
 ) {
+  console.log(wins)
   setActiveModalStats(wins);
   // show modal
   setShowWinModal(true);

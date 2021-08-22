@@ -26,7 +26,8 @@ import {
   fetchWeekWins,
   fetchLatestWin,
   fetchAreaStats,
-  fetchTitles
+  fetchTitles,
+  fetchSpecificWin
 } from '@/components/Fetch/fetchMaster';
 
 import { pushTitle } from '@/components/Push/pushMaster';
@@ -91,7 +92,7 @@ export default function Player({ user }) {
   const [activeModalStats, setActiveModalStats] = useState(null);
   const [weekWins, setWeekWins] = useState([]);
   const [areaStats, setAreaStats] = useState([]);
-  const [titles, setTitles] = useState([]);
+  const [titles, setTitles] = useState([]);  
 
   const currentHour = new Date().getHours();
   const greetingMessage =
@@ -250,6 +251,7 @@ export default function Player({ user }) {
       triggerWinModal,
       setShowWinModal
     );
+    if (win_id) loadSpecificWin(win_id);
   }
 
   async function refreshStats() {
@@ -322,6 +324,16 @@ export default function Player({ user }) {
   async function modalHandler(wins) {
     triggerWinModal(setActiveModalStats, setShowWinModal, wins);
   }
+
+  // if specific win is called on
+
+  const { win_id } = router.query;
+
+  async function loadSpecificWin(win){
+    const specific_win = await fetchSpecificWin(win)
+    if(specific_win) {triggerWinModal(setActiveModalStats, setShowWinModal, specific_win)}
+  }
+  
 
   if (loading) {
     return (

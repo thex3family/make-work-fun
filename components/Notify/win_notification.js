@@ -63,6 +63,7 @@ export default async function notifyMe(type, details) {
     let title = "🎉 You've completed a " + details.type.toLowerCase() + '!';
     let text = truncateString(details.name, 178);
     let vibe = [200, 100, 200];
+    let win_id = details.id;
     var options = {
       body: text,
       icon: img,
@@ -70,10 +71,11 @@ export default async function notifyMe(type, details) {
       vibrate: vibe,
       tag: type,
       renotify: true,
-    //   data: {
-    //     dateOfArrival: Date.now(),
-    //     primaryKey: 1
-    //   },
+      data: {
+        // dateOfArrival: Date.now(),
+        // primaryKey: 1
+        win_id: win_id
+      },
     };
     sendNotification(title, options);
   } else if (type == 'level') {
