@@ -9,7 +9,6 @@ self.addEventListener('notificationclick', function (e) {
     e.notification.close();
     console.log('Closed Notification');
   } else {
-    e.notification.close();
     e.waitUntil(
       clients
         .matchAll({
@@ -25,6 +24,7 @@ self.addEventListener('notificationclick', function (e) {
           }
         })
     );
+    e.notification.close();
     // e.waitUntil(clients.matchAll({ type: 'window' }).then(clientsArr => {
     //   // If a Window tab matching the targeted URL already exists, focus that;
     //   const hadWindowToFocus = clientsArr.some(windowClient => win_url.includes(windowClient.url) ? (windowClient.focus(), true) : false);
@@ -32,6 +32,6 @@ self.addEventListener('notificationclick', function (e) {
     //   if (!hadWindowToFocus) clients.openWindow(win_url).then(windowClient => windowClient ? windowClient.focus() : null);
     // }));
     // clients.openWindow(`https://makework.fun/player?utm_source=notification&win_id=${win_id}`);
-    notification.close();
+    // notification.close();
   }
 });
