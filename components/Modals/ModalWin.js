@@ -60,7 +60,7 @@ export default function WinModal({
     <>
       <div className="flex justify-center">
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none">
-          <div className="animate-fade-in-up relative my-6 mx-auto max-w-xl lg: max-w-4xl xl:max-w-5xl max-h-screen border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none align-middle">
+          <div className="animate-fade-in-up relative my-6 mx-auto max-w-xl lg:max-w-4xl xl:max-w-5xl max-h-screen border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none align-middle">
             {/*content*/}
             {/*header*/}
             <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500 w-full">
