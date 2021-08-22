@@ -200,8 +200,8 @@ export default function Avatar({
                 <i
                     className={
                       statGoldEarnedToday > 0
-                        ? 'fas fa-arrow-up text-emerald-500'
-                        : 'fas fa-grip-lines text-red-500'
+                        ? statGoldEarnedToday >= 1000 ? 'fas fa-angle-double-up text-emerald-500' : 'fas fa-angle-up text-emerald-600'
+                        : 'fas fa-grip-lines text-red-600'
                     }
                   ></i>{' '}
                 {statGoldEarnedToday ? +statGoldEarnedToday : 0} 💰
@@ -213,8 +213,8 @@ export default function Avatar({
                   <i
                     className={
                       statEXPEarnedToday > 0
-                        ? 'fas fa-arrow-up text-emerald-500'
-                        : 'fas fa-grip-lines text-red-500'
+                        ? statEXPEarnedToday >= 1000 ? 'fas fa-angle-double-up text-emerald-500' : 'fas fa-angle-up text-emerald-600'
+                        : 'fas fa-grip-lines text-red-600'
                     }
                   ></i>{' '}
                   {statEXPEarnedToday ? +statEXPEarnedToday : 0} XP

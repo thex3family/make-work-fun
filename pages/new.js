@@ -17,6 +17,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Aug 23, 2021"
+            title="See Today's Earnings On The Leaderboard"
+            desc="What does it take to rank up? Get motivated by seeing how your friends and family have been leveling up every day!"
+            img_url="updates/0.20.png"
+            button_url="/"
+            version="v.20"
+          />
           <CardRUpdate
             date="Aug 19, 2021"
             title="Embed Your Character Into Your Sites"
