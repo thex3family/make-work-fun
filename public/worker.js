@@ -6,25 +6,31 @@ self.addEventListener('notificationclick', function (e) {
   var win_url = `https://makework.fun/player?utm_source=notification&win_id=${e.notification.data.win_id}`;
 
   if (action === 'close') {
-    e.notification.close();
+    notification.close();
     console.log('Closed Notification');
   } else {
-    e.waitUntil(
-      clients
-        .matchAll({
-          type: 'window'
-        })
-        .then(function (clientList) {
-          for (var i = 0; i < clientList.length; i++) {
-            var client = clientList[i];
-            if (client.url == '/' && 'focus' in client) return client.focus();
-          }
-          if (clients.openWindow) {
-            return clients.openWindow(win_url);
-          }
-        })
-    );
-    e.notification.close();
+    e.waitUntil(clients.matchAll({ type: 'window' }).then(clientsArr => {
+      // If a Window tab matching the targeted URL already exists, focus that;
+      const hadWindowToFocus = clientsArr.some(windowClient => windowClient.url === "https://makework.fun/" ? (windowClient.focus(), true) : false);
+      // Otherwise, open a new tab to the applicable URL and focus it.
+      if (!hadWindowToFocus) clients.openWindow(win_url).then(windowClient => windowClient ? windowClient.focus() : null);
+    }));
+    // e.waitUntil(
+    //   clients
+    //     .matchAll({
+    //       type: 'window'
+    //     })
+    //     .then(function (clientList) {
+    //       for (var i = 0; i < clientList.length; i++) {
+    //         var client = clientList[i];
+    //         if (client.url == '/' && 'focus' in client) return client.focus();
+    //       }
+    //       if (clients.openWindow) {
+    //         return clients.openWindow(win_url);
+    //       }
+    //     })
+    // );
+    notification.close();
     // e.waitUntil(clients.matchAll({ type: 'window' }).then(clientsArr => {
     //   // If a Window tab matching the targeted URL already exists, focus that;
     //   const hadWindowToFocus = clientsArr.some(windowClient => win_url.includes(windowClient.url) ? (windowClient.focus(), true) : false);
