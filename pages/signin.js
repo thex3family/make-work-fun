@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { supabase } from '../utils/supabase-client';
 
 import Button from '@/components/ui/Button';
 import GitHub from '@/components/icons/GitHub';
@@ -8,14 +9,14 @@ import Input from '@/components/ui/Input';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { useUser } from '@/utils/useUser';
 
-const SignIn = () => {
+const SignIn = ({user}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authView, setAuthView] = useState('magic');
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ type: '', content: '' });
   const router = useRouter();
-  const { user, signIn, passwordReset, userOnboarding } = useUser();
+  const { signIn, passwordReset, userOnboarding } = useUser();
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -286,3 +287,13 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
+export async function getServerSideProps({ req }) {
+  // Get the user's session based on the request
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  return {
+    props: { user }
+  };
+}
+
