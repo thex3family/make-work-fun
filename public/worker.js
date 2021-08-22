@@ -3,28 +3,27 @@ self.__WB_DISABLE_DEV_LOGS = true;
 self.addEventListener('notificationclick', function (e) {
   var notification = e.notification;
   var action = e.action;
-  var location = `player?utm_source=notification&win_id=${e.notification.data.win_id}`;
+  var win_url = `https://makework.fun/player?utm_source=notification&win_id=${e.notification.data.win_id}`;
 
   if (action === 'close') {
     e.notification.close();
     console.log('Closed Notification');
   } else {
-    //For root applications: just change "'./'" to "'/'"
-    //Very important having the last forward slash on "new URL('./', location)..."
-    const rootUrl = new URL('./', location).href;
     e.notification.close();
     e.waitUntil(
-      clients.matchAll().then((matchedClients) => {
-        for (let client of matchedClients) {
-          if (client.url.indexOf(rootUrl) >= 0) {
-            return client.focus();
+      clients
+        .matchAll({
+          type: 'window'
+        })
+        .then(function (clientList) {
+          for (var i = 0; i < clientList.length; i++) {
+            var client = clientList[i];
+            if (client.url == '/' && 'focus' in client) return client.focus();
           }
-        }
-
-        return clients.openWindow(rootUrl).then(function (client) {
-          client.focus();
-        });
-      })
+          if (clients.openWindow) {
+            return clients.openWindow(win_url);
+          }
+        })
     );
     // e.waitUntil(clients.matchAll({ type: 'window' }).then(clientsArr => {
     //   // If a Window tab matching the targeted URL already exists, focus that;
