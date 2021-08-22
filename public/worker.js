@@ -9,6 +9,7 @@ self.addEventListener('notificationclick', function (e) {
     notification.close();
     console.log('Closed Notification');
   } else {
+    // this code doesn't really work, always the false case.
     e.waitUntil(clients.matchAll({ type: 'window' }).then(clientsArr => {
       // If a Window tab matching the targeted URL already exists, focus that;
       const hadWindowToFocus = clientsArr.some(windowClient => windowClient.url.includes("makework.fun") ? (windowClient.focus(), true) : false);
