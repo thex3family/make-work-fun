@@ -26,6 +26,7 @@ export default function Avatar({
 
   useEffect(() => {
     if (avatar_url) downloadImage(avatar_url, "avatar");
+    if (!avatar_url) setAvatarStatus("Missing");
     if (background_url) downloadImage(background_url, "background");
   }, []);
 
