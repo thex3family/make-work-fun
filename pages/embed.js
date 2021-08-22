@@ -108,7 +108,7 @@ export default function embed({ user }) {
                 </Button>
               </div>
               <div className="mb-1 font-semibold text-accents-2">Preview</div>
-              <iframe className="resize w-full h-96" src={embed_link} />
+              <iframe className="resize w-full" height="650" src={embed_link} />
             </div>
           </div>
         </div>
