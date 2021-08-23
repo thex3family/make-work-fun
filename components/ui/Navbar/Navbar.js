@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { useRouter } from 'next/router';
 
 const navigation = [
   { name: 'Player 🐣', href: '/player' },
@@ -16,6 +17,7 @@ import { useUser } from '@/utils/useUser';
 
 const Navbar = () => {
   const { user, signOut } = useUser();
+  const router = useRouter();
 
   return (
     // <nav className={s.root}>
@@ -78,7 +80,7 @@ const Navbar = () => {
             <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
               <div className="flex items-center justify-between w-full md:w-auto">
                 <a href="/" className={s.logo}>
-                  <span className="sr-only">Workflow</span>
+                  <span className="sr-only">Home</span>
                   <img
                     className="h-8 w-auto sm:h-10"
                     src="../co-x3logo_white_full.svg"
@@ -96,7 +98,7 @@ const Navbar = () => {
             </div>
             <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
               {navigation.map((item) => (
-                <Link href={item.href}><a key={item.name} className={s.link}>
+                <Link href={item.href}><a key={item.name} className={`${s.link} ${router.pathname == item.href ? s.activeLink : null}`}>
                   {item.name}
                 </a>
                 </Link>
@@ -157,7 +159,7 @@ const Navbar = () => {
                   <Link href={item.href}>
                   <a
                     key={item.name}
-                    className={s.mobile}
+                    className={`${s.mobile} ${router.pathname == item.href ? s.activeMobileLink : null}`}
                   >
                     {item.name}
                   </a>
