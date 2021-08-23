@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 
 import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
-import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
 // functions
 
@@ -83,7 +82,6 @@ export default function HomePage() {
   return (
     <>
       <section className="justify-center">
-      <BottomNavbar />
         <div className="bg-player-pattern bg-fixed h-4/5">
           <div className="bg-black bg-opacity-90 h-4/5">
             <div className="animate-fade-in-up  pt-8 md:pt-24 pb-10 max-w-7xl mx-auto">

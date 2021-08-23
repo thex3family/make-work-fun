@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { supabase } from '../../utils/supabase-client';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
-import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 import { Table, Input, Button, Popconfirm, Form, Select, Switch } from 'antd';
 import 'antd/dist/antd.css';
 
@@ -516,7 +515,6 @@ export default function edit({user}) {
       ) : (
         <div></div>
       )}
-      <BottomNavbar />
       <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
         <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
           <div className="pb-5 text-center">
