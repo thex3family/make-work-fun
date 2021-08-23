@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 
 import Navbar from '@/components/ui/Navbar';
 import Footer from '@/components/ui/Footer';
+import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
+
+import { useUser } from '@/utils/useUser';
 
 export default function Layout({ children, meta: pageMeta }) {
   const router = useRouter();
@@ -12,6 +15,12 @@ export default function Layout({ children, meta: pageMeta }) {
     cardImage: '/og.png',
     ...pageMeta
   };
+
+  
+  const {
+    user,
+    userOnboarding,
+  } = useUser();
 
   return (
     <>
@@ -38,6 +47,7 @@ export default function Layout({ children, meta: pageMeta }) {
       </Head>
       {!router.asPath.includes('embed/') ? <Navbar /> : null}
       <main id="skip">{children}</main>
+      {userOnboarding ? userOnboarding.onboarding_state.includes('4') ? <BottomNavbar /> : null : null}
       {!router.asPath.includes('embed/') ? <Footer /> : null}
     </>
   );
