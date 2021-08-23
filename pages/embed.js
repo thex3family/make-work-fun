@@ -34,8 +34,8 @@ export default function embed() {
   const { user } = useUser();
 
   useEffect(() => {
-    handleEmbedLink(dark);
-  }, [dark, embedComponent]);
+    if(user) handleEmbedLink(dark);
+  }, [user, dark, embedComponent]);
 
   async function handleEmbedLink(dark) {
     var t = window.location.href;
@@ -239,7 +239,7 @@ export default function embed() {
                 <iframe
                   id="player-card"
                   className="w-full lg:w-96"
-                  height="605"
+                  height="610"
                   src={embed_link}
                 />
               </div>
