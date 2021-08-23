@@ -47,7 +47,7 @@ export default function Layout({ children, meta: pageMeta }) {
       </Head>
       {!router.asPath.includes('embed/') ? <Navbar /> : null}
       <main id="skip">{children}</main>
-      {userOnboarding ? userOnboarding.onboarding_state.includes('4') ? <BottomNavbar /> : null : null}
+      {userOnboarding ? userOnboarding.onboarding_state.includes('4') && !router.asPath.includes('embed/') ? <BottomNavbar /> : null : null}
       {!router.asPath.includes('embed/') ? <Footer /> : null}
     </>
   );
