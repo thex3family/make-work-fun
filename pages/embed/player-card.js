@@ -120,8 +120,8 @@ export default function playerDetails() {
 
   return (
     <>
-      <section className={`animate-slow-fade-in h-screen ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
-        <div className="mx-5 pt-5">
+      <section className={`animate-slow-fade-in h-screen responsiveBackground ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
+        <div className="mx-5 py-5">
         <Avatar
           statRank={playerStats.player_rank}
           statName={playerStats.full_name}

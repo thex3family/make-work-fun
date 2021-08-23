@@ -351,3 +351,8 @@ a:focus {
 .confetti {
   z-index: 99;
 }
+
+.responsiveBackground {
+  min-height: 100vh;
+  height: 100%;
+}
