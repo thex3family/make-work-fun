@@ -27,7 +27,7 @@ function Card({ title, description, footer, children }) {
   );
 }
 
-export default function Account({ initialPurchaseRecord, user }) {
+export default function Account({ initialPurchaseRecord }) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function Account({ initialPurchaseRecord, user }) {
 
   const [notionCredentials, setNotionCredentials] = useState(null);
 
-  const { userLoaded, session, userDetails } = useUser();
+  const { user, userLoaded, session, userDetails } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   useEffect(() => {

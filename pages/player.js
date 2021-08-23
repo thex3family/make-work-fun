@@ -72,10 +72,11 @@ createTheme('game', {
   }
 });
 
-export default function Player({ user }) {
+export default function Player() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const {
+    user,
     userLoaded,
     session,
     userDetails,

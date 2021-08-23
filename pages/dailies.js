@@ -22,7 +22,7 @@ import {
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 
-export default function dallies({ user }) {
+export default function dallies() {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dailiesCount, setDailiesCount] = useState(0);
@@ -36,6 +36,7 @@ export default function dallies({ user }) {
 
   const router = useRouter();
   const {
+    user,
     userLoaded,
     session,
     userDetails,
