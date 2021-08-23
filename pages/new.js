@@ -11,8 +11,7 @@ export default function updates() {
             Whoa, there’s new stuff!
           </h1>
           <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-            We’re constantly making our app better. Here are some of the of
-            notable new features and improvements that we’ve made.
+            We’re constantly making our app better. Here are some of the notable new features and improvements that we’ve made.
           </p>
         </div>
         <div className="timeline z-10 grid grid-cols-3">
