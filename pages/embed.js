@@ -5,6 +5,8 @@ import Button from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase-client';
 import { createPopper } from '@popperjs/core';
 
+import { useUser } from '@/utils/useUser';
+
 function Feature({ name, status }) {
   return (
     <div
@@ -24,11 +26,12 @@ function Feature({ name, status }) {
   );
 }
 
-export default function embed({ user }) {
+export default function embed() {
   const [dark, setDark] = useState(false);
   const [embed_link, setEmbedLink] = useState(null);
   const [copyText, setCopyText] = useState('Copy');
   const [embedComponent, setEmbedComponent] = useState(1);
+  const { user } = useUser();
 
   useEffect(() => {
     handleEmbedLink(dark);
@@ -96,7 +99,7 @@ export default function embed({ user }) {
             </div>
             <div className="relative w-auto pl-4 flex-initial">
               <button
-                className="text-lg font-semibold button primary block cursor-pointer py-2 rounded outline-none border border-accents-4 mt-6 w-1/4 md:w-full lg:w-1/4 mx-auto focus:outline-none"
+                className="text-lg font-semibold button primary block cursor-pointer py-2 rounded outline-none border border-accents-4 mt-6 w-1/2 md:w-full lg:w-1/4 mx-auto focus:outline-none"
                 type="button"
                 ref={btnDropdownRef}
                 onClick={() => {
