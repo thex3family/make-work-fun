@@ -85,8 +85,8 @@ export default function Avatar({
 
   return (
     <>
-      <div className="px-8 mt-10 w-full sm:w-1/2 md:1/2 lg:w-1/3 xl:w-1/4 shadow-xl">
-        <div className="bg-primary-2 rounded mx-auto">
+      <div className="w-full sm:w-1/2 md:1/3 lg:w-1/4 xl:w-1/5 shadow-xl">
+        <div className="bg-primary-2 rounded-md mx-auto overflow-hidden">
           <div className="rounded-tr-md rounded-tl-md w-auto bg-cover" style={{ backgroundImage: `url(${backgroundUrl})` }}>
             <div className="bg-black bg-opacity-70">
               {/* {avatarUrl ? (
