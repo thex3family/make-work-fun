@@ -14,10 +14,14 @@ import {
   fetchLatestWin,
   fetchLeaderboardStats
 } from '@/components/Fetch/fetchMaster';
-import { triggerWinModal, triggerCardWin } from '@/components/Modals/ModalHandler';
+import {
+  triggerWinModal,
+  triggerCardWin
+} from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import CardWin from '@/components/Cards/CardWin';
+import Pagination from '@/components/Pagination';
 
 export default function HomePage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -25,6 +29,19 @@ export default function HomePage() {
 
   const [players, setPlayers] = useState([]);
   const [s1Players, setS1Players] = useState([]);
+  const [activePlayers, setActivePlayers] = useState([]);
+
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(12);
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPlayers = activePlayers.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
 
   const [levelUp, setLevelUp] = useState(false);
 
@@ -33,10 +50,16 @@ export default function HomePage() {
   const [activeWinStats, setActiveWinStats] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
   const [showCardWin, setShowCardWin] = useState(false);
-  
+
   const [avatarUrl, setAvatarUrl] = useState(null);
 
   const [openTab, setOpenTab] = useState(1);
+  
+  useEffect(() => {
+    if(openTab == 1 && s1Players) setActivePlayers(s1Players)
+    if(openTab == 2 && players) setActivePlayers(players)
+    setCurrentPage(1);
+  }, [openTab, s1Players]);
 
   // Redirects user to reset password
 
@@ -71,7 +94,7 @@ export default function HomePage() {
       triggerCardWin,
       setShowCardWin,
       setAvatarUrl,
-      setActiveWinStats,
+      setActiveWinStats
     );
   }, []);
 
@@ -226,10 +249,10 @@ export default function HomePage() {
                 className="max-w-screen-lg mx-auto flex mb-0 mt-6 list-none flex-wrap pt-3 pb-4 flex-row"
                 role="tablist"
               >
-                <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <li className="flex-auto text-center mx-2">
                   <a
                     className={
-                      'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                      'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
                       (openTab === 1
                         ? 'text-white bg-gradient-to-r from-emerald-500 to-blue-500'
                         : 'text-blueGray-600 bg-white')
@@ -255,10 +278,10 @@ export default function HomePage() {
                     </div>
                   </a>
                 </li>
-                <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <li className="mx-2 flex-auto text-center">
                   <a
                     className={
-                      'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                      'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
                       (openTab === 2
                         ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                         : 'text-blueGray-600 bg-white')
@@ -285,15 +308,16 @@ export default function HomePage() {
                   </a>
                 </li>
               </ul>
+              <div className='mb-24'>
               <div
                 className={
                   openTab === 1
-                    ? 'mb-24 mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                    ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                     : 'hidden'
                 }
                 id="link1"
               >
-                {s1Players.map((player, i) => (
+                {currentPlayers.map((player, i) => (
                   <Avatar
                     key={i}
                     statRank={player.player_rank}
@@ -318,12 +342,12 @@ export default function HomePage() {
               <div
                 className={
                   openTab === 2
-                    ? 'mb-24 mx-5 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                    ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                     : 'hidden'
                 }
                 id="link2"
               >
-                {players.map((player, i) => (
+                {currentPlayers.map((player, i) => (
                   <Avatar
                     key={i}
                     statRank={player.player_rank}
@@ -344,6 +368,14 @@ export default function HomePage() {
                     statGoldEarnedToday={player.gold_earned_today}
                   />
                 ))}
+              </div>
+              
+              <Pagination
+                postsPerPage={postsPerPage}
+                totalPosts={s1Players.length}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
               </div>
             </div>
           </div>
@@ -369,7 +401,12 @@ export default function HomePage() {
       ) : null}
 
       {showCardWin ? (
-        <CardWin setShowCardWin={setShowCardWin} win={activeWinStats} player_name={showCardWin} avatarUrl={avatarUrl} />
+        <CardWin
+          setShowCardWin={setShowCardWin}
+          win={activeWinStats}
+          player_name={showCardWin}
+          avatarUrl={avatarUrl}
+        />
       ) : null}
     </>
   );
