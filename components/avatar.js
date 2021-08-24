@@ -3,11 +3,8 @@ import { supabase } from '../utils/supabase-client';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { createPopper } from '@popperjs/core';
 
-export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload, showHide, setShowHide }) {
-  const [avatarUrl, setAvatarUrl] = useState(null);
-  const [avatarStatus, setAvatarStatus] = useState(null);
+export default function Avatar({ avatarUrl, size, onAvatarUpload, onBackgroundUpload, showHide, setShowHide }) {
   const [uploading, setUploading] = useState(false);
-
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
   const btnDropdownRef = createRef();
@@ -21,28 +18,6 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload, 
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
-
-  useEffect(() => {
-    if (url) downloadImage(url);
-    if (!url) setAvatarStatus('Missing');
-  }, [url]);
-
-  async function downloadImage(path) {
-    try {
-      const { data, error } = await supabase.storage
-        .from('avatars')
-        .download(path);
-      if (error) {
-        throw error;
-      }
-      const url = URL.createObjectURL(data);
-      setAvatarUrl(url);
-    } catch (error) {
-      console.log('Error downloading image: ', error.message);
-    } finally {
-      setAvatarStatus('Exists');
-    }
-  }
 
   async function uploadAvatar(event) {
     try {
@@ -104,7 +79,7 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload, 
 
   return (
     <div>
-      {avatarStatus == 'Exists' ? (
+      {avatarUrl ? (
         <img
           className="avatar image h-36 sm:h-auto m-auto cursor-pointer"
           src={avatarUrl}
@@ -113,7 +88,7 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload, 
             showHide ? setShowHide(false) : setShowHide(true);
           }}
         />
-      ) : avatarStatus == 'Missing' ? (
+      ) : (
         <img
           className="avatar image h-36 sm:h-auto m-auto cursor-pointer"
           src="img/default_avatar.png"
@@ -122,11 +97,7 @@ export default function Avatar({ url, size, onAvatarUpload, onBackgroundUpload, 
             showHide ? setShowHide(false) : setShowHide(true);
           }}
         />
-      ) : (
-        <div className="flex avatar image m-auto justify-center">
-          <LoadingDots />
-        </div>
-      )}
+      ) }
       {/* {avatarUrl ? (
         <img
           className="avatar image m-auto"
