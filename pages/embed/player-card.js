@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import CardAreaStats from '@/components/Cards/CardAreaStats';
 import CardLineChart from 'components/Cards/CardLineChart.js';
 import Avatar from '@/components/Cards/CardAvatar';
+import CardWin from '@/components/Cards/CardWin';
 
 import {
   fetchPlayerStats,
@@ -15,7 +16,7 @@ import {
   fetchSpecificPlayers
 } from '@/components/Fetch/fetchMaster';
 
-import { triggerWinModal } from '@/components/Modals/ModalHandler';
+import { triggerWinModal, triggerCardWin } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 
@@ -23,7 +24,6 @@ export default function playerDetails() {
   const router = useRouter();
   const [playerStats, setPlayerStats] = useState(null);
   const [specificPlayers, setSpecificPlayers] = useState(null);
-  const [avatar_url, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showHide, setShowHide] = useState(true);
@@ -44,6 +44,12 @@ export default function playerDetails() {
   const [levelUp, setLevelUp] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
 
+  // Card Win Stuff
+  const [activeWinStats, setActiveWinStats] = useState(null);
+  const [showCardWin, setShowCardWin] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [friends, setFriends] = useState(null);
+
   useEffect(() => {
     if (player || id) refreshStats();
     if (player)
@@ -55,12 +61,26 @@ export default function playerDetails() {
         setShowWinModal,
         player
       );
-  }, [player, id]);
+    if (id) 
+    fetchLatestWin(
+      setActiveModalStats,
+      refreshStats,
+      setLevelUp,
+      triggerWinModal,
+      setShowWinModal,
+      null,
+      triggerCardWin,
+      setShowCardWin,
+      setAvatarUrl,
+      setActiveWinStats,
+      friends
+    );
+  }, [player, id, friends]);
 
   async function refreshStats() {
     console.log('statsRefreshing');
     if (player) setPlayerStats(await fetchPlayerStats(null, player));
-    if (id) setSpecificPlayers(await fetchSpecificPlayers(id));
+    if (id) setSpecificPlayers(await fetchSpecificPlayers(id, setFriends));
     setLoading(false);
   }
 
@@ -175,6 +195,15 @@ export default function playerDetails() {
           </div>
         ) : null}
       </section>
+      {showCardWin ? (
+        <CardWin
+          setShowCardWin={setShowCardWin}
+          win={activeWinStats}
+          player_name={showCardWin}
+          avatarUrl={avatarUrl}
+          position={'top'}
+        />
+      ) : null}
     </>
   );
 }

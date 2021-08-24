@@ -13,6 +13,7 @@ export async function fetchLatestWin(
   setShowCardWin,
   setAvatarUrl,
   setActiveWinStats,
+  friends
 ) {
   try {
     // check if there is any win (only works when the app is open) - future will move it to a server
@@ -59,14 +60,26 @@ export async function fetchLatestWin(
               }
             }
           } else {
+            // if not logged in
             // if Show Card Win Exists (usually on leaderboard)
             if (triggerCardWin) {
-              triggerCardWin(
-                setActiveWinStats,
-                setShowCardWin,
-                payload.new,
-                setAvatarUrl
-              );
+              if (friends) {
+                if (friends.includes(payload.new.player)) {
+                  triggerCardWin(
+                    setActiveWinStats,
+                    setShowCardWin,
+                    payload.new,
+                    setAvatarUrl
+                  );
+                }
+              } else {
+                triggerCardWin(
+                  setActiveWinStats,
+                  setShowCardWin,
+                  payload.new,
+                  setAvatarUrl
+                );
+              }
             }
           }
           refreshStats();
@@ -210,7 +223,7 @@ export async function fetchSpecificWin(win_id) {
       throw error;
     }
   } catch (error) {
-    console.log('No specific win found!');
+    console.log('No Specific win found!');
   } finally {
   }
 }
@@ -295,9 +308,7 @@ export async function fetchLeaderboardStats(
   }
 }
 
-export async function fetchPlayers(
-  setPlayers,
-) {
+export async function fetchPlayers(setPlayers) {
   try {
     const { data, error } = await supabase
       .from('leaderboard')
@@ -317,29 +328,27 @@ export async function fetchPlayers(
   }
 }
 
-export async function fetchSpecificPlayers(
-  id,
-) {
+export async function fetchSpecificPlayers(id, setFriends) {
   try {
     const { data } = await supabase
       .from('friendship_links')
       .select('*')
       .eq('id', id)
       .single();
-      
-      const friends = (JSON.stringify(data.friends)+',player.eq.'+JSON.stringify(data.user)).replace(/"/g,"");
+
+    const friends = (
+      JSON.stringify(data.friends) +
+      ',player.eq.' +
+      JSON.stringify(data.user)
+    ).replace(/"/g, '');
+    setFriends(friends);
 
     if (friends) {
       const { data, error } = await supabase
-      .from('s1_leaderboard')
-      .select('*')
-      .order('total_exp', { ascending: false })
-      .or(
-        friends
-      );
-      console.log(friends)
-
-      console.log(data)
+        .from('s1_leaderboard')
+        .select('*')
+        .order('total_exp', { ascending: false })
+        .or(friends);
       return data;
     }
 
@@ -352,9 +361,7 @@ export async function fetchSpecificPlayers(
   }
 }
 
-export async function fetchFriendships(
-  setFriendships,
-) {
+export async function fetchFriendships(setFriendships) {
   try {
     const user = supabase.auth.user();
     const { data, error } = await supabase
@@ -363,9 +370,8 @@ export async function fetchFriendships(
       .eq('user', user.id);
 
     if (data) {
-      var friendData = []
+      var friendData = [];
       data.map((friend) => friendData.push('player.eq.' + friend.friend));
-      console.log(friendData.toString())
       setFriendships(friendData.toString());
     }
 
@@ -378,9 +384,7 @@ export async function fetchFriendships(
   }
 }
 
-export async function fetchFriendshipLink(
-  setFriendshipLink,
-) {
+export async function fetchFriendshipLink(setFriendshipLink) {
   try {
     const user = supabase.auth.user();
     const { data, error } = await supabase
@@ -390,7 +394,6 @@ export async function fetchFriendshipLink(
       .single();
 
     if (data) {
-      console.log('Friendship', data)
       setFriendshipLink(data);
     }
 
