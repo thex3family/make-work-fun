@@ -4,6 +4,7 @@ import Button from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { createPopper } from '@popperjs/core';
+import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
 
 export default function Avatar({
   statRank,
@@ -21,19 +22,23 @@ export default function Avatar({
   background_url,
   statTitle,
   statEXPEarnedToday,
-  statGoldEarnedToday
+  statGoldEarnedToday,
 }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
-  const [backgroundUrl, setBackgroundUrl] = useState('/background/cityscape.jpg');
+  const [backgroundUrl, setBackgroundUrl] = useState(
+    '/background/cityscape.jpg'
+  );
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
-    if (avatar_url) downloadImage(avatar_url, "avatar");
-    if (!avatar_url) setAvatarStatus("Missing");
-    if (background_url) downloadImage(background_url, "background");
-  }, []);
+    if (avatar_url) downloadImage(avatar_url, 'avatar');
+    if (!avatar_url) setAvatarStatus('Missing');
+    if (background_url) downloadImage(background_url, 'background');
+  }, [avatar_url, background_url]);
 
   async function downloadImage(path, type) {
+    setAvatarStatus(null);
     try {
       if (type === 'avatar') {
         const { data, error } = await supabase.storage
@@ -58,6 +63,7 @@ export default function Avatar({
     } catch (error) {
       console.log('Error downloading image: ', error.message);
     } finally {
+      
     }
   }
 
@@ -83,11 +89,20 @@ export default function Avatar({
     setPopoverShow(false);
   };
 
+  if (loading) {
+    return (
+      <CardAvatarSkeleton />
+    );
+  }
+
   return (
     <>
       <div className="w-full xs:w-1/2 sm:w-1/3 md:1/3 lg:w-1/4 xl:w-1/4 2xl:w-1/5 shadow-xl">
         <div className="bg-primary-2 rounded-md mx-auto overflow-hidden">
-          <div className="rounded-tr-md rounded-tl-md w-auto bg-cover" style={{ backgroundImage: `url(${backgroundUrl})` }}>
+          <div
+            className="rounded-tr-md rounded-tl-md w-auto bg-cover"
+            style={{ backgroundImage: `url(${backgroundUrl})` }}
+          >
             <div className="bg-black bg-opacity-70">
               {/* {avatarUrl ? (
         <img
@@ -192,45 +207,54 @@ export default function Avatar({
                 </div>
               </div>
             </div>
-            <div className="flex flex-row items-center gap-4" onMouseEnter={openTooltip} onMouseLeave={closeTooltip} ref={btnRef}> 
+            <div
+              className="flex flex-row items-center gap-4"
+              onMouseEnter={openTooltip}
+              onMouseLeave={closeTooltip}
+              ref={btnRef}
+            >
               <div
                 variant="slim"
                 className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
               >
                 <i
-                    className={
-                      statGoldEarnedToday > 0
-                        ? statGoldEarnedToday >= 1000 ? 'fas fa-angle-double-up text-emerald-500' : 'fas fa-angle-up text-emerald-600'
-                        : 'fas fa-grip-lines text-red-600'
-                    }
-                  ></i>{' '}
+                  className={
+                    statGoldEarnedToday > 0
+                      ? statGoldEarnedToday >= 1000
+                        ? 'fas fa-angle-double-up text-emerald-500'
+                        : 'fas fa-angle-up text-emerald-600'
+                      : 'fas fa-grip-lines text-red-600'
+                  }
+                ></i>{' '}
                 {statGoldEarnedToday ? +statGoldEarnedToday : 0} 💰
               </div>
               <div
                 variant="slim"
                 className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
               >
-                  <i
-                    className={
-                      statEXPEarnedToday > 0
-                        ? statEXPEarnedToday >= 1000 ? 'fas fa-angle-double-up text-emerald-500' : 'fas fa-angle-up text-emerald-600'
-                        : 'fas fa-grip-lines text-red-600'
-                    }
-                  ></i>{' '}
-                  {statEXPEarnedToday ? +statEXPEarnedToday : 0} XP
+                <i
+                  className={
+                    statEXPEarnedToday > 0
+                      ? statEXPEarnedToday >= 1000
+                        ? 'fas fa-angle-double-up text-emerald-500'
+                        : 'fas fa-angle-up text-emerald-600'
+                      : 'fas fa-grip-lines text-red-600'
+                  }
+                ></i>{' '}
+                {statEXPEarnedToday ? +statEXPEarnedToday : 0} XP
               </div>
             </div>
             <div
-            className={
-              (popoverShow ? '' : 'hidden ') +
-              'bg-primary-3 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg'
-            }
-            ref={popoverRef}
-          >
-            <div>
-              <div className="text-white p-3">⭐ Today's Earnings!</div>
+              className={
+                (popoverShow ? '' : 'hidden ') +
+                'bg-primary-3 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg'
+              }
+              ref={popoverRef}
+            >
+              <div>
+                <div className="text-white p-3">⭐ Today's Earnings!</div>
+              </div>
             </div>
-          </div>
             <div className="mt-6">
               <div className="">
                 <div className="">
