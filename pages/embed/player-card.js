@@ -11,7 +11,8 @@ import {
   fetchPlayerStats,
   fetchAreaStats,
   fetchWeekWins,
-  fetchLatestWin
+  fetchLatestWin,
+  fetchSpecificPlayers
 } from '@/components/Fetch/fetchMaster';
 
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
@@ -21,6 +22,7 @@ import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 export default function playerDetails() {
   const router = useRouter();
   const [playerStats, setPlayerStats] = useState(null);
+  const [specificPlayers, setSpecificPlayers] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -31,6 +33,7 @@ export default function playerDetails() {
 
   const { player } = router.query;
   const { style } = router.query;
+  const { id } = router.query;
   const { opacity } = router.query;
 
   let bg_opacity = 'bg-opacity-50';
@@ -42,7 +45,7 @@ export default function playerDetails() {
   const [activeModalStats, setActiveModalStats] = useState(null);
 
   useEffect(() => {
-    if (player) refreshStats();
+    if (player || id) refreshStats();
     if (player)
       fetchLatestWin(
         setActiveModalStats,
@@ -52,13 +55,12 @@ export default function playerDetails() {
         setShowWinModal,
         player
       );
-  }, [player]);
+  }, [player, id]);
 
   async function refreshStats() {
     console.log('statsRefreshing');
-    setPlayerStats(await fetchPlayerStats(null, player));
-    setAreaStats(await fetchAreaStats(player));
-    setWeekWins(await fetchWeekWins(player));
+    if (player) setPlayerStats(await fetchPlayerStats(null, player));
+    if (id) setSpecificPlayers(await fetchSpecificPlayers(id));
     setLoading(false);
   }
 
@@ -120,27 +122,58 @@ export default function playerDetails() {
 
   return (
     <>
-      <section className={`animate-slow-fade-in h-screen responsiveBackground ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
+      <section
+        className={`animate-slow-fade-in h-screen responsiveBackground ${
+          style == 'dark' ? 'bg-dark' : 'bg-white'
+        }`}
+      >
         <div className="mx-5 py-5">
-        <Avatar
-          statRank={playerStats.player_rank}
-          statName={playerStats.full_name}
-          statLevel={playerStats.current_level}
-          statEXP={playerStats.total_exp}
-          statEXPProgress={playerStats.exp_progress}
-          statLevelEXP={playerStats.level_exp}
-          statGold={playerStats.total_gold}
-          statWinName={playerStats.name}
-          statWinType={playerStats.type}
-          statWinGold={playerStats.gold_reward}
-          statWinEXP={playerStats.exp_reward}
-          avatar_url={playerStats.avatar_url}
-          background_url={playerStats.background_url}
-          statTitle={playerStats.title}
-          statEXPEarnedToday={playerStats.exp_earned_today}
-          statGoldEarnedToday={playerStats.gold_earned_today}
-        />
+          {player ? (
+            <Avatar
+              statRank={playerStats.player_rank}
+              statName={playerStats.full_name}
+              statLevel={playerStats.current_level}
+              statEXP={playerStats.total_exp}
+              statEXPProgress={playerStats.exp_progress}
+              statLevelEXP={playerStats.level_exp}
+              statGold={playerStats.total_gold}
+              statWinName={playerStats.name}
+              statWinType={playerStats.type}
+              statWinGold={playerStats.gold_reward}
+              statWinEXP={playerStats.exp_reward}
+              avatar_url={playerStats.avatar_url}
+              background_url={playerStats.background_url}
+              statTitle={playerStats.title}
+              statEXPEarnedToday={playerStats.exp_earned_today}
+              statGoldEarnedToday={playerStats.gold_earned_today}
+            />
+          ) : null}
         </div>
+        {specificPlayers ? (
+          <div className="mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pb-10">
+            {specificPlayers.map((player, i) => (
+              <Avatar
+                key={i}
+                statRank={player.player_rank}
+                statName={player.full_name}
+                statLevel={player.current_level}
+                statEXP={player.total_exp}
+                statEXPProgress={player.exp_progress}
+                statLevelEXP={player.level_exp}
+                statGold={player.total_gold}
+                statWinName={player.name}
+                statWinType={player.type}
+                statWinGold={player.gold_reward}
+                statWinEXP={player.exp_reward}
+                avatar_url={player.avatar_url}
+                background_url={player.background_url}
+                statTitle={player.title}
+                statEXPEarnedToday={player.exp_earned_today}
+                statGoldEarnedToday={player.gold_earned_today}
+              />
+            ))}
+          </div>
+        ) : null}
       </section>
     </>
   );

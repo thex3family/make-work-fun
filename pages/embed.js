@@ -1,11 +1,19 @@
 import { useState, useEffect, createRef } from 'react';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import React from 'react';
 
 import { supabase } from '@/utils/supabase-client';
 import { createPopper } from '@popperjs/core';
 
 import { useUser } from '@/utils/useUser';
+
+import DataTable, { createTheme } from 'react-data-table-component';
+import {
+  fetchPlayers,
+  fetchFriendships,
+  fetchFriendshipLink
+} from '@/components/Fetch/fetchMaster';
 
 function Feature({ name, status }) {
   return (
@@ -28,16 +36,14 @@ function Feature({ name, status }) {
 
 export default function embed() {
   const [dark, setDark] = useState(false);
+  const [friends, setFriends] = useState(false);
   const [embed_link, setEmbedLink] = useState(null);
   const [copyText, setCopyText] = useState('Copy');
   const [embedComponent, setEmbedComponent] = useState(1);
   const { user } = useUser();
 
-  useEffect(() => {
-    if(user) handleEmbedLink(dark);
-  }, [user, dark, embedComponent]);
-
   async function handleEmbedLink(dark) {
+    console.log(friendshipLink);
     var t = window.location.href;
     if (embedComponent == 1) {
       var embed_link_temp = `${t.substr(
@@ -45,10 +51,17 @@ export default function embed() {
         t.lastIndexOf('/')
       )}/embed/player-details?player=${user.id}`;
     } else {
-      var embed_link_temp = `${t.substr(
-        0,
-        t.lastIndexOf('/')
-      )}/embed/player-card?player=${user.id}`;
+      if (friends && friendshipLink) {
+        var embed_link_temp = `${t.substr(
+          0,
+          t.lastIndexOf('/')
+        )}/embed/player-card?id=${friendshipLink.id}`;
+      } else {
+        var embed_link_temp = `${t.substr(
+          0,
+          t.lastIndexOf('/')
+        )}/embed/player-card?player=${user.id}`;
+      }
     }
 
     if (dark) {
@@ -81,6 +94,272 @@ export default function embed() {
   async function changeEmbed(embed_id) {
     closeDropdownPopover();
     setEmbedComponent(embed_id);
+  }
+
+  // friendship table
+  const [players, setPlayers] = useState([]);
+  const [friendships, setFriendships] = useState([]);
+  const [friendshipLink, setFriendshipLink] = useState(null);
+  const [saving, setSaving] = useState(null);
+  const [generating, setGenerating] = useState(null);
+
+  
+  useEffect(() => {
+    if (user) handleEmbedLink(dark);
+  }, [user, dark, embedComponent, friends, friendshipLink]);
+
+  useEffect(() => {
+    fetchPlayers(setPlayers);
+    fetchFriendships(setFriendships);
+    fetchFriendshipLink(setFriendshipLink);
+  }, []);
+
+  useEffect(() => {
+    if (friendshipLink) updateFriendshipLink(friendships);
+    setSaving(false);
+  }, [friendships]);
+
+  
+  useEffect(() => {
+    setGenerating(false);
+  }, [friendshipLink]);
+
+  const columns = [
+    {
+      name: 'Player Name',
+      selector: 'full_name',
+      cell: (row) => <NameCustom {...row} />,
+      grow: 2
+    },
+    {
+      name: 'Friend Status',
+      cell: (row) => <FriendCustom {...row} />,
+      sortable: true,
+      compact: true
+    }
+  ];
+
+  const NameCustom = (row) => (
+    <div data-tag="allowRowEvents" className="">
+      <p
+        data-tag="allowRowEvents"
+        className="font-semibold text-sm mb-1 truncate"
+      >
+        {row.full_name}
+      </p>
+      {/* <p
+        data-tag="allowRowEvents"
+        className="text-sm px-2 inline-flex font-semibold rounded bg-emerald-100 text-emerald-800"
+      >
+        {row.player}
+      </p> */}
+    </div>
+  );
+
+  const FriendCustom = (row) => (
+    <div data-tag="allowRowEvents">
+      {friendships.includes(row.player) ? (
+        <Button
+          variant="prominent"
+          data-tag="allowRowEvents"
+          className="font-semibold text-sm"
+          onClick={() => removeFriend(row.player)}
+          disabled={saving}
+        >
+          {saving ? 'Saving...' : 'Remove'}
+        </Button>
+      ) : (
+        <Button
+          variant="incognito"
+          data-tag="allowRowEvents"
+          className="font-semibold text-sm"
+          onClick={() => addFriend(row.player)}
+          disabled={saving}
+        >
+          {saving ? 'Saving...' : 'Add Friend'}
+        </Button>
+      )}
+    </div>
+  );
+
+  const customStyles = {
+    headRow: {
+      style: {
+        backgroundColor: 'red',
+        backgroundImage: 'linear-gradient(to right, #10b981, #3b82f6)',
+        minHeight: '48px',
+        borderRadius: '6px 6px 0 0',
+        paddingLeft: '8px',
+        paddingRight: '8px'
+      }
+    },
+    headCells: {
+      style: {
+        fontSize: '14px',
+        fontWeight: 600,
+        paddingLeft: '16px',
+        paddingRight: '16px'
+      }
+    },
+    rows: {
+      style: {
+        minHeight: '60px', // override the row height
+        paddingLeft: '8px',
+        paddingRight: '8px'
+      }
+    }
+  };
+
+  createTheme('game', {
+    text: {
+      primary: '#ffffff',
+      secondary: 'rgba(255, 255, 255, 0.7)',
+      disabled: 'rgba(0,0,0,.12)'
+    },
+    background: {
+      default: '#111111'
+    },
+    context: {
+      background: '#cb4b16',
+      text: '#FFFFFF'
+    },
+    divider: {
+      default: '#ffffff'
+    },
+    button: {
+      default: '#FFFFFF',
+      focus: 'rgba(255, 255, 255, .54)',
+      hover: 'rgba(255, 255, 255, .12)',
+      disabled: 'rgba(255, 255, 255, .18)'
+    },
+    highlightOnHover: {
+      default: '#9CA3AF15',
+      text: 'rgba(255, 255, 255, 1)'
+    },
+    sortFocus: {
+      default: 'rgba(255, 255, 255, .54)'
+    },
+    selected: {
+      default: 'rgba(0, 0, 0, .7)',
+      text: '#FFFFFF'
+    }
+  });
+
+  const [filterText, setFilterText] = useState('');
+  // const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  const filteredItems = players.filter(
+    (player) =>
+      player.full_name &&
+      player.full_name.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  async function addFriend(friend_id) {
+    setSaving(true);
+    try {
+      const user = supabase.auth.user();
+      const { data, error } = await supabase.from('friendships').insert([
+        {
+          user: user.id,
+          friend: friend_id
+        }
+      ]);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      fetchPlayers(setPlayers);
+      fetchFriendships(setFriendships);
+    }
+  }
+
+  async function removeFriend(friend_id) {
+    setSaving(true);
+    try {
+      const user = supabase.auth.user();
+      const { data, error } = await supabase
+        .from('friendships')
+        .delete()
+        .eq('user', user.id)
+        .eq('friend', friend_id);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      fetchPlayers(setPlayers);
+      fetchFriendships(setFriendships);
+    }
+  }
+
+  async function generateFriendshipLink(friendships) {
+    setGenerating(true)
+    try {
+      const user = supabase.auth.user();
+      const { data, error } = await supabase.from('friendship_links').insert([
+        {
+          user: user.id,
+          friends: friendships
+        }
+      ]);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      fetchFriendshipLink(setFriendshipLink);
+    }
+  }
+
+  async function updateFriendshipLink(friendships) {
+    try {
+      const user = supabase.auth.user();
+
+      let { error } = await supabase
+        .from('friendship_links')
+        .update({
+          friends: friendships
+        })
+        .eq('user', user.id);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      reloadIframe();
+    }
+  }
+
+  async function deleteFriendshipLink(friendships) {
+    setGenerating(true);
+    try {
+      const user = supabase.auth.user();
+      const { data, error } = await supabase
+        .from('friendship_links')
+        .delete()
+        .eq('user', user.id);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setFriendshipLink(null);
+      reloadIframe();
+    }
+  }
+
+  async function reloadIframe() {
+    var iframe = document.getElementById('player-card');
+    if (iframe) {
+      iframe.src = iframe.src;
+    }
   }
 
   return (
@@ -209,37 +488,115 @@ export default function embed() {
                     />
                     Dark Mode
                   </button>
+                  <button
+                    onClick={() => setFriends(friends ? false : true)}
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${
+                      friends
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                    }`}
+                  >
+                    <i
+                      className={`mr-2 ${
+                        friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                      }`}
+                    />
+                    Show Friends
+                  </button>
                 </div>
+                {friends ? (
+                  <>
+                    <div className="mb-6 items-center w-full">
+                      <Input
+                        className="text-xl font-semibold rounded"
+                        id="search"
+                        type="text"
+                        placeholder="Add someone from the family as a friend!"
+                        value={filterText || ''}
+                        onChange={setFilterText}
+                      />
+                    </div>
+                    <div className="flex flex-wrap mt-4 mb-8">
+                      <div className="w-full">
+                        {/* <CardTable color="dark" data={wins} /> */}
+                        <DataTable
+                          className=""
+                          title="Friendships"
+                          noHeader
+                          columns={columns}
+                          data={filteredItems}
+                          // subHeader
+                          // subHeaderComponent={subHeaderComponentMemo}
+                          // highlightOnHover={true}
+                          // pointerOnHover={true}
+                          fixedHeader={true}
+                          customStyles={customStyles}
+                          pagination={true}
+                          paginationPerPage={3}
+                          paginationRowsPerPageOptions={[3, 5, 10]}
+                          theme="game"
+                        />
+                        {/* <TailwindTable wins={wins} /> */}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
                 <div className="text-lg mb-2 font-semibold">
                   Modifiable Soon...
                 </div>
                 <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
-                  <Feature name="Avatar + Background" status={true} />
+                  <Feature name="Player Card" status={true} />
                   <Feature name="Today's Earnings" status={true} />
                   <Feature name="Latest Win" status={true} />
-                  <Feature name="Friends" status={false} />
-                  <Feature name="Guild Members" status={false} />
+                  <Feature name="Recent Win Announcement" status={true} />
+                  <Feature name="Show Guild Members" status={false} />
                 </div>
-                <div className="grid grid-cols-3 mb-8 items-center gap-3">
-                  <div className="col-span-2">
-                    <Input
-                      className="text-xl font-semibold rounded"
-                      value={embed_link}
-                    />
+                {friends && !friendshipLink ? (
+                  <div className="mb-6 items-center w-full">
+                    <Button
+                      className="w-full"
+                      variant="slim"
+                      onClick={() => generateFriendshipLink(friendships)}
+                      disabled={generating}
+                    >
+                      {generating ? 'Generating...' : 'Generate Embed Link'}
+                    </Button>
                   </div>
-                  <Button
-                    className=""
-                    variant="slim"
-                    onClick={() => copyEmbedLink()}
-                  >
-                    {copyText}
-                  </Button>
-                </div>
+                ) : (
+                  <>
+                    <div className="mb-8">
+                      <div className="grid grid-cols-3 items-center gap-3">
+                        <div className="col-span-2">
+                          <Input
+                            className="text-xl font-semibold rounded"
+                            value={embed_link}
+                          />
+                        </div>
+                        <Button
+                          className=""
+                          variant="slim"
+                          onClick={() => copyEmbedLink()}
+                        >
+                          {copyText}
+                        </Button>
+                      </div>
+                      {friends && friendshipLink ? (
+                        <button
+                          onClick={() => deleteFriendshipLink(friendships)}
+                          className="text-red-500 mt-2 mr-5 font-semibold"
+                          disabled={generating}
+                        >
+                          {generating ? 'Deleting...' : 'Delete Generated Link'}
+                        </button>
+                      ) : null}
+                    </div>
+                  </>
+                )}
                 <div className="mb-1 font-semibold text-accents-2">Preview</div>
                 <iframe
                   id="player-card"
-                  className="w-full lg:w-96"
-                  height="610"
+                  className={`w-full ${friends ? null : 'lg:w-96'}`}
+                  height={`${friends ? '650' : '610'}`}
                   src={embed_link}
                 />
               </div>

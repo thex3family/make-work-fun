@@ -295,6 +295,114 @@ export async function fetchLeaderboardStats(
   }
 }
 
+export async function fetchPlayers(
+  setPlayers,
+) {
+  try {
+    const { data, error } = await supabase
+      .from('leaderboard')
+      .select('*')
+      .order('total_exp', { ascending: false });
+
+    if (data) {
+      setPlayers(data);
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
+export async function fetchSpecificPlayers(
+  id,
+) {
+  try {
+    const { data } = await supabase
+      .from('friendship_links')
+      .select('*')
+      .eq('id', id)
+      .single();
+      
+      const friends = (JSON.stringify(data.friends)+',player.eq.'+JSON.stringify(data.user)).replace(/"/g,"");
+
+    if (friends) {
+      const { data, error } = await supabase
+      .from('s1_leaderboard')
+      .select('*')
+      .order('total_exp', { ascending: false })
+      .or(
+        friends
+      );
+      console.log(friends)
+
+      console.log(data)
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
+export async function fetchFriendships(
+  setFriendships,
+) {
+  try {
+    const user = supabase.auth.user();
+    const { data, error } = await supabase
+      .from('friendships')
+      .select('*')
+      .eq('user', user.id);
+
+    if (data) {
+      var friendData = []
+      data.map((friend) => friendData.push('player.eq.' + friend.friend));
+      console.log(friendData.toString())
+      setFriendships(friendData.toString());
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
+export async function fetchFriendshipLink(
+  setFriendshipLink,
+) {
+  try {
+    const user = supabase.auth.user();
+    const { data, error } = await supabase
+      .from('friendship_links')
+      .select('*')
+      .eq('user', user.id)
+      .single();
+
+    if (data) {
+      console.log('Friendship', data)
+      setFriendshipLink(data);
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
 export async function fetchAreaStats(player) {
   try {
     if (!player) {
