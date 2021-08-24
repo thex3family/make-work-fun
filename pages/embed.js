@@ -557,7 +557,7 @@ export default function embed() {
                       className="w-full"
                       variant="slim"
                       onClick={() => generateFriendshipLink(friendships)}
-                      disabled={generating}
+                      disabled={generating || !friendships}
                     >
                       {generating ? 'Generating...' : 'Generate Embed Link'}
                     </Button>
