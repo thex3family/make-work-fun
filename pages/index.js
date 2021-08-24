@@ -30,6 +30,7 @@ export default function HomePage() {
 
   const [showWinModal, setShowWinModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
+  const [activeWinStats, setActiveWinStats] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
   const [showCardWin, setShowCardWin] = useState(false);
   
@@ -70,6 +71,7 @@ export default function HomePage() {
       triggerCardWin,
       setShowCardWin,
       setAvatarUrl,
+      setActiveWinStats,
     );
   }, []);
 
@@ -367,7 +369,7 @@ export default function HomePage() {
       ) : null}
 
       {showCardWin ? (
-        <CardWin setShowCardWin={setShowCardWin} win={activeModalStats} player_name={showCardWin} avatarUrl={avatarUrl} />
+        <CardWin setShowCardWin={setShowCardWin} win={activeWinStats} player_name={showCardWin} avatarUrl={avatarUrl} />
       ) : null}
     </>
   );

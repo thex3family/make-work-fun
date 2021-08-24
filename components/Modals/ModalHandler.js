@@ -11,13 +11,13 @@ export async function triggerWinModal(
 }
 
 export async function triggerCardWin(
-  setActiveModalStats,
+  setActiveWinStats,
   setShowCardWin,
   wins,
   setAvatarUrl
 ) {
   const player = await fetchPlayerStats(setAvatarUrl, wins.player)
-  setActiveModalStats(wins);
+  setActiveWinStats(wins);
   // show modal
   setShowCardWin(player.full_name);
 }
