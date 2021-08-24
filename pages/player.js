@@ -478,7 +478,7 @@ export default function Player() {
             <div className="animate-fade-in-up max-w-6xl px-0 sm:px-4 md:px-10 mx-auto w-full -m-24">
               <HeaderStats
                 playerStats={playerStats}
-                avatar_url={avatar_url}
+                avatarUrl={avatar_url}
                 setAvatarUrl={setAvatarUrl}
                 fetchPlayerBackground={fetchPlayerBackground}
                 updateProfile={updateProfile}
