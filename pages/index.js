@@ -14,9 +14,10 @@ import {
   fetchLatestWin,
   fetchLeaderboardStats
 } from '@/components/Fetch/fetchMaster';
-import { triggerWinModal } from '@/components/Modals/ModalHandler';
+import { triggerWinModal, triggerCardWin } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
+import CardWin from '@/components/Cards/CardWin';
 
 export default function HomePage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -30,6 +31,9 @@ export default function HomePage() {
   const [showWinModal, setShowWinModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
+  const [showCardWin, setShowCardWin] = useState(false);
+  
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   const [openTab, setOpenTab] = useState(1);
 
@@ -61,7 +65,11 @@ export default function HomePage() {
       refreshStats,
       setLevelUp,
       triggerWinModal,
-      setShowWinModal
+      setShowWinModal,
+      null,
+      triggerCardWin,
+      setShowCardWin,
+      setAvatarUrl,
     );
   }, []);
 
@@ -113,7 +121,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                
                 {/*  countdown for seasons
 
                 <div className="w-full md:w-3/5 py-6 text-center">
@@ -132,12 +139,22 @@ export default function HomePage() {
                     <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       Season 1 Statistics
                     </h1>
-                    <p className="text-sm text-accents-3 font-semibold">July 1 - August 31</p>
+                    <p className="text-sm text-accents-3 font-semibold">
+                      July 1 - August 31
+                    </p>
                     <h1 className=" rounded-lg pt-5 w-3/4 lg:w-full mx-auto text-xl font-semibold text-center lg:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      <LeaderboardStatistics 
-                      players = {s1Players.length}
-                      levels_earned = {s1Players.reduce((a,v) =>  a = a + v.current_level , 0 ) - s1Players.length}
-                        exp_earned = {s1Players.reduce((a,v) =>  a = a + v.total_exp , 0 )}
+                      <LeaderboardStatistics
+                        players={s1Players.length}
+                        levels_earned={
+                          s1Players.reduce(
+                            (a, v) => (a = a + v.current_level),
+                            0
+                          ) - s1Players.length
+                        }
+                        exp_earned={s1Players.reduce(
+                          (a, v) => (a = a + v.total_exp),
+                          0
+                        )}
                       />
                     </h1>
                   </div>
@@ -291,8 +308,8 @@ export default function HomePage() {
                     avatar_url={player.avatar_url}
                     background_url={player.background_url}
                     statTitle={player.title}
-                    statEXPEarnedToday = {player.exp_earned_today}
-                    statGoldEarnedToday = {player.gold_earned_today}
+                    statEXPEarnedToday={player.exp_earned_today}
+                    statGoldEarnedToday={player.gold_earned_today}
                   />
                 ))}
               </div>
@@ -321,8 +338,8 @@ export default function HomePage() {
                     avatar_url={player.avatar_url}
                     background_url={player.background_url}
                     statTitle={player.title}
-                    statEXPEarnedToday = {player.exp_earned_today}
-                    statGoldEarnedToday = {player.gold_earned_today}
+                    statEXPEarnedToday={player.exp_earned_today}
+                    statGoldEarnedToday={player.gold_earned_today}
                   />
                 ))}
               </div>
@@ -331,16 +348,10 @@ export default function HomePage() {
         )}
       </section>
 
-
       {/* level up modal */}
       {levelUp ? (
-        <ModalLevelUp
-          playerLevel={levelUp}
-          setLevelUp={setLevelUp}
-        />
-      ) : (
-        null
-      )}
+        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
+      ) : null}
 
       {/* // Modal Section */}
       {showWinModal ? (
@@ -353,6 +364,10 @@ export default function HomePage() {
             refreshStats={refreshStats}
           />
         </>
+      ) : null}
+
+      {showCardWin ? (
+        <CardWin setShowCardWin={setShowCardWin} win={activeModalStats} player_name={showCardWin} avatarUrl={avatarUrl} />
       ) : null}
     </>
   );

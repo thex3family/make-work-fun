@@ -126,7 +126,7 @@ export default function WinModal({
 
                       <img
                         src={activeGIF}
-                        className={`${boxClass} absolute box-image`}
+                        className={`${boxClass} absolute box-image object-cover`}
                       />
                     </a>
                   </div>

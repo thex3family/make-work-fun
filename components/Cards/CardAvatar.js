@@ -125,7 +125,7 @@ export default function Avatar({
                   {statTitle ? statTitle : 'Newbie'}
                 </h5>
                 <p className="font-semibold text-xl text-white-700 truncate w-3/4">
-                  {statName}
+                  {statName ? statName : 'Anonymous'}
                 </p>
                 <span className="font-semibold text-l text-white-700">
                   Level {statLevel}
@@ -237,7 +237,7 @@ export default function Avatar({
                   <p className="text-white text-md font-semibold w-3/5">
                     Latest Win 👀
                   </p>
-                  <p className="text-white text-sm truncate">{statWinName ? statWinName : 'Anonymous'}</p>
+                  <p className="text-white text-sm truncate">{statWinName}</p>
                   <p className="text-xs mt-3 text-right">
                     <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-lightBlue-700 bg-lightBlue-200 last:mr-0 mr-1">
                       {statWinType}
