@@ -11,7 +11,8 @@ export async function fetchLatestWin(
   player_id,
   triggerCardWin,
   setShowCardWin,
-  setAvatarUrl
+  setAvatarUrl,
+  setActiveWinStats,
 ) {
   try {
     // check if there is any win (only works when the app is open) - future will move it to a server
@@ -49,10 +50,8 @@ export async function fetchLatestWin(
               // if it is not the current user
               // if Show Card Win Exists (usually on leaderboard)
               if (triggerCardWin) {
-                
-                console.log('Triggering 1')
                 triggerCardWin(
-                  setActiveModalStats,
+                  setActiveWinStats,
                   setShowCardWin,
                   payload.new,
                   setAvatarUrl
@@ -62,10 +61,8 @@ export async function fetchLatestWin(
           } else {
             // if Show Card Win Exists (usually on leaderboard)
             if (triggerCardWin) {
-              
-              console.log('Triggering 2')
               triggerCardWin(
-                setActiveModalStats,
+                setActiveWinStats,
                 setShowCardWin,
                 payload.new,
                 setAvatarUrl
