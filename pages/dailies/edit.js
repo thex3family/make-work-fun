@@ -487,7 +487,7 @@ export default function edit({user}) {
   }
 
   return (
-    <section className="justify-center bg-dailies-pattern bg-fixed bg-cover">
+    <section className="justify-center bg-dailies-pattern bg-fixed bg-cover bg-center">
       {saving ? (
         <span className="fixed inline-flex left-0 bottom-0 ml-2 mb-24 sm:ml-4 sm:mb-4 text-md font-semibold py-3 px-4 uppercase rounded text-emerald-600 bg-emerald-200 z-50">
           <svg

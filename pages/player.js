@@ -6,7 +6,6 @@ import LoadingDots from '@/components/ui/LoadingDots';
 import { useUser } from '@/utils/useUser';
 
 import { supabase } from '../utils/supabase-client';
-import Datatable, { createTheme } from 'react-data-table-component';
 
 import React from 'react';
 
@@ -33,7 +32,7 @@ import { pushTitle } from '@/components/Push/pushMaster';
 // components
 
 import HeaderStats from 'components/Headers/HeaderStats.js';
-import DataTable from 'react-data-table-component';
+import DataTable, { createTheme } from 'react-data-table-component';
 
 createTheme('game', {
   text: {
@@ -453,7 +452,7 @@ export default function Player() {
     <>
       {/* <section className="bg-player-pattern bg-fixed bg-cover"> */}
       <section
-        className="animate-slow-fade-in bg-fixed bg-cover "
+        className="animate-slow-fade-in bg-fixed bg-cover bg-center"
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <div className="bg-black bg-opacity-70 sm:bg-opacity-0">

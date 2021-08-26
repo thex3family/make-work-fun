@@ -1,6 +1,7 @@
 .Countdown{
     margin: 10px auto;
     padding-bottom: 20px;
+    white-space: nowrap;
   }
   
   .Countdowncol{
@@ -21,9 +22,10 @@
     border-radius: 5px;
     color: black;
     box-shadow: 5px 8px #3b82f6;
+    line-height:normal;
   }
   .Countdowncolformat {
     margin-top: 10px;
-    font-weight: 600;
+    font-weight: 650;
     font-size: large;
   }

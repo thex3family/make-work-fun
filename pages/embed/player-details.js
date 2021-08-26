@@ -120,7 +120,7 @@ export default function playerDetails() {
   return (
     <>
       <section
-        className="animate-slow-fade-in bg-fixed bg-cover bg-dark responsiveBackground"
+        className="animate-slow-fade-in bg-fixed bg-cover bg-center bg-dark responsiveBackground"
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <div className={style == 'dark' ? null : `bg-black ${bg_opacity} responsiveBackground`}>
