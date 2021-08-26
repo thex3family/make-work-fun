@@ -103,7 +103,6 @@ export default function embed() {
   const [saving, setSaving] = useState(null);
   const [generating, setGenerating] = useState(null);
 
-  
   useEffect(() => {
     if (user) handleEmbedLink(dark);
   }, [user, dark, embedComponent, friends, friendshipLink]);
@@ -119,7 +118,6 @@ export default function embed() {
     setSaving(false);
   }, [friendships]);
 
-  
   useEffect(() => {
     setGenerating(false);
   }, [friendshipLink]);
@@ -296,7 +294,7 @@ export default function embed() {
   }
 
   async function generateFriendshipLink(friendships) {
-    setGenerating(true)
+    setGenerating(true);
     try {
       const user = supabase.auth.user();
       const { data, error } = await supabase.from('friendship_links').insert([
@@ -317,7 +315,6 @@ export default function embed() {
 
   async function updateFriendshipLink(friendships, friendshipLink_id) {
     try {
-
       let { error } = await supabase
         .from('friendship_links')
         .update({
@@ -592,17 +589,21 @@ export default function embed() {
                     </div>
                   </>
                 )}
-                <div className="overflow-x-auto">
-                <div className="mb-1 font-semibold text-accents-2">Preview</div>
-                <iframe
-                  id="player-card"
-                  className={`resize ${friends ? null : 'lg:w-96'}`}
-                  width={'1280'}
-                  scrolling={'yes'}
-                  height={`${friends ? '650' : '610'}`}
-                  src={embed_link}
-                />
-                </div>
+                {friends && !friendshipLink ? null : (
+                  <div className="overflow-x-auto">
+                    <div className="mb-1 font-semibold text-accents-2">
+                      Preview
+                    </div>
+                    <iframe
+                      id="player-card"
+                      className={`resize ${friends ? null : 'lg:w-96'}`}
+                      width={'1280'}
+                      scrolling={'yes'}
+                      height={`${friends ? '650' : '610'}`}
+                      src={embed_link}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>
