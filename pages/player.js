@@ -496,6 +496,8 @@ export default function Player() {
                         customStyles={customStyles}
                         pagination={true}
                         theme="game"
+                        paginationPerPage={5}
+                        paginationRowsPerPageOptions={[5,10,15,20]}
                       />
                       {/* <TailwindTable wins={wins} /> */}
                     </div>
