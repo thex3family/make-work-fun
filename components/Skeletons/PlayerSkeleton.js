@@ -1,4 +1,7 @@
-export default function CardStatsSkeleon(){
+import RecentWinsSkeleton from "./RecentWinsSkeleton";
+import WeekWinsSkeleton from "./WeekWinsSkeleton";
+
+export default function PlayerSkeleton(){
 
   return (
     <>
@@ -14,7 +17,6 @@ export default function CardStatsSkeleon(){
               <div className="relative md:pt-32 pb-16 pt-24">
                 <div className="px-4 md:px-10 mx-auto w-full">
                   <div>
-                    {/* Card stats */}
                     <div className="flex flex-wrap md:flex-nowrap items-center gap-5">
                       <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 h-full text-center relative">
                         <div className="w-full h-96 bg-gray-600 rounded animate-pulse mb-6" />
@@ -35,64 +37,13 @@ export default function CardStatsSkeleon(){
                           </div>
                           <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse" />
                         </div>
-                        <div className="w-full pt-6">
-                          <div className="w-full h-52 bg-primary-2 rounded p-4">
-                            <div className="w-28 h-4 rounded-sm bg-gray-600 animate-pulse mb-3" />
-                            <div className="w-40 h-6 rounded-sm bg-gray-600 animate-pulse mb-6" />
-                            <div className="w-full h-3 rounded-sm bg-gray-600 animate-pulse mb-2" />
-                            <div className="w-full h-3 rounded-sm bg-gray-600 animate-pulse mb-2" />
-                            <div className="w-full h-3 rounded-sm bg-gray-600 animate-pulse mb-2" />
-                            <div className="w-full h-3 rounded-sm bg-gray-600 animate-pulse mb-2" />
-                            <div className="w-full h-3 rounded-sm bg-gray-600 animate-pulse mb-2" />
-                          </div>
-                        </div>
+                        <WeekWinsSkeleton/>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-wrap mt-4">
-                <div className="w-full pb-36 px-4">
-                  <div className="w-full h-96 bg-primary-2 rounded">
-                    <div className="h-12 bg-gray-600 rounded-tr rounded-tl animate-pulse" />
-                    <div className="grid grid-cols-12 px-4 pt-4 gap-4 place-items-center">
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse col-span-5" />
-                      <div className=" col-span-4" />
-                      <div className="w-full h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-10 h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse" />
-                    </div>
-                    <div className="grid grid-cols-12 px-4 pt-4 gap-4 place-items-center">
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse col-span-5" />
-                      <div className=" col-span-4" />
-                      <div className="w-full h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-10 h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse" />
-                    </div>
-                    <div className="grid grid-cols-12 px-4 pt-4 gap-4 place-items-center">
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse col-span-5" />
-                      <div className=" col-span-4" />
-                      <div className="w-full h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-10 h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse" />
-                    </div>
-                    <div className="grid grid-cols-12 px-4 pt-4 gap-4 place-items-center">
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse col-span-5" />
-                      <div className=" col-span-4" />
-                      <div className="w-full h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-10 h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse" />
-                    </div>
-                    <div className="grid grid-cols-12 px-4 pt-4 gap-4 place-items-center">
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse col-span-5" />
-                      <div className=" col-span-4" />
-                      <div className="w-full h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-10 h-6 rounded-sm bg-gray-600 animate-pulse" />
-                      <div className="w-full h-12 rounded-sm bg-gray-600 animate-pulse" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <RecentWinsSkeleton/>
             </div>
           </div>
         </div>

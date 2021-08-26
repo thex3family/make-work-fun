@@ -16,6 +16,7 @@ import WinModal from '@/components/Modals/ModalWin';
 import TitleModal from '@/components/Modals/ModalTitle';
 
 import PlayerSkeleton from '@/components/Skeletons/PlayerSkeleton';
+import RecentWinsSkeleton from '@/components/Skeletons/RecentWinsSkeleton';
 
 // functions
 
@@ -35,6 +36,7 @@ import { pushTitle } from '@/components/Push/pushMaster';
 
 import HeaderStats from 'components/Headers/HeaderStats.js';
 import DataTable, { createTheme } from 'react-data-table-component';
+import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 
 createTheme('game', {
   text: {
@@ -76,7 +78,7 @@ export default function Player() {
   const router = useRouter();
   const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
 
-  const [wins, setWins] = useState([]);
+  const [wins, setWins] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
   const [background_url, setBackgroundUrl] = useState('/');
@@ -87,6 +89,8 @@ export default function Player() {
   const [weekWins, setWeekWins] = useState([]);
   const [areaStats, setAreaStats] = useState([]);
   const [titles, setTitles] = useState([]);
+
+  const [onboardingState, setOnboardingState] = useState(null);
 
   const currentHour = new Date().getHours();
   const greetingMessage =
@@ -224,7 +228,7 @@ export default function Player() {
       if (userOnboarding.onboarding_state.includes('4')) {
         loadPlayer();
       } else {
-        router.push('/account');
+        setOnboardingState(parseInt(userOnboarding.onboarding_state, 10));
       }
     } catch (error) {
       alert(error.message);
@@ -251,11 +255,11 @@ export default function Player() {
   async function refreshStats() {
     console.log('statsRefreshing');
     setPlayerStats(await fetchPlayerStats(setAvatarUrl));
-    setWins(await fetchWins());
     setWeekWins(await fetchWeekWins());
-    setAreaStats(await fetchAreaStats());
-    setTitles(await fetchTitles());
     setLoading(false);
+    setTitles(await fetchTitles());
+    setAreaStats(await fetchAreaStats());
+    setWins(await fetchWins());
   }
 
   async function fetchPlayerBackground(path) {
@@ -331,23 +335,17 @@ export default function Player() {
   }
 
   if (loading) {
-    return (
-      <PlayerSkeleton />
-    );
+    return <PlayerSkeleton />;
   }
 
-  if (!playerStats) {
+  if (!loading && !playerStats) {
+    // need to add a case to handle if no wins this season, how can they initialize their character
+
     return (
-      <div className="h-screen flex flex-col justify-center">
-        <div className="-mt-40 mx-auto">
-          <h1 className="mb-5 text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-            Loading Wins This Season...
-          </h1>
-          <div className="flex justify-center">
-            <LoadingDots />
-          </div>
-        </div>
-      </div>
+      <>
+        <PlayerSkeleton />
+          <ModalOnboarding onboardingState={5} />
+      </>
     );
   }
 
@@ -481,26 +479,30 @@ export default function Player() {
                   setShowTitleModal={setShowTitleModal}
                   titles={titles}
                 />
-                <div className="flex flex-wrap mt-4">
-                  <div className="w-full pb-36 px-4">
-                    {/* <CardTable color="dark" data={wins} /> */}
-                    <DataTable
-                      className=""
-                      title="Recent Wins 👀"
-                      noHeader
-                      columns={columns}
-                      data={wins}
-                      onRowClicked={modalHandler}
-                      // highlightOnHover={true}
-                      pointerOnHover={true}
-                      fixedHeader={true}
-                      customStyles={customStyles}
-                      pagination={true}
-                      theme="game"
-                    />
-                    {/* <TailwindTable wins={wins} /> */}
+                {wins ? (
+                  <div className="flex flex-wrap mt-4">
+                    <div className="w-full pb-36 px-4">
+                      {/* <CardTable color="dark" data={wins} /> */}
+                      <DataTable
+                        className=""
+                        title="Recent Wins 👀"
+                        noHeader
+                        columns={columns}
+                        data={wins}
+                        onRowClicked={modalHandler}
+                        // highlightOnHover={true}
+                        pointerOnHover={true}
+                        fixedHeader={true}
+                        customStyles={customStyles}
+                        pagination={true}
+                        theme="game"
+                      />
+                      {/* <TailwindTable wins={wins} /> */}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <RecentWinsSkeleton />
+                )}
               </div>
             </div>
           </div>
@@ -533,6 +535,9 @@ export default function Player() {
           pushTitle={pushTitle}
           refreshStats={refreshStats}
         />
+      ) : null}
+      {onboardingState ? (
+        <ModalOnboarding onboardingState={onboardingState} />
       ) : null}
     </>
   );
