@@ -85,7 +85,7 @@ class Countdown extends Component {
     const countDown = this.state;
 
     return (
-      <div className={s.Countdown}>
+      <div className={`${s.Countdown} overflow-x-auto`}>
         <span className={s.Countdowncol}>
           <span className={s.Countdowncolelement}>
               <strong>{this.addLeadingZeros(countDown.days)}</strong>

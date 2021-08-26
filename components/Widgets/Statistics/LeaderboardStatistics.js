@@ -17,25 +17,25 @@ export default function LeaderboardStatistics({
       //     </span>
       //   </span>
 
-      <div className={s.Countdown}>
+      <div className={`${s.Countdown} overflow-x-auto`}>
       
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
-          <strong>{players}</strong>
+          <strong>{players} 🏃‍♂️</strong>
           <span className={s.Countdowncolformat}>{players === 1 ? 'Player' : 'Players'}</span>
         </span>
       </span>
       
         <span className={s.Countdowncol}>
           <span className={s.Countdowncolelement}>
-            <strong>{levels_earned}</strong>
+            <strong>{levels_earned} 🆙</strong>
             <span className={s.Countdowncolformat}>{levels_earned === 1 ? 'Level Up' : 'Level Ups'}</span>
           </span>
         </span>
 
         <span className={s.Countdowncol}>
           <span className={s.Countdowncolelement}>
-            <strong>{exp_earned}</strong>
+            <strong>{exp_earned} XP</strong>
             <span className={s.Countdowncolformat}>EXP Earned</span>
           </span>
         </span>
