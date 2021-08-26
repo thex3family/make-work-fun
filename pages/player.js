@@ -15,6 +15,8 @@ import WinModal from '@/components/Modals/ModalWin';
 
 import TitleModal from '@/components/Modals/ModalTitle';
 
+import PlayerSkeleton from '@/components/Skeletons/PlayerSkeleton';
+
 // functions
 
 import {
@@ -72,13 +74,7 @@ createTheme('game', {
 export default function Player() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const {
-    user,
-    userLoaded,
-    session,
-    userDetails,
-    userOnboarding,
-  } = useUser();
+  const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
 
   const [wins, setWins] = useState([]);
   const [playerStats, setPlayerStats] = useState(null);
@@ -90,7 +86,7 @@ export default function Player() {
   const [activeModalStats, setActiveModalStats] = useState(null);
   const [weekWins, setWeekWins] = useState([]);
   const [areaStats, setAreaStats] = useState([]);
-  const [titles, setTitles] = useState([]);  
+  const [titles, setTitles] = useState([]);
 
   const currentHour = new Date().getHours();
   const greetingMessage =
@@ -327,17 +323,16 @@ export default function Player() {
 
   const { win_id } = router.query;
 
-  async function loadSpecificWin(win){
-    const specific_win = await fetchSpecificWin(win)
-    if(specific_win) {triggerWinModal(setActiveModalStats, setShowWinModal, specific_win)}
+  async function loadSpecificWin(win) {
+    const specific_win = await fetchSpecificWin(win);
+    if (specific_win) {
+      triggerWinModal(setActiveModalStats, setShowWinModal, specific_win);
+    }
   }
-  
 
   if (loading) {
     return (
-      <div className="h-screen flex justify-center">
-        <LoadingDots />
-      </div>
+      <PlayerSkeleton />
     );
   }
 
@@ -456,59 +451,59 @@ export default function Player() {
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <div className="bg-black bg-opacity-70 sm:bg-opacity-0">
-        <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-          <div className="animate-fade-in-up rounded sm:bg-black sm:bg-opacity-90 bg-none bg-opacity-100 opacity-95">
-            <div className="pt-0 sm:pt-10 pb-5">
-              <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
-                {greetingMessage},{' '}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                  {playerStats.full_name ? (
-                    `${playerStats.full_name ?? 'Adventurer'}`
-                  ) : (
-                    <LoadingDots />
-                  )}
-                  !
-                </span>
-              </h1>
-              <p className="mt-5 text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-                {greetingBlurb}
-              </p>
-            </div>
-            <div className="animate-fade-in-up max-w-6xl px-0 sm:px-4 md:px-10 mx-auto w-full -m-24">
-              <HeaderStats
-                playerStats={playerStats}
-                avatarUrl={avatar_url}
-                setAvatarUrl={setAvatarUrl}
-                fetchPlayerBackground={fetchPlayerBackground}
-                updateProfile={updateProfile}
-                weekWins={weekWins}
-                areaStats={areaStats}
-                setShowTitleModal={setShowTitleModal}
-                titles={titles}
-              />
-              <div className="flex flex-wrap mt-4">
-                <div className="w-full pb-36 px-4">
-                  {/* <CardTable color="dark" data={wins} /> */}
-                  <DataTable
-                    className=""
-                    title="Recent Wins 👀"
-                    noHeader
-                    columns={columns}
-                    data={wins}
-                    onRowClicked={modalHandler}
-                    // highlightOnHover={true}
-                    pointerOnHover={true}
-                    fixedHeader={true}
-                    customStyles={customStyles}
-                    pagination={true}
-                    theme="game"
-                  />
-                  {/* <TailwindTable wins={wins} /> */}
+          <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+            <div className="animate-fade-in-up rounded sm:bg-black sm:bg-opacity-90 bg-none bg-opacity-100 opacity-95">
+              <div className="pt-0 sm:pt-10 pb-5">
+                <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
+                  {greetingMessage},{' '}
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+                    {playerStats.full_name ? (
+                      `${playerStats.full_name ?? 'Adventurer'}`
+                    ) : (
+                      <LoadingDots />
+                    )}
+                    !
+                  </span>
+                </h1>
+                <p className="mt-5 text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
+                  {greetingBlurb}
+                </p>
+              </div>
+              <div className="animate-fade-in-up max-w-6xl px-0 sm:px-4 md:px-10 mx-auto w-full -m-24">
+                <HeaderStats
+                  playerStats={playerStats}
+                  avatarUrl={avatar_url}
+                  setAvatarUrl={setAvatarUrl}
+                  fetchPlayerBackground={fetchPlayerBackground}
+                  updateProfile={updateProfile}
+                  weekWins={weekWins}
+                  areaStats={areaStats}
+                  setShowTitleModal={setShowTitleModal}
+                  titles={titles}
+                />
+                <div className="flex flex-wrap mt-4">
+                  <div className="w-full pb-36 px-4">
+                    {/* <CardTable color="dark" data={wins} /> */}
+                    <DataTable
+                      className=""
+                      title="Recent Wins 👀"
+                      noHeader
+                      columns={columns}
+                      data={wins}
+                      onRowClicked={modalHandler}
+                      // highlightOnHover={true}
+                      pointerOnHover={true}
+                      fixedHeader={true}
+                      customStyles={customStyles}
+                      pagination={true}
+                      theme="game"
+                    />
+                    {/* <TailwindTable wins={wins} /> */}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 

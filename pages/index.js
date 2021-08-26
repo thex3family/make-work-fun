@@ -4,7 +4,7 @@ import Avatar from '@/components/Cards/CardAvatar';
 import LeaderboardStatistics from '@/components/Widgets/Statistics/LeaderboardStatistics';
 import { useState, useEffect } from 'react';
 
-import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
+import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
 
 // functions
