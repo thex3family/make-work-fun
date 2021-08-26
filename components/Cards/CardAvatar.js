@@ -100,7 +100,7 @@ export default function Avatar({
       <div className="w-full xs:w-1/2 sm:w-1/2 md:1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/5 shadow-xl">
         <div className="bg-primary-2 rounded-md mx-auto overflow-hidden">
           <div
-            className="rounded-tr-md rounded-tl-md w-auto bg-cover"
+            className="rounded-tr-md rounded-tl-md w-auto bg-cover bg-center"
             style={{ backgroundImage: `url(${backgroundUrl})` }}
           >
             <div className="bg-black bg-opacity-70">
