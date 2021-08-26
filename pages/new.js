@@ -16,6 +16,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Aug 26, 2021"
+            title="Personalize Your Leaderboard!"
+            desc="With our latest upgrade to the embed page, make your own leaderboard with your friends' player cards (unlimited!) and stay updated on their wins."
+            img_url="updates/0.21.png"
+            button_url="/embed"
+            version="v.21"
+          />
           <CardLUpdate
             date="Aug 23, 2021"
             title="See Today's Earnings On The Leaderboard"
