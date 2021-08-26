@@ -21,14 +21,14 @@ export default function LeaderboardStatistics({
       
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
-          <strong>{players} 🏃‍♂️</strong>
+          <strong>{players} <i className="fas fa-running"/></strong>
           <span className={s.Countdowncolformat}>{players === 1 ? 'Player' : 'Players'}</span>
         </span>
       </span>
       
         <span className={s.Countdowncol}>
           <span className={s.Countdowncolelement}>
-            <strong>{levels_earned} 🆙</strong>
+            <strong>{levels_earned} <i className="fas fa-angle-double-up"/></strong>
             <span className={s.Countdowncolformat}>{levels_earned === 1 ? 'Level Up' : 'Level Ups'}</span>
           </span>
         </span>
