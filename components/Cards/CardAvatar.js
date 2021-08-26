@@ -4,7 +4,7 @@ import Button from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { createPopper } from '@popperjs/core';
-import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
+import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 
 export default function Avatar({
   statRank,
