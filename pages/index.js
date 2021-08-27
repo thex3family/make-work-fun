@@ -228,7 +228,7 @@ export default function HomePage() {
           Leaderboard 🏆
         </h1>
         {loading ? (
-          <div className="animate-fade-in-up  mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl">
+          <div className="animate-fade-in-up mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10">
             <CardAvatarSkeleton />
             <CardAvatarSkeleton />
             <CardAvatarSkeleton />

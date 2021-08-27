@@ -22,6 +22,7 @@ import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
+import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 
 export default function dallies() {
   const [habits, setHabits] = useState(null);
@@ -219,9 +220,7 @@ export default function dallies() {
 
   if (!playerStats) {
     return (
-      <div className="h-screen flex justify-center">
-        <LoadingDots />
-      </div>
+        <DailiesSkeleton/>
     );
   }
 
@@ -234,7 +233,7 @@ export default function dallies() {
           <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
             <div className="pb-5">
               <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
-                Dailies
+                Daily Quests
               </h1>
               <div className="text-center mb-5">
                 {/* <div className="font-semibold text-dailies text-xl mb-3">
