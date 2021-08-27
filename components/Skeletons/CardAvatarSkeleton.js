@@ -2,7 +2,7 @@ export default function CardAvatarSkeleton(){
 
   return (
     <>
-<div className="px-8 mt-10 w-full sm:w-1/2 md:1/2 lg:w-1/3 xl:w-1/4 shadow-xl">
+<div className="w-full xs:w-1/2 sm:w-1/2 md:1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/5 shadow-xl">
 <div className="bg-primary-2 rounded mx-auto">
   <div className="h-60 bg-gray-600 rounded-tr rounded-tl animate-pulse"></div>
 
