@@ -33,6 +33,7 @@
     "next-pwa": "^5.2.21",
     "react": "17.0.1",
     "react-canvas-confetti": "^1.2.1",
+    "react-countup": "^5.2.0",
     "react-data-table-component": "^6.11.7",
     "react-dom": "17.0.1",
     "react-fa-icon-picker": "^1.0.3",
