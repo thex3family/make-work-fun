@@ -47,57 +47,26 @@ export default function parties() {
     setRecruitingParties(await fetchRecruitingParties());
   }
 
-  async function getActiveParties(parties_you_are_in) {
-    var temp_active_parties = [];
-    try {
-      // get the parties that are in progress and determine which or if any of these parties are in progress
-      const { data, error } = await supabase
-        .from('party')
-        .select('*')
-        .eq('status', 2);
-
-      var in_progress_parties = data;
-
-      //console.log('In Progress Parties:', in_progress_parties);
-
-      // find the in_progress parties that you are a part of
-      if (in_progress_parties.length != 0) {
-        // compare parties you are in with in_progress parties to see which of your parties are in progress
-        for (var i = 0; i < parties_you_are_in.length; i++) {
-          for (var j = 0; j < in_progress_parties.length; j++) {
-            if (parties_you_are_in[i].party_id == in_progress_parties[j].id) {
-              temp_active_parties.push(in_progress_parties[j]);
-            }
-          }
-        }
-      }
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      // alert(error.message)
-    } finally {
-      //console.log('Active Parties:', temp_active_parties);
-      return temp_active_parties;
-    }
-  }
-
   async function fetchActiveParties() {
     try {
       const user = supabase.auth.user();
 
-      // get the parties that the user is a part of
+      // get the parties that the user is a part of and return the associated party properties instead
+      // Note: Related table column values are returned as objects. ex. For the party's id, you will get { id: {id: 2} }
       const { data, error } = await supabase
         .from('party_members')
-        .select('*')
+        .select('id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status)')
         .eq('player', user.id);
 
-      var parties_you_are_in = data;
+      //console.log('parties you are in:', data);
 
-      //console.log('Parties you are in:', parties_you_are_in);
-      //console.log('Player Id:', user.id);
+      // Put the data into the right format
+      var parties_you_are_in = data.map((party) => {
+        return{ id: party.id.id, name: party.name.name, description: party.description.description, challenge: party.challenge.challenge, status: party.status.status };
+      });
 
-      setActiveParties(await getActiveParties(parties_you_are_in));
+      // only use the parties that are in progress
+      setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
 
       if (error && status !== 406) {
         throw error;
