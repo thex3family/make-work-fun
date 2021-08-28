@@ -5,9 +5,11 @@ import { supabase } from '../utils/supabase-client';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import CardParty from '@/components/Cards/CardParty';
+import Kanban from '@/components/Parties/Kanban';
 
 export default function parties() {
   const [activeParties, setActiveParties] = useState(null);
+  const [recruitingParties, setRecruitingParties] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
@@ -42,6 +44,7 @@ export default function parties() {
   async function loadPlayer() {
     console.log('Loading Player');
     fetchActiveParties();
+    setRecruitingParties(await fetchRecruitingParties());
   }
 
   async function getActiveParties(parties_you_are_in) {
@@ -115,7 +118,7 @@ export default function parties() {
         .select('player_avatar_url: users (avatar_url)')
         .eq('party_id', party_id);
 
-        party_members_avatar_urls = data;
+      party_members_avatar_urls = data;
 
       if (error && status !== 406) {
         throw error;
@@ -125,6 +128,29 @@ export default function parties() {
     } finally {
       setLoading(false);
       return party_members_avatar_urls;
+    }
+  }
+
+  async function fetchRecruitingParties() {
+    try {
+      // get the parties that the user is a part of
+      const { data, error } = await supabase
+        .from('party')
+        .select('*')
+        .eq('status', 1);
+
+      if (data) {
+        console.log('Recruiting Parties', data);
+        return data;
+      }
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -145,7 +171,13 @@ export default function parties() {
               </h2>
               {activeParties
                 ? activeParties.length != 0
-                  ? activeParties.map((party) => <CardParty key={party.id} party={party} avatar_urls={fetchPartyMemberAvatarURLs(party.id)}/>)
+                  ? activeParties.map((party) => (
+                      <CardParty
+                        key={party.id}
+                        party={party}
+                        avatar_urls={fetchPartyMemberAvatarURLs(party.id)}
+                      />
+                    ))
                   : "You aren't a part of any parties."
                 : null}
             </section>
@@ -153,6 +185,7 @@ export default function parties() {
               <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies mt-4">
                 Parties Recruiting
               </h2>
+              <Kanban recruitingParties={recruitingParties} />
             </section>
           </div>
         </div>
