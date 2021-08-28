@@ -43,8 +43,9 @@ export default function parties() {
 
   async function loadPlayer() {
     console.log('Loading Player');
-    fetchActiveParties();
-    setRecruitingParties(await fetchRecruitingParties());
+    fetchActiveParties().then(result => {
+      fetchRecruitingParties();
+    });
   }
 
   async function fetchActiveParties() {
@@ -87,7 +88,9 @@ export default function parties() {
         .select('player_avatar_url: users (avatar_url)')
         .eq('party_id', party_id);
 
-      party_members_avatar_urls = data;
+      party_members_avatar_urls = data.map(member => {
+        return member.player_avatar_url.avatar_url ;
+      });
 
       if (error && status !== 406) {
         throw error;
@@ -100,18 +103,36 @@ export default function parties() {
     }
   }
 
+  async function addChallengeNameAndMemberAvatars(recruitingParties) {
+
+    for (var i = 0; i < recruitingParties.length; i++) {
+      var tempParty = recruitingParties[i];
+      var member_avatar_urls = await fetchPartyMemberAvatarURLs(tempParty.id);
+      recruitingParties[i] = { ...tempParty, member_avatar_urls: member_avatar_urls  };
+    }
+
+    return recruitingParties.map((party) => {
+      return { ...party, challenge_name: party.challenge_name.name };
+    });
+  }
+
   async function fetchRecruitingParties() {
     try {
       // get the parties that the user is a part of
       const { data, error } = await supabase
         .from('party')
-        .select('*')
+        .select('id, name, challenge, description, due_date, status, challenge_name: party_challenge (name)')
         .eq('status', 1);
 
-      if (data) {
-        console.log('Recruiting Parties', data);
-        return data;
-      }
+      var recruitingParties = data;
+
+      console.log('fetchRecruitingParties');
+
+      recruitingParties = await addChallengeNameAndMemberAvatars(recruitingParties);
+
+      //console.log('updated -', recruitingParties);
+
+      setRecruitingParties(recruitingParties);
 
       if (error && status !== 406) {
         throw error;
@@ -154,7 +175,7 @@ export default function parties() {
               <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies mt-4">
                 Parties Recruiting
               </h2>
-              <Kanban recruitingParties={recruitingParties} />
+              { recruitingParties ? <Kanban recruitingParties={recruitingParties} /> : null } 
             </section>
           </div>
         </div>

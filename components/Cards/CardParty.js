@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function CardParty({ party, avatar_urls }) {
   
-  avatar_urls.then((result) => { // TODO: Use these results to populate the list of member avatars
+  avatar_urls.then((result) => { // TODO: Use these results to populate the list of member avatars (Reuse the member avatar component that is used for cards in the kanban board)
     console.log("CardParty -", result);
   });
 
