@@ -182,7 +182,7 @@ export async function fetchWins() {
     const { data, error } = await supabase
       .from('success_plan')
       .select(
-        'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname'
+        'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname, player)'
       )
       .eq('player', user.id)
       .order('closing_date', { ascending: false })
@@ -224,6 +224,30 @@ export async function fetchSpecificWin(win_id) {
     }
   } catch (error) {
     console.log('No Specific win found!');
+  } finally {
+  }
+}
+
+export async function fetchSpecificWins(upstream_id) {
+  try {
+    const { data, error } = await supabase
+      .from('success_plan')
+      .select(
+        'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname'
+      )
+      .eq('upstream_id', upstream_id)
+      .order('closing_date', { ascending: false })
+      .order('entered_on', { ascending: false })
+
+    if (data) {
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    console.log('No Specific Wins found!');
   } finally {
   }
 }
@@ -317,6 +341,26 @@ export async function fetchPlayers(setPlayers) {
 
     if (data) {
       setPlayers(data);
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
+export async function fetchPartyPlayers(party_id) {
+  try {
+    const { data, error } = await supabase
+    .from('party_member_details')
+    .select('*')
+    .eq('party_id', party_id);
+
+    if (data) {
+      return data;
     }
 
     if (error && status !== 406) {
@@ -450,6 +494,29 @@ export async function fetchTitles() {
       .from('titles')
       .select('*')
       .eq('active', true);
+
+    if (data) {
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
+export async function fetchParty(party_slug) {
+  try {
+    const { data, error } = await supabase
+      .from('party')
+      .select('*')
+      .eq('slug', party_slug)
+      .single();
+
+    console.log(data)
 
     if (data) {
       return data;
