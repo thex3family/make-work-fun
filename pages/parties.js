@@ -6,6 +6,7 @@ import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import CardParty from '@/components/Cards/CardParty';
 import Kanban from '@/components/Parties/Kanban';
+import RecruitingBoard from '@/components/Parties/RecruitingBoard';
 
 export default function parties() {
   const [activeParties, setActiveParties] = useState(null);
@@ -176,6 +177,7 @@ export default function parties() {
                 Parties Recruiting
               </h2>
               { recruitingParties ? <Kanban recruitingParties={recruitingParties} /> : null } 
+              <RecruitingBoard recruitingParties={recruitingParties || {}}/>
             </section>
           </div>
         </div>
