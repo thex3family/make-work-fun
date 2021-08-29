@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { fetchSpecificWins } from '../Fetch/fetchMaster';
 import LoadingDots from '../ui/LoadingDots';
 
-export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeWins, cumulativeEXP, setCumulativeEXP }) {
+export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeWins, cumulativeEXP, setCumulativeEXP, state }) {
   const [openTab, setOpenTab] = useState(1);
   const [avatarURL, setAvatarURL] = useState(null);
   const [wins, setWins] = useState(null);
@@ -20,7 +20,7 @@ export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeW
 
   useEffect(() => {
     loadAvatarURL();
-    loadWins();
+    if (state != 1) loadWins();
     if (player.background_url) loadBackgroundURL();
     if (player.dragon_bg_url) loadDragonBGURL();
   }, []);
