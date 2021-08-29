@@ -12,6 +12,7 @@ module.exports = {
       backgroundImage: (theme) => ({
         'player-pattern': "url('/background/cityscape.jpg')",
         'dailies-pattern': "url('/background/dailies.jpg')",
+        'hall-pattern': "url('/background/great-hall.jpg')",
         'first-place': "url('/img/first-place.svg')"
       }),
       maxWidth: {

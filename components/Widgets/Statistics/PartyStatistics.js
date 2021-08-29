@@ -1,11 +1,10 @@
-import s from './LeaderboardStatistics.module.css';
+import s from './PartyStatistics.module.css';
 import CountUp from 'react-countup';
 
-export default function LeaderboardStatistics({
+export default function PartyStatistics({
   players,
-  wins_earned,
   exp_earned,
-  levels_earned,
+  wins,
   gold_earned
 }) {
   return (
@@ -23,31 +22,29 @@ export default function LeaderboardStatistics({
             <CountUp start={0} end={players} duration={1} separator="," />{' '}
             <i className="fas fa-running" />
           </strong>
-          <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>
+          <span className={s.Countdowncolformat}>
             {players === 1 ? 'Player' : 'Players'}
-          </div>
+          </span>
         </span>
       </span>
 
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
           <strong>
-            <CountUp start={0} end={levels_earned} duration={1} separator="," />{' '}
-            <i className="fas fa-angle-double-up" />
+            <CountUp start={0} end={wins} duration={1} separator="," /> ⚔
           </strong>
-          <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>
-            {levels_earned === 1 ? 'Level Up' : 'Level Ups'}
-          </div>
+          <span className={s.Countdowncolformat}>
+            {wins === 1 ? 'Win Complete' : 'Wins Complete'}
+          </span>
         </span>
       </span>
 
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
           <strong>
-            <CountUp start={0} end={exp_earned} duration={1} separator="," />{' '}
-            XP
+            <CountUp start={0} end={exp_earned} duration={1} separator="," /> XP
           </strong>
-          <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>EXP Earned</div>
+          <span className={s.Countdowncolformat}>EXP Earned</span>
         </span>
       </span>
 

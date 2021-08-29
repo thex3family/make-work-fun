@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import Button from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '@/components/ui/LoadingDots';
+import { createPopper } from '@popperjs/core';
+import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 
 export default function Avatar({
   statRank,
@@ -18,18 +20,25 @@ export default function Avatar({
   statWinEXP,
   avatar_url,
   background_url,
-  statTitle
+  statTitle,
+  statEXPEarnedToday,
+  statGoldEarnedToday,
 }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
-  const [backgroundUrl, setBackgroundUrl] = useState('/background/cityscape.jpg');
+  const [backgroundUrl, setBackgroundUrl] = useState(
+    '/background/cityscape.jpg'
+  );
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
-    if (avatar_url) downloadImage(avatar_url, "avatar");
-    if (background_url) downloadImage(background_url, "background");
-  }, []);
+    if (avatar_url) downloadImage(avatar_url, 'avatar');
+    if (!avatar_url) setAvatarStatus('Missing');
+    if (background_url) downloadImage(background_url, 'background');
+  }, [avatar_url, background_url]);
 
   async function downloadImage(path, type) {
+    setAvatarStatus(null);
     try {
       if (type === 'avatar') {
         const { data, error } = await supabase.storage
@@ -54,22 +63,46 @@ export default function Avatar({
     } catch (error) {
       console.log('Error downloading image: ', error.message);
     } finally {
+      
     }
   }
 
   const statMaxLevel = '100';
   const statEXPPercent = Math.floor((statEXPProgress / statLevelEXP) * 100);
+
   const statArrow = 'up';
   const statPercent = '0';
   const statPercentColor = 'text-white';
   const statIconName = 'fas fa-chevron-up';
   const statIconColor = 'bg-transparent-500';
 
+  const [popoverShow, setPopoverShow] = React.useState(false);
+  const btnRef = React.createRef();
+  const popoverRef = React.createRef();
+  const openTooltip = () => {
+    createPopper(btnRef.current, popoverRef.current, {
+      placement: 'bottom'
+    });
+    setPopoverShow(true);
+  };
+  const closeTooltip = () => {
+    setPopoverShow(false);
+  };
+
+  if (loading) {
+    return (
+      <CardAvatarSkeleton />
+    );
+  }
+
   return (
     <>
-      <div className="px-8 mt-10 w-full sm:w-1/2 md:1/2 lg:w-1/3 xl:w-1/4 shadow-xl">
-        <div className="bg-primary-2 rounded mx-auto">
-          <div className="rounded-tr-md rounded-tl-md w-auto bg-cover" style={{ backgroundImage: `url(${backgroundUrl})` }}>
+      <div className="w-full xs:w-1/2 sm:w-1/2 md:1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/5 shadow-xl">
+        <div className="bg-primary-2 rounded-md mx-auto overflow-hidden">
+          <div
+            className="rounded-tr-md rounded-tl-md w-auto bg-cover bg-center"
+            style={{ backgroundImage: `url(${backgroundUrl})` }}
+          >
             <div className="bg-black bg-opacity-70">
               {/* {avatarUrl ? (
         <img
@@ -107,7 +140,7 @@ export default function Avatar({
                   {statTitle ? statTitle : 'Newbie'}
                 </h5>
                 <p className="font-semibold text-xl text-white-700 truncate w-3/4">
-                  {statName}
+                  {statName ? statName : 'Anonymous'}
                 </p>
                 <span className="font-semibold text-l text-white-700">
                   Level {statLevel}
@@ -174,29 +207,52 @@ export default function Avatar({
                 </div>
               </div>
             </div>
-            <div className="flex flex-row items-center gap-4">
+            <div
+              className="flex flex-row items-center gap-4"
+              onMouseEnter={openTooltip}
+              onMouseLeave={closeTooltip}
+              ref={btnRef}
+            >
               <div
                 variant="slim"
                 className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
               >
-                {statGold} 💰
+                <i
+                  className={
+                    statGoldEarnedToday > 0
+                      ? statGoldEarnedToday >= 1000
+                        ? 'fas fa-angle-double-up text-emerald-500'
+                        : 'fas fa-angle-up text-emerald-600'
+                      : 'fas fa-grip-lines text-red-600'
+                  }
+                ></i>{' '}
+                {statGoldEarnedToday ? +statGoldEarnedToday : 0} 💰
               </div>
               <div
                 variant="slim"
                 className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
               >
-                <span className={statPercentColor + ' mr-2'}>
-                  <i
-                    className={
-                      statArrow === 'up'
-                        ? 'fas fa-arrow-up'
-                        : statArrow === 'down'
-                        ? 'fas fa-arrow-down'
-                        : ''
-                    }
-                  ></i>{' '}
-                  {statPercent}%
-                </span>
+                <i
+                  className={
+                    statEXPEarnedToday > 0
+                      ? statEXPEarnedToday >= 1000
+                        ? 'fas fa-angle-double-up text-emerald-500'
+                        : 'fas fa-angle-up text-emerald-600'
+                      : 'fas fa-grip-lines text-red-600'
+                  }
+                ></i>{' '}
+                {statEXPEarnedToday ? +statEXPEarnedToday : 0} XP
+              </div>
+            </div>
+            <div
+              className={
+                (popoverShow ? '' : 'hidden ') +
+                'bg-primary-3 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg'
+              }
+              ref={popoverRef}
+            >
+              <div>
+                <div className="text-white p-3">⭐ Today's Earnings!</div>
               </div>
             </div>
             <div className="mt-6">

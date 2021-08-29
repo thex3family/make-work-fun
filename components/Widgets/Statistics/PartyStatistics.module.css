@@ -21,9 +21,10 @@
     background: white;
     border-radius: 5px;
     color: black;
-    box-shadow: 5px 8px #3b82f6;
+    box-shadow: 5px 8px #a413f8;
   }
   .Countdowncolformat {
     margin-top: 10px;
-    font-weight: 600;
+    font-weight: 650;
+    font-size: large;
   }

@@ -7,10 +7,11 @@ import CardStats from 'components/Cards/CardStats.js';
 import CardLineChart from 'components/Cards/CardLineChart.js';
 import Avatar from '@/components/avatar';
 import CardAreaStats from '@/components/Cards/CardAreaStats';
+import { downloadImage } from '@/utils/downloadImage';
 
 export default function HeaderStats({
   playerStats,
-  avatar_url,
+  avatarUrl,
   setAvatarUrl,
   fetchPlayerBackground,
   updateProfile,
@@ -22,6 +23,12 @@ export default function HeaderStats({
     (playerStats.exp_progress / playerStats.level_exp) * 100
   );
   const [showHide, setShowHide] = useState(true);
+
+  async function handleAvatarUpload(url){
+    setAvatarUrl(await downloadImage(url, 'avatar'));
+    updateProfile({ image_url: url, type: 'avatar' });
+  }
+
   return (
     <>
       {/* Header */}
@@ -41,11 +48,8 @@ export default function HeaderStats({
                 </div>
                 <div className={`${showHide ? '' : 'hidden'} animate-fade-in`}>
                   <Avatar
-                    url={avatar_url}
-                    onAvatarUpload={(url) => {
-                      setAvatarUrl(url);
-                      updateProfile({ image_url: url, type: 'avatar' });
-                    }}
+                    avatarUrl={avatarUrl}
+                    onAvatarUpload={(url) => handleAvatarUpload(url)}
                     onBackgroundUpload={(url) => {
                       fetchPlayerBackground(url);
                       updateProfile({ image_url: url, type: 'background' });

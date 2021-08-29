@@ -27,7 +27,7 @@ function Card({ title, description, footer, children }) {
   );
 }
 
-export default function Account({ initialPurchaseRecord, user }) {
+export default function Account({ initialPurchaseRecord }) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function Account({ initialPurchaseRecord, user }) {
 
   const [notionCredentials, setNotionCredentials] = useState(null);
 
-  const { userLoaded, session, userDetails } = useUser();
+  const { user, userLoaded, session, userDetails } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   useEffect(() => {
@@ -232,7 +232,7 @@ export default function Account({ initialPurchaseRecord, user }) {
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
                   <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
                     Not seeing everything? Your resources are tied to your
-                    email. You are currently logged in as <b>{user.email}</b>
+                    email. You are currently logged in as <b>{user ? user.email : <LoadingDots/>}</b>
                   </p>
                   <a
                     href="https://toolbox.co-x3.com/?utm_source=makeworkfun"
