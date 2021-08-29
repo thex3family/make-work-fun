@@ -71,7 +71,6 @@ export default function playerDetails() {
       null,
       triggerCardWin,
       setShowCardWin,
-      setAvatarUrl,
       setActiveWinStats,
       friends
     );
@@ -79,7 +78,7 @@ export default function playerDetails() {
 
   async function refreshStats() {
     console.log('statsRefreshing');
-    if (player) setPlayerStats(await fetchPlayerStats(null, player));
+    if (player) setPlayerStats(await fetchPlayerStats(player));
     if (id) setSpecificPlayers(await fetchSpecificPlayers(id, setFriends));
     setLoading(false);
   }
@@ -91,23 +90,6 @@ export default function playerDetails() {
   //     fetchPlayerBackground(playerStats.background_url);
   //   }
   // }, [playerStats]);
-
-  async function downloadImage(path) {
-    try {
-      const { data, error } = await supabase.storage
-        .from('avatars')
-        .download(path);
-      if (error) {
-        throw error;
-      }
-      const url = URL.createObjectURL(data);
-      setAvatarUrl(url);
-    } catch (error) {
-      console.log('Error downloading image: ', error.message);
-    } finally {
-      setAvatarStatus('Exists');
-    }
-  }
 
   // async function fetchPlayerBackground(path) {
   //   if (style == 'dark') {
@@ -199,8 +181,8 @@ export default function playerDetails() {
         <CardWin
           setShowCardWin={setShowCardWin}
           win={activeWinStats}
-          player_name={showCardWin}
-          avatarUrl={avatarUrl}
+          player_name={showCardWin.full_name}
+          avatarUrl={showCardWin.avatar_url}
           position={'top'}
         />
       ) : null}

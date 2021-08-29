@@ -42,7 +42,6 @@ export default function HomePage() {
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
   const [levelUp, setLevelUp] = useState(false);
 
   const [showWinModal, setShowWinModal] = useState(false);
@@ -54,10 +53,10 @@ export default function HomePage() {
   const [avatarUrl, setAvatarUrl] = useState(null);
 
   const [openTab, setOpenTab] = useState(1);
-  
+
   useEffect(() => {
-    if(openTab == 1 && s1Players) setActivePlayers(s1Players)
-    if(openTab == 2 && players) setActivePlayers(players)
+    if (openTab == 1 && s1Players) setActivePlayers(s1Players);
+    if (openTab == 2 && players) setActivePlayers(players);
     setCurrentPage(1);
   }, [openTab, s1Players]);
 
@@ -93,14 +92,14 @@ export default function HomePage() {
       null,
       triggerCardWin,
       setShowCardWin,
-      setAvatarUrl,
-      setActiveWinStats
+      setActiveWinStats,
     );
   }, []);
 
   async function refreshStats() {
     setPlayerStats(await fetchPlayerStats());
-    fetchLeaderboardStats(setS1Players, setPlayers, setLoading);
+    fetchLeaderboardStats(setS1Players, setLoading, '1');
+    fetchLeaderboardStats(setPlayers, setLoading);
   }
 
   if (recoveryToken) {
@@ -308,74 +307,74 @@ export default function HomePage() {
                   </a>
                 </li>
               </ul>
-              <div className='mb-24'>
-              <div
-                className={
-                  openTab === 1
-                    ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
-                    : 'hidden'
-                }
-                id="link1"
-              >
-                {currentPlayers.map((player, i) => (
-                  <Avatar
-                    key={i}
-                    statRank={player.player_rank}
-                    statName={player.full_name}
-                    statLevel={player.current_level}
-                    statEXP={player.total_exp}
-                    statEXPProgress={player.exp_progress}
-                    statLevelEXP={player.level_exp}
-                    statGold={player.total_gold}
-                    statWinName={player.name}
-                    statWinType={player.type}
-                    statWinGold={player.gold_reward}
-                    statWinEXP={player.exp_reward}
-                    avatar_url={player.avatar_url}
-                    background_url={player.background_url}
-                    statTitle={player.title}
-                    statEXPEarnedToday={player.exp_earned_today}
-                    statGoldEarnedToday={player.gold_earned_today}
-                  />
-                ))}
-              </div>
-              <div
-                className={
-                  openTab === 2
-                    ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
-                    : 'hidden'
-                }
-                id="link2"
-              >
-                {currentPlayers.map((player, i) => (
-                  <Avatar
-                    key={i}
-                    statRank={player.player_rank}
-                    statName={player.full_name}
-                    statLevel={player.current_level}
-                    statEXP={player.total_exp}
-                    statEXPProgress={player.exp_progress}
-                    statLevelEXP={player.level_exp}
-                    statGold={player.total_gold}
-                    statWinName={player.name}
-                    statWinType={player.type}
-                    statWinGold={player.gold_reward}
-                    statWinEXP={player.exp_reward}
-                    avatar_url={player.avatar_url}
-                    background_url={player.background_url}
-                    statTitle={player.title}
-                    statEXPEarnedToday={player.exp_earned_today}
-                    statGoldEarnedToday={player.gold_earned_today}
-                  />
-                ))}
-              </div>
-              
-              <Pagination
-                postsPerPage={postsPerPage}
-                totalPosts={s1Players.length}
-                paginate={paginate}
-                currentPage={currentPage}
-              />
+              <div className="mb-24">
+                <div
+                  className={
+                    openTab === 1
+                      ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                      : 'hidden'
+                  }
+                  id="link1"
+                >
+                  {currentPlayers.map((player, i) => (
+                    <Avatar
+                      key={i}
+                      statRank={player.player_rank}
+                      statName={player.full_name}
+                      statLevel={player.current_level}
+                      statEXP={player.total_exp}
+                      statEXPProgress={player.exp_progress}
+                      statLevelEXP={player.level_exp}
+                      statGold={player.total_gold}
+                      statWinName={player.name}
+                      statWinType={player.type}
+                      statWinGold={player.gold_reward}
+                      statWinEXP={player.exp_reward}
+                      avatar_url={player.avatar_url}
+                      background_url={player.background_url}
+                      statTitle={player.title}
+                      statEXPEarnedToday={player.exp_earned_today}
+                      statGoldEarnedToday={player.gold_earned_today}
+                    />
+                  ))}
+                </div>
+                <div
+                  className={
+                    openTab === 2
+                      ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                      : 'hidden'
+                  }
+                  id="link2"
+                >
+                  {currentPlayers.map((player, i) => (
+                    <Avatar
+                      key={i}
+                      statRank={player.player_rank}
+                      statName={player.full_name}
+                      statLevel={player.current_level}
+                      statEXP={player.total_exp}
+                      statEXPProgress={player.exp_progress}
+                      statLevelEXP={player.level_exp}
+                      statGold={player.total_gold}
+                      statWinName={player.name}
+                      statWinType={player.type}
+                      statWinGold={player.gold_reward}
+                      statWinEXP={player.exp_reward}
+                      avatar_url={player.avatar_url}
+                      background_url={player.background_url}
+                      statTitle={player.title}
+                      statEXPEarnedToday={player.exp_earned_today}
+                      statGoldEarnedToday={player.gold_earned_today}
+                    />
+                  ))}
+                </div>
+
+                <Pagination
+                  postsPerPage={postsPerPage}
+                  totalPosts={s1Players.length}
+                  paginate={paginate}
+                  currentPage={currentPage}
+                />
               </div>
             </div>
           </div>
@@ -404,8 +403,8 @@ export default function HomePage() {
         <CardWin
           setShowCardWin={setShowCardWin}
           win={activeWinStats}
-          player_name={showCardWin}
-          avatarUrl={avatarUrl}
+          player_name={showCardWin.full_name}
+          avatarUrl={showCardWin.avatar_url}
         />
       ) : null}
     </>

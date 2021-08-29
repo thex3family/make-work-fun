@@ -1,10 +1,9 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import Button from '@/components/ui/Button';
-import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { createPopper } from '@popperjs/core';
 import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
+import { downloadImage } from '@/utils/downloadImage';
 
 export default function Avatar({
   statRank,
@@ -22,7 +21,7 @@ export default function Avatar({
   background_url,
   statTitle,
   statEXPEarnedToday,
-  statGoldEarnedToday,
+  statGoldEarnedToday
 }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
@@ -32,49 +31,36 @@ export default function Avatar({
   const [loading, setLoading] = useState(null);
 
   useEffect(() => {
-    if (avatar_url) downloadImage(avatar_url, 'avatar');
-    if (!avatar_url) setAvatarStatus('Missing');
-    if (background_url) downloadImage(background_url, 'background');
-  }, [avatar_url, background_url]);
-
-  async function downloadImage(path, type) {
-    setAvatarStatus(null);
-    try {
-      if (type === 'avatar') {
-        const { data, error } = await supabase.storage
-          .from('avatars')
-          .download(path);
-        if (error) {
-          throw error;
-        }
-        const url = URL.createObjectURL(data);
-        setAvatarUrl(url);
-        setAvatarStatus('Exists');
-      } else if (type === 'background') {
-        const { data, error } = await supabase.storage
-          .from('backgrounds')
-          .download(path);
-        if (error) {
-          throw error;
-        }
-        const url = URL.createObjectURL(data);
-        setBackgroundUrl(url);
+    if (avatar_url) {
+      if (avatar_url.includes('blob:')){
+        setAvatarUrl(avatar_url)
+      } else {
+        setImage(avatar_url, 'avatar');
       }
-    } catch (error) {
-      console.log('Error downloading image: ', error.message);
-    } finally {
-      
+    }
+    if (!avatar_url) setAvatarStatus('Missing');
+  }, [avatar_url]);
+
+  useEffect(() => {
+    if (background_url) setImage(background_url, 'background');
+    if (!background_url) setBackgroundUrl('/background/cityscape.jpg');
+  }, [background_url]);
+
+  async function setImage(url, type) {
+    if (type == 'avatar') {
+      setAvatarStatus(null);
+      setAvatarUrl(await downloadImage(url, type));
+    } else if (type == 'background') {
+      if (url.includes('blob:')) {
+        setBackgroundUrl(url);
+      } else {
+        setBackgroundUrl(await downloadImage(url, type));
+      }
     }
   }
 
   const statMaxLevel = '100';
   const statEXPPercent = Math.floor((statEXPProgress / statLevelEXP) * 100);
-
-  const statArrow = 'up';
-  const statPercent = '0';
-  const statPercentColor = 'text-white';
-  const statIconName = 'fas fa-chevron-up';
-  const statIconColor = 'bg-transparent-500';
 
   const [popoverShow, setPopoverShow] = React.useState(false);
   const btnRef = React.createRef();
@@ -90,9 +76,7 @@ export default function Avatar({
   };
 
   if (loading) {
-    return (
-      <CardAvatarSkeleton />
-    );
+    return <CardAvatarSkeleton />;
   }
 
   return (
@@ -104,26 +88,16 @@ export default function Avatar({
             style={{ backgroundImage: `url(${backgroundUrl})` }}
           >
             <div className="bg-black bg-opacity-70">
-              {/* {avatarUrl ? (
-        <img
-          className="avatar image m-auto py-5 h-60"
-          src={avatarUrl}
-          alt="Avatar"
-        />
-      ) : (
-        <img className="avatar image m-auto py-5 h-60" src='img/default_avatar.png'/>
-      )} */}
-
-              {avatarStatus == 'Exists' ? (
-                <img
-                  className="avatar image m-auto py-5 h-60"
-                  src={avatarUrl}
-                  alt="Avatar"
-                />
-              ) : avatarStatus == 'Missing' ? (
+              {avatarStatus == 'Missing' ? (
                 <img
                   className="avatar image m-auto py-5 h-60"
                   src="img/default_avatar.png"
+                  alt="Avatar"
+                />
+              ) : avatarUrl ? (
+                <img
+                  className="avatar image m-auto py-5 h-60"
+                  src={avatarUrl}
                   alt="Avatar"
                 />
               ) : (
@@ -177,13 +151,6 @@ export default function Avatar({
                   </div>
                 ) : (
                   ''
-                  // <div
-                  //   className={
-                  //     'text-gray-400 border-gray-400 p-3 text-center inline-flex items-center justify-center w-8 h-8 border-2 shadow-lg rounded-full font-bold'
-                  //   }
-                  // >
-                  //   {statRank}
-                  // </div>
                 )}
               </div>
             </div>

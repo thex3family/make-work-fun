@@ -11,7 +11,6 @@ export async function fetchLatestWin(
   player_id,
   triggerCardWin,
   setShowCardWin,
-  setAvatarUrl,
   setActiveWinStats,
   friends
 ) {
@@ -54,8 +53,7 @@ export async function fetchLatestWin(
                 triggerCardWin(
                   setActiveWinStats,
                   setShowCardWin,
-                  payload.new,
-                  setAvatarUrl
+                  payload.new
                 );
               }
             }
@@ -69,7 +67,6 @@ export async function fetchLatestWin(
                     setActiveWinStats,
                     setShowCardWin,
                     payload.new,
-                    setAvatarUrl
                   );
                 }
               } else {
@@ -77,7 +74,6 @@ export async function fetchLatestWin(
                   setActiveWinStats,
                   setShowCardWin,
                   payload.new,
-                  setAvatarUrl
                 );
               }
             }
@@ -101,7 +97,7 @@ export async function fetchLatestWin(
           if (player_id) {
             if (payload.new.player === player_id) {
               // Get the latest updated stats of the user
-              const player = await fetchPlayerStats(null, player_id);
+              const player = await fetchPlayerStats(player_id);
 
               // check if user leveled up
 
@@ -132,7 +128,7 @@ export async function fetchLatestWin(
   }
 }
 
-export async function fetchPlayerStats(setAvatarUrl, player) {
+export async function fetchPlayerStats(player) {
   try {
     // gets the latest information about the user from the latest leaderboard
     if (!player) {
@@ -144,10 +140,12 @@ export async function fetchPlayerStats(setAvatarUrl, player) {
         .single();
 
       if (data) {
-        if (setAvatarUrl) {
-          setAvatarUrl(await downloadImage(data.avatar_url, 'avatar'));
-        }
-        return data;
+        var newData = {
+          ...data,
+          avatar_url: (data.avatar_url ? await downloadImage(data.avatar_url, 'avatar') : null)
+        };
+
+        return newData;
       }
     }
 
@@ -159,10 +157,13 @@ export async function fetchPlayerStats(setAvatarUrl, player) {
         .single();
 
       if (data) {
-        if (setAvatarUrl) {
-          setAvatarUrl(await downloadImage(data.avatar_url, 'avatar'));
-        }
-        return data;
+        
+        var newData = {
+          ...data,
+          avatar_url: (data.avatar_url ? await downloadImage(data.avatar_url, 'avatar') : null)
+        };
+
+        return newData;
       }
     }
 
@@ -237,7 +238,7 @@ export async function fetchSpecificWins(upstream_id) {
       )
       .eq('upstream_id', upstream_id)
       .order('closing_date', { ascending: false })
-      .order('entered_on', { ascending: false })
+      .order('entered_on', { ascending: false });
 
     if (data) {
       return data;
@@ -290,19 +291,33 @@ export async function fetchWeekWins(player) {
 }
 
 export async function fetchLeaderboardStats(
-  setS1Players,
   setPlayers,
-  setLoading
+  setLoading,
+  season,
 ) {
   try {
     const { data, error } = await supabase
-      .from('s1_leaderboard')
+      .from(`${season ? 's' + season + '_leaderboard' : 'leaderboard'}`)
       .select('*')
       .order('total_exp', { ascending: false });
 
-    if (data) {
-      setS1Players(data);
-    }
+      if (data) {
+        // var newData = data;
+  
+        // for (let i = 0; i < data.length; i++) {
+        //   let oldData = data[i];
+        //   newData[i] = {
+        //     ...oldData,
+        //     avatar_url: (oldData.avatar_url ? await downloadImage(oldData.avatar_url, 'avatar') : null),
+        //     background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null)
+        //   };
+        // }
+        // setPlayers(newData);
+
+        // above makes the loading of data too slow.
+
+        setPlayers(data);
+      }
 
     if (error && status !== 406) {
       throw error;
@@ -312,24 +327,7 @@ export async function fetchLeaderboardStats(
   } finally {
     setLoading(false);
   }
-  try {
-    const { data, error } = await supabase
-      .from('leaderboard')
-      .select('*')
-      .order('total_exp', { ascending: false });
-
-    if (data) {
-      setPlayers(data);
-    }
-
-    if (error && status !== 406) {
-      throw error;
-    }
-  } catch (error) {
-    // alert(error.message)
-  } finally {
-    setLoading(false);
-  }
+  
 }
 
 export async function fetchPlayers(setPlayers) {
@@ -355,9 +353,9 @@ export async function fetchPlayers(setPlayers) {
 export async function fetchPartyPlayers(party_id) {
   try {
     const { data, error } = await supabase
-    .from('party_member_details')
-    .select('*')
-    .eq('party_id', party_id);
+      .from('party_member_details')
+      .select('*')
+      .eq('party_id', party_id);
 
     if (data) {
       return data;
@@ -516,7 +514,7 @@ export async function fetchParty(party_slug) {
       .eq('slug', party_slug)
       .single();
 
-    console.log(data)
+    console.log(data);
 
     if (data) {
       return data;
