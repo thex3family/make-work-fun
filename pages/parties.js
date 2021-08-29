@@ -164,14 +164,17 @@ export default function parties() {
       <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
         <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
           <div className="pb-5">
-            <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
+            <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies">
               Parties
             </h1>
+            <p className="mt-5 text-xl text-dailies text-center sm:text-2xl max-w-2xl m-auto">
+                  It's time to really put multiplayer into personal development.
+                </p>
           </div>
           <div className="text-center">
-            <section>
-              <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies">
-                Your Active Party
+            <section className="mb-5">
+              <h2 className="text-4xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
+                Your Parties (1/3)
               </h2>
               {activeParties
                 ? activeParties.length != 0
@@ -182,16 +185,16 @@ export default function parties() {
                         avatar_urls={fetchPartyMemberAvatarURLs(party.id)}
                       />
                     ))
-                  : "You aren't a part of any parties."
+                  : <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">You aren't a part of any parties.</div>
                 : null}
             </section>
             <section>
-              <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies mt-4">
+              <h2 className="text-4xl align-middle justify-center inline-flex font-bold text-dailies mt-4">
                 Parties Recruiting
               </h2>
-              {recruitingParties ? (
+              {/* {recruitingParties ? (
                 <Kanban recruitingParties={recruitingParties} />
-              ) : null}
+              ) : null} */}
               {recruitingParties ? (
                 <RecruitingBoard recruitingParties={recruitingParties} />
               ) : null}
