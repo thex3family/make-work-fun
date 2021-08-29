@@ -218,6 +218,7 @@ export default function Player() {
   // Set player background when the information loads
 
   useEffect(() => {
+    if (playerStats) setAvatarUrl(playerStats.avatar_url)
     if (playerStats) fetchPlayerBackground(playerStats.background_url);
   }, playerStats);
 
@@ -254,7 +255,7 @@ export default function Player() {
 
   async function refreshStats() {
     console.log('statsRefreshing');
-    setPlayerStats(await fetchPlayerStats(setAvatarUrl));
+    setPlayerStats(await fetchPlayerStats());
     setWeekWins(await fetchWeekWins());
     setLoading(false);
     setTitles(await fetchTitles());

@@ -20,7 +20,6 @@ import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 export default function playerDetails() {
   const router = useRouter();
   const [playerStats, setPlayerStats] = useState(null);
-  const [avatar_url, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showHide, setShowHide] = useState(true);
@@ -55,7 +54,7 @@ export default function playerDetails() {
 
   async function refreshStats() {
     console.log('statsRefreshing');
-    setPlayerStats(await fetchPlayerStats(null, player));
+    setPlayerStats(await fetchPlayerStats(player));
     setAreaStats(await fetchAreaStats(player));
     setWeekWins(await fetchWeekWins(player));
     setLoading(false);
@@ -63,7 +62,6 @@ export default function playerDetails() {
 
   useEffect(() => {
     if (playerStats) {
-      if (playerStats.avatar_url) downloadImage(playerStats.avatar_url);
       if (!playerStats.avatar_url) setAvatarStatus('Missing');
       fetchPlayerBackground(playerStats.background_url);
     }
@@ -146,29 +144,26 @@ export default function playerDetails() {
                           showHide ? '' : 'hidden'
                         } animate-fade-in`}
                       >
-                        {avatarStatus == 'Exists' ? (
+                        {avatarStatus == 'Missing' ? (
+                          <img
+                          className="avatar image h-auto m-auto cursor-pointer"
+                          src="img/default_avatar.png"
+                          alt="Avatar"
+                          onClick={() => {
+                            showHide ? setShowHide(false) : setShowHide(true);
+                          }}
+                        />
+                          
+                        ) :  (
                           <img
                             className="avatar image h-auto m-auto cursor-pointer"
-                            src={avatar_url}
+                            src={playerStats.avatar_url}
                             alt="Avatar"
                             onClick={() => {
                               showHide ? setShowHide(false) : setShowHide(true);
                             }}
                           />
-                        ) : avatarStatus == 'Missing' ? (
-                          <img
-                            className="avatar image h-auto m-auto cursor-pointer"
-                            src="img/default_avatar.png"
-                            alt="Avatar"
-                            onClick={() => {
-                              showHide ? setShowHide(false) : setShowHide(true);
-                            }}
-                          />
-                        ) : (
-                          <div className="flex avatar image m-auto justify-center">
-                            <LoadingDots />
-                          </div>
-                        )}
+                        ) }
                       </div>
                     </div>
                     <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
