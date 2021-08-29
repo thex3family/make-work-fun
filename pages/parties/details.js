@@ -22,6 +22,8 @@ import { supabase } from '@/utils/supabase-client';
 
 // Table Components
 import PartyStatistics from '@/components/Widgets/Statistics/PartyStatistics';
+import AvatarPlayer from '@/components/Avatars/AvatarPlayer';
+import moment from 'moment';
 
 export default function partyDetail() {
   const [loading, setLoading] = useState(true);
@@ -43,11 +45,15 @@ export default function partyDetail() {
   const [due_date, setDue_Date] = useState(null);
   const [dragon_name, setDragonName] = useState(null);
   const [dragon_id, setDragonID] = useState(null);
+  const [playerStatus, setPlayerStatus] = useState(null);
 
-  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(null);
 
   const [cumulativeWins, setCumulativeWins] = useState([0]);
   const [cumulativeEXP, setCumulativeEXP] = useState([0]);
+
+  const notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
+  const notionID = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
 
   // Waits until database fetches user state before loading anything
 
@@ -150,6 +156,7 @@ export default function partyDetail() {
     if (specificPartyPlayer)
       setDragonName(specificPartyPlayer.notion_page_name);
     if (specificPartyPlayer) setDragonID(specificPartyPlayer.notion_page_id);
+    if (specificPartyPlayer) setPlayerStatus(specificPartyPlayer.status);
   }, [specificPartyPlayer]);
 
   // dropdown props
@@ -168,39 +175,125 @@ export default function partyDetail() {
 
   // background upload
 
-  async function uploadBackground(event) {
+  // async function uploadBackground(event) {
+  //   try {
+  //     setUploading(true);
+
+  //     if (!event.target.files || event.target.files.length === 0) {
+  //       throw new Error('You must select an image to upload.');
+  //     }
+
+  //     const file = event.target.files[0];
+  //     const fileExt = file.name.split('.').pop();
+  //     const fileName = `${Math.random()}.${fileExt}`;
+  //     const filePath = `${fileName}`;
+
+  // this needs to save to backend - need to setup a new storage unit
+
+  //     let { error: uploadError } = await supabase.storage
+  //       .from('backgrounds')
+  //       .upload(filePath, file);
+
+  //     if (uploadError) {
+  //       throw uploadError;
+  //     }
+
+  //     onBackgroundUpload(filePath);
+  //   } catch (error) {
+  //     alert(error.message);
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // }
+
+  useEffect(() => {
+    console.log('Wins', cumulativeWins);
+    console.log('EXP', cumulativeEXP);
+  }, [cumulativeWins, cumulativeEXP]);
+
+  async function changePlayerStatus(status) {
+    setPlayerStatus(status);
+    closeDropdownPopover();
     try {
-      setUploading(true);
+      const user = supabase.auth.user();
+      const { data, error } = await supabase
+        .from('party_members')
+        .update({
+          status: status
+        })
+        .eq('player', user.id);
 
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.');
+      if (error && status !== 406) {
+        throw error;
       }
-
-      const file = event.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      let { error: uploadError } = await supabase.storage
-        .from('backgrounds')
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      onBackgroundUpload(filePath);
     } catch (error) {
       alert(error.message);
     } finally {
-      setUploading(false);
+      await refreshStats();
     }
   }
 
-  useEffect(() => {
-    console.log('Wins', cumulativeWins)
-    console.log('EXP', cumulativeEXP)
-  }, [cumulativeWins, cumulativeEXP]);
+  async function saveDragon(database_id, party_member_id) {
+    setSaving(true);
+    try {
+      const user = supabase.auth.user();
+
+      // if matches a url, then change the format
+
+      if (database_id.match(notionLink)) {
+        const url = database_id;
+        const url3 = url.replace(/.*[\-]/, '');
+        // const url3 = url2.substring(url.lastIndexOf('/') + 1);
+        database_id =
+          url3.substr(0, 8) +
+          '-' +
+          url3.substr(8, 4) +
+          '-' +
+          url3.substr(12, 4) +
+          '-' +
+          url3.substr(16, 4) +
+          '-' +
+          url3.substr(20);
+        setDragonID(database_id);
+      }
+      if (database_id.match(notionID)) {
+        const { error } = await supabase
+          .from('party_members')
+          .update({ notion_page_id: database_id })
+          .eq('id', specificPartyPlayer.party_id);
+
+        if (error && status !== 406) {
+          throw error;
+        } else {
+          changePlayerStatus('Ready');
+        }
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setSaving(false);
+      refreshStats();
+    }
+  }
+
+  async function startChallenge() {
+    try {
+      const { data, error } = await supabase
+        .from('party')
+        .update({
+          status: 2
+        })
+        .eq('id', party.id);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      await refreshStats();
+    }
+  }
 
   if (!id || loading) {
     return (
@@ -270,19 +363,51 @@ export default function partyDetail() {
                     <div className="max-w-6xl md:w-3/4 lg:w-full xl:w-3/4 ml-auto py-8 px-4 sm:px-6 lg:px-8 my-auto flex flex-col bg-black bg-opacity-50 rounded-lg items-center">
                       {party.status == 1 ? (
                         <>
-                          <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                          {/* <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             STATUS: In Recruitment
                           </h1>
-                          <div className="flex flex-col space-y-4">
-                            <div className="mt-4 text-error border border-error p-3">
-                              <b>
-                                The challenge can be started by the party leader
-                                after:
-                              </b>
-                              <div>- There are 2 or more party members</div>
-                              <div>- Conrad shares their dragon</div>
-                              <div>- Vivian shares their dragon</div>
-                            </div>
+                          {partyPlayers ? (
+                            <>
+                              <div className="flex flex-col space-y-4">
+                                <div className="mt-4 p-3 text-left font-semibold">
+                                  <div
+                                    className={`
+                                  ${
+                                    partyPlayers.length < 2
+                                      ? 'text-error'
+                                      : 'text-green'
+                                  }`}
+                                  >
+                                    <i
+                                      className={`mr-2
+                                  ${
+                                    partyPlayers.length < 2
+                                      ? 'text-error fas fa-times'
+                                      : 'text-green fas fa-check'
+                                  }`}
+                                    />
+                                    2+ party members
+                                  </div>
+                                  <div className="mt-5 flex flex-row justify-center flex-nowrap text-center">
+                                    {partyPlayers
+                                      ? partyPlayers.map((player, i) => (
+                                          <AvatarPlayer
+                                            key={i}
+                                            player={player}
+                                          />
+                                        ))
+                                      : null}
+                                  </div>
+                                </div>
+                              </div> */}
+                              <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                            STATUS: In Recruitment
+                          </h1>
+                          <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                            <Countdown date={'2021-07-02T21:00:00-05:00'} />
+                          </h1>
+                          <div className="text-center text-accents-4 text-sm max-w-sm">
+                            The challenge can begin when all members are ready and the party leader starts! Confirm your loadout below.
                           </div>
                         </>
                       ) : (
@@ -305,35 +430,37 @@ export default function partyDetail() {
                 <div className="max-w-6xl mx-auto pb-8 px-2 sm:px-6 lg:px-8">
                   <div className="bg-black bg-opacity-30 rounded-md mx-auto overflow-hidden flex flex-row shadow-xl mb-6">
                     <div className="py-6 px-4 w-full">
-                      <div className="flex items-center">
-                        <div
-                          className="border-t-2 border-accents-2 flex-grow mb-6 sm:mb-3 mr-3"
-                          aria-hidden="true"
-                        ></div>
+                      {party.status > 1 ? (
+                        <div className="flex items-center">
+                          <div
+                            className="border-t-2 border-accents-2 flex-grow mb-6 sm:mb-3 mr-3"
+                            aria-hidden="true"
+                          ></div>
 
-                        <div
-                          className="font-semibold text-xl text-white-700 pb-5 cursor-pointer inline-block"
-                          onClick={() => {
-                            showDetails
-                              ? setShowDetails(false)
-                              : setShowDetails(true);
-                          }}
-                        >
-                          Party Details{' '}
-                          <i
-                            className={
-                              (showDetails
-                                ? 'fas fa-chevron-up'
-                                : 'fas fa-chevron-down') + ''
-                            }
-                          />
+                          <div
+                            className="font-semibold text-xl text-white-700 pb-5 cursor-pointer inline-block"
+                            onClick={() => {
+                              showDetails
+                                ? setShowDetails(false)
+                                : setShowDetails(true);
+                            }}
+                          >
+                            Party Details{' '}
+                            <i
+                              className={
+                                (showDetails
+                                  ? 'fas fa-chevron-up'
+                                  : 'fas fa-chevron-down') + ''
+                              }
+                            />
+                          </div>
+                          <div
+                            className="border-t-2 border-accents-2 flex-grow mb-6 sm:mb-3 ml-3"
+                            aria-hidden="true"
+                          ></div>
                         </div>
-                        <div
-                          className="border-t-2 border-accents-2 flex-grow mb-6 sm:mb-3 ml-3"
-                          aria-hidden="true"
-                        ></div>
-                      </div>
-                      {showDetails ? (
+                      ) : null}
+                      {showDetails && specificPartyPlayer ? (
                         <>
                           <div className="flex flex-col gap-5">
                             <div className="grid grid-cols-2 gap-5">
@@ -351,6 +478,10 @@ export default function partyDetail() {
                                       type="number"
                                       value={dailyTarget || ''}
                                       onChange={setDailyTarget}
+                                      disabled={
+                                        specificPartyPlayer.role !=
+                                        'Party Leader'
+                                      }
                                     />
                                   </div>
                                   <Button
@@ -358,6 +489,9 @@ export default function partyDetail() {
                                     variant="incognito"
                                     onClick={() =>
                                       savePartyDetails(dailyTarget)
+                                    }
+                                    disabled={
+                                      specificPartyPlayer.role != 'Party Leader'
                                     }
                                   >
                                     Save
@@ -379,6 +513,10 @@ export default function partyDetail() {
                                       type="datetime-local"
                                       value={due_date || ''}
                                       onChange={setDue_Date}
+                                      disabled={
+                                        specificPartyPlayer.role !=
+                                        'Party Leader'
+                                      }
                                     />
                                   </div>
                                   <Button
@@ -387,6 +525,9 @@ export default function partyDetail() {
                                     onClick={() =>
                                       savePartyDetails(null, due_date)
                                     }
+                                    disabled={
+                                      specificPartyPlayer.role != 'Party Leader'
+                                    }
                                   >
                                     Save
                                   </Button>
@@ -394,28 +535,44 @@ export default function partyDetail() {
                               </div>
                             </div>
                             <div className="">
-                              <div className="mb-2 font-semibold">
-                                🐉 Share Your Dragon!
-                              </div>
-                              <div className="grid grid-cols-5 items-center gap-3">
-                                <div className="col-span-4">
-                                  <Input
-                                    className="text-xl font-semibold rounded"
-                                    value={dragon_id || ''}
-                                    onChange={setDragonID}
-                                  />
+                              {party.challenge == 1 ? (
+                                <div className="text-emerald-600 border-2 bg-emerald-100 border-emerald-700 rounded p-3 mb-3 font-semibold">
+                                  <i className="fas fa-clock mr-2" />
+                                  This is a time challenge! Once the challenge
+                                  starts, all wins that you do will count
+                                  towards the challenge.
                                 </div>
-                                <Button
-                                  className="col-span-1"
-                                  variant="incognito"
-                                  onClick={() => copyEmbedLink()}
-                                >
-                                  Save
-                                </Button>
-                              </div>
-                              <div className="mt-2 flex flex-row text-sm font-semibold">
-                                <div className="">{dragon_name}</div>
-                                <div className="ml-2 ">
+                              ) : (
+                                <>
+                                  <div className="text-emerald-600 border-2 bg-emerald-100 border-emerald-700 rounded p-3 mb-3 font-semibold">
+                                    <i className="fas fa-dragon mr-2" />
+                                    This is a dragon quest! Tell your party
+                                    members what project you're fighting, and
+                                    we'll pull wins downstream.
+                                  </div>
+                                  <div className="mb-2 font-semibold">
+                                    🐉 Share Your Dragon!
+                                  </div>
+                                  <div className="grid grid-cols-5 items-center gap-3">
+                                    <div className="col-span-4">
+                                      <Input
+                                        className="text-xl font-semibold rounded"
+                                        value={dragon_id || ''}
+                                        onChange={setDragonID}
+                                      />
+                                    </div>
+                                    <Button
+                                      className="col-span-1"
+                                      variant="incognito"
+                                      onClick={() => saveDragon(dragon_id)}
+                                      disabled={saving}
+                                    >
+                                      {saving ? 'Saving...' : 'Save'}
+                                    </Button>
+                                  </div>
+                                  <div className="mt-2 flex flex-row text-sm font-semibold">
+                                    <div className="">{dragon_name}</div>
+                                    {/* <div className="ml-2 ">
                                   <label
                                     className="cursor-pointer text-emerald-500"
                                     htmlFor="background"
@@ -433,16 +590,34 @@ export default function partyDetail() {
                                     onChange={uploadBackground}
                                     disabled={uploading}
                                   />
-                                </div>
-                              </div>
+                                </div> */}
+                                  </div>
+                                </>
+                              )}
                             </div>
-                            <Button
-                              className="mt-3"
-                              variant="prominent"
-                              onClick={() => copyEmbedLink()}
-                            >
-                              Start Party Quest
-                            </Button>
+                            {specificPartyPlayer ? (
+                              specificPartyPlayer.role == 'Party Leader' ? (
+                                <Button
+                                  className="mt-3"
+                                  variant="prominent"
+                                  onClick={() => startChallenge()}
+                                >
+                                  Start Party Quest
+                                </Button>
+                              ) : (
+                                <Button
+                                  className="mt-3"
+                                  variant="prominent"
+                                  onClick={() => changePlayerStatus('Ready')}
+                                  disabled={
+                                    specificPartyPlayer.status == 'Ready'
+                                  }
+                                >
+                                  <i className="fas fa-check mr-2" />
+                                  I'm Ready!
+                                </Button>
+                              )
+                            ) : null}
                             <div className="text-center text-accents-4 text-sm">
                               You won't be able to change your details once the
                               party quest starts.
@@ -475,7 +650,10 @@ export default function partyDetail() {
                             <PartyStatistics
                               players={partyPlayers ? partyPlayers.length : 0}
                               wins={cumulativeWins.reduce((a, b) => a + b, 0)}
-                              exp_earned={cumulativeEXP.reduce((a, b) => a + b, 0)}
+                              exp_earned={cumulativeEXP.reduce(
+                                (a, b) => a + b,
+                                0
+                              )}
                             />
                           </h1>
 
@@ -538,7 +716,7 @@ export default function partyDetail() {
                                   : openDropdownPopover();
                               }}
                             >
-                              Status: Fighting{' '}
+                              Status: {playerStatus}{' '}
                               <i
                                 className={
                                   (dropdownPopoverShow
@@ -555,19 +733,21 @@ export default function partyDetail() {
                               }
                             >
                               <a
-                                onClick={() => changeEmbed(1)}
+                                onClick={() => changePlayerStatus('Fighting')}
                                 className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                               >
                                 Fighting
                               </a>
                               <a
-                                onClick={() => changeEmbed(2)}
+                                onClick={() =>
+                                  changePlayerStatus('Need Healing')
+                                }
                                 className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                               >
                                 Need Healing
                               </a>
                               <a
-                                onClick={() => changeEmbed(2)}
+                                onClick={() => changePlayerStatus('Completed')}
                                 className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                               >
                                 Completed
@@ -582,11 +762,11 @@ export default function partyDetail() {
               </div>
             </div>
           </div>
-          <h1 className="animate-fade-in-up  text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 p-3 sm:p-4">
-            Leaderboard 🏆
-          </h1>
-          <div className="mx-5">
-            {/* <div className="grid grid-cols-3 mt-8 items-center gap-3">
+              <h1 className="animate-fade-in-up  text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 p-3 sm:p-4">
+                Leaderboard 🏆
+              </h1>
+              <div className="mx-5">
+                {/* <div className="grid grid-cols-3 mt-8 items-center gap-3">
               <div className="col-span-2">
                 <Input
                   className="text-xl font-semibold rounded"
@@ -601,21 +781,22 @@ export default function partyDetail() {
                 Copy Embed Link
               </Button>
             </div> */}
-            <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 overflow-x-auto flex-nowrap lg:justify-center">
-              {partyPlayers
-                ? partyPlayers.map((player, i) => (
-                    <CardPartyPlayer
-                      key={i}
-                      player={player}
-                      cumulativeWins={cumulativeWins}
-                      setCumulativeWins={setCumulativeWins}
-                      cumulativeEXP={cumulativeEXP}
-                      setCumulativeEXP={setCumulativeEXP}
-                    />
-                  ))
-                : null}
-            </div>
-          </div>
+                <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 overflow-x-auto flex-nowrap lg:justify-center">
+                  {partyPlayers
+                    ? partyPlayers.map((player, i) => (
+                        <CardPartyPlayer
+                          key={i}
+                          player={player}
+                          cumulativeWins={cumulativeWins}
+                          setCumulativeWins={setCumulativeWins}
+                          cumulativeEXP={cumulativeEXP}
+                          setCumulativeEXP={setCumulativeEXP}
+                          state={party.status}
+                        />
+                      ))
+                    : null}
+                </div>
+              </div>
         </section>
         {/* level up modal */}
         {levelUp ? (
