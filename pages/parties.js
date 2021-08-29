@@ -44,7 +44,7 @@ export default function parties() {
 
   async function loadPlayer() {
     console.log('Loading Player');
-    fetchActiveParties().then(result => {
+    fetchActiveParties().then((result) => {
       fetchRecruitingParties();
     });
   }
@@ -57,14 +57,22 @@ export default function parties() {
       // Note: Related table column values are returned as objects. ex. For the party's id, you will get { id: {id: 2} }
       const { data, error } = await supabase
         .from('party_members')
-        .select('id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status)')
+        .select(
+          'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status)'
+        )
         .eq('player', user.id);
 
       //console.log('parties you are in:', data);
 
       // Put the data into the right format
       var parties_you_are_in = data.map((party) => {
-        return{ id: party.id.id, name: party.name.name, description: party.description.description, challenge: party.challenge.challenge, status: party.status.status };
+        return {
+          id: party.id.id,
+          name: party.name.name,
+          description: party.description.description,
+          challenge: party.challenge.challenge,
+          status: party.status.status
+        };
       });
 
       // only use the parties that are in progress
@@ -89,8 +97,8 @@ export default function parties() {
         .select('player_avatar_url: users (avatar_url)')
         .eq('party_id', party_id);
 
-      party_members_avatar_urls = data.map(member => {
-        return member.player_avatar_url.avatar_url ;
+      party_members_avatar_urls = data.map((member) => {
+        return member.player_avatar_url.avatar_url;
       });
 
       if (error && status !== 406) {
@@ -105,11 +113,13 @@ export default function parties() {
   }
 
   async function addChallengeNameAndMemberAvatars(recruitingParties) {
-
     for (var i = 0; i < recruitingParties.length; i++) {
       var tempParty = recruitingParties[i];
       var member_avatar_urls = await fetchPartyMemberAvatarURLs(tempParty.id);
-      recruitingParties[i] = { ...tempParty, member_avatar_urls: member_avatar_urls  };
+      recruitingParties[i] = {
+        ...tempParty,
+        member_avatar_urls: member_avatar_urls
+      };
     }
 
     return recruitingParties.map((party) => {
@@ -119,20 +129,23 @@ export default function parties() {
 
   async function fetchRecruitingParties() {
     try {
-      // get the parties that the user is a part of
       const { data, error } = await supabase
         .from('party')
-        .select('id, name, challenge, description, due_date, status, challenge_name: party_challenge (name)')
+        .select(
+          'id, name, challenge, description, due_date, status, challenge_name: party_challenge (name)'
+        )
         .eq('status', 1);
 
       var recruitingParties = data;
 
       console.log('fetchRecruitingParties');
 
-      recruitingParties = await addChallengeNameAndMemberAvatars(recruitingParties);
+      recruitingParties = await addChallengeNameAndMemberAvatars(
+        recruitingParties
+      );
 
       //console.log('updated -', recruitingParties);
-
+      console.log('RecruitingParties', recruitingParties)
       setRecruitingParties(recruitingParties);
 
       if (error && status !== 406) {
@@ -176,8 +189,12 @@ export default function parties() {
               <h2 className="text-xl align-middle justify-center inline-flex font-bold text-dailies mt-4">
                 Parties Recruiting
               </h2>
-              { recruitingParties ? <Kanban recruitingParties={recruitingParties} /> : null } 
-              <RecruitingBoard recruitingParties={recruitingParties || {}}/>
+              {recruitingParties ? (
+                <Kanban recruitingParties={recruitingParties} />
+              ) : null}
+              {recruitingParties ? (
+                <RecruitingBoard recruitingParties={recruitingParties} />
+              ) : null}
             </section>
           </div>
         </div>
