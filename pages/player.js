@@ -6,17 +6,17 @@ import LoadingDots from '@/components/ui/LoadingDots';
 import { useUser } from '@/utils/useUser';
 
 import { supabase } from '../utils/supabase-client';
-import Datatable, { createTheme } from 'react-data-table-component';
 
 import React from 'react';
-
-import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 
 import TitleModal from '@/components/Modals/ModalTitle';
+
+import PlayerSkeleton from '@/components/Skeletons/PlayerSkeleton';
+import RecentWinsSkeleton from '@/components/Skeletons/RecentWinsSkeleton';
 
 // functions
 
@@ -26,7 +26,8 @@ import {
   fetchWeekWins,
   fetchLatestWin,
   fetchAreaStats,
-  fetchTitles
+  fetchTitles,
+  fetchSpecificWin
 } from '@/components/Fetch/fetchMaster';
 
 import { pushTitle } from '@/components/Push/pushMaster';
@@ -34,7 +35,8 @@ import { pushTitle } from '@/components/Push/pushMaster';
 // components
 
 import HeaderStats from 'components/Headers/HeaderStats.js';
-import DataTable from 'react-data-table-component';
+import DataTable, { createTheme } from 'react-data-table-component';
+import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 
 createTheme('game', {
   text: {
@@ -71,17 +73,12 @@ createTheme('game', {
   }
 });
 
-export default function Player({ user }) {
+export default function Player() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const {
-    userLoaded,
-    session,
-    userDetails,
-    userOnboarding,
-  } = useUser();
+  const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
 
-  const [wins, setWins] = useState([]);
+  const [wins, setWins] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
   const [background_url, setBackgroundUrl] = useState('/');
@@ -92,6 +89,8 @@ export default function Player({ user }) {
   const [weekWins, setWeekWins] = useState([]);
   const [areaStats, setAreaStats] = useState([]);
   const [titles, setTitles] = useState([]);
+
+  const [onboardingState, setOnboardingState] = useState(null);
 
   const currentHour = new Date().getHours();
   const greetingMessage =
@@ -229,7 +228,7 @@ export default function Player({ user }) {
       if (userOnboarding.onboarding_state.includes('4')) {
         loadPlayer();
       } else {
-        router.push('/account');
+        setOnboardingState(parseInt(userOnboarding.onboarding_state, 10));
       }
     } catch (error) {
       alert(error.message);
@@ -250,16 +249,17 @@ export default function Player({ user }) {
       triggerWinModal,
       setShowWinModal
     );
+    if (win_id) loadSpecificWin(win_id);
   }
 
   async function refreshStats() {
     console.log('statsRefreshing');
     setPlayerStats(await fetchPlayerStats(setAvatarUrl));
-    setWins(await fetchWins());
     setWeekWins(await fetchWeekWins());
-    setAreaStats(await fetchAreaStats());
-    setTitles(await fetchTitles());
     setLoading(false);
+    setTitles(await fetchTitles());
+    setAreaStats(await fetchAreaStats());
+    setWins(await fetchWins());
   }
 
   async function fetchPlayerBackground(path) {
@@ -323,26 +323,29 @@ export default function Player({ user }) {
     triggerWinModal(setActiveModalStats, setShowWinModal, wins);
   }
 
-  if (loading) {
-    return (
-      <div className="h-screen flex justify-center">
-        <LoadingDots />
-      </div>
-    );
+  // if specific win is called on
+
+  const { win_id } = router.query;
+
+  async function loadSpecificWin(win) {
+    const specific_win = await fetchSpecificWin(win);
+    if (specific_win) {
+      triggerWinModal(setActiveModalStats, setShowWinModal, specific_win);
+    }
   }
 
-  if (!playerStats) {
+  if (loading) {
+    return <PlayerSkeleton />;
+  }
+
+  if (!loading && !playerStats) {
+    // need to add a case to handle if no wins this season, how can they initialize their character
+
     return (
-      <div className="h-screen flex flex-col justify-center">
-        <div className="-mt-40 mx-auto">
-          <h1 className="mb-5 text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-            Loading Wins This Season...
-          </h1>
-          <div className="flex justify-center">
-            <LoadingDots />
-          </div>
-        </div>
-      </div>
+      <>
+        <PlayerSkeleton />
+          <ModalOnboarding onboardingState={5} />
+      </>
     );
   }
 
@@ -442,64 +445,69 @@ export default function Player({ user }) {
     <>
       {/* <section className="bg-player-pattern bg-fixed bg-cover"> */}
       <section
-        className="animate-slow-fade-in bg-fixed bg-cover "
+        className="animate-slow-fade-in bg-fixed bg-cover bg-center"
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <div className="bg-black bg-opacity-70 sm:bg-opacity-0">
-        <BottomNavbar />
-        <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-          <div className="animate-fade-in-up rounded sm:bg-black sm:bg-opacity-90 bg-none bg-opacity-100 opacity-95">
-            <div className="pt-10 pb-5">
-              <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
-                {greetingMessage},{' '}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                  {playerStats.full_name ? (
-                    `${playerStats.full_name ?? 'Adventurer'}`
-                  ) : (
-                    <LoadingDots />
-                  )}
-                  !
-                </span>
-              </h1>
-              <p className="mt-5 text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-                {greetingBlurb}
-              </p>
-            </div>
-            <div className="animate-fade-in-up max-w-6xl px-0 sm:px-4 md:px-10 mx-auto w-full -m-24">
-              <HeaderStats
-                playerStats={playerStats}
-                avatar_url={avatar_url}
-                setAvatarUrl={setAvatarUrl}
-                fetchPlayerBackground={fetchPlayerBackground}
-                updateProfile={updateProfile}
-                weekWins={weekWins}
-                areaStats={areaStats}
-                setShowTitleModal={setShowTitleModal}
-                titles={titles}
-              />
-              <div className="flex flex-wrap mt-4">
-                <div className="w-full pb-36 px-4">
-                  {/* <CardTable color="dark" data={wins} /> */}
-                  <DataTable
-                    className=""
-                    title="Recent Wins 👀"
-                    noHeader
-                    columns={columns}
-                    data={wins}
-                    onRowClicked={modalHandler}
-                    // highlightOnHover={true}
-                    pointerOnHover={true}
-                    fixedHeader={true}
-                    customStyles={customStyles}
-                    pagination={true}
-                    theme="game"
-                  />
-                  {/* <TailwindTable wins={wins} /> */}
-                </div>
+          <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+            <div className="rounded sm:bg-black sm:bg-opacity-90 bg-none bg-opacity-100 opacity-95">
+              <div className="pt-0 sm:pt-10 pb-5">
+                <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
+                  {greetingMessage},{' '}
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+                    {playerStats.full_name ? (
+                      `${playerStats.full_name ?? 'Adventurer'}`
+                    ) : (
+                      <LoadingDots />
+                    )}
+                    !
+                  </span>
+                </h1>
+                <p className="mt-5 text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
+                  {greetingBlurb}
+                </p>
+              </div>
+              <div className="max-w-6xl px-0 sm:px-4 md:px-10 mx-auto w-full -m-24">
+                <HeaderStats
+                  playerStats={playerStats}
+                  avatarUrl={avatar_url}
+                  setAvatarUrl={setAvatarUrl}
+                  fetchPlayerBackground={fetchPlayerBackground}
+                  updateProfile={updateProfile}
+                  weekWins={weekWins}
+                  areaStats={areaStats}
+                  setShowTitleModal={setShowTitleModal}
+                  titles={titles}
+                />
+                {wins ? (
+                  <div className="flex flex-wrap mt-4">
+                    <div className="w-full pb-36 px-4">
+                      {/* <CardTable color="dark" data={wins} /> */}
+                      <DataTable
+                        className=""
+                        title="Recent Wins 👀"
+                        noHeader
+                        columns={columns}
+                        data={wins}
+                        onRowClicked={modalHandler}
+                        // highlightOnHover={true}
+                        pointerOnHover={true}
+                        fixedHeader={true}
+                        customStyles={customStyles}
+                        pagination={true}
+                        theme="game"
+                        paginationPerPage={5}
+                        paginationRowsPerPageOptions={[5,10,15,20]}
+                      />
+                      {/* <TailwindTable wins={wins} /> */}
+                    </div>
+                  </div>
+                ) : (
+                  <RecentWinsSkeleton />
+                )}
               </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 
@@ -529,6 +537,9 @@ export default function Player({ user }) {
           pushTitle={pushTitle}
           refreshStats={refreshStats}
         />
+      ) : null}
+      {onboardingState ? (
+        <ModalOnboarding onboardingState={onboardingState} />
       ) : null}
     </>
   );

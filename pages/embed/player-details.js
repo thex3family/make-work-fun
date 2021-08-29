@@ -10,7 +10,7 @@ import {
   fetchPlayerStats,
   fetchAreaStats,
   fetchWeekWins,
-  fetchLatestWin,
+  fetchLatestWin
 } from '@/components/Fetch/fetchMaster';
 
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
@@ -34,17 +34,16 @@ export default function playerDetails() {
 
   let bg_opacity = 'bg-opacity-50';
 
-
   // win modal stuff
-  
+
   const [showWinModal, setShowWinModal] = useState(false);
   const [levelUp, setLevelUp] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
 
-
   useEffect(() => {
     if (player) refreshStats();
-    if (player) fetchLatestWin(
+    if (player)
+      fetchLatestWin(
         setActiveModalStats,
         refreshStats,
         setLevelUp,
@@ -121,10 +120,10 @@ export default function playerDetails() {
   return (
     <>
       <section
-        className="animate-slow-fade-in bg-fixed bg-cover bg-dark"
+        className="animate-slow-fade-in bg-fixed bg-cover bg-center bg-dark responsiveBackground"
         style={{ backgroundImage: `url(${background_url})` }}
       >
-        <div className={style == 'dark' ? null : `bg-black ${bg_opacity}`}>
+        <div className={style == 'dark' ? null : `bg-black ${bg_opacity} responsiveBackground`}>
           <div className="px-4 md:px-10 mx-auto w-full">
             <div className="relative py-10">
               <div className="px-4 md:px-10 mx-auto w-full">
@@ -175,33 +174,34 @@ export default function playerDetails() {
                     <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
                       <div className="flex 2xl:flex-row flex-col gap-4">
                         <div className="2xl:w-1/2 w-full">
-                      <CardStats
-                        statTitle={playerStats.title}
-                        statName={playerStats.full_name}
-                        statLevel={playerStats.current_level}
-                        statMaxLevel={100}
-                        statEXP={playerStats.total_exp}
-                        statLevelEXP={playerStats.level_exp}
-                        statEXPProgress={playerStats.exp_progress}
-                        statEXPPercent={Math.floor(
-                          (playerStats.exp_progress / playerStats.level_exp) *
-                            100
-                        )}
-                        statGold={playerStats.total_gold}
-                        statArrow="up"
-                        statPercent="0"
-                        statPercentColor="text-white"
-                        statDescription="since last week"
-                        statIconName="fas fa-cogs"
-                        statIconColor="bg-transparent-500"
-                        statPlayer={player}
-                      />
-                      </div>
-                      <div className="2xl:w-1/2 w-full 2xl:pt-0">
-                        {weekWins ? (
-                          <CardLineChart weekWins={weekWins} />
-                        ) : null}
-                      </div>
+                          <CardStats
+                            statTitle={playerStats.title}
+                            statName={playerStats.full_name}
+                            statLevel={playerStats.current_level}
+                            statMaxLevel={100}
+                            statEXP={playerStats.total_exp}
+                            statLevelEXP={playerStats.level_exp}
+                            statEXPProgress={playerStats.exp_progress}
+                            statEXPPercent={Math.floor(
+                              (playerStats.exp_progress /
+                                playerStats.level_exp) *
+                                100
+                            )}
+                            statGold={playerStats.total_gold}
+                            statArrow="up"
+                            statPercent="0"
+                            statPercentColor="text-white"
+                            statDescription="since last week"
+                            statIconName="fas fa-cogs"
+                            statIconColor="bg-transparent-500"
+                            statPlayer={player}
+                          />
+                        </div>
+                        <div className="2xl:w-1/2 w-full 2xl:pt-0">
+                          {weekWins ? (
+                            <CardLineChart weekWins={weekWins} />
+                          ) : null}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -211,7 +211,6 @@ export default function playerDetails() {
           </div>
         </div>
       </section>
-
 
       {/* // Modal Section */}
       {showWinModal ? (
@@ -225,12 +224,11 @@ export default function playerDetails() {
           />
         </>
       ) : null}
-      
+
       {/* level up modal */}
       {levelUp ? (
         <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
       ) : null}
-
     </>
   );
 }

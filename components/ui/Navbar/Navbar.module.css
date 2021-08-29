@@ -3,7 +3,7 @@
 }
 
 .link {
-  @apply inline-flex items-center text-primary leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-accents-6 rounded-md p-1 px-2;
+  @apply inline-flex items-center leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-accents-6 rounded-md p-1 px-2;
 }
 
 .mobile {
@@ -11,15 +11,15 @@
 }
 
 .mobile:hover {
-  @apply text-accents-9 bg-gradient-to-r from-emerald-500 to-blue-500;
+  @apply text-emerald-400;
 }
 
 .mobile:focus {
   @apply outline-none text-accents-8;
 }
 
-.mobile:active {
-  @apply bg-gradient-to-r from-emerald-500 to-blue-500;
+.activeMobileLink {
+  @apply text-emerald-400;
 }
 
 .link:hover {
@@ -30,8 +30,8 @@
   @apply outline-none text-accents-8;
 }
 
-.link:active {
-  @apply bg-gradient-to-r from-emerald-500 to-blue-500;
+.activeLink {
+  @apply text-accents-9 bg-gradient-to-r from-emerald-500 to-blue-500;
 }
 
 .logo {

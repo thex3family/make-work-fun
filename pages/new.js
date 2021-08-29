@@ -11,12 +11,27 @@ export default function updates() {
             Whoa, there’s new stuff!
           </h1>
           <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-            We’re constantly making our app better. Here are some of the of
-            notable new features and improvements that we’ve made.
+            We’re constantly making our app better. Here are some of the notable new features and improvements that we’ve made.
           </p>
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Aug 26, 2021"
+            title="Personalize Your Leaderboard!"
+            desc="With our latest upgrade to the embed page, make your own leaderboard with your friends' player cards (unlimited!) and stay updated on their wins."
+            img_url="updates/0.21.png"
+            button_url="/embed"
+            version="v.21"
+          />
+          <CardLUpdate
+            date="Aug 23, 2021"
+            title="See Today's Earnings On The Leaderboard"
+            desc="What does it take to rank up? Get motivated by seeing how your friends and family have been leveling up every day!"
+            img_url="updates/0.20.png"
+            button_url="/"
+            version="v.20"
+          />
           <CardRUpdate
             date="Aug 19, 2021"
             title="Embed Your Character Into Your Sites"

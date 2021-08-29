@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import moment from 'moment';
-import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 import Countdown from '@/components/Widgets/DailiesCountdown/countdown';
 
 import HabitGroups from '@/components/Habits/habit_groups';
@@ -21,8 +20,11 @@ import {
 } from '@/components/Fetch/fetchMaster';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
+import { downloadImage } from '@/utils/downloadImage';
+import LoadingDots from '@/components/ui/LoadingDots';
+import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 
-export default function dallies({ user }) {
+export default function dallies() {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dailiesCount, setDailiesCount] = useState(0);
@@ -34,8 +36,13 @@ export default function dallies({ user }) {
   const [activeModalStats, setActiveModalStats] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
 
+  const [backgroundUrl, setBackgroundUrl] = useState(
+    '/'
+  );
+
   const router = useRouter();
   const {
+    user,
     userLoaded,
     session,
     userDetails,
@@ -65,6 +72,7 @@ export default function dallies({ user }) {
   async function loadPlayer() {
     console.log('Loading Player');
     fetchDailies();
+    refreshStats();
     fetchLatestWin(
       setActiveModalStats,
       refreshStats,
@@ -78,6 +86,18 @@ export default function dallies({ user }) {
     setPlayerStats(await fetchPlayerStats());
     setLoading(false);
   }
+
+  useEffect(() => {
+    if (playerStats) loadBackgroundURL();
+  }, [playerStats]);
+
+  async function loadBackgroundURL() {
+    if(playerStats.background_url){
+    setBackgroundUrl(await downloadImage(playerStats.background_url, 'background'));
+    }else{
+      setBackgroundUrl('/background/dailies.jpg')
+    }
+  }  
 
   async function fetchDailies(click) {
     try {
@@ -198,15 +218,22 @@ export default function dallies({ user }) {
     }
   }
 
+  if (!playerStats) {
+    return (
+        <DailiesSkeleton/>
+    );
+  }
+
   return (
     <>
-      <section className="animate-slow-fade-in justify-center bg-dailies-pattern bg-fixed bg-cover">
-        <BottomNavbar />
+      <section className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center"
+        style={{ backgroundImage: `url(${backgroundUrl})` }}>
+          
         <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
           <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
             <div className="pb-5">
               <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
-                Dailies
+                Daily Quests
               </h1>
               <div className="text-center mb-5">
                 {/* <div className="font-semibold text-dailies text-xl mb-3">

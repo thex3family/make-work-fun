@@ -4,9 +4,8 @@ import Avatar from '@/components/Cards/CardAvatar';
 import LeaderboardStatistics from '@/components/Widgets/Statistics/LeaderboardStatistics';
 import { useState, useEffect } from 'react';
 
-import CardAvatarSkeleton from '@/components/Cards/CardAvatarSkeleton';
+import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
-import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 
 // functions
 
@@ -15,9 +14,14 @@ import {
   fetchLatestWin,
   fetchLeaderboardStats
 } from '@/components/Fetch/fetchMaster';
-import { triggerWinModal } from '@/components/Modals/ModalHandler';
+import {
+  triggerWinModal,
+  triggerCardWin
+} from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
+import CardWin from '@/components/Cards/CardWin';
+import Pagination from '@/components/Pagination';
 
 export default function HomePage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -25,14 +29,37 @@ export default function HomePage() {
 
   const [players, setPlayers] = useState([]);
   const [s1Players, setS1Players] = useState([]);
+  const [activePlayers, setActivePlayers] = useState([]);
+
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(12);
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPlayers = activePlayers.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
 
   const [levelUp, setLevelUp] = useState(false);
 
   const [showWinModal, setShowWinModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
+  const [activeWinStats, setActiveWinStats] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
+  const [showCardWin, setShowCardWin] = useState(false);
+
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   const [openTab, setOpenTab] = useState(1);
+  
+  useEffect(() => {
+    if(openTab == 1 && s1Players) setActivePlayers(s1Players)
+    if(openTab == 2 && players) setActivePlayers(players)
+    setCurrentPage(1);
+  }, [openTab, s1Players]);
 
   // Redirects user to reset password
 
@@ -62,7 +89,12 @@ export default function HomePage() {
       refreshStats,
       setLevelUp,
       triggerWinModal,
-      setShowWinModal
+      setShowWinModal,
+      null,
+      triggerCardWin,
+      setShowCardWin,
+      setAvatarUrl,
+      setActiveWinStats
     );
   }, []);
 
@@ -83,7 +115,6 @@ export default function HomePage() {
   return (
     <>
       <section className="justify-center">
-      <BottomNavbar />
         <div className="bg-player-pattern bg-fixed h-4/5">
           <div className="bg-black bg-opacity-90 h-4/5">
             <div className="animate-fade-in-up  pt-8 md:pt-24 pb-10 max-w-7xl mx-auto">
@@ -115,7 +146,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                
                 {/*  countdown for seasons
 
                 <div className="w-full md:w-3/5 py-6 text-center">
@@ -130,16 +160,26 @@ export default function HomePage() {
                 </div> */}
 
                 <div className="w-full md:w-3/5 py-6 text-center">
-                  <div className="max-w-6xl md:w-3/4 lg:w-full xl:w-3/4 mx-auto py-8 px-4 sm:px-6 lg:px-8 my-auto flex flex-col bg-black bg-opacity-50 rounded-lg">
+                  <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg">
                     <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       Season 1 Statistics
                     </h1>
-                    <p className="text-sm text-accents-3 font-semibold">July 1 - August 31</p>
-                    <h1 className=" rounded-lg pt-5 w-3/4 lg:w-full mx-auto text-xl font-semibold text-center lg:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      <LeaderboardStatistics 
-                      players = {s1Players.length}
-                      levels_earned = {s1Players.reduce((a,v) =>  a = a + v.current_level , 0 ) - s1Players.length}
-                        exp_earned = {s1Players.reduce((a,v) =>  a = a + v.total_exp , 0 )}
+                    <p className="text-sm text-accents-3 font-semibold">
+                      July 1 - August 31
+                    </p>
+                    <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                      <LeaderboardStatistics
+                        players={s1Players.length}
+                        levels_earned={
+                          s1Players.reduce(
+                            (a, v) => (a = a + v.current_level),
+                            0
+                          ) - s1Players.length
+                        }
+                        exp_earned={s1Players.reduce(
+                          (a, v) => (a = a + v.total_exp),
+                          0
+                        )}
                       />
                     </h1>
                   </div>
@@ -188,7 +228,7 @@ export default function HomePage() {
           Leaderboard 🏆
         </h1>
         {loading ? (
-          <div className="animate-fade-in-up  mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl">
+          <div className="animate-fade-in-up mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10">
             <CardAvatarSkeleton />
             <CardAvatarSkeleton />
             <CardAvatarSkeleton />
@@ -209,10 +249,10 @@ export default function HomePage() {
                 className="max-w-screen-lg mx-auto flex mb-0 mt-6 list-none flex-wrap pt-3 pb-4 flex-row"
                 role="tablist"
               >
-                <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <li className="flex-auto text-center mx-2">
                   <a
                     className={
-                      'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                      'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
                       (openTab === 1
                         ? 'text-white bg-gradient-to-r from-emerald-500 to-blue-500'
                         : 'text-blueGray-600 bg-white')
@@ -238,10 +278,10 @@ export default function HomePage() {
                     </div>
                   </a>
                 </li>
-                <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <li className="mx-2 flex-auto text-center">
                   <a
                     className={
-                      'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                      'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
                       (openTab === 2
                         ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                         : 'text-blueGray-600 bg-white')
@@ -268,15 +308,16 @@ export default function HomePage() {
                   </a>
                 </li>
               </ul>
+              <div className='mb-24'>
               <div
                 className={
                   openTab === 1
-                    ? 'mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl'
+                    ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                     : 'hidden'
                 }
                 id="link1"
               >
-                {s1Players.map((player, i) => (
+                {currentPlayers.map((player, i) => (
                   <Avatar
                     key={i}
                     statRank={player.player_rank}
@@ -293,18 +334,20 @@ export default function HomePage() {
                     avatar_url={player.avatar_url}
                     background_url={player.background_url}
                     statTitle={player.title}
+                    statEXPEarnedToday={player.exp_earned_today}
+                    statGoldEarnedToday={player.gold_earned_today}
                   />
                 ))}
               </div>
               <div
                 className={
                   openTab === 2
-                    ? 'mb-24 mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl'
+                    ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                     : 'hidden'
                 }
                 id="link2"
               >
-                {players.map((player, i) => (
+                {currentPlayers.map((player, i) => (
                   <Avatar
                     key={i}
                     statRank={player.player_rank}
@@ -321,24 +364,28 @@ export default function HomePage() {
                     avatar_url={player.avatar_url}
                     background_url={player.background_url}
                     statTitle={player.title}
+                    statEXPEarnedToday={player.exp_earned_today}
+                    statGoldEarnedToday={player.gold_earned_today}
                   />
                 ))}
+              </div>
+              
+              <Pagination
+                postsPerPage={postsPerPage}
+                totalPosts={s1Players.length}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
               </div>
             </div>
           </div>
         )}
       </section>
 
-
       {/* level up modal */}
       {levelUp ? (
-        <ModalLevelUp
-          playerLevel={levelUp}
-          setLevelUp={setLevelUp}
-        />
-      ) : (
-        null
-      )}
+        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
+      ) : null}
 
       {/* // Modal Section */}
       {showWinModal ? (
@@ -351,6 +398,15 @@ export default function HomePage() {
             refreshStats={refreshStats}
           />
         </>
+      ) : null}
+
+      {showCardWin ? (
+        <CardWin
+          setShowCardWin={setShowCardWin}
+          win={activeWinStats}
+          player_name={showCardWin}
+          avatarUrl={avatarUrl}
+        />
       ) : null}
     </>
   );

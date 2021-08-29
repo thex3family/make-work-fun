@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { supabase } from '../../utils/supabase-client';
 import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
-import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 import { Table, Input, Button, Popconfirm, Form, Select, Switch } from 'antd';
 import 'antd/dist/antd.css';
 
@@ -488,7 +487,7 @@ export default function edit({user}) {
   }
 
   return (
-    <section className="justify-center bg-dailies-pattern bg-fixed bg-cover">
+    <section className="justify-center bg-dailies-pattern bg-fixed bg-cover bg-center">
       {saving ? (
         <span className="fixed inline-flex left-0 bottom-0 ml-2 mb-24 sm:ml-4 sm:mb-4 text-md font-semibold py-3 px-4 uppercase rounded text-emerald-600 bg-emerald-200 z-50">
           <svg
@@ -516,7 +515,6 @@ export default function edit({user}) {
       ) : (
         <div></div>
       )}
-      <BottomNavbar />
       <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
         <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
           <div className="pb-5 text-center">
