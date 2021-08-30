@@ -7,6 +7,12 @@ import { useRouter } from 'next/router';
 import CardParty from '@/components/Cards/CardParty';
 import Kanban from '@/components/Parties/Kanban';
 import RecruitingBoard from '@/components/Parties/RecruitingBoard';
+import { triggerWinModal } from '@/components/Modals/ModalHandler';
+import {
+  fetchLatestWin,
+  fetchPlayerStats
+} from '@/components/Fetch/fetchMaster';
+import { downloadImage } from '@/utils/downloadImage';
 
 export default function parties() {
   const [activeParties, setActiveParties] = useState(null);
@@ -14,13 +20,15 @@ export default function parties() {
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
-  const {
-    userLoaded,
-    session,
-    userDetails,
-    userOnboarding,
-    subscription
-  } = useUser();
+  const [levelUp, setLevelUp] = useState(false);
+
+  const [showWinModal, setShowWinModal] = useState(false);
+  const [activeModalStats, setActiveModalStats] = useState(null);
+  const [playerStats, setPlayerStats] = useState(null);
+
+  const [backgroundUrl, setBackgroundUrl] = useState('/');
+
+  const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -44,9 +52,35 @@ export default function parties() {
 
   async function loadPlayer() {
     console.log('Loading Player');
-    fetchActiveParties().then((result) => {
-      fetchRecruitingParties();
-    });
+    fetchActiveParties();
+    fetchRecruitingParties();
+    refreshStats();
+    fetchLatestWin(
+      setActiveModalStats,
+      refreshStats,
+      setLevelUp,
+      triggerWinModal,
+      setShowWinModal
+    );
+  }
+
+  async function refreshStats() {
+    setPlayerStats(await fetchPlayerStats());
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    if (playerStats) loadBackgroundURL();
+  }, [playerStats]);
+
+  async function loadBackgroundURL() {
+    if (playerStats.background_url) {
+      setBackgroundUrl(
+        await downloadImage(playerStats.background_url, 'background')
+      );
+    } else {
+      setBackgroundUrl('/background/great-hall.jpg');
+    }
   }
 
   async function fetchActiveParties() {
@@ -77,8 +111,8 @@ export default function parties() {
 
       // // only use the parties that are in progress
       // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
-      
-      setActiveParties(parties_you_are_in)
+
+      setActiveParties(parties_you_are_in);
 
       if (error && status !== 406) {
         throw error;
@@ -147,7 +181,7 @@ export default function parties() {
       );
 
       //console.log('updated -', recruitingParties);
-      console.log('RecruitingParties', recruitingParties)
+      console.log('RecruitingParties', recruitingParties);
       setRecruitingParties(recruitingParties);
 
       if (error && status !== 406) {
@@ -161,8 +195,10 @@ export default function parties() {
   }
 
   return (
-    <section className="animate-slow-fade-in justify-center bg-dailies-pattern bg-fixed bg-cover">
-      <BottomNavbar />
+    <section
+      className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center"
+      style={{ backgroundImage: `url(${backgroundUrl})` }}
+    >
       <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
         <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
           <div className="pb-5">
@@ -170,30 +206,55 @@ export default function parties() {
               Parties
             </h1>
             <p className="mt-5 text-xl text-dailies text-center sm:text-2xl max-w-2xl m-auto">
-                  It's time to really put multiplayer into personal development.
-                </p>
+              Multiplayer for personal development.
+            </p>
           </div>
           <div className="text-center">
             <section className="mb-5">
-              <h2 className="mx-auto text-4xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
-                Your Parties ({activeParties ? activeParties.length : 0}/3)
-              </h2>
-              {activeParties
-                ? activeParties.length != 0
-                  ? activeParties.map((party) => (
-                      <CardParty
-                        key={party.id}
-                        party={party}
-                        avatar_urls={fetchPartyMemberAvatarURLs(party.id)}
-                      />
-                    ))
-                  : <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">You aren't a part of any parties.</div>
-                : null}
+              <div className="flex items-center">
+                <div
+                  className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
+                  aria-hidden="true"
+                ></div>
+                <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
+                  Your Parties <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">{activeParties ? activeParties.length : 0}/3</span>
+                </h2>
+                <div
+                  className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 ml-3"
+                  aria-hidden="true"
+                ></div>
+              </div>
+
+              {activeParties ? (
+                activeParties.length != 0 ? (
+                  activeParties.map((party) => (
+                    <CardParty
+                      key={party.id}
+                      party={party}
+                      avatar_urls={fetchPartyMemberAvatarURLs(party.id)}
+                    />
+                  ))
+                ) : (
+                  <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
+                    You aren't a part of any parties.
+                  </div>
+                )
+              ) : null}
             </section>
             <section>
-              <h2 className="text-4xl align-middle justify-center inline-flex font-bold text-dailies mt-4">
-                Parties Recruiting
-              </h2>
+              <div className="flex items-center mt-4">
+                <div
+                  className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
+                  aria-hidden="true"
+                ></div>
+                <h2 className="text-3xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
+                  Parties Recruiting
+                </h2>
+                <div
+                  className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 ml-3"
+                  aria-hidden="true"
+                ></div>
+              </div>
               {/* {recruitingParties ? (
                 <Kanban recruitingParties={recruitingParties} />
               ) : null} */}
