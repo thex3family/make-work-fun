@@ -92,11 +92,9 @@ export default function parties() {
       const { data, error } = await supabase
         .from('party_members')
         .select(
-          'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status)'
+          'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status), start_date: party(start_date), party_members: party(party_members), slug: party(slug)'
         )
         .eq('player', user.id);
-
-      //console.log('parties you are in:', data);
 
       // Put the data into the right format
       var parties_you_are_in = data.map((party) => {
@@ -105,7 +103,11 @@ export default function parties() {
           name: party.name.name,
           description: party.description.description,
           challenge: party.challenge.challenge,
-          status: party.status.status
+          status: party.status.status,
+          start_date: party.start_date.start_date,
+          due_date: party.due_date.due_date,
+          slug: party.slug.slug,
+          // party_members: party.party_members.party_members,
         };
       });
 
@@ -124,44 +126,44 @@ export default function parties() {
     }
   }
 
-  async function fetchPartyMemberAvatarURLs(party_id) {
-    var party_members_avatar_urls = [];
+  // async function fetchPartyMemberAvatarURLs(party_id) {
+  //   var party_members_avatar_urls = [];
 
-    try {
-      const { data, error } = await supabase
-        .from('party_members')
-        .select('player_avatar_url: users (avatar_url)')
-        .eq('party_id', party_id);
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('party_members')
+  //       .select('player_avatar_url: users (avatar_url)')
+  //       .eq('party_id', party_id);
 
-      party_members_avatar_urls = data.map((member) => {
-        return member.player_avatar_url.avatar_url;
-      });
+  //     party_members_avatar_urls = data.map((member) => {
+  //       return member.player_avatar_url.avatar_url;
+  //     });
 
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      // alert(error.message)
-    } finally {
-      setLoading(false);
-      return party_members_avatar_urls;
-    }
-  }
+  //     if (error && status !== 406) {
+  //       throw error;
+  //     }
+  //   } catch (error) {
+  //     // alert(error.message)
+  //   } finally {
+  //     setLoading(false);
+  //     return party_members_avatar_urls;
+  //   }
+  // }
 
-  async function addChallengeNameAndMemberAvatars(recruitingParties) {
-    for (var i = 0; i < recruitingParties.length; i++) {
-      var tempParty = recruitingParties[i];
-      var member_avatar_urls = await fetchPartyMemberAvatarURLs(tempParty.id);
-      recruitingParties[i] = {
-        ...tempParty,
-        member_avatar_urls: member_avatar_urls
-      };
-    }
+  // async function addChallengeNameAndMemberAvatars(recruitingParties) {
+  //   for (var i = 0; i < recruitingParties.length; i++) {
+  //     var tempParty = recruitingParties[i];
+  //     var member_avatar_urls = await fetchPartyMemberAvatarURLs(tempParty.id);
+  //     recruitingParties[i] = {
+  //       ...tempParty,
+  //       member_avatar_urls: member_avatar_urls
+  //     };
+  //   }
 
-    return recruitingParties.map((party) => {
-      return { ...party, challenge_name: party.challenge_name.name };
-    });
-  }
+  //   return recruitingParties.map((party) => {
+  //     return { ...party, challenge_name: party.challenge_name.name };
+  //   });
+  // }
 
   async function fetchRecruitingParties() {
     try {
@@ -176,9 +178,9 @@ export default function parties() {
 
       console.log('fetchRecruitingParties');
 
-      recruitingParties = await addChallengeNameAndMemberAvatars(
-        recruitingParties
-      );
+      // recruitingParties = await addChallengeNameAndMemberAvatars(
+      //   recruitingParties
+      // );
 
       //console.log('updated -', recruitingParties);
       console.log('RecruitingParties', recruitingParties);
@@ -203,7 +205,7 @@ export default function parties() {
         <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
           <div className="pb-5">
             <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies">
-              Parties
+              Party Quests
             </h1>
             <p className="mt-5 text-xl text-dailies text-center sm:text-2xl max-w-2xl m-auto">
               Multiplayer for personal development.
@@ -231,7 +233,6 @@ export default function parties() {
                     <CardParty
                       key={party.id}
                       party={party}
-                      avatar_urls={fetchPartyMemberAvatarURLs(party.id)}
                     />
                   ))
                 ) : (

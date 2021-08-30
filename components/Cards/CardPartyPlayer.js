@@ -11,7 +11,7 @@ export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeW
     '/background/cityscape.jpg'
   );
   const [dragonBGUrl, setDragonBGUrl] = useState(
-    '/dragon/skyrim.jpg'
+    '/challenge/skyrim.jpg'
   );
   const [totalGold_Reward, setTotalGold_Reward] = useState(null)
   const [totalEXP_Reward, setTotalEXP_Reward] = useState(null)

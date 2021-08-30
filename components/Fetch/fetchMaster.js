@@ -528,3 +528,36 @@ export async function fetchParty(party_slug) {
   } finally {
   }
 }
+
+export async function fetchPartyMembers(party_id){
+  try {
+    const { data, error } = await supabase
+      .from('party_member_details')
+      .select(
+        '*'
+      )
+      .eq('party_id', party_id);
+
+    if (data){
+      var newData = data;
+  
+        for (let i = 0; i < data.length; i++) {
+          let oldData = data[i];
+          newData[i] = {
+            ...oldData,
+            avatar_url: (oldData.avatar_url ? await downloadImage(oldData.avatar_url, 'avatar') : null),
+            background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null)
+          };
+        }
+        return newData;
+    }
+
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    alert(error.message)
+  } finally {
+  }
+}
