@@ -18,32 +18,61 @@ export default function CardParty({ party, avatar_urls }) {
   // divide this number by the number of days and convert the result into a percentage
   var deadline_completion_percentage = (num_of_days_passed / num_of_days) * 100;
 
+  const health = 75;
+
   return (
-    <div className="max-w-lg bg-white shadow-md rounded-lg overflow-hidden mx-auto mt-2">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden mx-auto mt-2 text-left cursor-pointer">
       <div className="py-4 px-8 mt-3">
-        <div className="flex flex-col mb-8">
-          <h2 className="text-gray-700 font-semibold text-2xl tracking-wide mb-2">
+        <div className="grid grid-cols-4 mb-4">
+          <h2 className="col-span-3 text-gray-700 font-semibold text-2xl tracking-wide mb-2">
             { party.name }
           </h2>
-          <p className="text-black">{ party.description }</p>
-          <p className="text-black">
-            memberAvatar1 memberAvatar2 memberAvatar3
-          </p>
-          <div className="w-full">
-            <div className="shadow w-full bg-grey-light mt-2">
-              <div className="bg-green text-xs leading-none py-1 text-center text-white w-3/4 h-4" style={{ width: deadline_completion_percentage + '%' }}></div>
+          <div className="flex flex-wrap pt-2">
+              <div className="relative w-full max-w-full flex-grow flex-1">
+                <div className="flex items-center">
+                  <i
+                    className={`mr-2 fas fa-heart ${
+                      health >= 75
+                        ? 'text-emerald-500'
+                        : health >= 50
+                        ? 'text-yellow-500'
+                        : 'text-red-500'
+                    }`}
+                  />
+                  <div className="relative w-full">
+                    <div
+                      className={`overflow-hidden h-2 text-xs flex rounded ${
+                        health >= 75
+                          ? 'bg-emerald-200'
+                          : health >= 50
+                          ? 'bg-yellow-200'
+                          : 'bg-red-200'
+                      }`}
+                    >
+                      <div
+                        style={{ width: `${health}%` }}
+                        className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
+                          health >= 75
+                            ? 'bg-emerald-500'
+                            : health >= 50
+                            ? 'bg-yellow-500'
+                            : 'bg-red-500'
+                        }`}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <p className="row-start-2 col-span-3 text-black">{ party.description }</p>
+          
+          
+        </div>
+        <div className="w-full mb-4">
+            <div className="shadow w-full bg-gray-200 mt-2 rounded-full">
+              <div className="bg-gradient-to-r from-emerald-500 to-blue-500 text-xs leading-none py-1 text-center text-white w-3/4 h-4 rounded-full " style={{ width: deadline_completion_percentage + '%' }}></div>
             </div>
           </div>
-          <p className="text-black">Metrics</p>
-        </div>
-        <div className="mt-1">
-          <a
-            href="#"
-            className="block tracking-widest uppercase text-center shadow bg-indigo-600 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
-          >
-            View Party
-          </a>
-        </div>
       </div>
     </div>
   );

@@ -75,8 +75,10 @@ export default function parties() {
         };
       });
 
-      // only use the parties that are in progress
-      setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
+      // // only use the parties that are in progress
+      // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
+      
+      setActiveParties(parties_you_are_in)
 
       if (error && status !== 406) {
         throw error;
@@ -173,8 +175,8 @@ export default function parties() {
           </div>
           <div className="text-center">
             <section className="mb-5">
-              <h2 className="text-4xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
-                Your Parties (1/3)
+              <h2 className="mx-auto text-4xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
+                Your Parties ({activeParties ? activeParties.length : 0}/3)
               </h2>
               {activeParties
                 ? activeParties.length != 0
