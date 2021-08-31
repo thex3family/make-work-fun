@@ -92,7 +92,7 @@ export default function parties() {
       const { data, error } = await supabase
         .from('party_members')
         .select(
-          'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status), start_date: party(start_date), party_members: party(party_members), slug: party(slug)'
+          'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status), start_date: party(start_date), party_members: party(party_members), slug: party(slug), health'
         )
         .eq('player', user.id);
 
@@ -107,6 +107,7 @@ export default function parties() {
           start_date: party.start_date.start_date,
           due_date: party.due_date.due_date,
           slug: party.slug.slug,
+          health: party.health,
           // party_members: party.party_members.party_members,
         };
       });
