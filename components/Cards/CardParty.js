@@ -114,7 +114,7 @@ export default function CardParty({ party }) {
                 </div>
               </div>
 
-              <h2 className="row-start-2 col-span-3 text-primary font-semibold text-2xl tracking-wide">
+              <h2 className="row-start-2 col-span-3 text-primary font-semibold text-2xl tracking-wide truncate">
                 {party.name}
               </h2>
               <div className="row-start-2 justify-self-end flex mt-1">
@@ -142,7 +142,7 @@ export default function CardParty({ party }) {
                   : null}
               </div>
 
-              <p className="row-start-3 col-span-3 text-primary">
+              <p className="row-start-3 col-span-3 text-primary truncate">
                 {party.description}
               </p>
             </div>
