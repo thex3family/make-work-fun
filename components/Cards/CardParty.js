@@ -5,6 +5,7 @@ import { fetchPartyMembers } from '../Fetch/fetchMaster';
 export default function CardParty({ party }) {
   var start_date = new Date(party.start_date);
   var due_date = new Date(party.due_date);
+  var now = new Date()
 
   // get the number of days between the start date and due date
   var num_of_days = due_date.getDate() - start_date.getDate();
@@ -44,12 +45,36 @@ export default function CardParty({ party }) {
           <div className="py-2 px-6 pt-4">
             <div className="grid grid-cols-4 mb-4">
               <div className="row-start-1 col-span-3 mb-2">
-                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 uppercase last:mr-0 mr-1">
-                  Time Challenge
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 uppercase last:mr-0 mr-1">
-                  In Progress
-                </span>
+                {party.challenge == 1 ? (
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 last:mr-0 mr-1">
+                    Time Challenge
+                  </span>
+                ) : party.challenge == 2 ? (
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-indigo-600 bg-indigo-200 last:mr-0 mr-1">
+                    Slay Your Dragon
+                  </span>
+                ) : (
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                    Raid Boss
+                  </span>
+                )}
+                {party.challenge == 1 ? (
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1">
+                    Recruiting
+                  </span>
+                ) : party.challenge == 2 ? (
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
+                    In Progress
+                  </span>
+                ) : party.challenge == 3 ? (
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                    Complete
+                  </span>
+                ) : (
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200 last:mr-0 mr-1">
+                    Failed
+                  </span>
+                )}
               </div>
               <div className="row-start-1 flex flex-wrap pt-2 col-span-1">
                 <div className="relative w-full max-w-full flex-grow flex-1">
