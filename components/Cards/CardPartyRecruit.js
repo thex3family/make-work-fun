@@ -3,18 +3,16 @@ import Button from '@/components/ui/Button';
 
 export default function CardPartyRecruit({party}) {
   const style = {
-    card: `bg-yellow-50 shadow-lg w-56 m-2 p-2 text-dailies rounded-lg`,
-    name: `w-50 font-bold`,
+    card: `bg-yellow-50 shadow-lg w-56 sm:w-72 m-2 p-4 text-dailies rounded-lg flex flex-col gap-1 justify-center`,
+    name: `w-50 font-bold text-lg`,
     playerIcons: `w-8 h-8 m-1 border-2 rounded-full`,
     leader: `border-indigo-300 ml-0`,
     member: `border-yellow-100 -ml-3`,
-    description: `text-left`,
+    description: `text-left mb-2`,
     team: `flex justify-between`,
     joinUp: `bg-indigo-500 text-white p-1 shadow-sm`
   };
-  const exampleDescription = `Really long descriptions can go here. Maybe something like 140 characters. That should force leaders to be consise when describing parties. `;
   const playersExample = Array(4).fill(`http://localhost:3000/logo.svg`);
-  // console.log(props);
   return (
     <>
       <div className={style.card}>
@@ -22,8 +20,8 @@ export default function CardPartyRecruit({party}) {
         <div className={style.description}>
         {party.description}
         </div>
-        <div className={style.team}>
-          <div className="flex">
+        <div className="mt-auto">
+          <div className="flex justify-center mb-2">
             {playersExample.map((player, i) => (
               <img
                 src={player}
@@ -33,19 +31,14 @@ export default function CardPartyRecruit({party}) {
               ></img>
             ))}
           </div>
-          <div>
             <Button
               variant="prominent"
               disabled={false}
-              className="w-24 animate-fade-in-up text-center font-bold"
+              className="w-24 animate-fade-in-up text-center font-bold mx-auto"
             >
-              Join!
+              Apply
             </Button>
-            {/* <button className={style.joinUp}>
-                        Join up!
-                    </button> */}
-          </div>
-        </div>
+            </div>
       </div>
     </>
   );
