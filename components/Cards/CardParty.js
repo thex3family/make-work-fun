@@ -43,10 +43,15 @@ export default function CardParty({ party }) {
         <div className="bg-dark bg-opacity-90">
           <div className="py-2 px-6 pt-4">
             <div className="grid grid-cols-4 mb-4">
-              <h2 className="col-span-3 text-primary font-semibold text-2xl tracking-wide mb-2">
-                {party.name}
-              </h2>
-              <div className="flex flex-wrap pt-2">
+              <div className="row-start-1 col-span-3 mb-2">
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 uppercase last:mr-0 mr-1">
+                  Time Challenge
+                </span>
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 uppercase last:mr-0 mr-1">
+                  In Progress
+                </span>
+              </div>
+              <div className="row-start-1 flex flex-wrap pt-2 col-span-1">
                 <div className="relative w-full max-w-full flex-grow flex-1">
                   <div className="flex items-center">
                     <i
@@ -83,10 +88,11 @@ export default function CardParty({ party }) {
                   </div>
                 </div>
               </div>
-              <p className="row-start-2 col-span-3 text-primary">
-                {party.description}
-              </p>
-              <div className="row-start-2 justify-self-end flex">
+
+              <h2 className="row-start-2 col-span-3 text-primary font-semibold text-2xl tracking-wide">
+                {party.name}
+              </h2>
+              <div className="row-start-2 justify-self-end flex mt-1">
                 {partyMembers
                   ? partyMembers.map((members) => (
                       <div
@@ -110,6 +116,10 @@ export default function CardParty({ party }) {
                     ))
                   : null}
               </div>
+
+              <p className="row-start-3 col-span-3 text-primary">
+                {party.description}
+              </p>
             </div>
             <div className="w-full mb-4">
               <div className="shadow w-full bg-gray-200 mt-2 rounded-full h-4">

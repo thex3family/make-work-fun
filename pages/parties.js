@@ -212,7 +212,7 @@ export default function parties() {
             </p>
           </div>
           <div className="text-center">
-            <section className="mb-5">
+            <section className="mb-8">
               <div className="flex items-center">
                 <div
                   className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
