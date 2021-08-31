@@ -10,7 +10,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Head from 'next/head';
 
 function setupIntercom(mobileDevice) {
-  if (process.env.NODE_ENV != 'production') {
+  if (process.env.NODE_ENV === 'production') {
     window.intercomSettings = {
       app_id: "dcx9wsn6",
       hide_default_launcher: mobileDevice
