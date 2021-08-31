@@ -7,23 +7,23 @@ export default function RecruitingBoard({ recruitingParties }) {
     bg: `bg-dailies-default`,
     main: `w-full mt-4`,
     tab: `border-4 
-            border-yellow-900 
-            border-opacity-60 
-            text-dailies
-            font-bold 
-            rounded-lg 
-            p-1 m-1`,
+          border-yellow-900 
+          border-opacity-60 
+          text-dailies
+          font-bold 
+          rounded-lg 
+          p-1 m-1 px-2`,
     tabSelected: `
-            shadow-lg 
-            border-gray-100 
-            bg-opacity-60
-            bg-yellow-900 
-            font-bold
-            text-gray-100 
-            rounded-lg 
-            p-2 m-1`,
-    tabs: `w-full text-left p-1`,
-    board: `w-full bg-yellow-900 bg-opacity-60 rounded-lg shadow-lg`,
+          shadow-lg 
+          border-gray-100 
+          bg-opacity-60
+          bg-yellow-900 
+          font-bold
+          text-gray-100 
+          rounded-lg 
+          p-1 m-1 px-3`,
+    tabs: `w-full text-left p-1 overflow-x-auto flex-row flex justify-center`,
+    board: `w-full bg-yellow-900 bg-opacity-60 rounded-lg shadow-lg pb-3`,
     rowTitle: `text-left font-bold ml-4 pt-2`,
     row: `flex p-2`,
     left: `font-bold bg-yellow-700`,
@@ -31,8 +31,8 @@ export default function RecruitingBoard({ recruitingParties }) {
     scroll: `font-bold p-1`,
     partyList: `overflow-x-scroll sm:overflow-hidden flex party-list-box`
   };
-  const tabs = [`Time Challenge`, `Dragon's Lair`, `Raid Groups`];
-  const sections = [`Season Pass Completion`, `Guild Quests`];
+  const tabs = [`⏱ Time Challenge`, `🐉 Slay Your Dragons`];
+  const sections = [`Season Pass Completion`];
   const [selectedTab, selectTab] = useState(0);
   // const exampleParty = {
   //     name:`Four Musketeers`,
@@ -80,7 +80,7 @@ export default function RecruitingBoard({ recruitingParties }) {
           {sections.map((section, i) => (
             <>
               <section className={style.rowTitle}>
-                {tabs[selectedTab] + ' ' + section}
+                {/* {tabs[selectedTab] + ' ' + section} */}
               </section>
               <div className={style.row}>
                 <button

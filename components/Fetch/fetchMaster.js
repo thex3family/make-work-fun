@@ -536,6 +536,7 @@ export async function fetchPartyMembers(party_id){
       .select(
         '*'
       )
+      .order('role')
       .eq('party_id', party_id);
 
     if (data){

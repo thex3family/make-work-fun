@@ -8,13 +8,14 @@ export default function CardParty({ party }) {
   var now = new Date();
 
   // To calculate the date difference of two dates
-  var start_to_end_days = (due_date.getTime() - start_date.getTime())  / (1000 * 3600 * 24);
-  var start_to_now_days = (now.getTime() - start_date.getTime())  / (1000 * 3600 * 24);
-  console.log(start_to_end_days)
-  console.log(start_to_now_days)
+  var start_to_end_days =
+    (due_date.getTime() - start_date.getTime()) / (1000 * 3600 * 24);
+  var start_to_now_days =
+    (now.getTime() - start_date.getTime()) / (1000 * 3600 * 24);
 
   // divide this number by the number of days and convert the result into a percentage
-  var deadline_completion_percentage = (start_to_now_days / start_to_end_days) * 100;
+  var deadline_completion_percentage =
+    (start_to_now_days / start_to_end_days) * 100;
 
   const health = party.health * 10;
 
@@ -117,21 +118,25 @@ export default function CardParty({ party }) {
               <h2 className="row-start-2 col-span-3 text-primary font-semibold text-2xl tracking-wide truncate">
                 {party.name}
               </h2>
-              <div className="row-start-2 justify-self-end flex mt-1">
+              <div className="row-start-2 justify-self-end hidden sm:flex mt-1">
                 {partyMembers
-                  ? partyMembers.map((members) => (
+                  ? partyMembers.map((member) => (
                       <div
-                        className="bg-cover bg-center object-cover rounded-full shadow-xl block border-2 border-gray-800 w-8 h-8 -ml-3 overflow-hidden"
+                        className={`bg-cover bg-center object-cover rounded-full shadow-xl block w-8 h-8 -ml-3 overflow-hidden ${
+                          member.role == 'Party Leader'
+                            ? 'border-2 border-yellow-300'
+                            : 'border-2 border-gray-700'
+                        }`}
                         style={{
-                          backgroundImage: `url(${members.background_url})`
+                          backgroundImage: `url(${member.background_url})`
                         }}
                       >
                         <div className="bg-black bg-opacity-30 rounded-full w-8 h-8 p-0.5 flex items-center">
                           <img
                             className="avatar image mx-auto object-cover"
                             src={`${
-                              members.avatar_url
-                                ? members.avatar_url
+                              member.avatar_url
+                                ? member.avatar_url
                                 : 'img/default_avatar.png'
                             }`}
                             alt="Avatar"
@@ -150,7 +155,11 @@ export default function CardParty({ party }) {
               <div className="shadow w-full bg-gray-200 mt-2 rounded-full h-4">
                 <div
                   className="bg-gradient-to-r from-emerald-500 to-blue-500 text-xs leading-none py-1 text-center text-white w-3/4 h-4 rounded-full "
-                  style={{ width: party.start_date ? deadline_completion_percentage : 0 + '%' }}
+                  style={{
+                    width: party.start_date
+                      ? deadline_completion_percentage
+                      : 0 + '%'
+                  }}
                 ></div>
               </div>
             </div>

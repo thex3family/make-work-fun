@@ -246,14 +246,14 @@ export default function parties() {
             <section>
               <div className="flex items-center mt-4">
                 <div
-                  className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
+                  className="border-t-2 border-dailies-dark flex-grow mt-2 mr-3"
                   aria-hidden="true"
                 ></div>
-                <h2 className="text-3xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
+                <h2 className="text-3xl align-middle justify-center inline-flex font-bold text-dailies">
                   Parties Recruiting
                 </h2>
                 <div
-                  className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 ml-3"
+                  className="border-t-2 border-dailies-dark flex-grow mt-2 ml-3"
                   aria-hidden="true"
                 ></div>
               </div>
