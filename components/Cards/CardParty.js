@@ -5,16 +5,16 @@ import { fetchPartyMembers } from '../Fetch/fetchMaster';
 export default function CardParty({ party }) {
   var start_date = new Date(party.start_date);
   var due_date = new Date(party.due_date);
-  var now = new Date()
+  var now = new Date();
 
-  // get the number of days between the start date and due date
-  var num_of_days = due_date.getDate() - start_date.getDate();
-
-  // get the number of days from the start date and today
-  var num_of_days_passed = new Date().getDate() - start_date.getDate();
+  // To calculate the date difference of two dates
+  var start_to_end_days = (due_date.getTime() - start_date.getTime())  / (1000 * 3600 * 24);
+  var start_to_now_days = (now.getTime() - start_date.getTime())  / (1000 * 3600 * 24);
+  console.log(start_to_end_days)
+  console.log(start_to_now_days)
 
   // divide this number by the number of days and convert the result into a percentage
-  var deadline_completion_percentage = (num_of_days_passed / num_of_days) * 100;
+  var deadline_completion_percentage = (start_to_now_days / start_to_end_days) * 100;
 
   const health = 75;
 
