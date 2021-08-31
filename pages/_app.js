@@ -30,7 +30,6 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const mobileDevice = detectMob();
-    console.log(mobileDevice);
     setupIntercom(mobileDevice)
     document.body.classList?.remove('loading');
   }, []);
