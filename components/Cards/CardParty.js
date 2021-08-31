@@ -16,7 +16,7 @@ export default function CardParty({ party }) {
   // divide this number by the number of days and convert the result into a percentage
   var deadline_completion_percentage = (start_to_now_days / start_to_end_days) * 100;
 
-  const health = 75;
+  const health = party.health * 10;
 
   const [partyMembers, setPartyMembers] = useState(null);
 
