@@ -150,7 +150,7 @@ export default function CardParty({ party }) {
               <div className="shadow w-full bg-gray-200 mt-2 rounded-full h-4">
                 <div
                   className="bg-gradient-to-r from-emerald-500 to-blue-500 text-xs leading-none py-1 text-center text-white w-3/4 h-4 rounded-full "
-                  style={{ width: deadline_completion_percentage + '%' }}
+                  style={{ width: party.start_date ? deadline_completion_percentage : 0 + '%' }}
                 ></div>
               </div>
             </div>
