@@ -95,7 +95,7 @@ export default function parties() {
       const { data, error } = await supabase
         .from('party_members')
         .select(
-          'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status), start_date: party(start_date), party_members: party(party_members), slug: party(slug), health'
+          'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status), start_date: party(start_date), slug: party(slug), health'
         )
         .eq('player', user.id);
 
@@ -174,7 +174,7 @@ export default function parties() {
       const { data, error } = await supabase
         .from('party')
         .select(
-          'id, name, challenge, description, due_date, status, challenge_name: party_challenge (name), party_members'
+          'id, name, challenge, description, due_date, status, challenge_name: party_challenge (name)'
         )
         .eq('status', 1);
 
