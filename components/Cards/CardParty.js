@@ -59,15 +59,15 @@ export default function CardParty({ party }) {
                     Raid Boss
                   </span>
                 )}
-                {party.challenge == 1 ? (
+                {party.status == 1 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1">
                     Recruiting
                   </span>
-                ) : party.challenge == 2 ? (
+                ) : party.status == 2 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
                     In Progress
                   </span>
-                ) : party.challenge == 3 ? (
+                ) : party.status == 3 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
                     Complete
                   </span>
