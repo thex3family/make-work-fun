@@ -13,6 +13,8 @@ import {
   fetchPlayerStats
 } from '@/components/Fetch/fetchMaster';
 import { downloadImage } from '@/utils/downloadImage';
+import ModalParty from '@/components/Modals/ModalParty';
+import LoadingDots from '@/components/ui/LoadingDots';
 
 export default function parties() {
   const [activeParties, setActiveParties] = useState(null);
@@ -29,6 +31,7 @@ export default function parties() {
   const [backgroundUrl, setBackgroundUrl] = useState('/');
 
   const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
+  const [createParty, setCreateParty] = useState(null);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -107,7 +110,7 @@ export default function parties() {
           start_date: party.start_date.start_date,
           due_date: party.due_date.due_date,
           slug: party.slug.slug,
-          health: party.health,
+          health: party.health
           // party_members: party.party_members.party_members,
         };
       });
@@ -171,7 +174,7 @@ export default function parties() {
       const { data, error } = await supabase
         .from('party')
         .select(
-          'id, name, challenge, description, due_date, status, challenge_name: party_challenge (name)'
+          'id, name, challenge, description, due_date, status, challenge_name: party_challenge (name), party_members'
         )
         .eq('status', 1);
 
@@ -197,76 +200,109 @@ export default function parties() {
     }
   }
 
-  return (
-    <section
-      className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center"
-      style={{ backgroundImage: `url(${backgroundUrl})` }}
-    >
-      <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-        <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
-          <div className="pb-5">
-            <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies">
-              Party Quests
-            </h1>
-            <p className="mt-5 text-xl text-dailies text-center sm:text-2xl max-w-2xl m-auto">
-              Multiplayer for personal development.
-            </p>
-          </div>
-          <div className="text-center">
-            <section className="mb-8">
-              <div className="flex items-center">
-                <div
-                  className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
-                  aria-hidden="true"
-                ></div>
-                <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
-                  Your Parties <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">{activeParties ? activeParties.length : 0}/3</span>
-                </h2>
-                <div
-                  className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 ml-3"
-                  aria-hidden="true"
-                ></div>
-              </div>
+  // if (loading) {
+  //   return(
+  //     <LoadingDots />
+  //   );
+  // }
 
-              {activeParties ? (
-                activeParties.length != 0 ? (
-                  activeParties.map((party) => (
-                    <CardParty
-                      key={party.id}
-                      party={party}
-                    />
-                  ))
-                ) : (
-                  <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
-                    You aren't a part of any parties.
-                  </div>
-                )
-              ) : null}
-            </section>
-            <section>
-              <div className="flex items-center mt-4">
-                <div
-                  className="border-t-2 border-dailies-dark flex-grow mt-2 mr-3"
-                  aria-hidden="true"
-                ></div>
-                <h2 className="text-3xl align-middle justify-center inline-flex font-bold text-dailies">
-                  Parties Recruiting
-                </h2>
-                <div
-                  className="border-t-2 border-dailies-dark flex-grow mt-2 ml-3"
-                  aria-hidden="true"
-                ></div>
-              </div>
-              {/* {recruitingParties ? (
+  return (
+    <>
+      <section
+        className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center"
+        style={{ backgroundImage: `url(${backgroundUrl})` }}
+      >
+        <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+          <div className="animate-fade-in-up bg-dailies-default rounded p-10 opacity-90">
+            <div className="pb-5">
+              <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies">
+                Party Quests
+              </h1>
+              <p className="mt-5 text-xl text-dailies text-center sm:text-2xl max-w-2xl m-auto">
+                Multiplayer for personal development.
+              </p>
+            </div>
+            <div className="text-center mb-5">
+              <button onClick={()=>setCreateParty(true)} className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded">
+                <i className="text-yellow-500 fas fa-crown mr-2" />
+                Create Party
+              </button>
+            </div>
+            <div className="text-center">
+              <section className="mb-8">
+                <div className="flex items-center">
+                  <div
+                    className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
+                    aria-hidden="true"
+                  ></div>
+                  <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
+                    Your Parties{' '}
+                    <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">
+                      {activeParties ? activeParties.length : 0}/3
+                    </span>
+                  </h2>
+                  <div
+                    className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 ml-3"
+                    aria-hidden="true"
+                  ></div>
+                </div>
+
+                {activeParties ? (
+                  activeParties.length != 0 ? (
+                    activeParties.map((party) => (
+                      <CardParty key={party.id} party={party} />
+                    ))
+                  ) : (
+                    <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
+                      You aren't a part of any parties.
+                    </div>
+                  )
+                ) : null}
+              </section>
+              <section>
+                <div className="flex items-center mt-4">
+                  <div
+                    className="border-t-2 border-dailies-dark flex-grow mt-2 mr-3"
+                    aria-hidden="true"
+                  ></div>
+                  <h2 className="text-3xl align-middle justify-center inline-flex font-bold text-dailies">
+                    Parties Recruiting
+                  </h2>
+                  <div
+                    className="border-t-2 border-dailies-dark flex-grow mt-2 ml-3"
+                    aria-hidden="true"
+                  ></div>
+                </div>
+                {/* {recruitingParties ? (
                 <Kanban recruitingParties={recruitingParties} />
               ) : null} */}
-              {recruitingParties ? (
-                <RecruitingBoard recruitingParties={recruitingParties} />
-              ) : null}
-            </section>
+                {recruitingParties ? (
+                  <RecruitingBoard recruitingParties={recruitingParties} />
+                ) : null}
+              </section>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      {createParty ? <ModalParty setCreateParty={setCreateParty} /> : null}
+    </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  // Get the user's session based on the request
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { user },
+  }
 }
