@@ -72,7 +72,16 @@ export default function RecruitingBoard({ recruitingParties }) {
                 selectTab(i);
               }}
             >
-              {tab}
+              {tab} <div
+                      className={
+                        'text-white ml-1 text-center inline-flex items-center justify-center relative leading-tight font-bold text-sm ' +
+                        (i === selectedTab
+                          ? 'border-white'
+                          : 'text-dailies border-dailies-dark')
+                      }
+                    >
+                      {recruitingParties.filter(d => d.challenge === i+1).length}
+                    </div>
             </button>
           ))}
         </div>
