@@ -110,7 +110,7 @@ export default function partyDetail() {
   async function loadPartyDetails() {
     setPartyPlayers(await fetchPartyPlayers(party.id));
     setDailyTarget(party.daily_target);
-    setDue_Date(party.due_date);
+    setDue_Date(moment(party.due_date).local().format('YYYY-MM-DDTHH:mm:ss'));
   }
 
   async function savePartyDetails(target, deadline) {
@@ -132,7 +132,7 @@ export default function partyDetail() {
         const { data, error } = await supabase
           .from('party')
           .update({
-            due_date: deadline
+            due_date: deadline + (moment().format('Z'))
           })
           .eq('id', party.id);
 
@@ -281,7 +281,8 @@ export default function partyDetail() {
       const { data, error } = await supabase
         .from('party')
         .update({
-          status: 2
+          status: 2,
+          start_date: moment().local().format('YYYY-MM-DDTHH:mm:ssZ')
         })
         .eq('id', party.id);
 
@@ -464,7 +465,7 @@ export default function partyDetail() {
                         <>
                           <div className="flex flex-col gap-5">
                             <div className="grid grid-cols-2 gap-5">
-                              <div>
+                              <div className="col-span-2 sm:col-span-1">
                                 <div className="mb-2 font-semibold">
                                   🎯 Daily Target{' '}
                                   <span className="text-accents-4 text-xs">
@@ -499,7 +500,7 @@ export default function partyDetail() {
                                 </div>
                               </div>
 
-                              <div>
+                              <div className="col-span-2 sm:col-span-1">
                                 <div className="mb-2 font-semibold">
                                   📅 Deadline{' '}
                                   <span className="text-accents-4 text-xs">
@@ -791,7 +792,8 @@ export default function partyDetail() {
                           setCumulativeWins={setCumulativeWins}
                           cumulativeEXP={cumulativeEXP}
                           setCumulativeEXP={setCumulativeEXP}
-                          state={party.status}
+                          party={party}
+                          
                         />
                       ))
                     : null}
