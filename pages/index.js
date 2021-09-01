@@ -164,7 +164,7 @@ export default function HomePage() {
                       Season 1 Statistics
                     </h1>
                     <p className="text-sm text-accents-3 font-semibold">
-                      July 1 - September 31
+                      July 1 - September 30
                     </p>
                     <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <LeaderboardStatistics
