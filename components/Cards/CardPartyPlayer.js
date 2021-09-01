@@ -1,26 +1,31 @@
 import { downloadImage } from '@/utils/downloadImage';
 import { useState, useEffect } from 'react';
-import { fetchSpecificWins } from '../Fetch/fetchMaster';
+import { fetchSpecificWins, fetchWinsPastDate } from '../Fetch/fetchMaster';
 import LoadingDots from '../ui/LoadingDots';
 
-export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeWins, cumulativeEXP, setCumulativeEXP, state }) {
+export default function CardPartyPlayer({
+  player,
+  cumulativeWins,
+  setCumulativeWins,
+  cumulativeEXP,
+  setCumulativeEXP,
+  party
+}) {
   const [openTab, setOpenTab] = useState(1);
   const [avatarURL, setAvatarURL] = useState(null);
   const [wins, setWins] = useState(null);
   const [backgroundUrl, setBackgroundUrl] = useState(
     '/background/cityscape.jpg'
   );
-  const [dragonBGUrl, setDragonBGUrl] = useState(
-    '/challenge/skyrim.jpg'
-  );
-  const [totalGold_Reward, setTotalGold_Reward] = useState(null)
-  const [totalEXP_Reward, setTotalEXP_Reward] = useState(null)
+  const [dragonBGUrl, setDragonBGUrl] = useState('/challenge/skyrim.jpg');
+  const [totalGold_Reward, setTotalGold_Reward] = useState(null);
+  const [totalEXP_Reward, setTotalEXP_Reward] = useState(null);
 
   const health = player.health * 10;
 
   useEffect(() => {
     loadAvatarURL();
-    if (state != 1) loadWins();
+    if (party.status != 1) loadWins();
     if (player.background_url) loadBackgroundURL();
     if (player.dragon_bg_url) loadDragonBGURL();
   }, []);
@@ -41,25 +46,23 @@ export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeW
     setDragonBGUrl(await downloadImage(player.dragon_bg_url, 'background'));
   }
 
-
   async function loadWins() {
-    setWins(await fetchSpecificWins(player.notion_page_id));
+    if(party.challenge == 1) setWins(await fetchWinsPastDate(player.player, party.start_date));
+    if(party.challenge == 2) setWins(await fetchSpecificWins(player.notion_page_id, party.start_date));
   }
 
   useEffect(() => {
-    if (wins) setTotalGold_Reward(wins.reduce(
-      (a, v) => (a = a + v.gold_reward),
-      0
-    ))
-    if (wins) setTotalEXP_Reward(wins.reduce(
-      (a, v) => (a = a + v.exp_reward),
-      0
-    ))
+    if (wins)
+      setTotalGold_Reward(wins.reduce((a, v) => (a = a + v.gold_reward), 0));
+    if (wins)
+      setTotalEXP_Reward(wins.reduce((a, v) => (a = a + v.exp_reward), 0));
   }, [wins]);
 
   useEffect(() => {
-    if (totalGold_Reward) setCumulativeWins(cumulativeWins => [...cumulativeWins,wins.length] );
-    if (totalEXP_Reward) setCumulativeEXP(cumulativeEXP => [...cumulativeEXP,totalEXP_Reward] );
+    if (totalGold_Reward)
+      setCumulativeWins((cumulativeWins) => [...cumulativeWins, wins.length]);
+    if (totalEXP_Reward)
+      setCumulativeEXP((cumulativeEXP) => [...cumulativeEXP, totalEXP_Reward]);
   }, [totalEXP_Reward]);
 
   return (
@@ -161,18 +164,38 @@ export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeW
                   <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
                     <h5 className="text-emerald-400 uppercase font-bold text-xs mb-1">
                       Status:
-                      <span className={`text-xs ml-1 font-semibold inline-block py-0.5 px-1.5 uppercase rounded ${player.status == 'Fighting' ? 'text-indigo-600 bg-indigo-200' : player.status == 'Need Healing' ? 'text-red-600 bg-red-200' : 'text-emerald-600 bg-emerald-200'}`}>
+                      <span
+                        className={`text-xs ml-1 font-semibold inline-block py-0.5 px-1.5 uppercase rounded ${
+                          player.status == 'Fighting'
+                            ? 'text-indigo-600 bg-indigo-200'
+                            : player.status == 'Need Healing'
+                            ? 'text-red-600 bg-red-200'
+                            : 'text-emerald-600 bg-emerald-200'
+                        }`}
+                      >
                         {player.status}
                       </span>
                     </h5>
+                    {party.challenge == 1 ? null : party.challenge == 2 ?
+                    <>
                     <p className="font-semibold text-xl text-white-700 truncate">
-                      {player.notion_page_name ? player.notion_page_name : 'Undefined'}
+                      {player.notion_page_name
+                        ? player.notion_page_name
+                        : 'Undefined'}
                     </p>
                     <p className="text-xs font-semibold text-accents-3">
                       {player.notion_page_id ? (
-                        <span>Page ID: {player.notion_page_id}</span>
+                        <a
+                          href={`https://notion.so/${player.notion_page_id.replaceAll(
+                            '-',
+                            ''
+                          )}`}
+                          target="_blank"
+                        >
+                          Page ID: {player.notion_page_id}
+                        </a>
                       ) : null}
-                    </p>
+                    </p> </> : null}
                     <div className="flex flex-row items-center gap-4">
                       <div
                         variant="slim"
@@ -257,9 +280,7 @@ export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeW
                     ? 'border-white'
                     : 'text-blueGray-600 border-blueGray-600')
                 }
-              >
-                
-              </div>
+              ></div>
             </a>
           </li>
         </ul>
@@ -270,9 +291,7 @@ export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeW
           {wins
             ? wins.map((win, i) => (
                 <div className="relative text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
-                  <p className="truncate w-full">
-                    {win.name}
-                  </p>
+                  <p className="truncate w-full">{win.name}</p>
                   <div className="flex flex-row mt-1">
                     <span className="text-xs font-semibold py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200">
                       +{win.gold_reward} 💰{' '}
@@ -304,9 +323,7 @@ export default function CardPartyPlayer({ player, cumulativeWins, setCumulativeW
             </div>
           </div> */}
           <div className="text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-yellow-100 text-yellow-700 border-yellow-500">
-            <p className="truncate w-full text-center">
-              Feature Coming Soon!
-            </p>
+            <p className="truncate w-full text-center">Feature Coming Soon!</p>
           </div>
         </div>
       </div>
