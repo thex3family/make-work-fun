@@ -83,25 +83,35 @@ export default function RecruitingBoard({ recruitingParties }) {
                 {/* {tabs[selectedTab] + ' ' + section} */}
               </section>
               <div className={style.row}>
-                <button
-                  onClick={() => scroll(`left`, i)}
-                  className={style.scroll}
-                >{`<`}</button>
+                {recruitingParties.length > 3 ? (
+                  <button
+                    onClick={() => scroll(`left`, i)}
+                    className={style.scroll}
+                  >
+                    <i className="far fa-caret-square-left" />
+                  </button>
+                ) : null}
                 <div className={style.partyList}>
                   <div className="flex">
                     {/* {recruitingParties.map((e) => (
                       <CardPartyRecruit className={style.card} {...e} />
                     ))} */}
 
-                    {recruitingParties.map((party, i) => (
-                      <CardPartyRecruit key={i} party={party} />
-                    ))}
+                    {recruitingParties.map((party, i) =>
+                      party.challenge == selectedTab + 1 ? (
+                        <CardPartyRecruit key={i} party={party} />
+                      ) : null
+                    )}
                   </div>
                 </div>
-                <button
-                  onClick={() => scroll(`right`, i)}
-                  className={style.scroll}
-                >{`>`}</button>
+                {recruitingParties.length > 3 ? (
+                  <button
+                    onClick={() => scroll(`right`, i)}
+                    className={style.scroll}
+                  >
+                    <i className="far fa-caret-square-right" />
+                  </button>
+                ) : null}
               </div>
             </>
           ))}
