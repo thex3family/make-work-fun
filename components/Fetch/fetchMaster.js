@@ -376,11 +376,13 @@ export async function fetchPlayers(setPlayers) {
   }
 }
 
+// may not need this
 export async function fetchPartyPlayers(party_id) {
   try {
     const { data, error } = await supabase
       .from('party_member_details')
       .select('*')
+      .order('role')
       .eq('party_id', party_id);
 
     if (data) {
@@ -573,7 +575,8 @@ export async function fetchPartyMembers(party_id){
           newData[i] = {
             ...oldData,
             avatar_url: (oldData.avatar_url ? await downloadImage(oldData.avatar_url, 'avatar') : null),
-            background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null)
+            background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null),
+            dragon_bg_url: (oldData.dragon_bg_url ? await downloadImage(oldData.dragon_bg_url, 'background') : null)
           };
         }
         return newData;
