@@ -172,7 +172,7 @@ export default function partyDetail() {
   useEffect(() => {
     if (partyPlayers){
       setSpecificPartyPlayer(partyPlayers.find((x) => x.player === user.id));
-      if (partyPlayers.filter((d) => d.status === "Not Ready").length = 0){
+      if (partyPlayers.filter((d) => d.status === "Not Ready").length == 0){
         setAllMembersReady(true) 
       } else {
         setAllMembersReady(false)
