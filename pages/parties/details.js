@@ -364,7 +364,7 @@ export default function partyDetail() {
                       {party.description}
                     </p>
                     {specificPartyPlayer ? (
-                      specificPartyPlayer.role == 'Party Leader' ? (
+                      specificPartyPlayer.role == 'Party Leader' && party.status == 1 ? (
                         <div className="inline-block mx-auto md:mx-0 mt-5">
                           {/* <a href="https://makeworkfun.club" target="_blank">
                       <Button
