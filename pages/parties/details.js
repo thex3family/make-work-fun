@@ -481,7 +481,7 @@ export default function partyDetail() {
                                       onChange={setDailyTarget}
                                       disabled={
                                         specificPartyPlayer.role !=
-                                        'Party Leader'
+                                        'Party Leader' && party.status == 1 || party.status > 1
                                       }
                                     />
                                   </div>
@@ -492,7 +492,8 @@ export default function partyDetail() {
                                       savePartyDetails(dailyTarget)
                                     }
                                     disabled={
-                                      specificPartyPlayer.role != 'Party Leader'
+                                      specificPartyPlayer.role !=
+                                      'Party Leader' && party.status == 1 || party.status > 1
                                     }
                                   >
                                     Save
@@ -516,7 +517,7 @@ export default function partyDetail() {
                                       onChange={setDue_Date}
                                       disabled={
                                         specificPartyPlayer.role !=
-                                        'Party Leader'
+                                        'Party Leader' && party.status == 1 || party.status > 1
                                       }
                                     />
                                   </div>
@@ -527,7 +528,7 @@ export default function partyDetail() {
                                       savePartyDetails(null, due_date)
                                     }
                                     disabled={
-                                      specificPartyPlayer.role != 'Party Leader'
+                                      specificPartyPlayer.role != 'Party Leader' && party.status == 1 || party.status > 1
                                     }
                                   >
                                     Save
@@ -596,7 +597,8 @@ export default function partyDetail() {
                                 </>
                               )}
                             </div>
-                            {specificPartyPlayer ? (
+                            {party.status == 1 ?
+                            specificPartyPlayer ? (
                               specificPartyPlayer.role == 'Party Leader' ? (
                                 <Button
                                   className="mt-3"
@@ -618,7 +620,7 @@ export default function partyDetail() {
                                   I'm Ready!
                                 </Button>
                               )
-                            ) : null}
+                            ) : null : null }
                             <div className="text-center text-accents-4 text-sm">
                               You won't be able to change your details once the
                               party quest starts.
