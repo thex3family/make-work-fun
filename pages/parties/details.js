@@ -9,7 +9,9 @@ import {
   fetchLatestWin,
   fetchPlayerStats,
   fetchWins,
-  fetchPartyPlayers
+  fetchPartyPlayers,
+  fetchWinsPastDate,
+  fetchSpecificWins
 } from '@/components/Fetch/fetchMaster';
 import CardPartyPlayer from '@/components/Cards/CardPartyPlayer';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
@@ -42,6 +44,7 @@ export default function partyDetail() {
   const [showDetails, setShowDetails] = useState(true);
 
   const [dailyTarget, setDailyTarget] = useState(null);
+  const [dailyTarget_Achieved, setDailyTarget_Achieved] = useState(null);
   const [due_date, setDue_Date] = useState(null);
   const [dragon_name, setDragonName] = useState(null);
   const [dragon_id, setDragonID] = useState(null);
@@ -111,6 +114,8 @@ export default function partyDetail() {
     setPartyPlayers(await fetchPartyPlayers(party.id));
     setDailyTarget(party.daily_target);
     setDue_Date(moment(party.due_date).local().format('YYYY-MM-DDTHH:mm:ss'));
+    if(party.challenge == 1) setDailyTarget_Achieved(await fetchWinsPastDate(user.id, moment().local().format('YYYY-MM-DD')));
+    if(party.challenge == 2) setDailyTarget_Achieved(await fetchSpecificWins(dragon_id, moment().local().format('YYYY-MM-DD')));
   }
 
   async function savePartyDetails(target, deadline) {
@@ -132,7 +137,7 @@ export default function partyDetail() {
         const { data, error } = await supabase
           .from('party')
           .update({
-            due_date: deadline + (moment().format('Z'))
+            due_date: deadline + moment().format('Z')
           })
           .eq('id', party.id);
 
@@ -401,14 +406,16 @@ export default function partyDetail() {
                                   </div>
                                 </div>
                               </div> */}
-                              <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                          <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             STATUS: In Recruitment
                           </h1>
                           <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             <Countdown date={'2021-07-02T21:00:00-05:00'} />
                           </h1>
                           <div className="text-center text-accents-4 text-sm max-w-sm">
-                            The challenge can begin when all members are ready and the party leader starts! Confirm your loadout below.
+                            The challenge can begin when all members are ready
+                            and the party leader starts! Confirm your loadout
+                            below.
                           </div>
                         </>
                       ) : (
@@ -480,8 +487,10 @@ export default function partyDetail() {
                                       value={dailyTarget || ''}
                                       onChange={setDailyTarget}
                                       disabled={
-                                        specificPartyPlayer.role !=
-                                        'Party Leader' && party.status == 1 || party.status > 1
+                                        (specificPartyPlayer.role !=
+                                          'Party Leader' &&
+                                          party.status == 1) ||
+                                        party.status > 1
                                       }
                                     />
                                   </div>
@@ -492,8 +501,10 @@ export default function partyDetail() {
                                       savePartyDetails(dailyTarget)
                                     }
                                     disabled={
-                                      specificPartyPlayer.role !=
-                                      'Party Leader' && party.status == 1 || party.status > 1
+                                      (specificPartyPlayer.role !=
+                                        'Party Leader' &&
+                                        party.status == 1) ||
+                                      party.status > 1
                                     }
                                   >
                                     Save
@@ -516,8 +527,10 @@ export default function partyDetail() {
                                       value={due_date || ''}
                                       onChange={setDue_Date}
                                       disabled={
-                                        specificPartyPlayer.role !=
-                                        'Party Leader' && party.status == 1 || party.status > 1
+                                        (specificPartyPlayer.role !=
+                                          'Party Leader' &&
+                                          party.status == 1) ||
+                                        party.status > 1
                                       }
                                     />
                                   </div>
@@ -528,7 +541,10 @@ export default function partyDetail() {
                                       savePartyDetails(null, due_date)
                                     }
                                     disabled={
-                                      specificPartyPlayer.role != 'Party Leader' && party.status == 1 || party.status > 1
+                                      (specificPartyPlayer.role !=
+                                        'Party Leader' &&
+                                        party.status == 1) ||
+                                      party.status > 1
                                     }
                                   >
                                     Save
@@ -597,30 +613,31 @@ export default function partyDetail() {
                                 </>
                               )}
                             </div>
-                            {party.status == 1 ?
-                            specificPartyPlayer ? (
-                              specificPartyPlayer.role == 'Party Leader' ? (
-                                <Button
-                                  className="mt-3"
-                                  variant="prominent"
-                                  onClick={() => startChallenge()}
-                                >
-                                  Start Party Quest
-                                </Button>
-                              ) : (
-                                <Button
-                                  className="mt-3"
-                                  variant="prominent"
-                                  onClick={() => changePlayerStatus('Ready')}
-                                  disabled={
-                                    specificPartyPlayer.status == 'Ready'
-                                  }
-                                >
-                                  <i className="fas fa-check mr-2" />
-                                  I'm Ready!
-                                </Button>
-                              )
-                            ) : null : null }
+                            {party.status == 1 ? (
+                              specificPartyPlayer ? (
+                                specificPartyPlayer.role == 'Party Leader' ? (
+                                  <Button
+                                    className="mt-3"
+                                    variant="prominent"
+                                    onClick={() => startChallenge()}
+                                  >
+                                    Start Party Quest
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    className="mt-3"
+                                    variant="prominent"
+                                    onClick={() => changePlayerStatus('Ready')}
+                                    disabled={
+                                      specificPartyPlayer.status == 'Ready'
+                                    }
+                                  >
+                                    <i className="fas fa-check mr-2" />
+                                    I'm Ready!
+                                  </Button>
+                                )
+                              ) : null
+                            ) : null}
                             <div className="text-center text-accents-4 text-sm">
                               You won't be able to change your details once the
                               party quest starts.
@@ -672,7 +689,7 @@ export default function partyDetail() {
                                 <i className="fas fa-retweet" />
                                 <div className="flex flex-row mt-1">
                                   <span className="text-xs sm:text-sm font-semibold py-1 px-2 uppercase rounded-full text-emerald-700 bg-emerald-200 border border-emerald-500">
-                                    0 / {dailyTarget}
+                                    {dailyTarget_Achieved ? dailyTarget_Achieved.length : 0} / {dailyTarget}
                                   </span>
                                 </div>
                               </p>
@@ -697,10 +714,10 @@ export default function partyDetail() {
                                 </div>
                               </div>
                               <div className="w-1/3 bg-dailies-light border-l-2 border-emerald-500 flex justify-center items-center px-2">
-                                <p className="text-sm text-center text-emerald-600">
+                                {/* <p className="text-sm text-center text-emerald-600">
                                   In Progress
-                                </p>
-                                {/* <Button variant="prominent">Claim</Button> */}
+                                </p> */}
+                                <Button variant="prominent" onClick={()=>claimReward('Hit Daily Target', '1', '50')}>Claim</Button>
                               </div>
                             </div>
                           </div>
@@ -765,11 +782,11 @@ export default function partyDetail() {
               </div>
             </div>
           </div>
-              <h1 className="animate-fade-in-up  text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 p-3 sm:p-4">
-                Leaderboard 🏆
-              </h1>
-              <div className="mx-5">
-                {/* <div className="grid grid-cols-3 mt-8 items-center gap-3">
+          <h1 className="animate-fade-in-up  text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 p-3 sm:p-4">
+            Leaderboard 🏆
+          </h1>
+          <div className="mx-5">
+            {/* <div className="grid grid-cols-3 mt-8 items-center gap-3">
               <div className="col-span-2">
                 <Input
                   className="text-xl font-semibold rounded"
@@ -784,23 +801,22 @@ export default function partyDetail() {
                 Copy Embed Link
               </Button>
             </div> */}
-                <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 overflow-x-auto flex-nowrap lg:justify-center">
-                  {partyPlayers
-                    ? partyPlayers.map((player, i) => (
-                        <CardPartyPlayer
-                          key={i}
-                          player={player}
-                          cumulativeWins={cumulativeWins}
-                          setCumulativeWins={setCumulativeWins}
-                          cumulativeEXP={cumulativeEXP}
-                          setCumulativeEXP={setCumulativeEXP}
-                          party={party}
-                          
-                        />
-                      ))
-                    : null}
-                </div>
-              </div>
+            <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 overflow-x-auto flex-nowrap lg:justify-center">
+              {partyPlayers
+                ? partyPlayers.map((player, i) => (
+                    <CardPartyPlayer
+                      key={i}
+                      player={player}
+                      cumulativeWins={cumulativeWins}
+                      setCumulativeWins={setCumulativeWins}
+                      cumulativeEXP={cumulativeEXP}
+                      setCumulativeEXP={setCumulativeEXP}
+                      party={party}
+                    />
+                  ))
+                : null}
+            </div>
+          </div>
         </section>
         {/* level up modal */}
         {levelUp ? (
