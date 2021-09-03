@@ -11,6 +11,7 @@ import Input from '@/components/ui/Input';
 import { supabase } from '@/utils/supabase-client';
 import { table, minifyRecords } from '@/utils/airtable';
 import ConnectNotion from '@/components/API/ConnectNotion';
+import { fetchNotionCredentials } from '@/components/Fetch/fetchMaster';
 
 function Card({ title, description, footer, children }) {
   return (
@@ -69,28 +70,7 @@ export default function Account({ initialPurchaseRecord }) {
   }
 
   async function getNotionCredentials() {
-    try {
-      // setLoading(true);
-      // const user = supabase.auth.user();
-
-      let { data, error, status } = await supabase
-        .from('notion_credentials')
-        .select(`*`)
-        .eq('player', user.id)
-        .order('id', { ascending: true });
-
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (data) {
-        setNotionCredentials(data);
-      }
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      // setLoading(false);
-    }
+    setNotionCredentials(await fetchNotionCredentials());
   }
 
   async function updateProfile({ full_name }) {
@@ -429,7 +409,7 @@ export default function Account({ initialPurchaseRecord }) {
                       setShowSaveModal={setShowSaveModal}
                     />
                   ))
-                : null}
+                : <LoadingDots/>}
               {notionCredentials ? (
                 notionCredentials.length < 5 ? (
                   <div className="flex items-center my-6">

@@ -28,6 +28,7 @@ import PartyStatistics from '@/components/Widgets/Statistics/PartyStatistics';
 import AvatarPlayer from '@/components/Avatars/AvatarPlayer';
 import moment from 'moment';
 import ModalParty from '@/components/Modals/ModalParty';
+import ValidateDragon from '@/components/Modals/ModalValidateDragon';
 
 export default function partyDetail() {
   const [loading, setLoading] = useState(true);
@@ -58,6 +59,7 @@ export default function partyDetail() {
   const [cumulativeEXP, setCumulativeEXP] = useState([0]);
 
   const [editParty, setEditParty] = useState(null);
+  const [showValidateDragon, setShowValidateDragon] = useState(null);
 
   const notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
   const notionID = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
@@ -275,10 +277,13 @@ export default function partyDetail() {
         setDragonID(database_id);
       }
       if (database_id.match(notionID)) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('party_members')
           .update({ notion_page_id: database_id })
-          .eq('id', specificPartyPlayer.party_id);
+          .eq('id', specificPartyPlayer.party_member_id)
+
+          console.log('error', data, error)
+          setShowValidateDragon(true);
 
         if (error && status !== 406) {
           throw error;
@@ -637,7 +642,7 @@ export default function partyDetail() {
                                     variant="prominent"
                                     onClick={() => startChallenge()}
                                     disabled={
-                                      party.challenge == 2 && !dragon_id
+                                      party.challenge == 2 && !specificPartyPlayer.status == 'Ready'
                                     }
                                   >
                                     Start Party Quest
@@ -865,28 +870,32 @@ export default function partyDetail() {
           </>
         ) : null}
 
-        {editParty ? <ModalParty setCreateParty={setEditParty} party={party} /> : null}
+        {editParty ? (
+          <ModalParty setCreateParty={setEditParty} party={party} />
+        ) : null}
+        {showValidateDragon ?
+        <ValidateDragon specificPartyPlayer = {specificPartyPlayer} setShowValidateDragon = {setShowValidateDragon}/> : null }
       </>
     );
   }
-  return (<section className="justify-center">
-  <div className="animate-fade-in-up max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-    <div className="pb-10">
-      <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-        Party Not Found
-      </h1>
-      <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-      Looks like we stumbled into unknown territory here.
-      </p>
+  return (
+    <section className="justify-center">
+      <div className="animate-fade-in-up max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+        <div className="pb-10">
+          <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+            Party Not Found
+          </h1>
+          <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
+            Looks like we stumbled into unknown territory here.
+          </p>
+        </div>
+        <img className="w-3/5 m-auto" src="/img/notfound.png" />
+        <Link href="/parties">
+          <Button className="w-auto mx-auto my-10" variant="prominent">
+            Explore All Parties
+          </Button>
+        </Link>
       </div>
-      <img className="w-3/5 m-auto" src='/img/notfound.png'/>
-      <Link href="/parties">
-      <Button className="w-auto mx-auto my-10"
-        variant="prominent"
-        >
-        Explore All Parties
-    </Button>
-    </Link>
-      </div>
-      </section>);
+    </section>
+  );
 }
