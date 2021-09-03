@@ -3,7 +3,7 @@ import Button from '@/components/ui/Button';
 import { useState, useEffect } from 'react';
 import { fetchPartyMembers } from '../Fetch/fetchMaster';
 
-export default function CardPartyRecruit({party}) {
+export default function CardPartyRecruit({party, partyLimit}) {
   
   const [partyMembers, setPartyMembers] = useState(null);
 
@@ -74,7 +74,7 @@ export default function CardPartyRecruit({party}) {
               </div>
             <Button
               variant="prominent"
-              disabled={false}
+              disabled={partyLimit}
               className="w-24 animate-fade-in-up text-center font-bold mx-auto"
             >
               Apply
