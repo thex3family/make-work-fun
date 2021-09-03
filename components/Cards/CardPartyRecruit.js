@@ -2,10 +2,13 @@ import React from 'react';
 import Button from '@/components/ui/Button';
 import { useState, useEffect } from 'react';
 import { fetchPartyMembers } from '../Fetch/fetchMaster';
+import { supabase } from '@/utils/supabase-client';
+import { useRouter } from 'next/router';
 
 export default function CardPartyRecruit({party, partyLimit}) {
   
   const [partyMembers, setPartyMembers] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     getPartyMembers();
@@ -13,6 +16,28 @@ export default function CardPartyRecruit({party, partyLimit}) {
 
   async function getPartyMembers(){
     setPartyMembers(await fetchPartyMembers(party.id));
+  }
+
+  async function joinParty(){
+    // this should insert a row into the party members table
+
+    try {
+      const user = supabase.auth.user();
+
+      const { data, error } = await supabase.from('party_members').insert([
+        {
+          party_id: party.id,
+          player: user.id,
+          role: 'Adventurer'
+        }
+      ]);
+      router.push('/parties/details?id='+party.slug)
+
+    } catch (error) {
+      alert(error.message);
+    } finally {
+    }
+
   }
 
   const style = {
@@ -76,6 +101,7 @@ export default function CardPartyRecruit({party, partyLimit}) {
               variant="prominent"
               disabled={partyLimit}
               className="w-24 animate-fade-in-up text-center font-bold mx-auto"
+              onClick={()=>joinParty()}
             >
               Apply
             </Button>

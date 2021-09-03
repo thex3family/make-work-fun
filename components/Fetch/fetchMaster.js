@@ -382,7 +382,7 @@ export async function fetchPartyPlayers(party_id) {
     const { data, error } = await supabase
       .from('party_member_details')
       .select('*')
-      .order('role')
+      .order('role', { ascending: false })
       .eq('party_id', party_id);
 
     if (data) {
@@ -564,7 +564,7 @@ export async function fetchPartyMembers(party_id){
       .select(
         '*'
       )
-      .order('role')
+      .order('role', { ascending: false })
       .eq('party_id', party_id);
 
     if (data){
