@@ -15,6 +15,7 @@ import {
 import { downloadImage } from '@/utils/downloadImage';
 import ModalParty from '@/components/Modals/ModalParty';
 import LoadingDots from '@/components/ui/LoadingDots';
+import Button from '@/components/ui/Button';
 
 export default function parties() {
   const [activeParties, setActiveParties] = useState(null);
@@ -223,13 +224,26 @@ export default function parties() {
               </p>
             </div>
             <div className="text-center mb-5">
-              <button
+              <Button
                 onClick={() => setCreateParty(true)}
-                className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded"
+                className="px-5 font-bold py-2 rounded"
+                variant="dailies"
+                disabled={
+                  playerStats
+                    ? !playerStats.role.includes('Party Leader')
+                    : true
+                }
               >
                 <i className="text-yellow-500 fas fa-crown mr-2" />
                 Create Party
-              </button>
+              </Button>
+              {playerStats ? (
+                !playerStats.role.includes('Party Leader') ? (
+                  <div className="mt-1 text-xs text-accents-3">
+                    Party Leaders Only!
+                  </div>
+                ) : null
+              ) : null}
             </div>
             <div className="text-center">
               <section className="mb-8">

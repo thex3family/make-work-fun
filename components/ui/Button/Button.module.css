@@ -28,6 +28,11 @@
   @apply bg-gradient-to-r from-emerald-500 to-blue-500 border-emerald-500 text-white;
 }
 
+.dailies {
+  @apply py-2 transform-none normal-case;
+  @apply border-dailies-dark text-dailies bg-dailies-light border-2;
+}
+
 .incognito {
   @apply py-2 transform-none normal-case;
   @apply bg-primary-2 text-white border border-white;
