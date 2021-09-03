@@ -223,7 +223,10 @@ export default function parties() {
               </p>
             </div>
             <div className="text-center mb-5">
-              <button onClick={()=>setCreateParty(true)} className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded">
+              <button
+                onClick={() => setCreateParty(true)}
+                className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded"
+              >
                 <i className="text-yellow-500 fas fa-crown mr-2" />
                 Create Party
               </button>
@@ -276,8 +279,13 @@ export default function parties() {
                 {/* {recruitingParties ? (
                 <Kanban recruitingParties={recruitingParties} />
               ) : null} */}
-                {recruitingParties ? (
-                  <RecruitingBoard recruitingParties={recruitingParties} />
+                {recruitingParties && activeParties ? (
+                  <RecruitingBoard
+                    recruitingParties={recruitingParties}
+                    activePartiesID={activeParties.map(function (el) {
+                      return el.id;
+                    })}
+                  />
                 ) : null}
               </section>
             </div>
@@ -297,12 +305,12 @@ export async function getServerSideProps({ req }) {
     return {
       redirect: {
         destination: '/signin',
-        permanent: false,
-      },
-    }
+        permanent: false
+      }
+    };
   }
 
   return {
-    props: { user },
-  }
+    props: { user }
+  };
 }

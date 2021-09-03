@@ -2,7 +2,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import CardPartyRecruit from '@/components/Cards/CardPartyRecruit';
 
-export default function RecruitingBoard({ recruitingParties }) {
+export default function RecruitingBoard({ recruitingParties, activePartiesID }) {
+  console.log(activePartiesID)
   const style = {
     bg: `bg-dailies-default`,
     main: `w-full mt-4`,
@@ -80,7 +81,7 @@ export default function RecruitingBoard({ recruitingParties }) {
                           : 'text-dailies border-dailies-dark')
                       }
                     >
-                      {recruitingParties.filter(d => d.challenge === i+1).length}
+                      {recruitingParties.filter(d => d.challenge === i+1 && !activePartiesID.includes(d.id)).length}
                     </div>
             </button>
           ))}
@@ -107,7 +108,7 @@ export default function RecruitingBoard({ recruitingParties }) {
                     ))} */}
 
                     {recruitingParties.map((party, i) =>
-                      party.challenge == selectedTab + 1 ? (
+                      party.challenge == selectedTab + 1 && !activePartiesID.includes(party.id) ? (
                         <CardPartyRecruit key={i} party={party} />
                       ) : null
                     )}

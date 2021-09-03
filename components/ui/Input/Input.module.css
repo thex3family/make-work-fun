@@ -11,5 +11,5 @@
 }
 
 .dailies {
-  @apply bg-white text-black py-1.5;
+  @apply bg-white text-black;
 }
