@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import s from './Countdown.module.css';
+import Router from 'next/router';
 
 /**
  * Note : 
@@ -86,6 +87,7 @@ class Countdown extends Component {
     
     if(countDown.days == 0 && countDown.hours == 0 && countDown.min == 0 && countDown.sec == 1 ){
       console.log("It's midnight! Refresh the page.")
+      Router.reload(window.location.pathname)
       console.log(countDown)
     }
 
