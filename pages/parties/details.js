@@ -26,6 +26,7 @@ import { supabase } from '@/utils/supabase-client';
 import PartyStatistics from '@/components/Widgets/Statistics/PartyStatistics';
 import AvatarPlayer from '@/components/Avatars/AvatarPlayer';
 import moment from 'moment';
+import ModalParty from '@/components/Modals/ModalParty';
 
 export default function partyDetail() {
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,8 @@ export default function partyDetail() {
 
   const [cumulativeWins, setCumulativeWins] = useState([0]);
   const [cumulativeEXP, setCumulativeEXP] = useState([0]);
+
+  const [createParty, setCreateParty] = useState(null);
 
   const notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
   const notionID = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
@@ -114,8 +117,17 @@ export default function partyDetail() {
     setPartyPlayers(await fetchPartyPlayers(party.id));
     setDailyTarget(party.daily_target);
     setDue_Date(moment(party.due_date).local().format('YYYY-MM-DDTHH:mm:ss'));
-    if(party.challenge == 1) setDailyTarget_Achieved(await fetchWinsPastDate(user.id, moment().local().format('YYYY-MM-DD')));
-    if(party.challenge == 2) setDailyTarget_Achieved(await fetchSpecificWins(dragon_id, moment().local().format('YYYY-MM-DD')));
+    if (party.challenge == 1)
+      setDailyTarget_Achieved(
+        await fetchWinsPastDate(user.id, moment().local().format('YYYY-MM-DD'))
+      );
+    if (party.challenge == 2)
+      setDailyTarget_Achieved(
+        await fetchSpecificWins(
+          dragon_id,
+          moment().local().format('YYYY-MM-DD')
+        )
+      );
   }
 
   async function savePartyDetails(target, deadline) {
@@ -345,8 +357,10 @@ export default function partyDetail() {
                     <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl pr-2">
                       {party.description}
                     </p>
-                    <div className="inline-block mx-auto md:mx-0 mt-5">
-                      {/* <a href="https://makeworkfun.club" target="_blank">
+                    {specificPartyPlayer ? (
+                      specificPartyPlayer.role == 'Party Leader' ? (
+                        <div className="inline-block mx-auto md:mx-0 mt-5">
+                          {/* <a href="https://makeworkfun.club" target="_blank">
                       <Button
                         className="w-auto mx-auto mr-5 my-4"
                         variant="incognito"
@@ -354,15 +368,16 @@ export default function partyDetail() {
                         See Progress
                       </Button>
                     </a> */}
-                      {/* <Link href="/player">
-                        <Button
-                          className="w-auto mx-auto md:mx-0"
-                          variant="prominent"
-                        >
-                          See Progress 🚀
-                        </Button>
-                      </Link> */}
-                    </div>
+                          <Button
+                            className="w-auto mx-auto md:mx-0"
+                            variant="prominent"
+                            onClick={() => setCreateParty(true)}
+                          >
+                            Edit Name
+                          </Button>
+                        </div>
+                      ) : null
+                    ) : null}
                   </div>
 
                   <div className="w-full md:w-3/5 py-6 text-center">
@@ -689,7 +704,10 @@ export default function partyDetail() {
                                 <i className="fas fa-retweet" />
                                 <div className="flex flex-row mt-1">
                                   <span className="text-xs sm:text-sm font-semibold py-1 px-2 uppercase rounded-full text-emerald-700 bg-emerald-200 border border-emerald-500">
-                                    {dailyTarget_Achieved ? dailyTarget_Achieved.length : 0} / {dailyTarget}
+                                    {dailyTarget_Achieved
+                                      ? dailyTarget_Achieved.length
+                                      : 0}{' '}
+                                    / {dailyTarget}
                                   </span>
                                 </div>
                               </p>
@@ -717,7 +735,14 @@ export default function partyDetail() {
                                 {/* <p className="text-sm text-center text-emerald-600">
                                   In Progress
                                 </p> */}
-                                <Button variant="prominent" onClick={()=>claimReward('Hit Daily Target', '1', '50')}>Claim</Button>
+                                <Button
+                                  variant="prominent"
+                                  onClick={() =>
+                                    claimReward('Hit Daily Target', '1', '50')
+                                  }
+                                >
+                                  Claim
+                                </Button>
                               </div>
                             </div>
                           </div>
@@ -835,6 +860,8 @@ export default function partyDetail() {
             />
           </>
         ) : null}
+
+        {createParty ? <ModalParty setCreateParty={setCreateParty} party={party} /> : null}
       </>
     );
   }
