@@ -104,7 +104,7 @@ export default function ModalParty({ setCreateParty, party }) {
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                 <h3 className="text-xl sm:text-2xl font-semibold text-white">
-                  Create Your Party
+                  {newParty ? 'Create' : 'Edit'} Your Party
                 </h3>
               </div>
               {/*body*/}
