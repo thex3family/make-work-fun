@@ -26,13 +26,13 @@ export default function CardPartyPlayer({
   useEffect(() => {
     loadAvatarURL();
     if (party.status != 1) loadWins();
-    if (player.background_url) loadBackgroundURL();
-    if (player.dragon_bg_url) loadDragonBGURL();
+    if (player.background_url) setBackgroundUrl(player.background_url);
+    if (player.dragon_bg_url) setDragonBGUrl(player.dragon_bg_url);
   }, []);
 
   async function loadAvatarURL() {
     if (player.avatar_url) {
-      setAvatarURL(await downloadImage(player.avatar_url, 'avatar'));
+      setAvatarURL(player.avatar_url);
     } else {
       setAvatarURL('Missing');
     }
