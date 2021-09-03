@@ -13,6 +13,7 @@ export default function ModalParty({ setCreateParty, party }) {
   const [partyChallenge, setPartyChallenge] = useState(1);
   const [newParty, setNewParty] = useState(true);
   const [saving, setSaving] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (party) loadPartyDetails();
@@ -62,10 +63,11 @@ export default function ModalParty({ setCreateParty, party }) {
             role: 'Party Leader'
           }
         ]);
+        router.push('/parties/details?id='+slug)
+
       } catch (error) {
         alert(error.message);
       } finally {
-        router.push('/parties/details?id='+slug)
         setSaving(false);
       }
     } else {
@@ -116,6 +118,7 @@ export default function ModalParty({ setCreateParty, party }) {
                       className="text-xl font-semibold rounded"
                       variant="dailies"
                       type="text"
+                      disabled={saving}
                       value={partyName || ''}
                       onChange={setPartyName}
                     />
@@ -133,6 +136,7 @@ export default function ModalParty({ setCreateParty, party }) {
                     <select
                       id="challenge"
                       name="challenge"
+                      disabled={saving}
                       className="text-xl font-semibold rounded py-2 px-3 w-full transition duration-150 ease-in-out border border-accents-3"
                       value={partyChallenge || ''}
                       onChange={(e) => {
@@ -149,6 +153,7 @@ export default function ModalParty({ setCreateParty, party }) {
                       className="text-xl font-semibold rounded"
                       type="text"
                       variant="dailies"
+                      disabled={saving}
                       value={partyDescription || ''}
                       onChange={setPartyDescription}
                     />

@@ -2,8 +2,11 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import CardPartyRecruit from '@/components/Cards/CardPartyRecruit';
 
-export default function RecruitingBoard({ recruitingParties, activePartiesID }) {
-  console.log(activePartiesID)
+export default function RecruitingBoard({
+  partyLimit,
+  recruitingParties,
+  activePartiesID
+}) {
   const style = {
     bg: `bg-dailies-default`,
     main: `w-full mt-4`,
@@ -30,7 +33,7 @@ export default function RecruitingBoard({ recruitingParties, activePartiesID }) 
     left: `font-bold bg-yellow-700`,
     right: `font-bold bg-yellow-700`,
     scroll: `font-bold p-1`,
-    partyList: `overflow-x-scroll sm:overflow-hidden flex party-list-box`
+    partyList: `overflow-x-scroll sm:overflow-hidden flex justify-center party-list-box w-full`
   };
   const tabs = [`⏱ Time Challenge`, `🐉 Slay Your Dragons`];
   const sections = [`Season Pass Completion`];
@@ -62,6 +65,39 @@ export default function RecruitingBoard({ recruitingParties, activePartiesID }) 
     }
     console.log(dir, out, scroll);
   };
+
+  const recruitingParties_1 = recruitingParties.filter(
+    (d) => d.challenge === 1 && !activePartiesID.includes(d.id)
+  );
+
+  const recruitingParties_2 = recruitingParties.filter(
+    (d) => d.challenge === 2 && !activePartiesID.includes(d.id)
+  );
+
+  const showParties = () => {
+    let parties;
+    if (selectedTab === 0) {
+      parties = recruitingParties_1
+    } 
+    if (selectedTab === 1) {
+      parties = recruitingParties_2
+    } 
+
+    console.log('parties', parties)
+    console.log('selectedTab', selectedTab)
+    if (parties.length > 0) {
+      return parties.map((party, i) => (
+        <CardPartyRecruit
+          key={i}
+          party={party}
+          partyLimit={partyLimit}
+        />
+      ))
+    } else {
+      return (<p className="mx-auto text-center">There are no parties recruiting!</p>)
+    }
+  }
+
   return (
     <>
       <div className={style.main}>
@@ -73,16 +109,19 @@ export default function RecruitingBoard({ recruitingParties, activePartiesID }) 
                 selectTab(i);
               }}
             >
-              {tab} <div
-                      className={
-                        'text-white ml-1 text-center inline-flex items-center justify-center relative leading-tight font-bold text-sm ' +
-                        (i === selectedTab
-                          ? 'border-white'
-                          : 'text-dailies border-dailies-dark')
-                      }
-                    >
-                      {recruitingParties.filter(d => d.challenge === i+1 && !activePartiesID.includes(d.id)).length}
-                    </div>
+              {tab}{' '}
+              <div
+                className={
+                  'text-white ml-1 text-center inline-flex items-center justify-center relative leading-tight font-bold text-sm ' +
+                  (i === selectedTab
+                    ? 'border-white'
+                    : 'text-dailies border-dailies-dark')
+                }
+              >
+                
+                  {i == 0 ? recruitingParties_1.length : i == 1 ? recruitingParties_2.length : null}
+                
+              </div>
             </button>
           ))}
         </div>
@@ -93,7 +132,7 @@ export default function RecruitingBoard({ recruitingParties, activePartiesID }) 
                 {/* {tabs[selectedTab] + ' ' + section} */}
               </section>
               <div className={style.row}>
-                {recruitingParties.length > 3 ? (
+                {(i == 0 ? recruitingParties_1.length : i == 1 ? recruitingParties_2.length : null).length > 3 ? (
                   <button
                     onClick={() => scroll(`left`, i)}
                     className={style.scroll}
@@ -102,19 +141,23 @@ export default function RecruitingBoard({ recruitingParties, activePartiesID }) 
                   </button>
                 ) : null}
                 <div className={style.partyList}>
-                  <div className="flex">
                     {/* {recruitingParties.map((e) => (
                       <CardPartyRecruit className={style.card} {...e} />
                     ))} */}
 
-                    {recruitingParties.map((party, i) =>
-                      party.challenge == selectedTab + 1 && !activePartiesID.includes(party.id) ? (
-                        <CardPartyRecruit key={i} party={party} />
+                    {/* {recruitingParties.map((party, i) =>
+                      party.challenge == selectedTab + 1 &&
+                      !activePartiesID.includes(party.id) ? (
+                        <CardPartyRecruit
+                          key={i}
+                          party={party}
+                          partyLimit={partyLimit}
+                        />
                       ) : null
-                    )}
-                  </div>
+                    )} */}
+                    {showParties()}
                 </div>
-                {recruitingParties.length > 3 ? (
+                {(i == 0 ? recruitingParties_1.length : i == 1 ? recruitingParties_2.length : null).length > 3 ? (
                   <button
                     onClick={() => scroll(`right`, i)}
                     className={style.scroll}

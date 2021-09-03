@@ -181,7 +181,7 @@ export default function CardPartyPlayer({
                     <p className="font-semibold text-xl text-white-700 truncate">
                       {player.notion_page_name
                         ? player.notion_page_name
-                        : 'Undefined'}
+                        : 'N/A'}
                     </p>
                     <p className="text-xs font-semibold text-accents-3">
                       {player.notion_page_id ? (

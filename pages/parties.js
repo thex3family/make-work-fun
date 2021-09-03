@@ -21,6 +21,7 @@ export default function parties() {
   const [activeParties, setActiveParties] = useState(null);
   const [recruitingParties, setRecruitingParties] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [partyLimit, setPartyLimit] = useState(false);
 
   const router = useRouter();
   const [levelUp, setLevelUp] = useState(false);
@@ -120,6 +121,7 @@ export default function parties() {
       // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
 
       setActiveParties(parties_you_are_in);
+      if (parties_you_are_in.length >= 3) setPartyLimit(true);
 
       if (error && status !== 406) {
         throw error;
@@ -229,8 +231,10 @@ export default function parties() {
                 className="px-5 font-bold py-2 rounded"
                 variant="dailies"
                 disabled={
-                  playerStats
-                    ? !playerStats.role.includes('Party Leader')
+                  !partyLimit
+                    ? playerStats
+                      ? !playerStats.role.includes('Party Leader')
+                      : true
                     : true
                 }
               >
@@ -295,6 +299,7 @@ export default function parties() {
               ) : null} */}
                 {recruitingParties && activeParties ? (
                   <RecruitingBoard
+                    partyLimit={partyLimit}
                     recruitingParties={recruitingParties}
                     activePartiesID={activeParties.map(function (el) {
                       return el.id;
