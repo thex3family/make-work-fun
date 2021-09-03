@@ -230,6 +230,7 @@ export default function Player() {
         loadPlayer();
       } else {
         setOnboardingState(parseInt(userOnboarding.onboarding_state, 10));
+        console.log('Setting onboarding state...', parseInt(userOnboarding.onboarding_state, 10))
       }
     } catch (error) {
       alert(error.message);
@@ -336,7 +337,12 @@ export default function Player() {
   }
 
   if (loading) {
-    return <PlayerSkeleton />;
+    return <>
+    <PlayerSkeleton />
+    {onboardingState ? (
+        <ModalOnboarding onboardingState={onboardingState} />
+      ) : null}
+    </>;
   }
 
   if (!loading && !playerStats) {
