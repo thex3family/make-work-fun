@@ -77,9 +77,12 @@ export default function ModalParty({ setCreateParty, party }) {
           .from('party')
           .update({
             name: name,
-            description: description
+            description: description,
+            challenge: challenge
           })
           .eq('id', id);
+
+          router.reload(window.location.pathname)
       } catch (error) {
         alert(error.message);
       } finally {
@@ -182,7 +185,7 @@ export default function ModalParty({ setCreateParty, party }) {
                     )
                   }
                 >
-                  {saving ? 'Saving...' : 'Create'}
+                  {saving ? 'Saving...' : newParty ? 'Create' : 'Update'}
                 </button>
               </div>
             </div>
