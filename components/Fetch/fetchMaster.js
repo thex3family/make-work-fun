@@ -591,3 +591,28 @@ export async function fetchPartyMembers(party_id){
   } finally {
   }
 }
+
+export async function fetchNotionCredentials() {
+  try {
+    // setLoading(true);
+    const user = supabase.auth.user();
+
+    let { data, error, status } = await supabase
+      .from('notion_credentials')
+      .select(`*`)
+      .eq('player', user.id)
+      .order('id', { ascending: true });
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      return data;
+    }
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    // setLoading(false);
+  }
+}
