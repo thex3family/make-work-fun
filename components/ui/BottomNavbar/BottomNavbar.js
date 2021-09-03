@@ -14,11 +14,19 @@ const BottomNavbar = () => {
         className="mx-auto max-w-screen-sm block fixed inset-x-0 bottom-0 z-10 bg-gradient-to-r from-emerald-500 to-blue-500 shadow sm:rounded-t-lg"
       >
         <div id="tabs" className="flex justify-between">
-          <NavLink href="/">
+          {/* <NavLink href="/">
             <a className={`w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform ${router.pathname == "/" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
               <i className="fas fa-trophy text-3xl inline-block mb-1" />
               <span className="tab tab-home block text-sm font-medium">
                 Leaderboard
+              </span>
+            </a>
+          </NavLink> */}
+          <NavLink href="/parties">
+            <a className={`w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform ${router.pathname == "/parties" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
+              <i className="fas fa-dragon text-3xl inline-block mb-1" />
+              <span className="tab tab-home block text-sm font-medium">
+                Parties
               </span>
             </a>
           </NavLink>
