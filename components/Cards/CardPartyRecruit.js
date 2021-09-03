@@ -6,6 +6,8 @@ import { supabase } from '@/utils/supabase-client';
 import { useRouter } from 'next/router';
 
 export default function CardPartyRecruit({party, partyLimit}) {
+
+  console.log('this is what I need', party)
   
   const [partyMembers, setPartyMembers] = useState(null);
   const router = useRouter();

@@ -177,20 +177,17 @@ export default function parties() {
       const { data, error } = await supabase
         .from('party')
         .select(
-          'id, name, challenge, description, due_date, status, challenge_name: party_challenge (name)'
+          'id, name, challenge, description, due_date, status, challenge_name: party_challenge (name), slug'
         )
         .eq('status', 1);
 
       var recruitingParties = data;
 
-      console.log('fetchRecruitingParties');
 
       // recruitingParties = await addChallengeNameAndMemberAvatars(
       //   recruitingParties
       // );
 
-      //console.log('updated -', recruitingParties);
-      console.log('RecruitingParties', recruitingParties);
       setRecruitingParties(recruitingParties);
 
       if (error && status !== 406) {
