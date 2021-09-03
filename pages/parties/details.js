@@ -11,7 +11,8 @@ import {
   fetchWins,
   fetchPartyPlayers,
   fetchWinsPastDate,
-  fetchSpecificWins
+  fetchSpecificWins,
+  fetchPartyMembers
 } from '@/components/Fetch/fetchMaster';
 import CardPartyPlayer from '@/components/Cards/CardPartyPlayer';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
@@ -56,7 +57,7 @@ export default function partyDetail() {
   const [cumulativeWins, setCumulativeWins] = useState([0]);
   const [cumulativeEXP, setCumulativeEXP] = useState([0]);
 
-  const [createParty, setCreateParty] = useState(null);
+  const [editParty, setEditParty] = useState(null);
 
   const notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
   const notionID = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
@@ -114,7 +115,7 @@ export default function partyDetail() {
   }
 
   async function loadPartyDetails() {
-    setPartyPlayers(await fetchPartyPlayers(party.id));
+    setPartyPlayers(await fetchPartyMembers(party.id));
     setDailyTarget(party.daily_target);
     setDue_Date(moment(party.due_date).local().format('YYYY-MM-DDTHH:mm:ss'));
     if (party.challenge == 1)
@@ -371,7 +372,7 @@ export default function partyDetail() {
                           <Button
                             className="w-auto mx-auto md:mx-0"
                             variant="prominent"
-                            onClick={() => setCreateParty(true)}
+                            onClick={() => setEditParty(true)}
                           >
                             Edit Name
                           </Button>
@@ -635,6 +636,9 @@ export default function partyDetail() {
                                     className="mt-3"
                                     variant="prominent"
                                     onClick={() => startChallenge()}
+                                    disabled={
+                                      party.challenge == 2 && !dragon_id
+                                    }
                                   >
                                     Start Party Quest
                                   </Button>
@@ -861,9 +865,28 @@ export default function partyDetail() {
           </>
         ) : null}
 
-        {createParty ? <ModalParty setCreateParty={setCreateParty} party={party} /> : null}
+        {editParty ? <ModalParty setCreateParty={setEditParty} party={party} /> : null}
       </>
     );
   }
-  return null;
+  return (<section className="justify-center">
+  <div className="animate-fade-in-up max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+    <div className="pb-10">
+      <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+        Party Not Found
+      </h1>
+      <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
+      Looks like we stumbled into unknown territory here.
+      </p>
+      </div>
+      <img className="w-3/5 m-auto" src='/img/notfound.png'/>
+      <Link href="/parties">
+      <Button className="w-auto mx-auto my-10"
+        variant="prominent"
+        >
+        Explore All Parties
+    </Button>
+    </Link>
+      </div>
+      </section>);
 }
