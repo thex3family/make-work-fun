@@ -642,20 +642,7 @@ export default function partyDetail() {
                                 </>
                               )}
                             </div>
-                            {party.status == 1 ? (
-                              specificPartyPlayer ? (
-                                specificPartyPlayer.role == 'Party Leader' ? (
-                                  <Button
-                                    className="mt-3"
-                                    variant="prominent"
-                                    onClick={() => startChallenge()}
-                                    disabled={
-                                      !allMembersReady
-                                    }
-                                  >
-                                    Start Party Quest
-                                  </Button>
-                                ) : party.challenge == 1 ? (
+                            {party.status == 1 ? party.challenge == 1 ? (
                                   <Button
                                     className="mt-3"
                                     variant="prominent"
@@ -668,9 +655,22 @@ export default function partyDetail() {
                                     I'm Ready!
                                   </Button>
                                   
-                                ): null
-                              ) : null
-                            ) : null}
+                                ) : null : null
+                            }
+                            {party.status == 1 ? 
+                              specificPartyPlayer ? 
+                                specificPartyPlayer.role == 'Party Leader' ? (
+                                  <Button
+                                    className=""
+                                    variant="prominent"
+                                    onClick={() => startChallenge()}
+                                    disabled={
+                                      !allMembersReady
+                                    }
+                                  >
+                                    Start Party Quest
+                                  </Button>
+                                ) : null : null : null}
                             <div className="text-center text-accents-4 text-sm">
                               You won't be able to change your details once the
                               party quest starts.
