@@ -45,34 +45,34 @@ export default function CardParty({ party }) {
         <div className="bg-dark bg-opacity-90">
           <div className="py-2 px-6 pt-4">
             <div className="grid grid-cols-4 mb-4">
-              <div className="row-start-1 col-span-3 mb-2">
+              <div className="row-start-1 col-span-3 mb-1">
                 {party.challenge == 1 ? (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 last:mr-0 mr-1">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 last:mr-0 mr-1 mb-1">
                     Time Challenge
                   </span>
                 ) : party.challenge == 2 ? (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-indigo-600 bg-indigo-200 last:mr-0 mr-1">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-indigo-600 bg-indigo-200 last:mr-0 mr-1 mb-1">
                     Slay Your Dragon
                   </span>
                 ) : (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1 mb-1">
                     Raid Boss
                   </span>
                 )}
                 {party.status == 1 ? (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1 mb-1">
                     Recruiting
                   </span>
                 ) : party.status == 2 ? (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1 mb-1">
                     In Progress
                   </span>
                 ) : party.status == 3 ? (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1 mb-1">
                     Complete
                   </span>
                 ) : (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200 last:mr-0 mr-1">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200 last:mr-0 mr-1 mb-1">
                     Failed
                   </span>
                 )}
@@ -115,7 +115,7 @@ export default function CardParty({ party }) {
                 </div>
               </div>
 
-              <h2 className="row-start-2 col-span-3 text-primary font-semibold text-2xl tracking-wide truncate">
+              <h2 className="row-start-2 col-span-4 sm:col-span-3 text-primary font-semibold text-2xl tracking-wide truncate">
                 {party.name}
               </h2>
               <div className="row-start-2 justify-self-end hidden sm:flex mt-1">
@@ -147,7 +147,7 @@ export default function CardParty({ party }) {
                   : null}
               </div>
 
-              <p className="row-start-3 col-span-3 text-primary truncate">
+              <p className="row-start-3 col-span-4 sm:col-span-3 text-primary truncate">
                 {party.description}
               </p>
             </div>
