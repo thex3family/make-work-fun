@@ -60,6 +60,8 @@ export default function partyDetail() {
 
   const [editParty, setEditParty] = useState(null);
   const [showValidateDragon, setShowValidateDragon] = useState(null);
+  
+  const [allMembersReady, setAllMembersReady] = useState(null);
 
   const notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
   const notionID = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
@@ -170,6 +172,11 @@ export default function partyDetail() {
   useEffect(() => {
     if (partyPlayers){
       setSpecificPartyPlayer(partyPlayers.find((x) => x.player === user.id));
+      if (partyPlayers.filter((d) => d.status === "Not Ready").length = 0){
+        setAllMembersReady(true) 
+      } else {
+        setAllMembersReady(false)
+      }
     }
   }, [partyPlayers]);
 
@@ -643,8 +650,7 @@ export default function partyDetail() {
                                     variant="prominent"
                                     onClick={() => startChallenge()}
                                     disabled={
-                                      party.challenge == 2 && (partyPlayers.filter(
-                                        (d) => d.status === "Not Ready").length() > 0)
+                                      !allMembersReady
                                     }
                                   >
                                     Start Party Quest
