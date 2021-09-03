@@ -131,7 +131,7 @@ export default function ModalParty({ setCreateParty, party }) {
                     <div className="mb-2 font-semibold">
                       Party Challenge
                       <a
-                        href="https://academy.co-x3.com/en/articles/5476321-attributing-your-wins-to-areas-of-competence/?utm_source=makeworkfun"
+                        href="https://academy.co-x3.com/en/articles/5547184-what-is-the-party-quests-feature"
                         target="_blank"
                         className="absolute ml-1.5 mt-1.5 text-sm fas fa-question-circle"
                       />
@@ -151,7 +151,7 @@ export default function ModalParty({ setCreateParty, party }) {
                     </select>
                   </div>
                   <div className="col-span-2">
-                    <div className="mb-2 font-semibold">Party Description</div>
+                    <div className="mb-2 font-semibold">Short Party Description</div>
                     <Input
                       className="text-xl font-semibold rounded"
                       type="text"

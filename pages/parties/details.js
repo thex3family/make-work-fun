@@ -168,8 +168,9 @@ export default function partyDetail() {
   }
 
   useEffect(() => {
-    if (partyPlayers)
+    if (partyPlayers){
       setSpecificPartyPlayer(partyPlayers.find((x) => x.player === user.id));
+    }
   }, [partyPlayers]);
 
   useEffect(() => {
@@ -642,12 +643,13 @@ export default function partyDetail() {
                                     variant="prominent"
                                     onClick={() => startChallenge()}
                                     disabled={
-                                      party.challenge == 2 && !specificPartyPlayer.status == 'Ready'
+                                      party.challenge == 2 && (partyPlayers.filter(
+                                        (d) => d.status === "Not Ready").length() > 0)
                                     }
                                   >
                                     Start Party Quest
                                   </Button>
-                                ) : (
+                                ) : party.challenge == 1 ? (
                                   <Button
                                     className="mt-3"
                                     variant="prominent"
@@ -659,7 +661,8 @@ export default function partyDetail() {
                                     <i className="fas fa-check mr-2" />
                                     I'm Ready!
                                   </Button>
-                                )
+                                  
+                                ): null
                               ) : null
                             ) : null}
                             <div className="text-center text-accents-4 text-sm">
