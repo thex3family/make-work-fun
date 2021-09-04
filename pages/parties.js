@@ -219,6 +219,11 @@ export default function parties() {
               </h1>
               <p className="mt-5 text-xl text-dailies text-center sm:text-2xl max-w-2xl m-auto">
                 Do tasks with your friends and get extra points!
+                <a
+                  href="https://academy.co-x3.com/en/articles/5547184-what-is-the-party-quests-feature"
+                  target="_blank"
+                  className="ml-1.5 text-xl fas fa-question-circle"
+                />
               </p>
             </div>
             <div className="text-center mb-5">
