@@ -183,7 +183,6 @@ export default function parties() {
 
       var recruitingParties = data;
 
-
       // recruitingParties = await addChallengeNameAndMemberAvatars(
       //   recruitingParties
       // );
@@ -219,7 +218,7 @@ export default function parties() {
                 Party Quests
               </h1>
               <p className="mt-5 text-xl text-dailies text-center sm:text-2xl max-w-2xl m-auto">
-                Multiplayer for personal development.
+                Do tasks with your friends and get extra points!
               </p>
             </div>
             <div className="text-center mb-5">
