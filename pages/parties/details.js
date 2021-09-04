@@ -185,6 +185,7 @@ export default function partyDetail() {
       setDragonName(specificPartyPlayer.notion_page_name);
     if (specificPartyPlayer) setDragonID(specificPartyPlayer.notion_page_id);
     if (specificPartyPlayer) setPlayerStatus(specificPartyPlayer.status);
+    console.log('Specific Party Player', specificPartyPlayer);
   }, [specificPartyPlayer]);
 
   // dropdown props
@@ -248,7 +249,7 @@ export default function partyDetail() {
         .update({
           status: status
         })
-        .eq('id', specificPartyPlayer.id);
+        .eq('id', specificPartyPlayer.party_member_id);
 
       if (error && status !== 406) {
         throw error;
