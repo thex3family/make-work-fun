@@ -60,7 +60,7 @@ export default function partyDetail() {
 
   const [editParty, setEditParty] = useState(null);
   const [showValidateDragon, setShowValidateDragon] = useState(null);
-  
+
   const [allMembersReady, setAllMembersReady] = useState(null);
 
   const notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
@@ -170,12 +170,12 @@ export default function partyDetail() {
   }
 
   useEffect(() => {
-    if (partyPlayers){
+    if (partyPlayers) {
       setSpecificPartyPlayer(partyPlayers.find((x) => x.player === user.id));
-      if (partyPlayers.filter((d) => d.status === "Not Ready").length == 0){
-        setAllMembersReady(true) 
+      if (partyPlayers.filter((d) => d.status === 'Not Ready').length == 0) {
+        setAllMembersReady(true);
       } else {
-        setAllMembersReady(false)
+        setAllMembersReady(false);
       }
     }
   }, [partyPlayers]);
@@ -288,10 +288,10 @@ export default function partyDetail() {
         const { data, error } = await supabase
           .from('party_members')
           .update({ notion_page_id: database_id })
-          .eq('id', specificPartyPlayer.party_member_id)
+          .eq('id', specificPartyPlayer.party_member_id);
 
-          console.log('error', data, error)
-          setShowValidateDragon(true);
+        console.log('error', data, error);
+        setShowValidateDragon(true);
 
         if (error && status !== 406) {
           throw error;
@@ -372,7 +372,8 @@ export default function partyDetail() {
                       {party.description}
                     </p>
                     {specificPartyPlayer ? (
-                      specificPartyPlayer.role == 'Party Leader' && party.status == 1 ? (
+                      specificPartyPlayer.role == 'Party Leader' &&
+                      party.status == 1 ? (
                         <div className="inline-block mx-auto md:mx-0 mt-5">
                           {/* <a href="https://makeworkfun.club" target="_blank">
                       <Button
@@ -642,35 +643,35 @@ export default function partyDetail() {
                                 </>
                               )}
                             </div>
-                            {party.status == 1 ? party.challenge == 1 ? (
-                                  <Button
-                                    className="mt-3"
-                                    variant="prominent"
-                                    onClick={() => changePlayerStatus('Ready')}
-                                    disabled={
-                                      specificPartyPlayer.status == 'Ready'
-                                    }
-                                  >
-                                    <i className="fas fa-check mr-2" />
-                                    I'm Ready!
-                                  </Button>
-                                  
-                                ) : null : null
-                            }
-                            {party.status == 1 ? 
-                              specificPartyPlayer ? 
+                            {party.status == 1 ? (
+                              party.challenge == 1 ? (
+                                <Button
+                                  className="mt-3"
+                                  variant="prominent"
+                                  onClick={() => changePlayerStatus('Ready')}
+                                  disabled={
+                                    specificPartyPlayer.status == 'Ready'
+                                  }
+                                >
+                                  <i className="fas fa-check mr-2" />
+                                  I'm Ready!
+                                </Button>
+                              ) : null
+                            ) : null}
+                            {party.status == 1 ? (
+                              specificPartyPlayer ? (
                                 specificPartyPlayer.role == 'Party Leader' ? (
                                   <Button
                                     className=""
                                     variant="prominent"
                                     onClick={() => startChallenge()}
-                                    disabled={
-                                      !allMembersReady
-                                    }
+                                    disabled={!allMembersReady}
                                   >
                                     Start Party Quest
                                   </Button>
-                                ) : null : null : null}
+                                ) : null
+                              ) : null
+                            ) : null}
                             <div className="text-center text-accents-4 text-sm">
                               You won't be able to change your details once the
                               party quest starts.
@@ -844,21 +845,25 @@ export default function partyDetail() {
                 Copy Embed Link
               </Button>
             </div> */}
-            <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 overflow-x-auto flex-nowrap lg:justify-center">
-              {partyPlayers
-                ? partyPlayers.map((player, i) => (
-                    <CardPartyPlayer
-                      key={i}
-                      player={player}
-                      cumulativeWins={cumulativeWins}
-                      setCumulativeWins={setCumulativeWins}
-                      cumulativeEXP={cumulativeEXP}
-                      setCumulativeEXP={setCumulativeEXP}
-                      party={party}
-                    />
-                  ))
-                : null}
-            </div>
+            {partyPlayers ? (
+              <div
+                className={`mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 overflow-x-auto flex-nowrap ${
+                  partyPlayers.length >= 3 ? '' : 'lg:justify-center'
+                }`}
+              >
+                {partyPlayers.map((player, i) => (
+                  <CardPartyPlayer
+                    key={i}
+                    player={player}
+                    cumulativeWins={cumulativeWins}
+                    setCumulativeWins={setCumulativeWins}
+                    cumulativeEXP={cumulativeEXP}
+                    setCumulativeEXP={setCumulativeEXP}
+                    party={party}
+                  />
+                ))}
+              </div>
+            ) : <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 justify-center"><LoadingDots/></div>}
           </div>
         </section>
         {/* level up modal */}
@@ -882,8 +887,12 @@ export default function partyDetail() {
         {editParty ? (
           <ModalParty setCreateParty={setEditParty} party={party} />
         ) : null}
-        {showValidateDragon ?
-        <ValidateDragon specificPartyPlayer = {specificPartyPlayer} setShowValidateDragon = {setShowValidateDragon}/> : null }
+        {showValidateDragon ? (
+          <ValidateDragon
+            specificPartyPlayer={specificPartyPlayer}
+            setShowValidateDragon={setShowValidateDragon}
+          />
+        ) : null}
       </>
     );
   }
