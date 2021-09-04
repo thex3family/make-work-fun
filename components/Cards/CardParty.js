@@ -48,11 +48,11 @@ export default function CardParty({ party }) {
               <div className="row-start-1 col-span-3 mb-1">
                 {party.challenge == 1 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 last:mr-0 mr-1 mb-1">
-                    Time Challenge
+                    ⏱ Time Challenge
                   </span>
                 ) : party.challenge == 2 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-indigo-600 bg-indigo-200 last:mr-0 mr-1 mb-1">
-                    Slay Your Dragon
+                    🐉 Slay Your Dragon
                   </span>
                 ) : (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1 mb-1">
