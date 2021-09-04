@@ -751,17 +751,17 @@ export default function partyDetail() {
                                 </div>
                               </div>
                               <div className="w-1/3 bg-dailies-light border-l-2 border-emerald-500 flex justify-center items-center px-2">
-                                {/* <p className="text-sm text-center text-emerald-600">
+                                <p className="text-sm text-center text-emerald-600">
                                   In Progress
-                                </p> */}
-                                <Button
+                                </p>
+                                {/* <Button
                                   variant="prominent"
                                   onClick={() =>
                                     claimReward('Hit Daily Target', '1', '50')
                                   }
                                 >
                                   Claim
-                                </Button>
+                                </Button> */}
                               </div>
                             </div>
                           </div>
@@ -810,12 +810,16 @@ export default function partyDetail() {
                               >
                                 Need Healing
                               </a>
-                              <a
-                                onClick={() => changePlayerStatus('Completed')}
-                                className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                              >
-                                Completed
-                              </a>
+                              {party.challenge == 2 ? (
+                                <a
+                                  onClick={() =>
+                                    changePlayerStatus('Dragon Slain')
+                                  }
+                                  className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                                >
+                                  Dragon Slain
+                                </a>
+                              ) : null}
                             </div>
                           </div>
                         </>
@@ -863,7 +867,11 @@ export default function partyDetail() {
                   />
                 ))}
               </div>
-            ) : <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 justify-center"><LoadingDots/></div>}
+            ) : (
+              <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 justify-center">
+                <LoadingDots />
+              </div>
+            )}
           </div>
         </section>
         {/* level up modal */}
