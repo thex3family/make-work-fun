@@ -243,13 +243,12 @@ export default function partyDetail() {
     setPlayerStatus(status);
     closeDropdownPopover();
     try {
-      const user = supabase.auth.user();
       const { data, error } = await supabase
         .from('party_members')
         .update({
           status: status
         })
-        .eq('player', user.id);
+        .eq('id', specificPartyPlayer.id);
 
       if (error && status !== 406) {
         throw error;
