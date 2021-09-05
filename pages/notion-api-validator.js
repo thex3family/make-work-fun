@@ -1069,7 +1069,7 @@ export default function NotionWizard({ response, nickname }) {
                         id="link10"
                       >
                         {response.properties.hasOwnProperty('Area') ? (
-                          response.properties.Type.type.includes('select') ? (
+                          response.properties.Area.type.includes('select') ? (
                             <h2 className="text-xl text-bold text-emerald-600 mb-3">
                               <i className="fas fa-check mr-2"></i>Your database
                               has this property!
