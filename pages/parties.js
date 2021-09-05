@@ -233,22 +233,21 @@ export default function parties() {
                 variant="dailies"
                 disabled={
                   !partyLimit
-                    ? playerStats
-                      ? !playerStats.role.includes('Party Leader')
-                      : true
+                    ? playerStats ? playerStats.role ? !playerStats.role.includes('Party Leader')
+                      : true : true
                     : true
                 }
               >
                 <i className="text-yellow-500 fas fa-crown mr-2" />
                 Create Party
               </Button>
-              {playerStats ? (
+              {playerStats ? playerStats.role ? (
                 !playerStats.role.includes('Party Leader') ? (
                   <div className="mt-1 text-xs text-accents-3">
                     Party Leaders Only!
                   </div>
                 ) : null
-              ) : null}
+              ) : null : null}
             </div>
             <div className="text-center">
               <section className="mb-8">
