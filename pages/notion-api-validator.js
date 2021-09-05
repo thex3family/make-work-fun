@@ -368,8 +368,10 @@ export default function NotionWizard({ response, nickname }) {
                               ) ||
                               response.properties.Difficulty.type.includes(
                                 'number'
-                              )
-                              ? 'text-white bg-emerald-500'
+                              ) ||
+                              response.properties.Difficulty.type.includes(
+                                'formula'
+                              ) ? 'text-white bg-emerald-500'
                               : 'text-white bg-red-500'
                             : 'text-white bg-red-500'
                           : response.properties.hasOwnProperty('Difficulty')
@@ -378,8 +380,10 @@ export default function NotionWizard({ response, nickname }) {
                             ) ||
                             response.properties.Difficulty.type.includes(
                               'number'
-                            )
-                            ? 'text-emerald-500 bg-white'
+                            ) ||
+                            response.properties.Difficulty.type.includes(
+                              'formula'
+                            ) ?  'text-emerald-500 bg-white'
                             : 'text-red-500 bg-white'
                           : 'text-red-500 bg-white')
                       }
@@ -400,8 +404,10 @@ export default function NotionWizard({ response, nickname }) {
                               ) ||
                               response.properties.Difficulty.type.includes(
                                 'number'
-                              )
-                              ? 'fas fa-check'
+                              ) ||
+                              response.properties.Difficulty.type.includes(
+                                'formula'
+                              ) ?  'fas fa-check'
                               : 'fas fa-exclamation-triangle'
                             : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
                         }
@@ -889,6 +895,9 @@ export default function NotionWizard({ response, nickname }) {
                           ) ||
                           response.properties.Difficulty.type.includes(
                             'number'
+                          ) ||
+                          response.properties.Difficulty.type.includes(
+                            'formula'
                           ) ? (
                             <h2 className="text-xl text-bold text-emerald-600 mb-3">
                               <i className="fas fa-check mr-2"></i>Your database
