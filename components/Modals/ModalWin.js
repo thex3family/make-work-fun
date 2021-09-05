@@ -12,6 +12,7 @@ export default function WinModal({
   refreshStats
 }) {
   const [activeGIF, setActiveGIF] = useState(null);
+  const [sharedWithFamily, setSharedWithFamily] = useState(false);
 
   useEffect(() => {
     initializeModal();
@@ -143,22 +144,22 @@ export default function WinModal({
               >
                 Close
               </button>
-              <a
-                href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
-                target="_blank"
-              >
-                {page !== 'validator' ? (
+                {page !== 'validator' ? sharedWithFamily ? <a href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat" target="_blank"><button
+                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                  >
+                    Shared! Go To Guilded
+                  </button></a> : (
                   <button
                     className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() =>
-                      shareWithGuilded(playerStats, activeModalStats, activeGIF)
+                      shareWithGuilded(playerStats, activeModalStats, activeGIF, setSharedWithFamily)
                     }
                   >
                     Share With Family
                   </button>
                 ) : null}
-              </a>
             </div>
             {page !== 'player' ? (
               <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
@@ -174,7 +175,7 @@ export default function WinModal({
             ) : null}
           </div>
         </div>
-        <div className="opacity-25 fixed inset-0 z-30 bg-black"></div>
+        <div className="opacity-50 fixed inset-0 z-30 bg-black" onClick={() => closeModal()}></div>
       </div>
     </>
   );

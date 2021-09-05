@@ -1,4 +1,4 @@
-export async function shareWithGuilded(playerStats, activeModalStats, activeGIF) {
+export async function shareWithGuilded(playerStats, activeModalStats, activeGIF, setSharedWithFamily) {
     let textNextRank = '';
     if (playerStats.next_rank) {
       textNextRank = `(${playerStats.next_rank} EXP to next rank)`;
@@ -64,4 +64,5 @@ export async function shareWithGuilded(playerStats, activeModalStats, activeGIF)
         ]
       })
     });
+    setSharedWithFamily(true);
   }
