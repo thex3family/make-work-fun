@@ -371,7 +371,8 @@ export default function NotionWizard({ response, nickname }) {
                               ) ||
                               response.properties.Difficulty.type.includes(
                                 'formula'
-                              ) ? 'text-white bg-emerald-500'
+                              )
+                              ? 'text-white bg-emerald-500'
                               : 'text-white bg-red-500'
                             : 'text-white bg-red-500'
                           : response.properties.hasOwnProperty('Difficulty')
@@ -383,7 +384,8 @@ export default function NotionWizard({ response, nickname }) {
                             ) ||
                             response.properties.Difficulty.type.includes(
                               'formula'
-                            ) ?  'text-emerald-500 bg-white'
+                            )
+                            ? 'text-emerald-500 bg-white'
                             : 'text-red-500 bg-white'
                           : 'text-red-500 bg-white')
                       }
@@ -407,7 +409,8 @@ export default function NotionWizard({ response, nickname }) {
                               ) ||
                               response.properties.Difficulty.type.includes(
                                 'formula'
-                              ) ?  'fas fa-check'
+                              )
+                              ? 'fas fa-check'
                               : 'fas fa-exclamation-triangle'
                             : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
                         }
