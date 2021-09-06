@@ -514,6 +514,13 @@ export default function partyDetail() {
                                     <Input
                                       className="text-xl font-semibold rounded"
                                       type="number"
+                                      min="0"
+                                      max="10"
+                                      onKeyPress={(event) => {
+                                        if (!/[0-9]/.test(event.key)) {
+                                          event.preventDefault();
+                                        }
+                                      }}
                                       value={dailyTarget || ''}
                                       onChange={setDailyTarget}
                                       disabled={
@@ -678,27 +685,7 @@ export default function partyDetail() {
                             </div>
                           </div>
                         </>
-                      ) : (
-                        // <div className="flex flex-row items-center gap-4 text-2xl">
-                        //   <div
-                        //     variant="slim"
-                        //     className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
-                        //   >
-                        //     40 ⚔
-                        //   </div>
-                        //   <div
-                        //     variant="slim"
-                        //     className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
-                        //   >
-                        //     550 💰
-                        //   </div>
-                        //   <div
-                        //     variant="slim"
-                        //     className="mt-4 w-1/2 text-center font-bold border py-2 rounded"
-                        //   >
-                        //     1200 XP
-                        //   </div>
-                        // </div>
+                      ) : party.status > 1 ? (
                         <>
                           <h1 className=" rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-pink-500">
                             <PartyStatistics
@@ -823,6 +810,10 @@ export default function partyDetail() {
                             </div>
                           </div>
                         </>
+                      ) : (
+                        <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 justify-center">
+                          <LoadingDots />
+                        </div>
                       )}
                     </div>
                   </div>

@@ -33,7 +33,7 @@ export default function RecruitingBoard({
     left: `font-bold bg-yellow-700`,
     right: `font-bold bg-yellow-700`,
     scroll: `font-bold p-1`,
-    partyList: `overflow-x-scroll sm:overflow-hidden flex justify-center party-list-box w-full`
+    partyList: `overflow-x-scroll sm:overflow-hidden flex justify-start party-list-box w-full`
   };
   const tabs = [`⏱ Time Challenge`, `🐉 Slay Your Dragons`];
   const sections = [`Season Pass Completion`];
@@ -82,9 +82,6 @@ export default function RecruitingBoard({
     if (selectedTab === 1) {
       parties = recruitingParties_2
     } 
-
-    console.log('parties', parties)
-    console.log('selectedTab', selectedTab)
     if (parties.length > 0) {
       return parties.map((party, i) => (
         <CardPartyRecruit
