@@ -565,6 +565,7 @@ export async function fetchPartyMembers(party_id){
         '*'
       )
       .order('role', { ascending: false })
+      .order('notion_page_name', { ascending: false })
       .eq('party_id', party_id);
 
     if (data){
