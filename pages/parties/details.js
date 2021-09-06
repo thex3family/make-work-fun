@@ -605,9 +605,19 @@ export default function partyDetail() {
                                     members what project you're fighting, and
                                     we'll pull wins downstream.
                                   </div>
-                                  <div className="mb-2 font-semibold">
-                                    🐉 Share Your Dragon!
-                                  </div>
+                                  
+                                  <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+                                      <p className="font-semibold w-full sm:w-auto">
+                                        🐉 Share Your Dragon!
+                                      </p>
+                                      <a
+                                        className="text-right font-semibold text-emerald-500"
+                                        href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
+                                        target="_blank"
+                                      >
+                                        Where do I find this?
+                                      </a>
+                                    </div>
                                   <div className="grid grid-cols-5 items-center gap-3">
                                     <div className="col-span-4">
                                       <Input
