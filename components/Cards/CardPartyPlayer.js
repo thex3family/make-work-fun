@@ -80,7 +80,7 @@ export default function CardPartyPlayer({
               {avatarURL == 'Missing' ? (
                 <img
                   className="avatar image mx-auto px-2 object-contain"
-                  src="img/default_avatar.png"
+                  src="../img/default_avatar.png"
                   alt="Avatar"
                 />
               ) : avatarURL ? (
