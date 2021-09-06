@@ -6,8 +6,6 @@ import { supabase } from '@/utils/supabase-client';
 import { useRouter } from 'next/router';
 
 export default function CardPartyRecruit({party, partyLimit}) {
-
-  console.log('this is what I need', party)
   
   const [partyMembers, setPartyMembers] = useState(null);
   const router = useRouter();
@@ -43,7 +41,7 @@ export default function CardPartyRecruit({party, partyLimit}) {
   }
 
   const style = {
-    card: `bg-yellow-50 shadow-lg w-56 sm:w-72 m-2 p-4 text-dailies rounded-lg flex flex-col gap-1 justify-center`,
+    card: `bg-yellow-50 shadow-lg w-full sm:w-72 m-2 p-4 text-dailies rounded-lg flex flex-col gap-1 justify-center`,
     name: `w-50 font-bold text-xl`,
     playerIcons: `w-8 h-8 m-1 border-2 rounded-full`,
     leader: `border-indigo-300 ml-0`,
