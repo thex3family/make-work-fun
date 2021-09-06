@@ -18,11 +18,12 @@ export default function updates() {
           {/* start  */}
           <CardLUpdate
             date="Sep 05, 2021"
-            title="Party Quests Are Here!"
+            title="Embark On Party Quests"
             desc="Do tasks with your friends and get extra points! Get the motivation and accountability to get things done - with 2 exciting game modes to try!"
-            img_url="updates/0.20.png"
-            button_url="/"
-            version="v.20"
+            desc2="Join our first batch of parties - we'll announce new ones every week! 👇"
+            img_url="updates/0.22.PNG"
+            button_url="/parties"
+            version="v.22"
           />
           <CardRUpdate
             date="Aug 26, 2021"
