@@ -17,7 +17,9 @@ export default function CardPartyPlayer({
   const [backgroundUrl, setBackgroundUrl] = useState(
     '/background/cityscape.jpg'
   );
-  const [dragonBGUrl, setDragonBGUrl] = useState('/challenge/skyrim.jpg');
+
+
+  const [dragonBGUrl, setDragonBGUrl] = useState('');
   const [totalGold_Reward, setTotalGold_Reward] = useState(null);
   const [totalEXP_Reward, setTotalEXP_Reward] = useState(null);
 
@@ -27,7 +29,15 @@ export default function CardPartyPlayer({
     loadAvatarURL();
     if (party.status != 1) loadWins();
     if (player.background_url) setBackgroundUrl(player.background_url);
-    if (player.dragon_bg_url) setDragonBGUrl(player.dragon_bg_url);
+    if (player.dragon_bg_url) {
+      setDragonBGUrl(player.dragon_bg_url)
+    } else {
+      if(party.challenge == 1){
+        setDragonBGUrl('/challenge/rush.jpg')
+      }else if (party.challenge == 2){
+        setDragonBGUrl('/challenge/skyrim.jpg')
+      }
+    };
   }, []);
 
   async function loadAvatarURL() {
@@ -38,13 +48,6 @@ export default function CardPartyPlayer({
     }
   }
 
-  async function loadBackgroundURL() {
-    setBackgroundUrl(await downloadImage(player.background_url, 'background'));
-  }
-
-  async function loadDragonBGURL() {
-    setDragonBGUrl(await downloadImage(player.dragon_bg_url, 'background'));
-  }
 
   async function loadWins() {
     if(party.challenge == 1) setWins(await fetchWinsPastDate(player.player, party.start_date));
@@ -70,7 +73,7 @@ export default function CardPartyPlayer({
       <div className="w-full xs:w-1/2 sm:w-1/2 md:1/3 lg:w-1/3 xl:w-1/4 mb-5 flex-none">
         <div className="bg-primary-2 rounded-md mx-auto overflow-hidden flex flex-row shadow-xl">
           <div
-            className="rounded-tl-md rounded-bl-md w-1/3 bg-cover bg-center"
+            className="rounded-tl-md rounded-bl-md w-1/3 bg-cover bg-center flex-shrink-0 "
             style={{ backgroundImage: `url(${backgroundUrl})` }}
           >
             <div className="bg-black bg-opacity-70 h-full flex">
@@ -178,10 +181,10 @@ export default function CardPartyPlayer({
                     </h5>
                     {party.challenge == 1 ? null : party.challenge == 2 ?
                     <>
-                    <p className="font-semibold text-xl text-white-700 truncate">
+                    <p className="font-semibold text-xl text-white-700 truncate block">
                       {player.notion_page_name
                         ? player.notion_page_name
-                        : 'N/A'}
+                        : <span className="text-red-500 "><i className='mr-2 fas fa-times'/>Not Shared Yet!</span>}
                     </p>
                     <p className="text-xs font-semibold text-accents-3">
                       {player.notion_page_id ? (
@@ -194,7 +197,7 @@ export default function CardPartyPlayer({
                         >
                           Page ID: {player.notion_page_id}
                         </a>
-                      ) : null}
+                      ) : "Page ID: N/A"}
                     </p> </> : null}
                     <div className="flex flex-row items-center gap-4">
                       <div
