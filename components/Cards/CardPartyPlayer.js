@@ -18,7 +18,6 @@ export default function CardPartyPlayer({
     '/background/cityscape.jpg'
   );
 
-
   const [dragonBGUrl, setDragonBGUrl] = useState('');
   const [totalGold_Reward, setTotalGold_Reward] = useState(null);
   const [totalEXP_Reward, setTotalEXP_Reward] = useState(null);
@@ -30,14 +29,14 @@ export default function CardPartyPlayer({
     if (party.status != 1) loadWins();
     if (player.background_url) setBackgroundUrl(player.background_url);
     if (player.dragon_bg_url) {
-      setDragonBGUrl(player.dragon_bg_url)
+      setDragonBGUrl(player.dragon_bg_url);
     } else {
-      if(party.challenge == 1){
-        setDragonBGUrl('/challenge/rush.jpg')
-      }else if (party.challenge == 2){
-        setDragonBGUrl('/challenge/skyrim.jpg')
+      if (party.challenge == 1) {
+        setDragonBGUrl('/challenge/rush.jpg');
+      } else if (party.challenge == 2) {
+        setDragonBGUrl('/challenge/skyrim.jpg');
       }
-    };
+    }
   }, []);
 
   async function loadAvatarURL() {
@@ -48,10 +47,11 @@ export default function CardPartyPlayer({
     }
   }
 
-
   async function loadWins() {
-    if(party.challenge == 1) setWins(await fetchWinsPastDate(player.player, party.start_date));
-    if(party.challenge == 2) setWins(await fetchSpecificWins(player.notion_page_id, party.start_date));
+    if (party.challenge == 1)
+      setWins(await fetchWinsPastDate(player.player, party.start_date));
+    if (party.challenge == 2)
+      setWins(await fetchSpecificWins(player.notion_page_id, party.start_date));
   }
 
   useEffect(() => {
@@ -179,26 +179,35 @@ export default function CardPartyPlayer({
                         {player.status}
                       </span>
                     </h5>
-                    {party.challenge == 1 ? null : party.challenge == 2 ?
-                    <>
-                    <p className="font-semibold text-xl text-white-700 truncate block">
-                      {player.notion_page_name
-                        ? player.notion_page_name
-                        : <span className="text-red-500 "><i className='mr-2 fas fa-times'/>Not Shared Yet!</span>}
-                    </p>
-                    <p className="text-xs font-semibold text-accents-3">
-                      {player.notion_page_id ? (
-                        <a
-                          href={`https://notion.so/${player.notion_page_id.replaceAll(
-                            '-',
-                            ''
-                          )}`}
-                          target="_blank"
-                        >
-                          Page ID: {player.notion_page_id}
-                        </a>
-                      ) : "Page ID: N/A"}
-                    </p> </> : null}
+                    {party.challenge == 1 ? null : party.challenge == 2 ? (
+                      <>
+                        <p className="font-semibold text-xl text-white-700 truncate block">
+                          {player.notion_page_name ? (
+                            player.notion_page_name
+                          ) : (
+                            <span className="text-red-500 ">
+                              <i className="mr-2 fas fa-times" />
+                              Not Shared Yet!
+                            </span>
+                          )}
+                        </p>
+                        <p className="text-xs font-semibold text-accents-3">
+                          {player.notion_page_id ? (
+                            <a
+                              href={`https://notion.so/${player.notion_page_id.replaceAll(
+                                '-',
+                                ''
+                              )}`}
+                              target="_blank"
+                            >
+                              Page ID: {player.notion_page_id}
+                            </a>
+                          ) : (
+                            'Page ID: N/A'
+                          )}
+                        </p>{' '}
+                      </>
+                    ) : null}
                     <div className="flex flex-row items-center gap-4">
                       <div
                         variant="slim"
@@ -225,93 +234,94 @@ export default function CardPartyPlayer({
             </div>
           </div>
         </div>
-
-        <ul
-          className="max-w-screen-lg mx-auto flex mb-0 mt-6 list-none flex-row"
-          role="tablist"
-        >
-          <li className="flex-auto text-center mr-1 w-1/2">
-            <a
-              className={
-                'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
-                (openTab === 1
-                  ? 'bg-emerald-500 border-emerald-700'
-                  : 'text-blueGray-600 bg-white ')
-              }
-              onClick={(e) => {
-                e.preventDefault();
-                setOpenTab(1);
-              }}
-              data-toggle="tab"
-              href="#link1"
+        {party.status > 1 ? (
+          <>
+            <ul
+              className="max-w-screen-lg mx-auto flex mb-0 mt-6 list-none flex-row"
               role="tablist"
             >
-              Completed
-              <div
-                className={
-                  'text-white ml-1 text-center inline-flex items-center justify-center relative leading-tight font-bold text-xs ' +
-                  (openTab === 1
-                    ? 'border-white'
-                    : 'text-blueGray-600 border-blueGray-600')
-                }
-              >
-                {wins ? wins.length : null}
-              </div>
-            </a>
-          </li>
-          <li className="ml-2 flex-auto text-center w-1/2">
-            <a
-              className={
-                'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
-                (openTab === 2
-                  ? 'bg-yellow-500 border-yellow-700'
-                  : 'text-blueGray-600 bg-white')
-              }
-              onClick={(e) => {
-                e.preventDefault();
-                setOpenTab(2);
-              }}
-              data-toggle="tab"
-              href="#link2"
-              role="tablist"
-            >
-              Incomplete
-              <div
-                className={
-                  'text-white ml-1 text-center inline-flex items-center justify-center relative leading-tight font-bold text-xs ' +
-                  (openTab === 2
-                    ? 'border-white'
-                    : 'text-blueGray-600 border-blueGray-600')
-                }
-              ></div>
-            </a>
-          </li>
-        </ul>
-        <div
-          className={openTab === 1 ? 'flex flex-col gap-2 pt-2' : 'hidden'}
-          id="link1"
-        >
-          {wins
-            ? wins.map((win, i) => (
-                <div className="relative text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
-                  <p className="truncate w-full">{win.name}</p>
-                  <div className="flex flex-row mt-1">
-                    <span className="text-xs font-semibold py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200">
-                      +{win.gold_reward} 💰{' '}
-                    </span>
-                    <span className="text-xs font-semibold ml-2 py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                      +{win.exp_reward} XP{' '}
-                    </span>
+              <li className="flex-auto text-center mr-1 w-1/2">
+                <a
+                  className={
+                    'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
+                    (openTab === 1
+                      ? 'bg-emerald-500 border-emerald-700'
+                      : 'text-blueGray-600 bg-white ')
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenTab(1);
+                  }}
+                  data-toggle="tab"
+                  href="#link1"
+                  role="tablist"
+                >
+                  Completed
+                  <div
+                    className={
+                      'text-white ml-1 text-center inline-flex items-center justify-center relative leading-tight font-bold text-xs ' +
+                      (openTab === 1
+                        ? 'border-white'
+                        : 'text-blueGray-600 border-blueGray-600')
+                    }
+                  >
+                    {wins ? wins.length : null}
                   </div>
-                </div>
-              ))
-            : null}
-        </div>
-        <div
-          className={openTab === 2 ? 'flex flex-col gap-2 pt-2' : 'hidden'}
-          id="link2"
-        >
-          {/* <div className="text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-yellow-100 text-yellow-700 border-yellow-500">
+                </a>
+              </li>
+              <li className="ml-2 flex-auto text-center w-1/2">
+                <a
+                  className={
+                    'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
+                    (openTab === 2
+                      ? 'bg-yellow-500 border-yellow-700'
+                      : 'text-blueGray-600 bg-white')
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenTab(2);
+                  }}
+                  data-toggle="tab"
+                  href="#link2"
+                  role="tablist"
+                >
+                  Incomplete
+                  <div
+                    className={
+                      'text-white ml-1 text-center inline-flex items-center justify-center relative leading-tight font-bold text-xs ' +
+                      (openTab === 2
+                        ? 'border-white'
+                        : 'text-blueGray-600 border-blueGray-600')
+                    }
+                  ></div>
+                </a>
+              </li>
+            </ul>
+            <div
+              className={openTab === 1 ? 'flex flex-col gap-2 pt-2' : 'hidden'}
+              id="link1"
+            >
+              {wins
+                ? wins.map((win, i) => (
+                    <div className="relative text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
+                      <p className="truncate w-full">{win.name}</p>
+                      <div className="flex flex-row mt-1">
+                        <span className="text-xs font-semibold py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200">
+                          +{win.gold_reward} 💰{' '}
+                        </span>
+                        <span className="text-xs font-semibold ml-2 py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+                          +{win.exp_reward} XP{' '}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                : null}
+            </div>
+            <div
+              className={openTab === 2 ? 'flex flex-col gap-2 pt-2' : 'hidden'}
+              id="link2"
+            >
+              {/* <div className="text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-yellow-100 text-yellow-700 border-yellow-500">
             <p className="truncate w-full">
               Figure out how to handle scope creep for seasons, ideally they can
               be automated
@@ -325,10 +335,14 @@ export default function CardPartyPlayer({
               </span>
             </div>
           </div> */}
-          <div className="text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-yellow-100 text-yellow-700 border-yellow-500">
-            <p className="truncate w-full text-center">Feature Coming Soon!</p>
-          </div>
-        </div>
+              <div className="text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-yellow-100 text-yellow-700 border-yellow-500">
+                <p className="truncate w-full text-center">
+                  Feature Coming Soon!
+                </p>
+              </div>
+            </div>
+          </>
+        ) : null}
       </div>
     </>
   );
