@@ -24,7 +24,6 @@ export default function CardStats({
   setShowTitleModal,
   statPlayer
 }) {
-
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
   const btnDropdownRef = createRef();
@@ -37,6 +36,19 @@ export default function CardStats({
   };
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
+  };
+
+  const [popoverShow, setPopoverShow] = React.useState(false);
+  const btnRef = React.createRef();
+  const popoverRef = React.createRef();
+  const openTooltip = () => {
+    createPopper(btnRef.current, popoverRef.current, {
+      placement: 'bottom'
+    });
+    setPopoverShow(true);
+  };
+  const closeTooltip = () => {
+    setPopoverShow(false);
   };
 
   return (
@@ -85,20 +97,20 @@ export default function CardStats({
                   'bg-blueGray-900 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 w-36 '
                 }
               >
-                <Link
-                  href="/embed"
-                  target="_blank"
-                >
-                  <a target="_blank" className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600">
-                  Copy Embed Link
+                <Link href="/embed" target="_blank">
+                  <a
+                    target="_blank"
+                    className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                  >
+                    Copy Embed Link
                   </a>
                 </Link>
-                <Link
-                  href="/account"
-                  target="_blank"
+                <Link href="/account" target="_blank">
+                  <a
+                    target="_blank"
+                    className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                   >
-                  <a target="_blank" className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600">
-                  Go To Account
+                    Go To Account
                   </a>
                 </Link>
               </div>
@@ -125,9 +137,28 @@ export default function CardStats({
             </div>
           </div>
           <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-0 sm:gap-4">
-            <Button variant="slim" disabled={true} className="mt-4 w-full">
+            <div
+              variant="slim"
+              className="mt-4 w-full text-center font-semibold border py-2 rounded"
+              onMouseEnter={openTooltip}
+              onMouseLeave={closeTooltip}
+              ref={btnRef}
+            >
               {statGold} 💰
-            </Button>
+            </div>
+            <div
+            className={
+              (popoverShow ? "" : "hidden ") +
+              "bg-blueGray-900 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg"
+            }
+            ref={popoverRef}
+          >
+            <div>
+              <div className="text-white p-3">
+                Item shop coming soon!
+              </div>
+            </div>
+          </div>
             {/* <Button disabled={true} variant="slim" className="mt-4 w-full sm:w-3/5">
               <span className={statPercentColor + " mr-2"}>
                 <i
