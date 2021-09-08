@@ -55,7 +55,7 @@ export async function getServerSideProps({ req }) {
     const key = await supabase
       .from('notion_credentials_validation')
       .select('test_pair, test_member')
-      .eq('player', '082ce7cc-e1ec-46f6-82a1-e0111bd85ff4')
+      .eq('player', user.id)
       .limit(1)
       .single();
 
