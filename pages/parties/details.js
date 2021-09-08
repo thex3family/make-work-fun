@@ -345,7 +345,6 @@ export default function partyDetail() {
         .eq('party_id', party.id)
         .eq('player', user.id)
         .eq('type', 'Party Mission')
-        .ilike('name', 'Daily Target')
         .gte('entered_on', moment().startOf('day').utc().format());
 
       if (error && status !== 406) {
@@ -356,6 +355,8 @@ export default function partyDetail() {
 
       if (fetchData.length === 0) {
         setDailyTargetRewardClaimed(false);
+      } else {
+        setDailyTargetRewardClaimed(true);
       }
     } catch (error) {
       alert(error.message);
@@ -394,6 +395,7 @@ export default function partyDetail() {
       alert(error.message);
     } finally {
       if(mission_name == 'Daily Target') setDailyTargetRewardClaimed(true);
+      refreshStats();
     }
   }
 
