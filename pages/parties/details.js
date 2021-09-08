@@ -351,7 +351,10 @@ export default function partyDetail() {
       if (error && status !== 406) {
         throw error;
       }
-      console.log('Daily Target stuff', data, data.length);
+
+      // I'll need to seperate out the daily target from the other missions later on...
+      
+      console.log('Daily Target Hit!', data, data.length);
       const fetchData = data;
 
       if (fetchData.length === 0) {
