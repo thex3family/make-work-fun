@@ -379,6 +379,7 @@ export default function partyDetail() {
           closing_date: testDateStr,
           trend: 'check',
           type: 'Party Mission',
+          party_id: party.id,
           punctuality: 0,
           health_reward: health_reward,
           exp_reward: exp_reward,
