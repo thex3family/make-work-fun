@@ -342,6 +342,7 @@ export default function partyDetail() {
       const { data, error } = await supabase
         .from('success_plan')
         .select('*')
+        .ilike('name', '%Daily Target%')
         .eq('party_id', party.id)
         .eq('player', user.id)
         .eq('type', 'Party Mission')
