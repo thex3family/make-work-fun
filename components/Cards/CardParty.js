@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { fetchPartyMembers } from '../Fetch/fetchMaster';
 
 export default function CardParty({ party }) {
-  var start_date = new Date(party.start_date);
-  var due_date = new Date(party.due_date);
+  var start_date = new Date(party.party_start_date);
+  var due_date = new Date(party.party_due_date);
   var now = new Date();
 
   // To calculate the date difference of two dates
@@ -17,6 +17,7 @@ export default function CardParty({ party }) {
   var deadline_completion_percentage =
     (start_to_now_days / start_to_end_days) * 100;
 
+
   const health = party.health * 10;
 
   const [partyMembers, setPartyMembers] = useState(null);
@@ -26,17 +27,17 @@ export default function CardParty({ party }) {
   }, []);
 
   async function getPartyMembers() {
-    setPartyMembers(await fetchPartyMembers(party.id));
+    setPartyMembers(await fetchPartyMembers(party.party_id));
   }
   console.log(party);
 
   return (
-    <Link href={`/parties/details/?id=${party.slug}`}>
+    <Link href={`/parties/details/?id=${party.party_slug}`}>
       <div
         className="bg-white shadow-md rounded-lg overflow-hidden mx-auto mt-2 text-left cursor-pointer bg-cover bg-center object-cover"
         style={{
           backgroundImage: `url(${
-            party.challenge == 1
+            party.party_challenge == 1
               ? '/challenge/rush.jpg'
               : '/challenge/skyrim.jpg'
           })`
@@ -46,11 +47,11 @@ export default function CardParty({ party }) {
           <div className="py-2 px-6 pt-4">
             <div className="grid grid-cols-4 mb-4">
               <div className="row-start-1 col-span-3 mb-1">
-                {party.challenge == 1 ? (
+                {party.party_challenge == 1 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 last:mr-0 mr-1 mb-1">
                     ⏱ Time Challenge
                   </span>
-                ) : party.challenge == 2 ? (
+                ) : party.party_challenge == 2 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-indigo-600 bg-indigo-200 last:mr-0 mr-1 mb-1">
                     🐉 Slay Your Dragon
                   </span>
@@ -59,15 +60,15 @@ export default function CardParty({ party }) {
                     Raid Boss
                   </span>
                 )}
-                {party.status == 1 ? (
+                {party.party_status == 1 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1 mb-1">
                     Recruiting
                   </span>
-                ) : party.status == 2 ? (
+                ) : party.party_status == 2 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1 mb-1">
                     In Progress
                   </span>
-                ) : party.status == 3 ? (
+                ) : party.party_status == 3 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1 mb-1">
                     Complete
                   </span>
@@ -116,7 +117,7 @@ export default function CardParty({ party }) {
               </div>
 
               <h2 className="row-start-2 col-span-4 sm:col-span-3 text-primary font-semibold text-2xl tracking-wide truncate">
-                {party.name}
+                {party.party_name}
               </h2>
               <div className="row-start-2 justify-self-end hidden sm:flex mt-1">
                 {partyMembers
@@ -148,7 +149,7 @@ export default function CardParty({ party }) {
               </div>
 
               <p className="row-start-3 col-span-4 sm:col-span-3 text-primary truncate">
-                {party.description}
+                {party.party_description}
               </p>
             </div>
             <div className="w-full mb-4">
@@ -156,7 +157,7 @@ export default function CardParty({ party }) {
                 <div
                   className="bg-gradient-to-r from-emerald-500 to-blue-500 text-xs leading-none py-1 text-center text-white w-3/4 h-4 rounded-full "
                   style={{
-                    width: party.start_date
+                    width: party.party_start_date
                       ? deadline_completion_percentage
                       : 0 + '%'
                   }}
