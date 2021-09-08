@@ -302,7 +302,7 @@ export default function CardPartyPlayer({
               id="link1"
             >
               {wins
-                ? wins.map((win, i) => (
+                ? wins.slice(0,5).map((win, i) => (
                     <div className="relative text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
                       <p className="truncate w-full">{win.name}</p>
                       <div className="flex flex-row mt-1">
