@@ -67,7 +67,7 @@ export default function partyDetail() {
   const notionID = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
 
   const [dailyTargetRewardClaimed, setDailyTargetRewardClaimed] = useState(
-    false
+    true
   );
 
   // Waits until database fetches user state before loading anything
@@ -351,11 +351,11 @@ export default function partyDetail() {
       if (error && status !== 406) {
         throw error;
       }
-      console.log('Daily Target stuff', data);
+      console.log('Daily Target stuff', data, data.length);
       const fetchData = data;
 
-      if (fetchData.length == 0) {
-        setDailyTargetRewardClaimed(true);
+      if (fetchData.length === 0) {
+        setDailyTargetRewardClaimed(false);
       }
     } catch (error) {
       alert(error.message);
