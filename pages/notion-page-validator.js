@@ -68,13 +68,13 @@ export async function getServerSideProps({ req }) {
 
     const dragon = await supabase
       .from('party_member_details')
-      .select('notion_page_id, slug')
+      .select('notion_page_id, party_slug')
       .eq('party_member_id', key.data.test_member)
       .limit(1)
       .single();
 
     const credentials = data.body;
-    const slug = dragon.data.slug;
+    const slug = dragon.data.party_slug;
 
     // Send credentials to Notion API
     const notion = new Client({ auth: credentials.api_secret_key });
