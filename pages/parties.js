@@ -94,28 +94,35 @@ export default function parties() {
 
       // get the parties that the user is a part of and return the associated party properties instead
       // Note: Related table column values are returned as objects. ex. For the party's id, you will get { id: {id: 2} }
+      // const { data, error } = await supabase
+      //   .from('party_members')
+      //   .select(
+      //     'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status), start_date: party(start_date), slug: party(slug), health'
+      //   )
+      //   .eq('player', user.id);
+
+      // // Put the data into the right format
+      // var parties_you_are_in = data.map((party) => {
+      //   return {
+      //     id: party.id.id,
+      //     name: party.name.name,
+      //     description: party.description.description,
+      //     challenge: party.challenge.challenge,
+      //     status: party.status.status,
+      //     start_date: party.start_date.start_date,
+      //     due_date: party.due_date.due_date,
+      //     slug: party.slug.slug,
+      //     health: party.health
+      //     // party_members: party.party_members.party_members,
+      //   };
+      // });
+
       const { data, error } = await supabase
-        .from('party_members')
-        .select(
-          'id: party (id), name: party (name), challenge: party(challenge), description: party(description), due_date: party(due_date), status: party(status), start_date: party(start_date), slug: party(slug), health'
-        )
+        .from('party_member_details')
+        .select('*')
         .eq('player', user.id);
 
-      // Put the data into the right format
-      var parties_you_are_in = data.map((party) => {
-        return {
-          id: party.id.id,
-          name: party.name.name,
-          description: party.description.description,
-          challenge: party.challenge.challenge,
-          status: party.status.status,
-          start_date: party.start_date.start_date,
-          due_date: party.due_date.due_date,
-          slug: party.slug.slug,
-          health: party.health
-          // party_members: party.party_members.party_members,
-        };
-      });
+        var parties_you_are_in = data;
 
       // // only use the parties that are in progress
       // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
@@ -177,7 +184,7 @@ export default function parties() {
       const { data, error } = await supabase
         .from('party')
         .select(
-          'id, name, challenge, description, due_date, status, challenge_name: party_challenge (name), slug'
+          '*'
         )
         .eq('status', 1);
 
@@ -233,21 +240,26 @@ export default function parties() {
                 variant="dailies"
                 disabled={
                   !partyLimit
-                    ? playerStats ? playerStats.role ? !playerStats.role.includes('Party Leader')
-                      : true : true
+                    ? playerStats
+                      ? playerStats.role
+                        ? !playerStats.role.includes('Party Leader')
+                        : true
+                      : true
                     : true
                 }
               >
                 <i className="text-yellow-500 fas fa-crown mr-2" />
                 Create Party
               </Button>
-              {playerStats ? playerStats.role ? (
-                !playerStats.role.includes('Party Leader') ? (
-                  <div className="mt-1 text-xs text-accents-3">
-                    Party Leaders Only!
-                  </div>
+              {playerStats ? (
+                playerStats.role ? (
+                  !playerStats.role.includes('Party Leader') ? (
+                    <div className="mt-1 text-xs text-accents-3">
+                      Party Leaders Only!
+                    </div>
+                  ) : null
                 ) : null
-              ) : null : null}
+              ) : null}
             </div>
             <div className="text-center">
               <section className="mb-8">
@@ -302,7 +314,7 @@ export default function parties() {
                     partyLimit={partyLimit}
                     recruitingParties={recruitingParties}
                     activePartiesID={activeParties.map(function (el) {
-                      return el.id;
+                      return el.party_id;
                     })}
                   />
                 ) : null}

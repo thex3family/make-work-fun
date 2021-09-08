@@ -91,7 +91,7 @@ export default function RecruitingBoard({
         />
       ))
     } else {
-      return (<p className="mx-auto text-center">There are no parties currently recruiting! Check again later or create your own.</p>)
+      return (<p className="mx-auto text-center">There are no other parties recruiting! Check again later.</p>)
     }
   }
 
