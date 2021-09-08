@@ -66,6 +66,10 @@ export default function partyDetail() {
   const notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
   const notionID = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
 
+  const [dailyTargetRewardClaimed, setDailyTargetRewardClaimed] = useState(
+    false
+  );
+
   // Waits until database fetches user state before loading anything
 
   useEffect(() => {
@@ -75,7 +79,10 @@ export default function partyDetail() {
   useEffect(() => {
     if (party) {
       loadPartyDetails();
-      if (party.status != 1) setShowDetails(false);
+      if (party.status != 1) {
+        setShowDetails(false);
+        checkMissionReward();
+      }
     } else {
       setShowDetails(true);
     }
@@ -324,6 +331,68 @@ export default function partyDetail() {
       alert(error.message);
     } finally {
       await refreshStats();
+    }
+  }
+
+  async function checkMissionReward() {
+    try {
+      const user = supabase.auth.user();
+
+      // See if reward has already been claimed
+      const { data, error } = await supabase
+        .from('success_plan')
+        .select('*')
+        .eq('party_id', party.id)
+        .eq('player', user.id)
+        .eq('type', 'Party Mission')
+        .ilike('name', 'Daily Target')
+        .gte('entered_on', moment().startOf('day').utc().format());
+
+      if (error && status !== 406) {
+        throw error;
+      }
+      console.log('Daily Target stuff', data);
+      const fetchData = data;
+
+      if (fetchData.length == 0) {
+        setDailyTargetRewardClaimed(true);
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      // How do I show the null state?
+    }
+  }
+
+  async function claimMissionReward(mission_name, health_reward, exp_reward) {
+    try {
+      const user = supabase.auth.user();
+
+      let testDateStr = new Date();
+      // console.log('testDateStr: ' + testDateStr);
+
+      const { data, error } = await supabase.from('success_plan').insert([
+        {
+          player: user.id,
+          difficulty: 1,
+          do_date: testDateStr,
+          closing_date: testDateStr,
+          trend: 'check',
+          type: 'Party Mission',
+          punctuality: 0,
+          health_reward: health_reward,
+          exp_reward: exp_reward,
+          gold_reward: 0,
+          name: mission_name + ' - ' + party.name
+        }
+      ]);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      if(mission_name == 'Daily Target') setDailyTargetRewardClaimed(true);
     }
   }
 
@@ -605,19 +674,19 @@ export default function partyDetail() {
                                     members what project you're fighting, and
                                     we'll pull wins downstream.
                                   </div>
-                                  
+
                                   <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-                                      <p className="font-semibold w-full sm:w-auto">
-                                        🐉 Share Your Dragon!
-                                      </p>
-                                      <a
-                                        className="text-right font-semibold text-emerald-500"
-                                        href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
-                                        target="_blank"
-                                      >
-                                        Where do I find this?
-                                      </a>
-                                    </div>
+                                    <p className="font-semibold w-full sm:w-auto">
+                                      🐉 Share Your Dragon!
+                                    </p>
+                                    <a
+                                      className="text-right font-semibold text-emerald-500"
+                                      href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
+                                      target="_blank"
+                                    >
+                                      Where do I find this?
+                                    </a>
+                                  </div>
                                   <div className="grid grid-cols-5 items-center gap-3">
                                     <div className="col-span-4">
                                       <Input
@@ -723,7 +792,7 @@ export default function partyDetail() {
                                     {dailyTarget_Achieved
                                       ? dailyTarget_Achieved.length
                                       : 0}{' '}
-                                    / {dailyTarget}
+                                    / {party.daily_target}
                                   </span>
                                 </div>
                               </p>
@@ -748,17 +817,32 @@ export default function partyDetail() {
                                 </div>
                               </div>
                               <div className="w-1/3 bg-dailies-light border-l-2 border-emerald-500 flex justify-center items-center px-2">
-                                <p className="text-sm text-center text-emerald-600">
-                                  In Progress
-                                </p>
-                                {/* <Button
-                                  variant="prominent"
-                                  onClick={() =>
-                                    claimReward('Hit Daily Target', '1', '50')
-                                  }
-                                >
-                                  Claim
-                                </Button> */}
+                                {dailyTarget_Achieved ? dailyTarget_Achieved.length >= party.daily_target ? (
+                                  dailyTargetRewardClaimed ? (
+                                    <Button variant="prominent" disabled={true}>
+                                      Claimed
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      variant="prominent"
+                                      onClick={() =>
+                                        claimMissionReward(
+                                          'Daily Target',
+                                          '1',
+                                          '50'
+                                        )
+                                      }
+                                    >
+                                      Claim
+                                    </Button>
+                                  )
+                                ) : (
+                                  <p className="text-sm text-center text-emerald-600">
+                                    In Progress
+                                  </p>
+                                ) : <p className="text-sm text-center text-emerald-600">
+                                In Progress
+                              </p>}
                               </div>
                             </div>
                           </div>
