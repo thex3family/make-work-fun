@@ -1,6 +1,5 @@
 import { downloadImage } from '@/utils/downloadImage';
 import { useState, useEffect } from 'react';
-import { fetchSpecificWins } from '../Fetch/fetchMaster';
 import LoadingDots from '../ui/LoadingDots';
 
 export default function AvatarPlayer({ player }) {
