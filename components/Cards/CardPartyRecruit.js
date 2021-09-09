@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { fetchPartyMembers } from '../Fetch/fetchMaster';
 import { supabase } from '@/utils/supabase-client';
 import { useRouter } from 'next/router';
+import AvatarMember from '../Avatars/AvatarMember';
 
 export default function CardPartyRecruit({party, partyLimit}) {
   
@@ -72,28 +73,7 @@ export default function CardPartyRecruit({party, partyLimit}) {
           <div className="row-start-2 justify-center hidden sm:flex mb-3">
                 {partyMembers
                   ? partyMembers.map((member) => (
-                      <div
-                        className={`bg-cover bg-center object-cover rounded-full shadow-xl block w-8 h-8 -ml-3 overflow-hidden ${
-                          member.role == 'Party Leader'
-                            ? 'border-2 border-yellow-300'
-                            : 'border-2 border-gray-700'
-                        }`}
-                        style={{
-                          backgroundImage: `url(${member.background_url})`
-                        }}
-                      >
-                        <div className="bg-black bg-opacity-30 rounded-full w-8 h-8 p-0.5 flex items-center">
-                          <img
-                            className="avatar image mx-auto object-cover"
-                            src={`${
-                              member.avatar_url
-                                ? member.avatar_url
-                                : 'img/default_avatar.png'
-                            }`}
-                            alt="Avatar"
-                          />
-                        </div>
-                      </div>
+                      <AvatarMember member = {member}/>
                     ))
                   : null}
               </div>
