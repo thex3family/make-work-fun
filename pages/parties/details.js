@@ -129,17 +129,18 @@ export default function partyDetail() {
     setPartyPlayers(await fetchPartyMembers(party.id));
     setDailyTarget(party.daily_target);
     setDue_Date(moment(party.due_date).local().format('YYYY-MM-DDTHH:mm:ss'));
-    if (party.challenge == 1)
+    if (party.challenge == 1) {
       setDailyTarget_Achieved(
         await fetchWinsPastDate(user.id, moment().local().format('YYYY-MM-DD'))
       );
-    if (party.challenge == 2)
-      setDailyTarget_Achieved(
-        await fetchSpecificWins(
-          dragon_id,
-          moment().local().format('YYYY-MM-DD')
-        )
-      );
+    }
+    // if (party.challenge == 2)
+    //   setDailyTarget_Achieved(
+    //     await fetchSpecificWins(
+    //       dragon_id,
+    //       moment().local().format('YYYY-MM-DD')
+    //     )
+    //   );
   }
 
   async function savePartyDetails(target, deadline) {
@@ -192,8 +193,20 @@ export default function partyDetail() {
       setDragonName(specificPartyPlayer.notion_page_name);
     if (specificPartyPlayer) setDragonID(specificPartyPlayer.notion_page_id);
     if (specificPartyPlayer) setPlayerStatus(specificPartyPlayer.status);
+    if (specificPartyPlayer) loadSpecificPartyPlayer();
     console.log('Specific Party Player', specificPartyPlayer);
   }, [specificPartyPlayer]);
+
+  async function loadSpecificPartyPlayer() {
+    if (party.challenge == 2) {
+      setDailyTarget_Achieved(
+        await fetchSpecificWins(
+          specificPartyPlayer.notion_page_id,
+          moment().local().format('YYYY-MM-DD')
+        )
+      );
+    }
+  }
 
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
@@ -353,7 +366,7 @@ export default function partyDetail() {
       }
 
       // I'll need to seperate out the daily target from the other missions later on...
-      
+
       console.log('Daily Target Hit!', data, data.length);
       const fetchData = data;
 
@@ -398,7 +411,7 @@ export default function partyDetail() {
     } catch (error) {
       alert(error.message);
     } finally {
-      if(mission_name == 'Daily Target') setDailyTargetRewardClaimed(true);
+      if (mission_name == 'Daily Target') setDailyTargetRewardClaimed(true);
       refreshStats();
     }
   }
@@ -824,32 +837,40 @@ export default function partyDetail() {
                                 </div>
                               </div>
                               <div className="w-1/3 bg-dailies-light border-l-2 border-emerald-500 flex justify-center items-center px-2">
-                                {dailyTarget_Achieved ? dailyTarget_Achieved.length >= party.daily_target ? (
-                                  dailyTargetRewardClaimed ? (
-                                    <Button variant="prominent" disabled={true}>
-                                      Claimed
-                                    </Button>
+                                {dailyTarget_Achieved ? (
+                                  dailyTarget_Achieved.length >=
+                                  party.daily_target ? (
+                                    dailyTargetRewardClaimed ? (
+                                      <Button
+                                        variant="prominent"
+                                        disabled={true}
+                                      >
+                                        Claimed
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        variant="prominent"
+                                        onClick={() =>
+                                          claimMissionReward(
+                                            'Daily Target',
+                                            '1',
+                                            '50'
+                                          )
+                                        }
+                                      >
+                                        Claim
+                                      </Button>
+                                    )
                                   ) : (
-                                    <Button
-                                      variant="prominent"
-                                      onClick={() =>
-                                        claimMissionReward(
-                                          'Daily Target',
-                                          '1',
-                                          '50'
-                                        )
-                                      }
-                                    >
-                                      Claim
-                                    </Button>
+                                    <p className="text-sm text-center text-emerald-600">
+                                      In Progress
+                                    </p>
                                   )
                                 ) : (
                                   <p className="text-sm text-center text-emerald-600">
                                     In Progress
                                   </p>
-                                ) : <p className="text-sm text-center text-emerald-600">
-                                In Progress
-                              </p>}
+                                )}
                               </div>
                             </div>
                           </div>
