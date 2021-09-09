@@ -796,141 +796,151 @@ export default function partyDetail() {
                               )}
                             />
                           </h1>
-
-                          <div className="text-center text-white text-lg mb-2 font-semibold">
-                            Party Missions
-                          </div>
-                          <div className="mb-5 max-w-lg mx-auto font-semibold shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
-                            <div className="flex flex-row ml-3 gap-3">
-                              <p className="text-2xl py-2 mb-1">🎯</p>
-                              <p className="text-sm sm:text-lg w-full py-2 mb-1">
-                                Complete {party.daily_target}{' '}
-                                {party.daily_target > 1 ? 'Tasks' : 'Task'}{' '}
-                                <i className="fas fa-retweet" />
-                                <div className="flex flex-row mt-1">
-                                  <span className="text-xs sm:text-sm font-semibold py-1 px-2 uppercase rounded-full text-emerald-700 bg-emerald-200 border border-emerald-500">
-                                    {dailyTarget_Achieved
-                                      ? dailyTarget_Achieved.length
-                                      : 0}{' '}
-                                    / {party.daily_target}
-                                  </span>
-                                </div>
-                              </p>
-                              <div className="hidden sm:flex justify-center items-center gap-2 py-2">
-                                <div className="px-5 rounded bg-red-200 border border-red-500 flex justify-center items-center h-16">
-                                  <div className="my-auto">
-                                    <div className="text-red-600 fas fa-heart text-xl" />
-                                    <p className="text-red-700 text-xs text-center">
-                                      +1
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="px-5 rounded bg-emerald-200 border border-emerald-500 flex justify-center items-center h-16">
-                                  <div className="my-auto">
-                                    <div className="text-emerald-700 text-xl">
-                                      XP
+                          {specificPartyPlayer ? (
+                            <>
+                              <div className="text-center text-white text-lg mb-2 font-semibold">
+                                Party Missions
+                              </div>
+                              <div className="mb-5 max-w-lg mx-auto font-semibold shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
+                                <div className="flex flex-row ml-3 gap-3">
+                                  <p className="text-2xl py-2 mb-1">🎯</p>
+                                  <p className="text-sm sm:text-lg w-full py-2 mb-1">
+                                    Complete {party.daily_target}{' '}
+                                    {party.daily_target > 1 ? 'Tasks' : 'Task'}{' '}
+                                    <i className="fas fa-retweet" />
+                                    <div className="flex flex-row mt-1">
+                                      <span className="text-xs sm:text-sm font-semibold py-1 px-2 uppercase rounded-full text-emerald-700 bg-emerald-200 border border-emerald-500">
+                                        {dailyTarget_Achieved
+                                          ? dailyTarget_Achieved.length
+                                          : 0}{' '}
+                                        / {party.daily_target}
+                                      </span>
                                     </div>
-                                    <p className="text-emerald-700 text-xs text-center">
-                                      +50
-                                    </p>
+                                  </p>
+                                  <div className="hidden sm:flex justify-center items-center gap-2 py-2">
+                                    <div className="px-5 rounded bg-red-200 border border-red-500 flex justify-center items-center h-16">
+                                      <div className="my-auto">
+                                        <div className="text-red-600 fas fa-heart text-xl" />
+                                        <p className="text-red-700 text-xs text-center">
+                                          +1
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="px-5 rounded bg-emerald-200 border border-emerald-500 flex justify-center items-center h-16">
+                                      <div className="my-auto">
+                                        <div className="text-emerald-700 text-xl">
+                                          XP
+                                        </div>
+                                        <p className="text-emerald-700 text-xs text-center">
+                                          +50
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="w-1/3 bg-dailies-light border-l-2 border-emerald-500 flex justify-center items-center px-2">
+                                    {dailyTarget_Achieved ? (
+                                      dailyTarget_Achieved.length >=
+                                      party.daily_target ? (
+                                        dailyTargetRewardClaimed ? (
+                                          <Button
+                                            variant="prominent"
+                                            disabled={true}
+                                          >
+                                            Claimed
+                                          </Button>
+                                        ) : (
+                                          <Button
+                                            variant="prominent"
+                                            onClick={() =>
+                                              claimMissionReward(
+                                                'Daily Target',
+                                                '1',
+                                                '50'
+                                              )
+                                            }
+                                          >
+                                            Claim
+                                          </Button>
+                                        )
+                                      ) : (
+                                        <p className="text-sm text-center text-emerald-600">
+                                          In Progress
+                                        </p>
+                                      )
+                                    ) : (
+                                      <p className="text-sm text-center text-emerald-600">
+                                        In Progress
+                                      </p>
+                                    )}
                                   </div>
                                 </div>
                               </div>
-                              <div className="w-1/3 bg-dailies-light border-l-2 border-emerald-500 flex justify-center items-center px-2">
-                                {dailyTarget_Achieved ? (
-                                  dailyTarget_Achieved.length >=
-                                  party.daily_target ? (
-                                    dailyTargetRewardClaimed ? (
-                                      <Button
-                                        variant="prominent"
-                                        disabled={true}
-                                      >
-                                        Claimed
-                                      </Button>
-                                    ) : (
-                                      <Button
-                                        variant="prominent"
-                                        onClick={() =>
-                                          claimMissionReward(
-                                            'Daily Target',
-                                            '1',
-                                            '50'
-                                          )
-                                        }
-                                      >
-                                        Claim
-                                      </Button>
-                                    )
-                                  ) : (
-                                    <p className="text-sm text-center text-emerald-600">
-                                      In Progress
-                                    </p>
-                                  )
-                                ) : (
-                                  <p className="text-sm text-center text-emerald-600">
-                                    In Progress
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex flex-col items-center mt-8">
-                            <div className="text-lg mb-2 font-semibold text-center">
-                              How are you feeling about your adventure today?
-                            </div>
+                              <div className="flex flex-col items-center mt-8">
+                                <div className="text-lg mb-2 font-semibold text-center">
+                                  How are you feeling about your adventure
+                                  today?
+                                </div>
 
-                            <Button
-                              className=""
-                              variant="incognito"
-                              ref={btnDropdownRef}
-                              onClick={() => {
-                                dropdownPopoverShow
-                                  ? closeDropdownPopover()
-                                  : openDropdownPopover();
-                              }}
-                            >
-                              Status: {playerStatus}{' '}
-                              <i
-                                className={
-                                  (dropdownPopoverShow
-                                    ? 'fas fa-chevron-up '
-                                    : 'fas fa-chevron-down ') + 'ml-2'
-                                }
-                              />
-                            </Button>
-                            <div
-                              ref={popoverDropdownRef}
-                              className={
-                                (dropdownPopoverShow ? 'block ' : 'hidden ') +
-                                'bg-primary-2 border border-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 w-44 '
-                              }
-                            >
-                              <a
-                                onClick={() => changePlayerStatus('Fighting')}
-                                className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                              >
-                                Fighting
-                              </a>
-                              <a
-                                onClick={() =>
-                                  changePlayerStatus('Need Healing')
-                                }
-                                className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                              >
-                                Need Healing
-                              </a>
-                              {party.challenge == 2 ? (
-                                <a
-                                  onClick={() =>
-                                    changePlayerStatus('Dragon Slain')
-                                  }
-                                  className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                                <Button
+                                  className=""
+                                  variant="incognito"
+                                  ref={btnDropdownRef}
+                                  onClick={() => {
+                                    dropdownPopoverShow
+                                      ? closeDropdownPopover()
+                                      : openDropdownPopover();
+                                  }}
                                 >
-                                  Dragon Slain
-                                </a>
-                              ) : null}
-                            </div>
-                          </div>
+                                  Status: {playerStatus}{' '}
+                                  <i
+                                    className={
+                                      (dropdownPopoverShow
+                                        ? 'fas fa-chevron-up '
+                                        : 'fas fa-chevron-down ') + 'ml-2'
+                                    }
+                                  />
+                                </Button>
+                                <div
+                                  ref={popoverDropdownRef}
+                                  className={
+                                    (dropdownPopoverShow
+                                      ? 'block '
+                                      : 'hidden ') +
+                                    'bg-primary-2 border border-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 w-44 '
+                                  }
+                                >
+                                  <a
+                                    onClick={() =>
+                                      changePlayerStatus('Fighting')
+                                    }
+                                    className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                                  >
+                                    Fighting
+                                  </a>
+                                  <a
+                                    onClick={() =>
+                                      changePlayerStatus('Need Healing')
+                                    }
+                                    className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                                  >
+                                    Need Healing
+                                  </a>
+                                  {party.challenge == 2 ? (
+                                    <a
+                                      onClick={() =>
+                                        changePlayerStatus('Dragon Slain')
+                                      }
+                                      className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                                    >
+                                      Dragon Slain
+                                    </a>
+                                  ) : null}
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            null
+                          )}
                         </>
                       ) : (
                         <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 justify-center">
@@ -977,6 +987,7 @@ export default function partyDetail() {
                     cumulativeEXP={cumulativeEXP}
                     setCumulativeEXP={setCumulativeEXP}
                     party={party}
+                    specificPartyPlayer={specificPartyPlayer}
                   />
                 ))}
               </div>
