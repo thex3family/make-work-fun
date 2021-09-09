@@ -262,6 +262,26 @@ export default function parties() {
               ) : null}
             </div>
             <div className="text-center">
+            {/* <section className="mb-8">
+                <div className="flex items-center">
+                  <div
+                    className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
+                    aria-hidden="true"
+                  ></div>
+                  <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
+                    Active Parties{' '}
+                    <span className="align-middle my-auto ml-2 px-3 py-1 shadow-md bg-white rounded-full text-lg">
+                      {activeParties ? activeParties.length : 0}
+                    </span>
+                  </h2>
+                  <div
+                    className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 ml-3"
+                    aria-hidden="true"
+                  ></div>
+                </div>
+
+                
+              </section> */}
               <section className="mb-8">
                 <div className="flex items-center">
                   <div

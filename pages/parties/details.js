@@ -70,6 +70,8 @@ export default function partyDetail() {
     true
   );
 
+  const [anonymousAdventurer, setAnonymousAdventurer] = useState(null);
+
   // Waits until database fetches user state before loading anything
 
   useEffect(() => {
@@ -179,7 +181,12 @@ export default function partyDetail() {
 
   useEffect(() => {
     if (partyPlayers) {
-      setSpecificPartyPlayer(partyPlayers.find((x) => x.player === user.id));
+      const SPP = partyPlayers.find((x) => x.player === user.id);
+      if (SPP) {
+        setSpecificPartyPlayer(SPP);
+      } else {
+        setAnonymousAdventurer(true);
+      }
       if (partyPlayers.filter((d) => d.status === 'Not Ready').length == 0) {
         setAllMembersReady(true);
       } else {
@@ -194,7 +201,6 @@ export default function partyDetail() {
     if (specificPartyPlayer) setDragonID(specificPartyPlayer.notion_page_id);
     if (specificPartyPlayer) setPlayerStatus(specificPartyPlayer.status);
     if (specificPartyPlayer) loadSpecificPartyPlayer();
-    console.log('Specific Party Player', specificPartyPlayer);
   }, [specificPartyPlayer]);
 
   async function loadSpecificPartyPlayer() {
@@ -416,6 +422,29 @@ export default function partyDetail() {
     }
   }
 
+  async function joinParty(){
+    // this should insert a row into the party members table
+
+    try {
+      const user = supabase.auth.user();
+
+      const { data, error } = await supabase.from('party_members').insert([
+        {
+          party_id: party.id,
+          player: user.id,
+          role: 'Adventurer'
+        }
+      ]);
+      router.push('/parties/details?id='+party.slug)
+
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      refreshStats();
+    }
+
+  }
+
   if (!id || loading) {
     return (
       <div className="h-screen flex justify-center">
@@ -587,146 +616,240 @@ export default function partyDetail() {
                           ></div>
                         </div>
                       ) : null}
-                      {showDetails && specificPartyPlayer ? (
+                      {showDetails ? (
                         <>
                           <div className="flex flex-col gap-5">
-                            <div className="grid grid-cols-2 gap-5">
-                              <div className="col-span-2 sm:col-span-1">
-                                <div className="mb-2 font-semibold">
-                                  🎯 Daily Target{' '}
-                                  <span className="text-accents-4 text-xs">
-                                    Editable By Leader
-                                  </span>
-                                </div>
-                                <div className="grid grid-cols-3 items-center gap-3">
-                                  <div className="col-span-2">
-                                    <Input
-                                      className="text-xl font-semibold rounded"
-                                      type="number"
-                                      min="0"
-                                      max="10"
-                                      onKeyPress={(event) => {
-                                        if (!/[0-9]/.test(event.key)) {
-                                          event.preventDefault();
-                                        }
-                                      }}
-                                      value={dailyTarget || ''}
-                                      onChange={setDailyTarget}
-                                      disabled={
-                                        (specificPartyPlayer.role !=
-                                          'Party Leader' &&
-                                          party.status == 1) ||
-                                        party.status > 1
-                                      }
-                                    />
-                                  </div>
-                                  <Button
-                                    className=""
-                                    variant="incognito"
-                                    onClick={() =>
-                                      savePartyDetails(dailyTarget)
-                                    }
-                                    disabled={
-                                      (specificPartyPlayer.role !=
-                                        'Party Leader' &&
-                                        party.status == 1) ||
-                                      party.status > 1
-                                    }
-                                  >
-                                    Save
-                                  </Button>
-                                </div>
-                              </div>
-
-                              <div className="col-span-2 sm:col-span-1">
-                                <div className="mb-2 font-semibold">
-                                  📅 Deadline{' '}
-                                  <span className="text-accents-4 text-xs">
-                                    Editable By Leader
-                                  </span>
-                                </div>
-                                <div className="grid grid-cols-3 items-center gap-3">
-                                  <div className="col-span-2">
-                                    <Input
-                                      className="text-xl font-semibold rounded"
-                                      type="datetime-local"
-                                      value={due_date || ''}
-                                      onChange={setDue_Date}
-                                      disabled={
-                                        (specificPartyPlayer.role !=
-                                          'Party Leader' &&
-                                          party.status == 1) ||
-                                        party.status > 1
-                                      }
-                                    />
-                                  </div>
-                                  <Button
-                                    className=""
-                                    variant="incognito"
-                                    onClick={() =>
-                                      savePartyDetails(null, due_date)
-                                    }
-                                    disabled={
-                                      (specificPartyPlayer.role !=
-                                        'Party Leader' &&
-                                        party.status == 1) ||
-                                      party.status > 1
-                                    }
-                                  >
-                                    Save
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="">
-                              {party.challenge == 1 ? (
-                                <div className="text-emerald-600 border-2 bg-emerald-100 border-emerald-700 rounded p-3 mb-3 font-semibold">
-                                  <i className="fas fa-clock mr-2" />
-                                  This is a time challenge! Once the challenge
-                                  starts, all wins that you do will count
-                                  towards the challenge.
-                                </div>
-                              ) : (
-                                <>
-                                  <div className="text-emerald-600 border-2 bg-emerald-100 border-emerald-700 rounded p-3 mb-3 font-semibold">
-                                    <i className="fas fa-dragon mr-2" />
-                                    This is a dragon quest! Tell your party
-                                    members what project you're fighting, and
-                                    we'll pull wins downstream.
-                                  </div>
-
-                                  <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-                                    <p className="font-semibold w-full sm:w-auto">
-                                      🐉 Share Your Dragon!
-                                    </p>
-                                    <a
-                                      className="text-right font-semibold text-emerald-500"
-                                      href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
-                                      target="_blank"
-                                    >
-                                      Where do I find this?
-                                    </a>
-                                  </div>
-                                  <div className="grid grid-cols-5 items-center gap-3">
-                                    <div className="col-span-4">
-                                      <Input
-                                        className="text-xl font-semibold rounded"
-                                        value={dragon_id || ''}
-                                        onChange={setDragonID}
-                                      />
+                            {specificPartyPlayer ? (
+                              <div className="grid grid-cols-2 gap-5">
+                                {specificPartyPlayer.role == 'Party Leader' ? (
+                                  <>
+                                    <div className="col-span-2 sm:col-span-1">
+                                      <div className="mb-2 font-semibold">
+                                        🎯 Daily Target{' '}
+                                        <span className="text-accents-4 text-xs">
+                                          Editable By Leader
+                                        </span>
+                                      </div>
+                                      <div className="grid grid-cols-3 items-center gap-3">
+                                        <div className="col-span-2">
+                                          <Input
+                                            className="text-xl font-semibold rounded"
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            onKeyPress={(event) => {
+                                              if (!/[0-9]/.test(event.key)) {
+                                                event.preventDefault();
+                                              }
+                                            }}
+                                            value={dailyTarget || ''}
+                                            onChange={setDailyTarget}
+                                            disabled={
+                                              (specificPartyPlayer.role !=
+                                                'Party Leader' &&
+                                                party.status == 1) ||
+                                              party.status > 1
+                                            }
+                                          />
+                                        </div>
+                                        <Button
+                                          className=""
+                                          variant="incognito"
+                                          onClick={() =>
+                                            savePartyDetails(dailyTarget)
+                                          }
+                                          disabled={
+                                            (specificPartyPlayer.role !=
+                                              'Party Leader' &&
+                                              party.status == 1) ||
+                                            party.status > 1
+                                          }
+                                        >
+                                          Save
+                                        </Button>
+                                      </div>
                                     </div>
-                                    <Button
-                                      className="col-span-1"
-                                      variant="incognito"
-                                      onClick={() => saveDragon(dragon_id)}
-                                      disabled={saving}
-                                    >
-                                      {saving ? 'Saving...' : 'Save'}
-                                    </Button>
+
+                                    <div className="col-span-2 sm:col-span-1">
+                                      <div className="mb-2 font-semibold">
+                                        📅 Deadline{' '}
+                                        <span className="text-accents-4 text-xs">
+                                          Editable By Leader
+                                        </span>
+                                      </div>
+                                      <div className="grid grid-cols-3 items-center gap-3">
+                                        <div className="col-span-2">
+                                          <Input
+                                            className="text-xl font-semibold rounded"
+                                            type="datetime-local"
+                                            value={due_date || ''}
+                                            onChange={setDue_Date}
+                                            disabled={
+                                              (specificPartyPlayer.role !=
+                                                'Party Leader' &&
+                                                party.status == 1) ||
+                                              party.status > 1
+                                            }
+                                          />
+                                        </div>
+                                        <Button
+                                          className=""
+                                          variant="incognito"
+                                          onClick={() =>
+                                            savePartyDetails(null, due_date)
+                                          }
+                                          disabled={
+                                            (specificPartyPlayer.role !=
+                                              'Party Leader' &&
+                                              party.status == 1) ||
+                                            party.status > 1
+                                          }
+                                        >
+                                          Save
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <>
+                                    <div className="col-span-2 sm:col-span-1 text-center border rounded p-4 shadow-md">
+                                      <div className="mb-2 font-semibold mt-2">
+                                        🎯 Daily Target{' '}
+                                        <span className="text-accents-4 text-xs">
+                                          Editable By Leader
+                                        </span>
+                                      </div>
+                                      <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                                      {party.daily_target} {party.daily_target > 1 ? 'Tasks' : 'Task'}
+                                      </div>
+                                      <div className="text-lg mb-2 font-semibold">
+                                        Per Day
+                                      </div>
+                                    </div>
+                                    <div className="col-span-2 sm:col-span-1 text-center border rounded p-4 shadow-md">
+                                      <div className="mb-2 font-semibold mt-2">
+                                        📅 Deadline{' '}
+                                        <span className="text-accents-4 text-xs">
+                                          Editable By Leader
+                                        </span>
+                                      </div>
+                                      <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                                        {moment(due_date)
+                                          .local()
+                                          .format('YYYY-MM-DD')}
+                                      </div>
+                                      <div className="text-lg mb-2 font-semibold">
+                                        Challenge Ends at{' '}
+                                        {moment(due_date)
+                                          .local()
+                                          .format('h:mm a')}
+                                      </div>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            ) : anonymousAdventurer ? (
+                              <>
+                                <div className="grid grid-cols-2 gap-5">
+                                  <div className="col-span-2 sm:col-span-1 text-center border rounded p-4 shadow-md">
+                                    <div className="mb-2 font-semibold mt-2">
+                                      🎯 Daily Target{' '}
+                                      <span className="text-accents-4 text-xs">
+                                        Editable By Leader
+                                      </span>
+                                    </div>
+                                    <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                                      {party.daily_target} {party.daily_target > 1 ? 'Tasks' : 'Task'}
+                                    </div>
+                                    <div className="text-lg mb-2 font-semibold">
+                                      Per Day
+                                    </div>
                                   </div>
-                                  <div className="mt-2 flex flex-row text-sm font-semibold">
-                                    <div className="">{dragon_name}</div>
-                                    {/* <div className="ml-2 ">
+                                  <div className="col-span-2 sm:col-span-1 text-center border rounded p-4 shadow-md">
+                                    <div className="mb-2 font-semibold mt-2">
+                                      📅 Deadline{' '}
+                                      <span className="text-accents-4 text-xs">
+                                        Editable By Leader
+                                      </span>
+                                    </div>
+                                    <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                                      {moment(due_date)
+                                        .local()
+                                        .format('YYYY-MM-DD')}
+                                    </div>
+                                    <div className="text-lg mb-2 font-semibold">
+                                      Challenge Ends at{' '}
+                                      {moment(due_date)
+                                        .local()
+                                        .format('h:mm a')}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <Button
+                                  variant="prominent"
+                                  className="w-full animate-fade-in-up text-center font-bold mx-auto"
+                                  onClick={()=>joinParty()}
+                                >
+                                  Join Party
+                                </Button>
+                              </>
+                            ) : (
+                              <div className="mx-auto flex flex-row max-w-screen-2xl pt-10 mb-10 justify-center">
+                                <LoadingDots />
+                              </div>
+                            )}
+                            {specificPartyPlayer ? (
+                              <>
+                                <div className="">
+                                  {party.challenge == 1 ? (
+                                    <div className="text-emerald-600 border-2 bg-emerald-100 border-emerald-700 rounded p-3 mb-3 font-semibold">
+                                      <i className="fas fa-clock mr-2" />
+                                      This is a time challenge! Once the
+                                      challenge starts, all wins that you do
+                                      will count towards the challenge.
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <div className="text-emerald-600 border-2 bg-emerald-100 border-emerald-700 rounded p-3 mb-3 font-semibold">
+                                        <i className="fas fa-dragon mr-2" />
+                                        This is a dragon quest! Tell your party
+                                        members what project you're fighting,
+                                        and we'll pull wins downstream.
+                                      </div>
+
+                                      <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+                                        <p className="font-semibold w-full sm:w-auto">
+                                          🐉 Share Your Dragon!
+                                        </p>
+                                        <a
+                                          className="text-right font-semibold text-emerald-500"
+                                          href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
+                                          target="_blank"
+                                        >
+                                          Where do I find this?
+                                        </a>
+                                      </div>
+                                      <div className="grid grid-cols-5 items-center gap-3">
+                                        <div className="col-span-4">
+                                          <Input
+                                            className="text-xl font-semibold rounded"
+                                            value={dragon_id || ''}
+                                            onChange={setDragonID}
+                                          />
+                                        </div>
+                                        <Button
+                                          className="col-span-1"
+                                          variant="incognito"
+                                          onClick={() => saveDragon(dragon_id)}
+                                          disabled={saving}
+                                        >
+                                          {saving ? 'Saving...' : 'Save'}
+                                        </Button>
+                                      </div>
+                                      <div className="mt-2 flex flex-row text-sm font-semibold">
+                                        <div className="">{dragon_name}</div>
+                                        {/* <div className="ml-2 ">
                                   <label
                                     className="cursor-pointer text-emerald-500"
                                     htmlFor="background"
@@ -745,43 +868,48 @@ export default function partyDetail() {
                                     disabled={uploading}
                                   />
                                 </div> */}
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                            {party.status == 1 ? (
-                              party.challenge == 1 ? (
-                                <Button
-                                  className="mt-3"
-                                  variant="prominent"
-                                  onClick={() => changePlayerStatus('Ready')}
-                                  disabled={
-                                    specificPartyPlayer.status == 'Ready'
-                                  }
-                                >
-                                  <i className="fas fa-check mr-2" />
-                                  I'm Ready!
-                                </Button>
-                              ) : null
+                                      </div>
+                                      <div className="mt-4 text-center text-accents-4 text-sm">
+                                        You won't be able to change your details
+                                        once the party quest starts.
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                                {party.status == 1 ? (
+                                  party.challenge == 1 ? (
+                                    <Button
+                                      className="mt-3"
+                                      variant="prominent"
+                                      onClick={() =>
+                                        changePlayerStatus('Ready')
+                                      }
+                                      disabled={
+                                        specificPartyPlayer.status == 'Ready'
+                                      }
+                                    >
+                                      <i className="fas fa-check mr-2" />
+                                      I'm Ready!
+                                    </Button>
+                                  ) : null
+                                ) : null}
+                                {party.status == 1 ? (
+                                  specificPartyPlayer ? (
+                                    specificPartyPlayer.role ==
+                                    'Party Leader' ? (
+                                      <Button
+                                        className=""
+                                        variant="prominent"
+                                        onClick={() => startChallenge()}
+                                        disabled={!allMembersReady}
+                                      >
+                                        Start Party Quest
+                                      </Button>
+                                    ) : null
+                                  ) : null
+                                ) : null}
+                              </>
                             ) : null}
-                            {party.status == 1 ? (
-                              specificPartyPlayer ? (
-                                specificPartyPlayer.role == 'Party Leader' ? (
-                                  <Button
-                                    className=""
-                                    variant="prominent"
-                                    onClick={() => startChallenge()}
-                                    disabled={!allMembersReady}
-                                  >
-                                    Start Party Quest
-                                  </Button>
-                                ) : null
-                              ) : null
-                            ) : null}
-                            <div className="text-center text-accents-4 text-sm">
-                              You won't be able to change your details once the
-                              party quest starts.
-                            </div>
                           </div>
                         </>
                       ) : party.status > 1 ? (
@@ -818,7 +946,9 @@ export default function partyDetail() {
                                     </div>
                                   </p>
                                   <div className="hidden sm:flex justify-center items-center gap-2 py-2">
-                                    <div className={`px-5 rounded flex justify-center items-center bg-red-200 border border-red-500 h-16`}>
+                                    <div
+                                      className={`px-5 rounded flex justify-center items-center bg-red-200 border border-red-500 h-16`}
+                                    >
                                       <div className="my-auto">
                                         <div className="text-red-600 fas fa-heart text-xl" />
                                         <p className="text-red-700 text-xs text-center">
@@ -826,7 +956,9 @@ export default function partyDetail() {
                                         </p>
                                       </div>
                                     </div>
-                                    <div className={`px-5 rounded bg-emerald-200 border border-emerald-500 flex justify-center items-center h-16`}>
+                                    <div
+                                      className={`px-5 rounded bg-emerald-200 border border-emerald-500 flex justify-center items-center h-16`}
+                                    >
                                       <div className="my-auto">
                                         <div className="text-emerald-700 text-xl">
                                           XP
@@ -938,9 +1070,7 @@ export default function partyDetail() {
                                 </div>
                               </div>
                             </>
-                          ) : (
-                            null
-                          )}
+                          ) : null}
                         </>
                       ) : (
                         <div className="mx-auto flex flex-row max-w-screen-2xl gap-6 pt-10 mb-10 justify-center">

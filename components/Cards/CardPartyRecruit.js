@@ -19,28 +19,6 @@ export default function CardPartyRecruit({party, partyLimit}) {
     setPartyMembers(await fetchPartyMembers(party.id));
   }
 
-  async function joinParty(){
-    // this should insert a row into the party members table
-
-    try {
-      const user = supabase.auth.user();
-
-      const { data, error } = await supabase.from('party_members').insert([
-        {
-          party_id: party.id,
-          player: user.id,
-          role: 'Adventurer'
-        }
-      ]);
-      router.push('/parties/details?id='+party.slug)
-
-    } catch (error) {
-      alert(error.message);
-    } finally {
-    }
-
-  }
-
   const style = {
     card: `bg-yellow-50 shadow-lg w-full sm:w-72 m-2 p-4 text-dailies rounded-lg flex flex-col gap-1 justify-center`,
     name: `w-50 font-bold text-xl`,
@@ -81,9 +59,10 @@ export default function CardPartyRecruit({party, partyLimit}) {
               variant="prominent"
               disabled={partyLimit}
               className="w-24 animate-fade-in-up text-center font-bold mx-auto"
-              onClick={()=>joinParty()}
+              // onClick={()=>joinParty()}
+              onClick={()=>router.push('/parties/details?id='+party.slug)}
             >
-              Apply
+              View
             </Button>
             </div>
       </div>
