@@ -79,6 +79,8 @@ export default function parties() {
     if (playerStats) loadBackgroundURL();    
     if (playerStats?.role.includes('Party Leader')) {
       setPartyLimitNo(5);
+    } else {
+      setPartyLimitNo(3);
     }
   }, [playerStats]);
 
