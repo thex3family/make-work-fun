@@ -57,7 +57,6 @@ export default function CardPartyRecruit({party, partyLimit}) {
               </div>
             <Button
               variant="prominent"
-              disabled={partyLimit}
               className="w-24 animate-fade-in-up text-center font-bold mx-auto"
               // onClick={()=>joinParty()}
               onClick={()=>router.push('/parties/details?id='+party.slug)}
