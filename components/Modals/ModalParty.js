@@ -124,6 +124,7 @@ export default function ModalParty({ setCreateParty, party }) {
                       disabled={saving}
                       value={partyName || ''}
                       onChange={setPartyName}
+                      maxlength = "35"
                     />
                   </div>
 
@@ -159,6 +160,7 @@ export default function ModalParty({ setCreateParty, party }) {
                       disabled={saving}
                       value={partyDescription || ''}
                       onChange={setPartyDescription}
+                      maxlength = "140"
                     />
                   </div>
                 </div>
