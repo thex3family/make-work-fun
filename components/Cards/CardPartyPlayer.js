@@ -9,7 +9,8 @@ export default function CardPartyPlayer({
   setCumulativeWins,
   cumulativeEXP,
   setCumulativeEXP,
-  party
+  party,
+  specificPartyPlayer
 }) {
   const [openTab, setOpenTab] = useState(1);
   const [avatarURL, setAvatarURL] = useState(null);
@@ -102,7 +103,7 @@ export default function CardPartyPlayer({
                 <h5 className="text-emerald-400 uppercase font-bold text-xs">
                   {player.role ? player.role : 'Adventurer'}
                 </h5>
-                <p className="font-semibold text-xl text-white-700 truncate">
+                <p className="font-semibold text-xl text-white-700 truncate w-32">
                   {player.full_name}
                 </p>
               </div>
@@ -234,7 +235,7 @@ export default function CardPartyPlayer({
             </div>
           </div>
         </div>
-        {party.status > 1 ? (
+        {party.status > 1 && specificPartyPlayer ? (
           <>
             <ul
               className="max-w-screen-lg mx-auto flex mb-0 mt-6 list-none flex-row"
