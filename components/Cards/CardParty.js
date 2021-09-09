@@ -8,15 +8,24 @@ export default function CardParty({ party }) {
   var due_date = new Date(party.party_due_date);
   var now = new Date();
 
+  console.log('Start Date', party.party_name, start_date);
+
   // To calculate the date difference of two dates
   var start_to_end_days =
     (due_date.getTime() - start_date.getTime()) / (1000 * 3600 * 24);
+
+  console.log('s2e', party.party_name, start_to_end_days);
+
   var start_to_now_days =
     (now.getTime() - start_date.getTime()) / (1000 * 3600 * 24);
+
+  console.log('s2n', party.party_name, start_to_now_days);
 
   // divide this number by the number of days and convert the result into a percentage
   var deadline_completion_percentage =
     (start_to_now_days / start_to_end_days) * 100;
+
+  console.log('dcp', party.party_name, deadline_completion_percentage);
 
   const health = party.health * 10;
 
@@ -122,7 +131,7 @@ export default function CardParty({ party }) {
               <div className="row-start-2 justify-self-end hidden sm:flex mt-1">
                 {partyMembers
                   ? partyMembers.map((member) => (
-                      <AvatarMember member = {member}/>
+                      <AvatarMember member={member} />
                     ))
                   : null}
               </div>
@@ -137,7 +146,7 @@ export default function CardParty({ party }) {
                   className="bg-gradient-to-r from-emerald-500 to-blue-500 text-xs leading-none py-1 text-center text-white w-3/4 h-4 rounded-full "
                   style={{
                     width: party.party_start_date
-                      ? deadline_completion_percentage
+                      ? deadline_completion_percentage+'%'
                       : 0 + '%'
                   }}
                 ></div>
