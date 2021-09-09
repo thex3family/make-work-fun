@@ -22,6 +22,7 @@ export default function parties() {
   const [recruitingParties, setRecruitingParties] = useState(null);
   const [loading, setLoading] = useState(true);
   const [partyLimit, setPartyLimit] = useState(false);
+  const [partyLimitNo, setPartyLimitNo] = useState(3);
 
   const router = useRouter();
   const [levelUp, setLevelUp] = useState(false);
@@ -75,7 +76,10 @@ export default function parties() {
   }
 
   useEffect(() => {
-    if (playerStats) loadBackgroundURL();
+    if (playerStats) loadBackgroundURL();    
+    if (playerStats?.role.includes('Party Leader')) {
+      setPartyLimitNo(5);
+    }
   }, [playerStats]);
 
   async function loadBackgroundURL() {
@@ -87,6 +91,10 @@ export default function parties() {
       setBackgroundUrl('/background/great-hall.jpg');
     }
   }
+
+  useEffect(() => {
+    if (activeParties?.length >= partyLimitNo) setPartyLimit(true);
+  }, [partyLimitNo])
 
   async function fetchActiveParties() {
     try {
@@ -122,19 +130,18 @@ export default function parties() {
         .select('*')
         .eq('player', user.id);
 
-        var parties_you_are_in = data;
+      var parties_you_are_in = data;
 
       // // only use the parties that are in progress
       // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
 
       setActiveParties(parties_you_are_in);
-      if (parties_you_are_in.length >= 3) setPartyLimit(true);
 
       if (error && status !== 406) {
         throw error;
       }
     } catch (error) {
-      // alert(error.message)
+      alert(error.message)
     } finally {
       setLoading(false);
     }
@@ -183,9 +190,7 @@ export default function parties() {
     try {
       const { data, error } = await supabase
         .from('party')
-        .select(
-          '*'
-        )
+        .select('*')
         .eq('status', 1);
 
       var recruitingParties = data;
@@ -262,7 +267,7 @@ export default function parties() {
               ) : null}
             </div>
             <div className="text-center">
-            {/* <section className="mb-8">
+              {/* <section className="mb-8">
                 <div className="flex items-center">
                   <div
                     className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
@@ -291,7 +296,7 @@ export default function parties() {
                   <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-dailies mb-5">
                     Your Parties{' '}
                     <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">
-                      {activeParties ? activeParties.length : 0}/3
+                      {activeParties ? activeParties.length : 0}/{partyLimitNo}
                     </span>
                   </h2>
                   <div
