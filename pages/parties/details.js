@@ -801,7 +801,7 @@ export default function partyDetail() {
                               <div className="text-center text-white text-lg mb-2 font-semibold">
                                 Party Missions
                               </div>
-                              <div className="mb-5 max-w-lg mx-auto font-semibold shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
+                              <div className="mb-5 max-w-xl mx-auto font-semibold shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
                                 <div className="flex flex-row ml-3 gap-3">
                                   <p className="text-2xl py-2 mb-1">🎯</p>
                                   <p className="text-sm sm:text-lg w-full py-2 mb-1">
@@ -818,7 +818,7 @@ export default function partyDetail() {
                                     </div>
                                   </p>
                                   <div className="hidden sm:flex justify-center items-center gap-2 py-2">
-                                    <div className="px-5 rounded bg-red-200 border border-red-500 flex justify-center items-center h-16">
+                                    <div className={`px-5 rounded flex justify-center items-center bg-red-200 border border-red-500 h-16`}>
                                       <div className="my-auto">
                                         <div className="text-red-600 fas fa-heart text-xl" />
                                         <p className="text-red-700 text-xs text-center">
@@ -826,7 +826,7 @@ export default function partyDetail() {
                                         </p>
                                       </div>
                                     </div>
-                                    <div className="px-5 rounded bg-emerald-200 border border-emerald-500 flex justify-center items-center h-16">
+                                    <div className={`px-5 rounded bg-emerald-200 border border-emerald-500 flex justify-center items-center h-16`}>
                                       <div className="my-auto">
                                         <div className="text-emerald-700 text-xl">
                                           XP
