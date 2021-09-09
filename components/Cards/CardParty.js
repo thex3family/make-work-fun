@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { fetchPartyMembers } from '../Fetch/fetchMaster';
+import AvatarMember from '../Avatars/AvatarMember';
 
 export default function CardParty({ party }) {
   var start_date = new Date(party.party_start_date);
@@ -16,7 +17,6 @@ export default function CardParty({ party }) {
   // divide this number by the number of days and convert the result into a percentage
   var deadline_completion_percentage =
     (start_to_now_days / start_to_end_days) * 100;
-
 
   const health = party.health * 10;
 
@@ -122,28 +122,7 @@ export default function CardParty({ party }) {
               <div className="row-start-2 justify-self-end hidden sm:flex mt-1">
                 {partyMembers
                   ? partyMembers.map((member) => (
-                      <div
-                        className={`bg-cover bg-center object-cover rounded-full shadow-xl block w-8 h-8 -ml-3 overflow-hidden ${
-                          member.role == 'Party Leader'
-                            ? 'border-2 border-yellow-300'
-                            : 'border-2 border-gray-700'
-                        }`}
-                        style={{
-                          backgroundImage: `url(${member.background_url})`
-                        }}
-                      >
-                        <div className="bg-black bg-opacity-30 rounded-full w-8 h-8 p-0.5 flex items-center">
-                          <img
-                            className="avatar image mx-auto object-cover"
-                            src={`${
-                              member.avatar_url
-                                ? member.avatar_url
-                                : 'img/default_avatar.png'
-                            }`}
-                            alt="Avatar"
-                          />
-                        </div>
-                      </div>
+                      <AvatarMember member = {member}/>
                     ))
                   : null}
               </div>
