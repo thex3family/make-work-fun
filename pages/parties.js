@@ -79,7 +79,7 @@ export default function parties() {
 
   useEffect(() => {
     if (playerStats) loadBackgroundURL();
-    if (playerStats?.role.includes('Party Leader')) {
+    if (playerStats?.role?.includes('Party Leader')) {
       setPartyLimitNo(5);
     } else {
       setPartyLimitNo(3);
