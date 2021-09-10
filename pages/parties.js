@@ -251,7 +251,7 @@ export default function parties() {
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                       : ''
                   }`}
-                  onClick={()=>setActiveTab(1)}
+                  onClick={() => setActiveTab(1)}
                 >
                   My Parties
                 </div>
@@ -261,7 +261,7 @@ export default function parties() {
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                       : ''
                   }`}
-                  onClick={()=>setActiveTab(2)}
+                  onClick={() => setActiveTab(2)}
                 >
                   Leaderboard
                 </div>
@@ -307,14 +307,10 @@ export default function parties() {
                       <i className="text-yellow-500 fas fa-crown mr-2" />
                       Create Party
                     </Button>
-                    {playerStats ? (
-                      playerStats.role ? (
-                        !playerStats.role.includes('Party Leader') ? (
-                          <div className="mt-1 text-xs text-accents-3">
-                            Party Leaders Only!
-                          </div>
-                        ) : null
-                      ) : null
+                    {!playerStats?.role?.includes('Party Leader') ? (
+                      <div className="mt-1 text-xs text-accents-3">
+                        Party Leaders Only!
+                      </div>
                     ) : null}
                   </div>
                   <section className="mb-8">
@@ -376,7 +372,9 @@ export default function parties() {
                     ) : null}
                   </section>
                 </>
-              ) : <div className="font-semibold">Feature Coming Soon!</div>}
+              ) : (
+                <div className="font-semibold">Feature Coming Soon!</div>
+              )}
             </div>
           </div>
         </div>
