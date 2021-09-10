@@ -52,7 +52,7 @@ export default function CardParty({ party }) {
           })`
         }}
       >
-        <div className="bg-dark bg-opacity-90">
+        <div className="bg-dark bg-opacity-70">
           <div className="py-2 px-6 pt-4">
             <div className="grid grid-cols-4 mb-4">
               <div className="row-start-1 col-span-3 mb-1">
