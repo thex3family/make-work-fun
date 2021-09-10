@@ -719,7 +719,7 @@ export default function partyDetail() {
                                           Editable By Leader
                                         </span>
                                       </div>
-                                      <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                                      <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                                       {party.daily_target} {party.daily_target > 1 ? 'Tasks' : 'Task'}
                                       </div>
                                       <div className="text-lg mb-2 font-semibold">
@@ -733,13 +733,13 @@ export default function partyDetail() {
                                           Editable By Leader
                                         </span>
                                       </div>
-                                      <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                                      <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                                         {moment(due_date)
                                           .local()
                                           .format('YYYY-MM-DD')}
                                       </div>
                                       <div className="text-lg mb-2 font-semibold">
-                                        Challenge Ends at{' '}
+                                        Challenge Ends At{' '}
                                         {moment(due_date)
                                           .local()
                                           .format('h:mm a')}
@@ -758,7 +758,7 @@ export default function partyDetail() {
                                         Editable By Leader
                                       </span>
                                     </div>
-                                    <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                                    <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                                       {party.daily_target} {party.daily_target > 1 ? 'Tasks' : 'Task'}
                                     </div>
                                     <div className="text-lg mb-2 font-semibold">
@@ -772,13 +772,13 @@ export default function partyDetail() {
                                         Editable By Leader
                                       </span>
                                     </div>
-                                    <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                                    <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                                       {moment(due_date)
                                         .local()
                                         .format('YYYY-MM-DD')}
                                     </div>
                                     <div className="text-lg mb-2 font-semibold">
-                                      Challenge Ends at{' '}
+                                      Challenge Ends At{' '}
                                       {moment(due_date)
                                         .local()
                                         .format('h:mm a')}
