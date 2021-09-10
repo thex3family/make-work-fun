@@ -8,24 +8,17 @@ export default function CardParty({ party }) {
   var due_date = new Date(party.party_due_date);
   var now = new Date();
 
-  console.log('Start Date', party.party_name, start_date);
-
   // To calculate the date difference of two dates
   var start_to_end_days =
     (due_date.getTime() - start_date.getTime()) / (1000 * 3600 * 24);
 
-  console.log('s2e', party.party_name, start_to_end_days);
-
   var start_to_now_days =
     (now.getTime() - start_date.getTime()) / (1000 * 3600 * 24);
 
-  console.log('s2n', party.party_name, start_to_now_days);
 
   // divide this number by the number of days and convert the result into a percentage
   var deadline_completion_percentage =
     (start_to_now_days / start_to_end_days) * 100;
-
-  console.log('dcp', party.party_name, deadline_completion_percentage);
 
   const health = party.health * 10;
 
@@ -38,7 +31,6 @@ export default function CardParty({ party }) {
   async function getPartyMembers() {
     setPartyMembers(await fetchPartyMembers(party.party_id));
   }
-  console.log(party);
 
   return (
     <Link href={`/parties/details/?id=${party.party_slug}`}>
