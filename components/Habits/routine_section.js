@@ -30,12 +30,12 @@ export default function RoutineSection({
     <div className="animate-fade-in-up" key={habit_group_name}>
       <div className="flex items-center">
         <div
-          className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 mr-3"
+          className="border-t-2 border-white flex-grow mb-6 sm:mb-3 mr-3"
           aria-hidden="true"
         ></div>
 
         <div
-          className="text-xl sm:text-2xl md:text-3xl font-extrabold text-dailies pb-5 cursor-pointer inline-block"
+          className="text-xl sm:text-2xl md:text-3xl font-bold text-primary pb-5 cursor-pointer inline-block"
           onClick={() => {
             showHide ? setShowHide(false) : setShowHide(true);
           }}
@@ -57,7 +57,7 @@ export default function RoutineSection({
           />
         </div>
         <div
-          className="border-t-2 border-dailies-dark flex-grow mb-6 sm:mb-3 ml-3"
+          className="border-t-2 border-white flex-grow mb-6 sm:mb-3 ml-3"
           aria-hidden="true"
         ></div>
       </div>

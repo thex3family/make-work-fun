@@ -166,7 +166,7 @@ export default function HabitSquare({
             : () => handleHabitCompletionStatusChange(habit_id)
           : null
       }
-      className={`my-4 mb-0 sm:mb-8 p-4 sm:p-6 w-full sm:w-64 relative ${
+      className={`animate-fade-in-down my-4 mb-0 sm:mb-8 p-4 sm:p-6 w-full sm:w-64 relative ${
         habitCompletedToday
           ? (details == 'meh' ? `bg-yellow-500 border-yellow-700` : details == 'unhappy' ? `bg-red-500 border-red-700` : `bg-emerald-500 border-emerald-700`)
           : `bg-dailies-light border-dailies-dark`
