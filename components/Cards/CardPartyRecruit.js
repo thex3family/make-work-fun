@@ -20,7 +20,7 @@ export default function CardPartyRecruit({party, partyLimit}) {
   }
 
   const style = {
-    card: `bg-yellow-50 shadow-lg w-full sm:w-72 m-2 p-4 text-dailies rounded-lg flex flex-col gap-1 justify-center`,
+    card: `bg-yellow-50 shadow-lg w-full sm:w-72 m-2 p-4 text-dailies rounded-lg flex flex-col gap-1 justify-center mb-3`,
     name: `w-50 font-bold text-xl`,
     playerIcons: `w-8 h-8 m-1 border-2 rounded-full`,
     leader: `border-indigo-300 ml-0`,

@@ -11,9 +11,9 @@ export default function RecruitingBoard({
     bg: `bg-dailies-default`,
     main: `w-full mt-4`,
     tab: `border-4 
-          border-yellow-900 
-          border-opacity-60 
-          text-dailies
+          border-white 
+          border-opacity-20 
+          text-gray-100
           font-bold 
           rounded-lg 
           p-1 m-1 px-2`,
@@ -21,13 +21,13 @@ export default function RecruitingBoard({
           shadow-lg 
           border-gray-100 
           bg-opacity-60
-          bg-yellow-900 
+          bg-gradient-to-r from-emerald-500 to-blue-500
           font-bold
           text-gray-100 
           rounded-lg 
           p-1 m-1 px-3`,
     tabs: `w-full text-left p-1 overflow-x-auto flex-row flex justify-center`,
-    board: `w-full bg-yellow-900 bg-opacity-60 rounded-lg shadow-lg pb-3`,
+    board: `w-full rounded-lg shadow-lg bg-cover bg-center object-cover`,
     rowTitle: `text-left font-bold ml-4 pt-2`,
     row: `flex p-2`,
     left: `font-bold bg-yellow-700`,
@@ -77,23 +77,23 @@ export default function RecruitingBoard({
   const showParties = () => {
     let parties;
     if (selectedTab === 0) {
-      parties = recruitingParties_1
-    } 
+      parties = recruitingParties_1;
+    }
     if (selectedTab === 1) {
-      parties = recruitingParties_2
-    } 
+      parties = recruitingParties_2;
+    }
     if (parties.length > 0) {
       return parties.map((party, i) => (
-        <CardPartyRecruit
-          key={i}
-          party={party}
-          partyLimit={partyLimit}
-        />
-      ))
+        <CardPartyRecruit key={i} party={party} partyLimit={partyLimit} />
+      ));
     } else {
-      return (<p className="mx-auto text-center">There are no other parties recruiting! Check again later.</p>)
+      return (
+        <p className="mx-auto text-center pb-3">
+          There are no other parties recruiting! Check again later.
+        </p>
+      );
     }
-  }
+  };
 
   return (
     <>
@@ -115,21 +115,36 @@ export default function RecruitingBoard({
                     : 'text-dailies border-dailies-dark')
                 }
               >
-                
-                  {i == 0 ? recruitingParties_1.length : i == 1 ? recruitingParties_2.length : null}
-                
+                {i == 0
+                  ? recruitingParties_1.length
+                  : i == 1
+                  ? recruitingParties_2.length
+                  : null}
               </div>
             </button>
           ))}
         </div>
-        <div className={style.board}>
+        <div
+          className={style.board}
+          style={{
+            backgroundImage: `url(${
+              selectedTab == 0 ? '/challenge/rush.jpg' : '/challenge/skyrim.jpg'
+            })`
+          }}
+        >
+          <div className="bg-dark bg-opacity-70">
           {sections.map((section, i) => (
             <>
               <section className={style.rowTitle}>
                 {/* {tabs[selectedTab] + ' ' + section} */}
               </section>
               <div className={style.row}>
-                {(i == 0 ? recruitingParties_1.length : i == 1 ? recruitingParties_2.length : null).length > 3 ? (
+                {(i == 0
+                  ? recruitingParties_1.length
+                  : i == 1
+                  ? recruitingParties_2.length
+                  : null
+                ).length > 3 ? (
                   <button
                     onClick={() => scroll(`left`, i)}
                     className={style.scroll}
@@ -138,11 +153,11 @@ export default function RecruitingBoard({
                   </button>
                 ) : null}
                 <div className={style.partyList}>
-                    {/* {recruitingParties.map((e) => (
+                  {/* {recruitingParties.map((e) => (
                       <CardPartyRecruit className={style.card} {...e} />
                     ))} */}
 
-                    {/* {recruitingParties.map((party, i) =>
+                  {/* {recruitingParties.map((party, i) =>
                       party.challenge == selectedTab + 1 &&
                       !activePartiesID.includes(party.id) ? (
                         <CardPartyRecruit
@@ -152,9 +167,14 @@ export default function RecruitingBoard({
                         />
                       ) : null
                     )} */}
-                    {showParties()}
+                  {showParties()}
                 </div>
-                {(i == 0 ? recruitingParties_1.length : i == 1 ? recruitingParties_2.length : null).length > 3 ? (
+                {(i == 0
+                  ? recruitingParties_1.length
+                  : i == 1
+                  ? recruitingParties_2.length
+                  : null
+                ).length > 3 ? (
                   <button
                     onClick={() => scroll(`right`, i)}
                     className={style.scroll}
@@ -165,6 +185,7 @@ export default function RecruitingBoard({
               </div>
             </>
           ))}
+          </div>
           {/* <div className={style.rowTitle}>Row Title</div>
                 <div className={style.row}>
                     <button className={style.scroll}>{`<`}</button>
