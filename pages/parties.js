@@ -243,7 +243,7 @@ export default function parties() {
               </p>
             </div>
 
-            <div className="text-center bg-black bg-opacity-80 p-10 rounded-0 sm:rounded-b relative mt-7 pt-16">
+            <div className="text-center bg-black bg-opacity-80 p-10 rounded-0 sm:rounded-b relative mt-7 pt-14">
               <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 rounded-0 sm:rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
                 <div
                   className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
@@ -307,11 +307,9 @@ export default function parties() {
                       <i className="text-yellow-500 fas fa-crown mr-2" />
                       Create Party
                     </Button>
-                    {!playerStats?.role?.includes('Party Leader') ? (
-                      <div className="mt-1 text-xs text-accents-3">
-                        Party Leaders Only!
+                      <div className="mt-1 text-xs text-accents-4">
+                        For Party Leaders Only!
                       </div>
-                    ) : null}
                   </div>
                   <section className="mb-8">
                     <div className="flex items-center">
