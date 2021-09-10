@@ -132,7 +132,7 @@ export default function RecruitingBoard({
             })`
           }}
         >
-          <div className="bg-dark bg-opacity-70">
+          <div className="bg-dark bg-opacity-70 rounded-lg">
           {sections.map((section, i) => (
             <>
               <section className={style.rowTitle}>
