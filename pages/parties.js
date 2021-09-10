@@ -227,8 +227,8 @@ export default function parties() {
         className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundUrl})` }}
       >
-        <div className=" max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
-          <div className="animate-fade-in-up bg-dailies-default rounded opacity-90">
+        <div className="max-w-6xl mx-auto py-0 sm:py-8 sm:pt-24 px-0 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+          <div className="animate-fade-in-up bg-dailies-default rounded-0 sm:rounded opacity-90">
             <div className="pb-5 p-10">
               <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies">
                 Party Quests
@@ -243,8 +243,8 @@ export default function parties() {
               </p>
             </div>
 
-            <div className="text-center bg-black bg-opacity-80 p-10 rounded-b relative mt-7 pt-16">
-              <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
+            <div className="text-center bg-black bg-opacity-80 p-10 rounded-0 sm:rounded-b relative mt-7 pt-16">
+              <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 rounded-0 sm:rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
                 <div
                   className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
                     activeTab == 1
