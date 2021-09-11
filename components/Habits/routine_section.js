@@ -44,11 +44,9 @@ export default function RoutineSection({
             ? habit_group_name
             : habit_group_name + ' Routines'}{' '}
           <span
-            className={
-              'text-dailies p-3 text-sm align-middle mb-1 bg-dailies-light text-center inline-flex items-center justify-center w-4 h-4 border-2 sm:border-4 border-dailies-dark shadow-lg rounded-full font-bold'
-            }
+            className={`text-dailies p-3 text-sm align-middle mb-1 text-center inline-flex items-center justify-center w-4 h-4 border-2 sm:border-4 shadow-lg rounded-full font-bold ${associated_habits.length - habitCounter.length == 0 ? 'border-emerald-500 bg-emerald-200' : 'border-dailies-dark bg-dailies-light'}`}
           >
-            {associated_habits.length - habitCounter.length}
+            {associated_habits.length - habitCounter.length == 0  ? <i className="text-emerald-600 fas fa-check"/> : associated_habits.length - habitCounter.length}
           </span>{' '}
           <i
             className={
