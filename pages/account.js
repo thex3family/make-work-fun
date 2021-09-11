@@ -212,16 +212,14 @@ export default function Account({ initialPurchaseRecord }) {
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
                   <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
                     Not seeing everything? Your resources are tied to your
-                    email. You are currently logged in as <b>{user ? user.email : <LoadingDots/>}</b>
+                    email. You are currently logged in as{' '}
+                    <b>{user ? user.email : <LoadingDots />}</b>
                   </p>
                   <a
                     href="https://toolbox.co-x3.com/?utm_source=makeworkfun"
                     target="_blank"
                   >
-                    <Button
-                      className="w-full sm:w-auto"
-                      variant="incognito"
-                    >
+                    <Button className="w-full sm:w-auto" variant="incognito">
                       Visit Our Toolbox
                     </Button>
                   </a>
@@ -401,15 +399,17 @@ export default function Account({ initialPurchaseRecord }) {
                   Gamify Your Life!
                 </a>
               </div>
-              {notionCredentials
-                ? notionCredentials.map((credentials) => (
-                    <ConnectNotion
-                      credentials={credentials}
-                      getNotionCredentials={getNotionCredentials}
-                      setShowSaveModal={setShowSaveModal}
-                    />
-                  ))
-                : <LoadingDots/>}
+              {notionCredentials ? (
+                notionCredentials.map((credentials) => (
+                  <ConnectNotion
+                    credentials={credentials}
+                    getNotionCredentials={getNotionCredentials}
+                    setShowSaveModal={setShowSaveModal}
+                  />
+                ))
+              ) : (
+                <LoadingDots />
+              )}
               {notionCredentials ? (
                 notionCredentials.length < 5 ? (
                   <div className="flex items-center my-6">
@@ -502,12 +502,13 @@ export default function Account({ initialPurchaseRecord }) {
 
       {showSaveModal ? (
         <>
-          <div className="h-screen flex justify-center">
-            <div
-              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-              // onClick={() => setShowModal(false)}
-            >
-              <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+          <div className="animate-fade-in h-screen flex justify-center">
+            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+              <div
+                className="opacity-50 fixed inset-0 z-40 bg-black"
+                onClick={() => setShowSaveModal(false)}
+              ></div>
+              <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen z-50">
                 {/*content*/}
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
@@ -531,13 +532,13 @@ export default function Account({ initialPurchaseRecord }) {
                   </div>
                   {/*footer*/}
                   <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                      <Button
-                        className="w-full"
-                        variant="prominent"
-                        onClick={() => router.push('/notion-api-validator')}
-                      >
-                        Test Connection
-                      </Button>
+                    <Button
+                      className="w-full"
+                      variant="prominent"
+                      onClick={() => router.push('/notion-api-validator')}
+                    >
+                      Test Connection
+                    </Button>
                   </div>
                   <div className="text-center mb-6">
                     <button
@@ -550,7 +551,6 @@ export default function Account({ initialPurchaseRecord }) {
                 </div>
               </div>
             </div>
-            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </div>
         </>
       ) : null}
@@ -583,7 +583,8 @@ export async function getServerSideProps({ req }) {
       .firstPage();
     return {
       props: {
-        initialPurchaseRecord: minifyRecords(purchaseRecord), user
+        initialPurchaseRecord: minifyRecords(purchaseRecord),
+        user
       }
     };
   } catch (error) {
