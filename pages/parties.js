@@ -249,7 +249,7 @@ export default function parties() {
                   className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
                     activeTab == 1
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                      : ''
+                      : 'text-blueGray-600'
                   }`}
                   onClick={() => setActiveTab(1)}
                 >
@@ -259,7 +259,7 @@ export default function parties() {
                   className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
                     activeTab == 2
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                      : ''
+                      : 'text-blueGray-600'
                   }`}
                   onClick={() => setActiveTab(2)}
                 >
@@ -289,90 +289,94 @@ export default function parties() {
 
               {activeTab == 1 ? (
                 <>
-                  <div className="text-center mb-5">
-                    <Button
-                      onClick={() => setCreateParty(true)}
-                      className="px-5 font-bold py-2 rounded"
-                      variant="dailies"
-                      disabled={
-                        !partyLimit
-                          ? playerStats
-                            ? playerStats.role
-                              ? !playerStats.role.includes('Party Leader')
+                  <div className="animate-fade-in">
+                    <div className="text-center mb-5">
+                      <Button
+                        onClick={() => setCreateParty(true)}
+                        className="px-5 font-bold py-2 rounded"
+                        variant="dailies"
+                        disabled={
+                          !partyLimit
+                            ? playerStats
+                              ? playerStats.role
+                                ? !playerStats.role.includes('Party Leader')
+                                : true
                               : true
                             : true
-                          : true
-                      }
-                    >
-                      <i className="text-yellow-500 fas fa-crown mr-2" />
-                      Create Party
-                    </Button>
+                        }
+                      >
+                        <i className="text-yellow-500 fas fa-crown mr-2" />
+                        Create Party
+                      </Button>
                       <div className="mt-1 text-xs text-accents-4">
                         For Party Leaders Only!
                       </div>
-                  </div>
-                  <section className="mb-8">
-                    <div className="flex items-center">
-                      <div
-                        className="border-t-2 border-white flex-grow mb-6 sm:mb-3 mr-3"
-                        aria-hidden="true"
-                      ></div>
-                      <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-primary mb-5">
-                        Your Parties{' '}
-                        <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">
-                          {activeParties ? activeParties.length : 0}/
-                          {partyLimitNo}
-                        </span>
-                      </h2>
-                      <div
-                        className="border-t-2 border-white flex-grow mb-6 sm:mb-3 ml-3"
-                        aria-hidden="true"
-                      ></div>
                     </div>
-                    <div className="flex flex-col gap-4">
-                    {activeParties ? (
-                      activeParties.length != 0 ? (
-                        activeParties.map((party) => (
-                          <CardParty key={party.id} party={party} />
-                        ))
-                      ) : (
-                        <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
-                          You aren't a part of any parties.
-                        </div>
-                      )
-                    ) : null}
-                    </div>
-                  </section>
-                  <section>
-                    <div className="flex items-center mt-4">
-                      <div
-                        className="border-t-2 border-white flex-grow mt-2 mr-3"
-                        aria-hidden="true"
-                      ></div>
-                      <h2 className="text-3xl align-middle justify-center inline-flex font-bold text-primary">
-                        Parties Recruiting
-                      </h2>
-                      <div
-                        className="border-t-2 border-white flex-grow mt-2 ml-3"
-                        aria-hidden="true"
-                      ></div>
-                    </div>
-                    {/* {recruitingParties ? (
+                    <section className="mb-8">
+                      <div className="flex items-center">
+                        <div
+                          className="border-t-2 border-white flex-grow mb-6 sm:mb-3 mr-3"
+                          aria-hidden="true"
+                        ></div>
+                        <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-primary mb-5">
+                          Your Parties{' '}
+                          <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">
+                            {activeParties ? activeParties.length : 0}/
+                            {partyLimitNo}
+                          </span>
+                        </h2>
+                        <div
+                          className="border-t-2 border-white flex-grow mb-6 sm:mb-3 ml-3"
+                          aria-hidden="true"
+                        ></div>
+                      </div>
+                      <div className="flex flex-col gap-4">
+                        {activeParties ? (
+                          activeParties.length != 0 ? (
+                            activeParties.map((party) => (
+                              <CardParty key={party.id} party={party} />
+                            ))
+                          ) : (
+                            <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
+                              You aren't a part of any parties.
+                            </div>
+                          )
+                        ) : null}
+                      </div>
+                    </section>
+                    <section>
+                      <div className="flex items-center mt-4">
+                        <div
+                          className="border-t-2 border-white flex-grow mt-2 mr-3"
+                          aria-hidden="true"
+                        ></div>
+                        <h2 className="text-3xl align-middle justify-center inline-flex font-bold text-primary">
+                          Parties Recruiting
+                        </h2>
+                        <div
+                          className="border-t-2 border-white flex-grow mt-2 ml-3"
+                          aria-hidden="true"
+                        ></div>
+                      </div>
+                      {/* {recruitingParties ? (
                 <Kanban recruitingParties={recruitingParties} />
               ) : null} */}
-                    {recruitingParties && activeParties ? (
-                      <RecruitingBoard
-                        partyLimit={partyLimit}
-                        recruitingParties={recruitingParties}
-                        activePartiesID={activeParties.map(function (el) {
-                          return el.party_id;
-                        })}
-                      />
-                    ) : null}
-                  </section>
+                      {recruitingParties && activeParties ? (
+                        <RecruitingBoard
+                          partyLimit={partyLimit}
+                          recruitingParties={recruitingParties}
+                          activePartiesID={activeParties.map(function (el) {
+                            return el.party_id;
+                          })}
+                        />
+                      ) : null}
+                    </section>
+                  </div>
                 </>
               ) : (
-                <div className="font-semibold">Feature Coming Soon!</div>
+                <div className="animate-fade-in">
+                  <div className="font-semibold">Feature Coming Soon!</div>
+                </div>
               )}
             </div>
           </div>

@@ -92,7 +92,7 @@ export default function HomePage() {
       null,
       triggerCardWin,
       setShowCardWin,
-      setActiveWinStats,
+      setActiveWinStats
     );
   }, []);
 
@@ -223,9 +223,65 @@ export default function HomePage() {
           </g>
         </svg>
       </div> */}
-        <h1 className="animate-fade-in-up  text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 p-3 sm:p-4">
-          Leaderboard 🏆
-        </h1>
+        <div className="mb-8 animate-fade-in-up text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 h-20 sm:h-24 relative">
+          <h1 className="text-2xl sm:text-3xl font-bold text-center p-3 sm:p-4">
+            Leaderboard 🏆
+          </h1>
+          <div className="mx-auto absolute inset-x-0 -bottom-7 bg-gray-700 rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
+            <div
+              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
+                openTab == 1
+                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                  : 'text-blueGray-600'
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenTab(1);
+              }}
+              data-toggle="tab"
+              href="#link1"
+              role="tablist"
+            >
+              Season 1
+              <div
+                className={
+                  'text-xs text-white p-3 ml-2 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
+                  (openTab === 1
+                    ? 'border-white'
+                    : 'text-blueGray-600 border-blueGray-600')
+                }
+              >
+                {s1Players.length}
+              </div>
+            </div>
+            <div
+              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
+                openTab == 2
+                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                  : 'text-blueGray-600'
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenTab(2);
+              }}
+              data-toggle="tab"
+              href="#link1"
+              role="tablist"
+            >
+              All Time
+              <div
+                className={
+                  'text-xs text-white p-3 ml-2 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
+                  (openTab === 2
+                    ? 'border-white'
+                    : 'text-blueGray-600 border-blueGray-600')
+                }
+              >
+                {players.length}
+              </div>
+            </div>
+          </div>
+        </div>
         {loading ? (
           <div className="animate-fade-in-up mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10">
             <CardAvatarSkeleton />
@@ -244,7 +300,7 @@ export default function HomePage() {
         ) : (
           <div className="flex flex-wrap">
             <div className="w-full">
-              <ul
+              {/* <ul
                 className="max-w-screen-lg mx-auto flex mb-0 mt-6 list-none flex-wrap pt-3 pb-4 flex-row"
                 role="tablist"
               >
@@ -306,7 +362,7 @@ export default function HomePage() {
                     </div>
                   </a>
                 </li>
-              </ul>
+              </ul> */}
               <div className="mb-24">
                 <div
                   className={
