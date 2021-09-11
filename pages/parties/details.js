@@ -424,7 +424,7 @@ export default function partyDetail() {
 
   async function joinParty(){
     // this should insert a row into the party members table
-
+    setSaving(true)
     try {
       const user = supabase.auth.user();
 
@@ -441,6 +441,7 @@ export default function partyDetail() {
       alert(error.message);
     } finally {
       refreshStats();
+      setSaving(false)
     }
 
   }
@@ -790,8 +791,9 @@ export default function partyDetail() {
                                   variant="prominent"
                                   className="w-full animate-fade-in-up text-center font-bold mx-auto"
                                   onClick={()=>joinParty()}
+                                  disabled={saving}
                                 >
-                                  Join Party
+                                  {saving ? 'Joining...' : 'Join Party'}
                                 </Button>
                               </>
                             ) : (
