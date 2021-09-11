@@ -91,7 +91,7 @@ export default function Avatar({
               {avatarStatus == 'Missing' ? (
                 <img
                   className="avatar image m-auto py-5 h-60"
-                  src="img/default_avatar.png"
+                  src="/img/default_avatar.png"
                   alt="Avatar"
                 />
               ) : avatarUrl ? (

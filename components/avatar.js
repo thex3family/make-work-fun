@@ -91,7 +91,7 @@ export default function Avatar({ avatarUrl, size, onAvatarUpload, onBackgroundUp
       ) : (
         <img
           className="avatar image h-36 sm:h-auto m-auto cursor-pointer"
-          src="img/default_avatar.png"
+          src="/img/default_avatar.png"
           alt="Avatar"
           onClick={() => {
             showHide ? setShowHide(false) : setShowHide(true);

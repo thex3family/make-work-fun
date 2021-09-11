@@ -147,7 +147,7 @@ export default function playerDetails() {
                         {avatarStatus == 'Missing' ? (
                           <img
                           className="avatar image h-auto m-auto cursor-pointer"
-                          src="img/default_avatar.png"
+                          src="/img/default_avatar.png"
                           alt="Avatar"
                           onClick={() => {
                             showHide ? setShowHide(false) : setShowHide(true);
