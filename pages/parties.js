@@ -16,6 +16,7 @@ import { downloadImage } from '@/utils/downloadImage';
 import ModalParty from '@/components/Modals/ModalParty';
 import LoadingDots from '@/components/ui/LoadingDots';
 import Button from '@/components/ui/Button';
+import PartiesSkeleton from '@/components/Skeletons/PartiesSkeleton';
 
 export default function parties() {
   const [activeParties, setActiveParties] = useState(null);
@@ -220,6 +221,12 @@ export default function parties() {
   //     <LoadingDots />
   //   );
   // }
+
+  if (!playerStats) {
+    return (
+        <PartiesSkeleton/>
+    );
+  }
 
   return (
     <>
