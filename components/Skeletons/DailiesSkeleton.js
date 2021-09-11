@@ -22,7 +22,7 @@ export default function DailiesSkeleton() {
                 <div className="mx-auto max-w-xs w-72 h-14 sm:h-16 mt-6 bg-gray-600 rounded animate-pulse mb-6" />
               </div>
             </div>
-            <div className="animate-fade-in-up mx-8 sm:mx-0">
+            <div className="animate-fade-in-up mx-0">
               <div className="flex items-center w-full">
                 <div
                   className="border-t-2 border-gray-600 flex-grow mb-6 sm:mb-3 mr-3"
