@@ -192,7 +192,7 @@ export default function CardPartyPlayer({
                             </span>
                           )}
                         </p>
-                        <p className="text-xs font-semibold text-accents-3">
+                        <p className="text-xs font-semibold text-accents-3 truncate">
                           {player.notion_page_id ? (
                             <a
                               href={`https://notion.so/${player.notion_page_id.replaceAll(
