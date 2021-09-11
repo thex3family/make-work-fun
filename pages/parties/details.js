@@ -72,6 +72,8 @@ export default function partyDetail() {
 
   const [anonymousAdventurer, setAnonymousAdventurer] = useState(null);
 
+  const [startChallengeModal, setStartChallengeModal] = useState(false);
+
   // Waits until database fetches user state before loading anything
 
   useEffect(() => {
@@ -125,6 +127,7 @@ export default function partyDetail() {
     setPlayerStats(await fetchPlayerStats());
     setParty(await fetchParty(id));
     setLoading(false);
+    setSaving(false);
   }
 
   async function loadPartyDetails() {
@@ -201,6 +204,8 @@ export default function partyDetail() {
     if (specificPartyPlayer) setDragonID(specificPartyPlayer.notion_page_id);
     if (specificPartyPlayer) setPlayerStatus(specificPartyPlayer.status);
     if (specificPartyPlayer) loadSpecificPartyPlayer();
+    if (specificPartyPlayer?.status == "Not Ready") setShowDetails(true);
+
   }, [specificPartyPlayer]);
 
   async function loadSpecificPartyPlayer() {
@@ -334,6 +339,7 @@ export default function partyDetail() {
   }
 
   async function startChallenge() {
+    setStartChallengeModal(false)
     try {
       const { data, error } = await supabase
         .from('party')
@@ -422,9 +428,9 @@ export default function partyDetail() {
     }
   }
 
-  async function joinParty(){
+  async function joinParty() {
     // this should insert a row into the party members table
-    setSaving(true)
+    setSaving(true);
     try {
       const user = supabase.auth.user();
 
@@ -435,15 +441,12 @@ export default function partyDetail() {
           role: 'Adventurer'
         }
       ]);
-      router.push('/parties/details?id='+party.slug)
-
+      router.push('/parties/details?id=' + party.slug);
     } catch (error) {
       alert(error.message);
     } finally {
       refreshStats();
-      setSaving(false)
     }
-
   }
 
   if (!id || loading) {
@@ -721,7 +724,10 @@ export default function partyDetail() {
                                         </span>
                                       </div>
                                       <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                                      {party.daily_target} {party.daily_target > 1 ? 'Tasks' : 'Task'}
+                                        {party.daily_target}{' '}
+                                        {party.daily_target > 1
+                                          ? 'Tasks'
+                                          : 'Task'}
                                       </div>
                                       <div className="text-lg mb-2 font-semibold">
                                         Per Day
@@ -760,7 +766,10 @@ export default function partyDetail() {
                                       </span>
                                     </div>
                                     <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                                      {party.daily_target} {party.daily_target > 1 ? 'Tasks' : 'Task'}
+                                      {party.daily_target}{' '}
+                                      {party.daily_target > 1
+                                        ? 'Tasks'
+                                        : 'Task'}
                                     </div>
                                     <div className="text-lg mb-2 font-semibold">
                                       Per Day
@@ -790,7 +799,7 @@ export default function partyDetail() {
                                 <Button
                                   variant="prominent"
                                   className="w-full animate-fade-in-up text-center font-bold mx-auto"
-                                  onClick={()=>joinParty()}
+                                  onClick={() => joinParty()}
                                   disabled={saving}
                                 >
                                   {saving ? 'Joining...' : 'Join Party'}
@@ -902,8 +911,12 @@ export default function partyDetail() {
                                       <Button
                                         className=""
                                         variant="prominent"
-                                        onClick={() => startChallenge()}
-                                        disabled={!allMembersReady}
+                                        onClick={() =>
+                                          allMembersReady
+                                            ? startChallenge()
+                                            : setStartChallengeModal(true)
+                                        }
+                                        // disabled={!allMembersReady}
                                       >
                                         Start Party Quest
                                       </Button>
@@ -1151,11 +1164,86 @@ export default function partyDetail() {
         {editParty ? (
           <ModalParty setCreateParty={setEditParty} party={party} />
         ) : null}
+
         {showValidateDragon ? (
           <ValidateDragon
             specificPartyPlayer={specificPartyPlayer}
             setShowValidateDragon={setShowValidateDragon}
           />
+        ) : null}
+
+        {startChallengeModal ? (
+          <div className="animate-fade-in h-screen flex justify-center">
+            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+              <div
+                className="opacity-50 fixed inset-0 z-40 bg-black"
+                onClick={() => setStartChallengeModal(false)}
+              ></div>
+              <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen z-50">
+                {/*content*/}
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                  {/*header*/}
+                  <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-white">
+                      <i className="fas fa-exclamation-triangle mr-2" /> Not
+                      Everybody In The Party Is Ready!
+                    </h3>
+                  </div>
+                  {/*body*/}
+                  <div className="relative p-6 text-blueGray-500">
+                    <div className="text-center">
+                      <p className="text-xl text-primary-2 font-semibold">
+                        Here's what you can do...
+                      </p>
+
+                      <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
+                        <li>1. Send a message to the members to ready up.</li>
+                        <li>
+                          2. Help them understand{' '}
+                          <a
+                            className="text-emerald-500"
+                            href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
+                            target="_blank"
+                          >
+                            what they need to do to start.
+                          </a>{' '}
+                        </li>
+                        <li>
+                          3. Wait for them to respond (a few hours is
+                          reasonable!)
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
+
+                  {/* <img src="img/default_avatar.png" height="auto" className="w-3/4 mx-auto pb-2" /> */}
+                  {/*footer*/}
+                  <div className="flex items-center p-6 border-t border-solid border-blueGray-200 rounded-b">
+                    <div className="text-center mx-auto">
+                      <p className="text-sm text-accents-3 mb-4">
+                        If you decide to start anyways, they will be able to
+                        ready up on next log in.
+                      </p>
+                      <button
+                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                        onClick={() => setStartChallengeModal(false)}
+                      >
+                        Cancel
+                      </button>
+                      <Button
+                        variant="prominent"
+                        className="text-md font-semibold text-emerald-600"
+                        onClick={() => startChallenge()}
+                      >
+                        Start Anyways
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         ) : null}
       </>
     );
