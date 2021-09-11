@@ -28,7 +28,7 @@ export async function fetchLatestWin(
             if (payload.new.player === user.id) {
               // Get the latest updated stats of the user
               const player = await fetchPlayerStats();
-
+              console.log('Player', player);
               // check if user leveled up
 
               if (player.current_level > player.previous_level) {
@@ -50,11 +50,7 @@ export async function fetchLatestWin(
               // if it is not the current user
               // if Show Card Win Exists (usually on leaderboard)
               if (triggerCardWin) {
-                triggerCardWin(
-                  setActiveWinStats,
-                  setShowCardWin,
-                  payload.new
-                );
+                triggerCardWin(setActiveWinStats, setShowCardWin, payload.new);
               }
             }
           } else {
@@ -66,15 +62,11 @@ export async function fetchLatestWin(
                   triggerCardWin(
                     setActiveWinStats,
                     setShowCardWin,
-                    payload.new,
+                    payload.new
                   );
                 }
               } else {
-                triggerCardWin(
-                  setActiveWinStats,
-                  setShowCardWin,
-                  payload.new,
-                );
+                triggerCardWin(setActiveWinStats, setShowCardWin, payload.new);
               }
             }
           }
@@ -134,15 +126,18 @@ export async function fetchPlayerStats(player) {
     if (!player) {
       const user = supabase.auth.user();
       const { data, error } = await supabase
-        .from('s1_leaderboard')
+        .from('season_leaderboard')
         .select('*')
         .eq('player', user.id)
+        .eq('latest', true)
         .single();
 
       if (data) {
         var newData = {
           ...data,
-          avatar_url: (data.avatar_url ? await downloadImage(data.avatar_url, 'avatar') : null)
+          avatar_url: data.avatar_url
+            ? await downloadImage(data.avatar_url, 'avatar')
+            : null
         };
 
         return newData;
@@ -151,16 +146,18 @@ export async function fetchPlayerStats(player) {
 
     if (player) {
       const { data, error } = await supabase
-        .from('s1_leaderboard')
+        .from('season_leaderboard')
         .select('*')
         .eq('player', player)
+        .eq('latest', true)
         .single();
 
       if (data) {
-        
         var newData = {
           ...data,
-          avatar_url: (data.avatar_url ? await downloadImage(data.avatar_url, 'avatar') : null)
+          avatar_url: data.avatar_url
+            ? await downloadImage(data.avatar_url, 'avatar')
+            : null
         };
 
         return newData;
@@ -316,20 +313,18 @@ export async function fetchWeekWins(player) {
   }
 }
 
-export async function fetchLeaderboardStats(
-  setPlayers,
-  setLoading,
-  season,
-) {
+export async function fetchLeaderboardStats(setPlayers, setLoading, season) {
   try {
-    const { data, error } = await supabase
-      .from(`${season ? 's' + season + '_leaderboard' : 'leaderboard'}`)
-      .select('*')
-      .order('total_exp', { ascending: false });
+    if (season) {
+      const { data, error } = await supabase
+        .from('season_leaderboard')
+        .select('*')
+        .order('total_exp', { ascending: false })
+        .eq('season', season);
 
       if (data) {
         // var newData = data;
-  
+
         // for (let i = 0; i < data.length; i++) {
         //   let oldData = data[i];
         //   newData[i] = {
@@ -345,15 +340,42 @@ export async function fetchLeaderboardStats(
         setPlayers(data);
       }
 
-    if (error && status !== 406) {
-      throw error;
+      if (error && status !== 406) {
+        throw error;
+      }
+    } else {
+      const { data, error } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .order('total_exp', { ascending: false });
+
+      if (data) {
+        // var newData = data;
+
+        // for (let i = 0; i < data.length; i++) {
+        //   let oldData = data[i];
+        //   newData[i] = {
+        //     ...oldData,
+        //     avatar_url: (oldData.avatar_url ? await downloadImage(oldData.avatar_url, 'avatar') : null),
+        //     background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null)
+        //   };
+        // }
+        // setPlayers(newData);
+
+        // above makes the loading of data too slow.
+
+        setPlayers(data);
+      }
+
+      if (error && status !== 406) {
+        throw error;
+      }
     }
   } catch (error) {
     // alert(error.message)
   } finally {
     setLoading(false);
   }
-  
 }
 
 export async function fetchPlayers(setPlayers) {
@@ -415,7 +437,7 @@ export async function fetchSpecificPlayers(id, setFriends) {
 
     if (friends) {
       const { data, error } = await supabase
-        .from('s1_leaderboard')
+        .from('leaderboard')
         .select('*')
         .order('total_exp', { ascending: false })
         .or(friends);
@@ -557,38 +579,41 @@ export async function fetchParty(party_slug) {
   }
 }
 
-export async function fetchPartyMembers(party_id){
+export async function fetchPartyMembers(party_id) {
   try {
     const { data, error } = await supabase
       .from('party_member_details')
-      .select(
-        '*'
-      )
+      .select('*')
       .order('role', { ascending: false })
       .order('notion_page_name', { ascending: false })
       .eq('party_id', party_id);
 
-    if (data){
+    if (data) {
       var newData = data;
-  
-        for (let i = 0; i < data.length; i++) {
-          let oldData = data[i];
-          newData[i] = {
-            ...oldData,
-            avatar_url: (oldData.avatar_url ? await downloadImage(oldData.avatar_url, 'avatar') : null),
-            background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null),
-            dragon_bg_url: (oldData.dragon_bg_url ? await downloadImage(oldData.dragon_bg_url, 'background') : null)
-          };
-        }
-        return newData;
-    }
 
+      for (let i = 0; i < data.length; i++) {
+        let oldData = data[i];
+        newData[i] = {
+          ...oldData,
+          avatar_url: oldData.avatar_url
+            ? await downloadImage(oldData.avatar_url, 'avatar')
+            : null,
+          background_url: oldData.background_url
+            ? await downloadImage(oldData.background_url, 'background')
+            : null,
+          dragon_bg_url: oldData.dragon_bg_url
+            ? await downloadImage(oldData.dragon_bg_url, 'background')
+            : null
+        };
+      }
+      return newData;
+    }
 
     if (error && status !== 406) {
       throw error;
     }
   } catch (error) {
-    alert(error.message)
+    alert(error.message);
   } finally {
   }
 }

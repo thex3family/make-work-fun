@@ -98,7 +98,7 @@ export default function HomePage() {
 
   async function refreshStats() {
     setPlayerStats(await fetchPlayerStats());
-    fetchLeaderboardStats(setS1Players, setLoading, '1');
+    fetchLeaderboardStats(setS1Players, setLoading, '1S');
     fetchLeaderboardStats(setPlayers, setLoading);
   }
 
