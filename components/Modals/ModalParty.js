@@ -68,7 +68,7 @@ export default function ModalParty({ setCreateParty, party }) {
       } catch (error) {
         alert(error.message);
       } finally {
-        setSaving(false);
+        // setSaving(false);
       }
     } else {
       // just updating existing entries (not allowing changing challenge)
