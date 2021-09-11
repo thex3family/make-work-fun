@@ -8,9 +8,13 @@ export default function TitleModal({
   refreshStats
 }) {
   return (
-    <div className="h-screen flex justify-center">
+    <div className="animate-fade-in h-screen flex justify-center">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none">
-        <div className="animate-fade-in-up relative w-auto my-6 mx-auto max-w-xl max-h-screen">
+        <div
+          className="opacity-50 fixed inset-0 z-30 bg-black"
+          onClick={() => setShowTitleModal(false)}
+        ></div>
+        <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen z-40">
           {/*content*/}
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
@@ -94,9 +98,11 @@ export default function TitleModal({
                         playerStats.title == title.name ? 'prominent' : 'slim'
                       }`}
                       disabled={
-                        playerStats.role ? !playerStats.role.includes(
-                          title.name.slice(0, title.name.length - 3)
-                        ) : true
+                        playerStats.role
+                          ? !playerStats.role.includes(
+                              title.name.slice(0, title.name.length - 3)
+                            )
+                          : true
                       }
                       title_name={title.name}
                       description={title.description}
@@ -125,7 +131,6 @@ export default function TitleModal({
           </div>
         </div>
       </div>
-      <div className="opacity-25 fixed inset-0 z-30 bg-black"></div>
     </div>
   );
 }
