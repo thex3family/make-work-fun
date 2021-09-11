@@ -61,7 +61,7 @@ export default function CardWin({
         ) : (
           <img
             className="avatar image m-auto mr-2 object-cover"
-            src="img/default_avatar.png"
+            src="/img/default_avatar.png"
             alt="Avatar"
             height="80"
             width="80"

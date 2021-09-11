@@ -1294,7 +1294,7 @@ export default function NotionWizard({ response, nickname }) {
                   {/*body*/}
                   <div className="relative p-6 text-blueGray-500">
                     <img
-                      src="img/default_avatar.png"
+                      src="/img/default_avatar.png"
                       height="auto"
                       className="w-3/4 mx-auto pb-2"
                     />

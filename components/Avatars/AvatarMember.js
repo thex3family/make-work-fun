@@ -33,7 +33,7 @@ export default function AvatarMember({ member }) {
           <img
             className="avatar image mx-auto object-cover"
             src={`${
-              member.avatar_url ? member.avatar_url : 'img/default_avatar.png'
+              member.avatar_url ? member.avatar_url : '/img/default_avatar.png'
             }`}
             alt="Avatar"
           />

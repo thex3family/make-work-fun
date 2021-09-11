@@ -39,7 +39,7 @@ export default function AvatarPlayer({ player }) {
               {avatarURL == 'Missing' ? (
                 <img
                   className="avatar image  mx-auto object-cover rounded-full w-12 h-12"
-                  src="img/default_avatar.png"
+                  src="/img/default_avatar.png"
                   alt="Avatar"
                 />
               ) : avatarURL ? (
