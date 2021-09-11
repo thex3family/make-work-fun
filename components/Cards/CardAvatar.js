@@ -4,6 +4,7 @@ import LoadingDots from '@/components/ui/LoadingDots';
 import { createPopper } from '@popperjs/core';
 import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 import { downloadImage } from '@/utils/downloadImage';
+import { truncateString } from '@/utils/truncateString';
 
 export default function Avatar({
   statRank,
@@ -231,7 +232,7 @@ export default function Avatar({
                   <p className="text-white text-sm truncate">{statWinName}</p>
                   <p className="text-xs mt-3 text-right">
                     <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-lightBlue-700 bg-lightBlue-200 last:mr-0 mr-1">
-                      {statWinType}
+                      {truncateString(statWinType, 13)}
                     </span>
                     <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
                       +{statWinGold} 💰{' '}
