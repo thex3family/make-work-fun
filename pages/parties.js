@@ -256,7 +256,7 @@ export default function parties() {
                   className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
                     activeTab == 1
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                      : 'text-blueGray-600'
+                      : 'text-blueGray-500'
                   }`}
                   onClick={() => setActiveTab(1)}
                 >
@@ -266,7 +266,7 @@ export default function parties() {
                   className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
                     activeTab == 2
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                      : 'text-blueGray-600'
+                      : 'text-blueGray-500'
                   }`}
                   onClick={() => setActiveTab(2)}
                 >

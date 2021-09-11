@@ -232,7 +232,7 @@ export default function HomePage() {
               className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
                 openTab == 1
                   ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                  : 'text-blueGray-600'
+                  : 'text-blueGray-500'
               }`}
               onClick={(e) => {
                 e.preventDefault();
@@ -248,7 +248,7 @@ export default function HomePage() {
                   'text-xs text-white p-3 ml-2 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
                   (openTab === 1
                     ? 'border-white'
-                    : 'text-blueGray-600 border-blueGray-600')
+                    : 'text-blueGray-500 border-blueGray-500')
                 }
               >
                 {s1Players.length}
@@ -258,7 +258,7 @@ export default function HomePage() {
               className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
                 openTab == 2
                   ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                  : 'text-blueGray-600'
+                  : 'text-blueGray-500'
               }`}
               onClick={(e) => {
                 e.preventDefault();
@@ -274,7 +274,7 @@ export default function HomePage() {
                   'text-xs text-white p-3 ml-2 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
                   (openTab === 2
                     ? 'border-white'
-                    : 'text-blueGray-600 border-blueGray-600')
+                    : 'text-blueGray-500 border-blueGray-500')
                 }
               >
                 {players.length}
