@@ -511,12 +511,12 @@ export default function NotionWizard({ response, nickname }) {
                         'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
                         (openTab === 10
                           ? response.properties.hasOwnProperty('Area')
-                            ? response.properties.Area.type.includes('select')
+                            ? response.properties.Area.type.includes('select') || response.properties.Area.type.includes('formula')
                               ? 'text-white bg-emerald-500'
                               : 'text-white bg-red-500'
                             : 'text-white bg-red-500'
                           : response.properties.hasOwnProperty('Area')
-                          ? response.properties.Area.type.includes('select')
+                          ? response.properties.Area.type.includes('select') || response.properties.Area.type.includes('formula')
                             ? 'text-emerald-500 bg-white'
                             : 'text-red-500 bg-white'
                           : 'text-red-500 bg-white')
@@ -533,7 +533,7 @@ export default function NotionWizard({ response, nickname }) {
                         className={
                           'mr-2 ' +
                           (response.properties.hasOwnProperty('Area')
-                            ? response.properties.Area.type.includes('select')
+                            ? response.properties.Area.type.includes('select') || response.properties.Area.type.includes('formula')
                               ? 'fas fa-check'
                               : 'fas fa-exclamation-triangle'
                             : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
@@ -1179,7 +1179,7 @@ export default function NotionWizard({ response, nickname }) {
                         id="link10"
                       >
                         {response.properties.hasOwnProperty('Area') ? (
-                          response.properties.Area.type.includes('select') ? (
+                          response.properties.Area.type.includes('select') || response.properties.Area.type.includes('formula') ? (
                             <h2 className="text-xl text-bold text-emerald-600 mb-3">
                               <i className="fas fa-check mr-2"></i>Your database
                               has this property!
