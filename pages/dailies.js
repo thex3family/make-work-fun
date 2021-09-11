@@ -231,7 +231,7 @@ export default function dallies() {
           
         <div className=" max-w-6xl mx-auto py-0 sm:py-8 sm:pt-24 px-0 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
           <div className="animate-fade-in-up bg-dailies-default rounded-0 sm:rounded opacity-95">
-            <div className="pb-5 p-10">
+            <div className="pb-5 py-10 px-4 sm:px-10">
               <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
                 Daily Quests
               </h1>
@@ -339,7 +339,7 @@ export default function dallies() {
             {/* <button onClick={() => console.log(habits)}>
           Push me to check if data is pulled properly
         </button>  */}
-        <div className="text-center bg-black bg-opacity-90 p-10 rounded-0 sm:rounded-b relative pt-14">
+        <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
             <div className="text-center">
               {habits != null ? (
                 habits.length != 0 ? (
