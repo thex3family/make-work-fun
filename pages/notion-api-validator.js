@@ -509,6 +509,44 @@ export default function NotionWizard({ response, nickname }) {
                     <a
                       className={
                         'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
+                        (openTab === 10
+                          ? response.properties.hasOwnProperty('Area')
+                            ? response.properties.Area.type.includes('select')
+                              ? 'text-white bg-emerald-500'
+                              : 'text-white bg-red-500'
+                            : 'text-white bg-red-500'
+                          : response.properties.hasOwnProperty('Area')
+                          ? response.properties.Area.type.includes('select')
+                            ? 'text-emerald-500 bg-white'
+                            : 'text-red-500 bg-white'
+                          : 'text-red-500 bg-white')
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenTab(10);
+                      }}
+                      data-toggle="tab"
+                      href="#link10"
+                      role="tablist"
+                    >
+                      <i
+                        className={
+                          'mr-2 ' +
+                          (response.properties.hasOwnProperty('Area')
+                            ? response.properties.Area.type.includes('select')
+                              ? 'fas fa-check'
+                              : 'fas fa-exclamation-triangle'
+                            : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
+                        }
+                      />
+                      Area{' '}
+                      <span className="text-xs font-medium">(Optional)</span>
+                    </a>
+                  </li>
+                  <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
+                    <a
+                      className={
+                        'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
                         (openTab === 9
                           ? response.properties.hasOwnProperty('Upstream (Sum)')
                             ? response.properties[
@@ -558,45 +596,54 @@ export default function NotionWizard({ response, nickname }) {
                       <span className="text-xs font-medium">(Optional)</span>
                     </a>
                   </li>
-
                   <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
                     <a
                       className={
                         'text-md font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal align-middle ' +
-                        (openTab === 10
-                          ? response.properties.hasOwnProperty('Area')
-                            ? response.properties.Area.type.includes('select')
+                        (openTab === 12
+                          ? response.properties.hasOwnProperty('Upstream')
+                            ? response.properties['Upstream'].type.includes(
+                                'relation'
+                              )
                               ? 'text-white bg-emerald-500'
                               : 'text-white bg-red-500'
                             : 'text-white bg-red-500'
-                          : response.properties.hasOwnProperty('Area')
-                          ? response.properties.Area.type.includes('select')
+                          : response.properties.hasOwnProperty('Upstream')
+                          ? response.properties['Upstream'].type.includes(
+                              'relation'
+                            )
                             ? 'text-emerald-500 bg-white'
                             : 'text-red-500 bg-white'
                           : 'text-red-500 bg-white')
                       }
                       onClick={(e) => {
                         e.preventDefault();
-                        setOpenTab(10);
+                        setOpenTab(12);
                       }}
                       data-toggle="tab"
-                      href="#link10"
+                      href="#link12"
                       role="tablist"
                     >
                       <i
                         className={
                           'mr-2 ' +
-                          (response.properties.hasOwnProperty('Area')
-                            ? response.properties.Area.type.includes('select')
+                          (response.properties.hasOwnProperty('Upstream (Sum)')
+                            ? response.properties[
+                                'Upstream (Sum)'
+                              ].type.includes('formula') ||
+                              response.properties[
+                                'Upstream (Sum)'
+                              ].type.includes('text')
                               ? 'fas fa-check'
                               : 'fas fa-exclamation-triangle'
                             : 'text-xl ml-0.5 mr-2.5 align-middle fas fa-times')
                         }
                       />
-                      Area{' '}
+                      Upstream{' '}
                       <span className="text-xs font-medium">(Optional)</span>
                     </a>
                   </li>
+
                   <li className="-mb-px mr-2 last:mr-0 flex-auto text-left min-w-max">
                     <a
                       className={
@@ -758,7 +805,7 @@ export default function NotionWizard({ response, nickname }) {
                           </h2>
                         )}
                         <p className="font-semibold">
-                          Recommended Type: Select / Multi-Select / Formula
+                          Recommended Type: Select / Multi-Select
                         </p>
                         <p>
                           We use this property to determine how to calculate
@@ -1028,7 +1075,7 @@ export default function NotionWizard({ response, nickname }) {
                       </div>
                       <div
                         className={openTab === 9 ? 'block' : 'hidden'}
-                        id="link4"
+                        id="link9"
                       >
                         {response.properties.hasOwnProperty(
                           'Upstream (Sum)'
@@ -1069,6 +1116,57 @@ export default function NotionWizard({ response, nickname }) {
                           <i>
                             If you don't have this property or leave it blank,
                             you will not be able to see your storyline.
+                          </i>
+                        </p>
+                        <img
+                          className="w-auto pt-5"
+                          src="/wizard/upstream(sum)_prop.PNG"
+                        ></img>
+                      </div>
+                      <div
+                        className={openTab === 12 ? 'block' : 'hidden'}
+                        id="link12"
+                      >
+                        {response.properties.hasOwnProperty('Upstream') ? (
+                          response.properties['Upstream'].type.includes(
+                            'relation'
+                          ) ? (
+                            <h2 className="text-xl text-bold text-emerald-600 mb-3">
+                              <i className="fas fa-check mr-2"></i>Your database
+                              has this property!
+                            </h2>
+                          ) : (
+                            <h2 className="text-xl text-bold text-red-600 mb-3">
+                              <i className="fas fa-exclamation-triangle mr-2"></i>
+                              Your database has this property but not the
+                              recommended type.
+                            </h2>
+                          )
+                        ) : (
+                          <h2 className="text-xl text-bold text-red-600 mb-3">
+                            <i className="fas fa-times mr-2"></i>Your database
+                            is missing this property!
+                          </h2>
+                        )}
+                        <p className="font-semibold">
+                          Mandatory Type: Relation
+                        </p>
+                        <p>
+                          We use this property to pull the Notion ID of the
+                          upstream Goal, Key Result, or Project.
+                          <br />
+                          <br />
+                          <i>
+                            If you don't have this property or leave it blank,
+                            you cannot participate in the following:
+                            <br />
+                            <a
+                              className="text-emerald-500"
+                              href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
+                              target="_blank"
+                            >
+                              - Party Quest: Slay Your Dragon
+                            </a>
                           </i>
                         </p>
                         <img
@@ -1233,9 +1331,7 @@ export default function NotionWizard({ response, nickname }) {
       {showRequiredModal ? (
         <>
           <div className="animate-fade-in h-screen flex justify-center">
-            <div
-              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-            >
+            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
               <div
                 className="opacity-50 fixed inset-0 z-40 bg-black"
                 onClick={() => setShowRequiredModal(false)}
