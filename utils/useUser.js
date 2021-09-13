@@ -28,7 +28,7 @@ export const UserContextProvider = (props) => {
       async (event, session) => {
         // setSession(session);
         // setUser(session?.user ?? null);
-        console.log(`Supbase auth event: ${event}`);
+        console.log(`Supabase auth event: ${event}`);
 
         // This is what forwards the session to our auth API route which sets/deletes the cookie:
         await postData('/api/auth', {
