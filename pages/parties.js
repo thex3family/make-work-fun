@@ -133,6 +133,7 @@ export default function parties() {
       const { data, error } = await supabase
         .from('party_member_details')
         .select('*')
+        .order('party_status', { ascending: true })
         .eq('player', user.id);
 
       var parties_you_are_in = data;

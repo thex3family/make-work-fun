@@ -50,9 +50,17 @@ export default function CardPartyPlayer({
 
   async function loadWins() {
     if (party.challenge == 1)
-      setWins(await fetchWinsPastDate(player.player, party.start_date, party.due_date));
+      setWins(
+        await fetchWinsPastDate(player.player, party.start_date, party.due_date)
+      );
     if (party.challenge == 2)
-      setWins(await fetchSpecificWins(player.notion_page_id, party.start_date, party.due_date));
+      setWins(
+        await fetchSpecificWins(
+          player.notion_page_id,
+          party.start_date,
+          party.due_date
+        )
+      );
   }
 
   useEffect(() => {
@@ -68,6 +76,68 @@ export default function CardPartyPlayer({
     if (totalEXP_Reward)
       setCumulativeEXP((cumulativeEXP) => [...cumulativeEXP, totalEXP_Reward]);
   }, [totalEXP_Reward]);
+
+  const reviewStar = () => {
+    if (player.review_party_rating == 1) {
+      return (
+        <>
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-gray-800 far fa-star" />
+          <i className="text-gray-800 far fa-star" />
+          <i className="text-gray-800 far fa-star" />
+          <i className="text-gray-800 far fa-star" />
+        </>
+      );
+    }
+
+    if (player.review_party_rating == 2) {
+      return (
+        <>
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-gray-800 far fa-star" />
+          <i className="text-gray-800 far fa-star" />
+          <i className="text-gray-800 far fa-star" />
+        </>
+      );
+    }
+
+    if (player.review_party_rating == 3) {
+      return (
+        <>
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-gray-800 far fa-star" />
+          <i className="text-gray-800 far fa-star" />
+        </>
+      );
+    }
+
+    if (player.review_party_rating == 4) {
+      return (
+        <>
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-gray-800 far fa-star" />
+        </>
+      );
+    }
+
+    if (player.review_party_rating == 5) {
+      return (
+        <>
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+          <i className="text-yellow-400 fas fa-star" />
+        </>
+      );
+    }
+  };
 
   return (
     <>
@@ -157,6 +227,16 @@ export default function CardPartyPlayer({
             </div>
           </div>
         </div>
+        {player.review_be_helpful ? (
+          <div class="speech-bubble text-primary-2 animate-soft-bounce">
+            <p className=" font-bold">
+              I would find it helpful in my next challenge if others can...
+            </p>
+            <p className="text-lg">{player.review_be_helpful}</p>
+
+            <div className="text-xl mt-2">{reviewStar()}</div>
+          </div>
+        ) : null}
         <div className="bg-primary-2 rounded-md mx-auto overflow-hidden shadow-xl mt-5">
           <div
             className="bg-cover bg-center"
@@ -303,7 +383,7 @@ export default function CardPartyPlayer({
               id="link1"
             >
               {wins
-                ? wins.slice(0,5).map((win, i) => (
+                ? wins.slice(0, 5).map((win, i) => (
                     <div className="relative text-sm font-semibold px-3 py-2 shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
                       <p className="truncate w-full">{win.name}</p>
                       <div className="flex flex-row mt-1">
