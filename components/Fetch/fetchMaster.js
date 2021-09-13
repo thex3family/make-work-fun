@@ -248,7 +248,6 @@ export async function fetchSpecificWins(upstream_id, start_date, due_date) {
       throw error;
     }
   } catch (error) {
-    alert(error);
     console.log('No Specific Wins found!');
   } finally {
   }
