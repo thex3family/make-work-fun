@@ -71,11 +71,11 @@ export default function CardParty({ party }) {
                   </span>
                 ) : party.party_status == 3 ? (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1 mb-1">
-                    Complete
+                    In Review
                   </span>
                 ) : (
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200 last:mr-0 mr-1 mb-1">
-                    Failed
+                    Complete
                   </span>
                 )}
               </div>
@@ -138,7 +138,7 @@ export default function CardParty({ party }) {
                   className="bg-gradient-to-r from-emerald-500 to-blue-500 text-xs leading-none py-1 text-center text-white w-3/4 h-4 rounded-full "
                   style={{
                     width: party.party_start_date
-                      ? deadline_completion_percentage+'%'
+                      ? deadline_completion_percentage <= 100 ? deadline_completion_percentage+'%' : 100+'%'
                       : 0 + '%'
                   }}
                 ></div>
