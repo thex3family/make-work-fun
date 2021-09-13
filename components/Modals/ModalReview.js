@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function ModalReview({ setOpenReviewModal, party_member_id }) {
+export default function ModalReview({ setOpenReviewModal, party_member_id, changePlayerStatus }) {
   const [reviewWell, setReviewWell] = useState(null);
   const [reviewBetter, setReviewBetter] = useState(null);
   const [reviewHelpful, setReviewHelpful] = useState(null);
@@ -78,6 +78,7 @@ export default function ModalReview({ setOpenReviewModal, party_member_id }) {
       alert(error.message);
     } finally {
       setSaving(false);
+      changePlayerStatus('Reviewing')
       setOpenReviewModal(false);
     }
   }

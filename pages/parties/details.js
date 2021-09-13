@@ -563,7 +563,14 @@ export default function partyDetail() {
                           {/* <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             <Countdown date={party.due_date} />
                           </h1> */}
-                          <Button variant="prominent" className="my-4" onClick={()=>setOpenReviewModal(true)} disabled={!specificPartyPlayer}>{!specificPartyPlayer ? 'Loading...' : 'Reflect ✨'}</Button>
+                          <Button
+                            variant="prominent"
+                            className="my-4"
+                            onClick={() => setOpenReviewModal(true)}
+                            disabled={!specificPartyPlayer}
+                          >
+                            {!specificPartyPlayer ? 'Loading...' : 'Reflect ✨'}
+                          </Button>
                           <div className="text-center text-accents-4 text-sm max-w-sm">
                             Your challenge has ended and its time to reflect.
                           </div>
@@ -1231,7 +1238,11 @@ export default function partyDetail() {
           </div>
         ) : null}
         {openReviewModal ? (
-          <ModalReview setOpenReviewModal={setOpenReviewModal} party_member_id = {specificPartyPlayer.party_member_id}/>
+          <ModalReview
+            setOpenReviewModal={setOpenReviewModal}
+            party_member_id={specificPartyPlayer.party_member_id}
+            changePlayerStatus={changePlayerStatus}
+          />
         ) : null}
       </>
     );
