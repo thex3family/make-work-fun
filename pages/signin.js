@@ -9,6 +9,15 @@ import Input from '@/components/ui/Input';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { useUser } from '@/utils/useUser';
 
+const postData = (url, data = {}) =>
+  fetch(url, {
+    method: 'POST',
+    headers: new Headers({ 'Content-Type': 'application/json' }),
+    credentials: 'same-origin',
+    body: JSON.stringify(data)
+  }).then((res) => res.json());
+
+
 const SignIn = ({user}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,7 +25,22 @@ const SignIn = ({user}) => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ type: '', content: '' });
   const router = useRouter();
-  const { signIn, passwordReset, userOnboarding } = useUser();
+  const { signIn, passwordReset, userOnboarding, session } = useUser();
+
+  // This is a dirty way to make sure the cookie stays active if the session is...
+  useEffect
+  if (!user && session) {
+    refreshCookie();
+  }
+
+  async function refreshCookie(){
+    const event = 'SIGNED_IN';
+    // This is what forwards the session to our auth API route which sets/deletes the cookie:
+    await postData('/api/auth', {
+      event,
+      session: session
+    });
+  }
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -291,6 +315,7 @@ export default SignIn;
 export async function getServerSideProps({ req }) {
   // Get the user's session based on the request
   const { user } = await supabase.auth.api.getUserByCookie(req);
+  console.log(user);
 
   return {
     props: { user }
