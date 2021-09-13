@@ -29,6 +29,8 @@ import AvatarPlayer from '@/components/Avatars/AvatarPlayer';
 import moment from 'moment';
 import ModalParty from '@/components/Modals/ModalParty';
 import ValidateDragon from '@/components/Modals/ModalValidateDragon';
+import Snow from '@/components/Widgets/snow';
+import ModalReview from '@/components/Modals/ModalReview';
 
 export default function partyDetail() {
   const [loading, setLoading] = useState(true);
@@ -73,6 +75,7 @@ export default function partyDetail() {
   const [anonymousAdventurer, setAnonymousAdventurer] = useState(null);
 
   const [startChallengeModal, setStartChallengeModal] = useState(false);
+  const [openReviewModal, setOpenReviewModal] = useState(false);
 
   // Waits until database fetches user state before loading anything
 
@@ -551,12 +554,16 @@ export default function partyDetail() {
                         </>
                       ) : (
                         <>
+                          <div className="confetti">
+                            <Snow />
+                          </div>
                           <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             STATUS: In Review
                           </h1>
-                          <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                          {/* <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             <Countdown date={party.due_date} />
-                          </h1>
+                          </h1> */}
+                          <Button variant="prominent" className="my-4" onClick={()=>setOpenReviewModal(true)}>Reflect ✨</Button>
                           <div className="text-center text-accents-4 text-sm max-w-sm">
                             The challenge has ended and its time to reflect.
                           </div>
@@ -917,7 +924,7 @@ export default function partyDetail() {
                               )}
                             />
                           </h1>
-                          {specificPartyPlayer ? (
+                          {specificPartyPlayer && party.status < 3 ? (
                             <>
                               <div className="text-center text-white text-lg mb-2 font-semibold">
                                 Party Missions
@@ -1222,6 +1229,9 @@ export default function partyDetail() {
               </div>
             </div>
           </div>
+        ) : null}
+        {openReviewModal ? (
+          <ModalReview setOpenReviewModal={setOpenReviewModal} party_member_id = {specificPartyPlayer.party_member_id}/>
         ) : null}
       </>
     );
