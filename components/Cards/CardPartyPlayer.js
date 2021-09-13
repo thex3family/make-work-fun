@@ -50,9 +50,9 @@ export default function CardPartyPlayer({
 
   async function loadWins() {
     if (party.challenge == 1)
-      setWins(await fetchWinsPastDate(player.player, party.start_date));
+      setWins(await fetchWinsPastDate(player.player, party.start_date, party.due_date));
     if (party.challenge == 2)
-      setWins(await fetchSpecificWins(player.notion_page_id, party.start_date));
+      setWins(await fetchSpecificWins(player.notion_page_id, party.start_date, party.due_date));
   }
 
   useEffect(() => {

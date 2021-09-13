@@ -226,7 +226,8 @@ export async function fetchSpecificWin(win_id) {
   }
 }
 
-export async function fetchSpecificWins(upstream_id, date) {
+export async function fetchSpecificWins(upstream_id, start_date, due_date) {
+
   try {
     const { data, error } = await supabase
       .from('success_plan')
@@ -234,7 +235,8 @@ export async function fetchSpecificWins(upstream_id, date) {
         'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname'
       )
       .eq('upstream_id', upstream_id)
-      .gte('closing_date', date)
+      .gte('closing_date', start_date)
+      .lte('closing_date', due_date)
       .order('closing_date', { ascending: false })
       .order('entered_on', { ascending: false });
 
@@ -246,12 +248,14 @@ export async function fetchSpecificWins(upstream_id, date) {
       throw error;
     }
   } catch (error) {
+    alert(error);
     console.log('No Specific Wins found!');
   } finally {
   }
 }
 
-export async function fetchWinsPastDate(player, date) {
+export async function fetchWinsPastDate(player, start_date, due_date) {
+  
   try {
     const { data, error } = await supabase
       .from('success_plan')
@@ -259,7 +263,8 @@ export async function fetchWinsPastDate(player, date) {
         'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname'
       )
       .eq('player', player)
-      .gte('closing_date', date)
+      .gte('closing_date', start_date)
+      .lte('closing_date', due_date)
       .order('closing_date', { ascending: false })
       .order('entered_on', { ascending: false });
 
@@ -559,7 +564,7 @@ export async function fetchTitles() {
 export async function fetchParty(party_slug) {
   try {
     const { data, error } = await supabase
-      .from('party')
+      .from('party_details')
       .select('*')
       .eq('slug', party_slug)
       .single();

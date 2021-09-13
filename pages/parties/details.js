@@ -136,7 +136,11 @@ export default function partyDetail() {
     setDue_Date(moment(party.due_date).local().format('YYYY-MM-DDTHH:mm:ss'));
     if (party.challenge == 1) {
       setDailyTarget_Achieved(
-        await fetchWinsPastDate(user.id, moment().local().format('YYYY-MM-DD'))
+        await fetchWinsPastDate(
+          user.id,
+          moment().local().format('YYYY-MM-DD'),
+          party.due_date
+        )
       );
     }
     // if (party.challenge == 2)
@@ -204,8 +208,7 @@ export default function partyDetail() {
     if (specificPartyPlayer) setDragonID(specificPartyPlayer.notion_page_id);
     if (specificPartyPlayer) setPlayerStatus(specificPartyPlayer.status);
     if (specificPartyPlayer) loadSpecificPartyPlayer();
-    if (specificPartyPlayer?.status == "Not Ready") setShowDetails(true);
-
+    if (specificPartyPlayer?.status == 'Not Ready') setShowDetails(true);
   }, [specificPartyPlayer]);
 
   async function loadSpecificPartyPlayer() {
@@ -339,7 +342,7 @@ export default function partyDetail() {
   }
 
   async function startChallenge() {
-    setStartChallengeModal(false)
+    setStartChallengeModal(false);
     try {
       const { data, error } = await supabase
         .from('party')
@@ -521,43 +524,6 @@ export default function partyDetail() {
                     <div className="max-w-6xl md:w-3/4 lg:w-full xl:w-3/4 ml-auto py-8 px-4 sm:px-6 lg:px-8 my-auto flex flex-col bg-black bg-opacity-50 rounded-lg items-center">
                       {party.status == 1 ? (
                         <>
-                          {/* <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                            STATUS: In Recruitment
-                          </h1>
-                          {partyPlayers ? (
-                            <>
-                              <div className="flex flex-col space-y-4">
-                                <div className="mt-4 p-3 text-left font-semibold">
-                                  <div
-                                    className={`
-                                  ${
-                                    partyPlayers.length < 2
-                                      ? 'text-error'
-                                      : 'text-green'
-                                  }`}
-                                  >
-                                    <i
-                                      className={`mr-2
-                                  ${
-                                    partyPlayers.length < 2
-                                      ? 'text-error fas fa-times'
-                                      : 'text-green fas fa-check'
-                                  }`}
-                                    />
-                                    2+ party members
-                                  </div>
-                                  <div className="mt-5 flex flex-row justify-center flex-nowrap text-center">
-                                    {partyPlayers
-                                      ? partyPlayers.map((player, i) => (
-                                          <AvatarPlayer
-                                            key={i}
-                                            player={player}
-                                          />
-                                        ))
-                                      : null}
-                                  </div>
-                                </div>
-                              </div> */}
                           <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             STATUS: In Recruitment
                           </h1>
@@ -570,7 +536,7 @@ export default function partyDetail() {
                             below.
                           </div>
                         </>
-                      ) : (
+                      ) : party.status == 2 ? (
                         <>
                           <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             Challenge Ends In...
@@ -581,6 +547,18 @@ export default function partyDetail() {
                           <div className="text-center text-accents-4 text-sm max-w-sm">
                             You'll deplete <b>1 health</b> every day until the
                             challenge ends. Earn ❤ by completing party missions!
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                            STATUS: In Review
+                          </h1>
+                          <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                            <Countdown date={party.due_date} />
+                          </h1>
+                          <div className="text-center text-accents-4 text-sm max-w-sm">
+                            The challenge has ended and its time to reflect.
                           </div>
                         </>
                       )}
