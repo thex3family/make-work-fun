@@ -145,7 +145,7 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
                     </div>
                     <div className="col-span-2">
                       <div className="mb-2 font-semibold">
-                        How can others be helpful for my next challenge?
+                      I would find it helpful in my next challenge if others can...
                       </div>
                       <TextArea
                         className="text-lg font-semibold rounded py-2 px-3 w-full transition duration-150 ease-in-out border border-accents-3"
@@ -162,7 +162,7 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
                     </div>
                     <div className="col-span-2">
                       <div className="mb-2 font-semibold text-center">
-                        Rate This Challenge!
+                        How did you like this party experience?
                       </div>
                       <div className={`${classes.root} items-center`}>
                         <Rating
