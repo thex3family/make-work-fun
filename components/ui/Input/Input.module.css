@@ -14,6 +14,10 @@
   @apply bg-white text-black;
 }
 
+.dailies:disabled {
+  @apply bg-gray-200 text-black cursor-not-allowed;
+}
+
 .root[type='datetime-local']::-webkit-calendar-picker-indicator{
   @apply filter invert cursor-pointer;
 }
