@@ -22,6 +22,7 @@ import WinModal from '@/components/Modals/ModalWin';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import CardWin from '@/components/Cards/CardWin';
 import Pagination from '@/components/Pagination';
+import { downloadImage } from '@/utils/downloadImage';
 
 export default function HomePage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -100,6 +101,30 @@ export default function HomePage() {
     setPlayerStats(await fetchPlayerStats());
     fetchLeaderboardStats(setS1Players, setLoading, '1S');
     fetchLeaderboardStats(setPlayers, setLoading);
+  }
+
+  useEffect(() => {
+    if(s1Players) loadPlayerImages(s1Players, setS1Players)
+  }, [s1Players]);
+
+  useEffect(() => {
+    if(players) loadPlayerImages(players, setPlayers)
+  }, [players]);
+
+  async function loadPlayerImages(data, setData) {
+    var newData = data;
+
+        for (let i = 0; i < data.length; i++) {
+          let oldData = data[i];
+          newData[i] = {
+            ...oldData,
+            avatar_url: (oldData.avatar_url ? await downloadImage(oldData.avatar_url, 'avatar') : null),
+            background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null)
+          };
+        }
+        console.log(newData)
+        setData(newData);
+
   }
 
   if (recoveryToken) {

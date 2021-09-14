@@ -34,9 +34,11 @@ export default function Avatar({
   useEffect(() => {
     if (avatar_url) {
       if (avatar_url.includes('blob:')){
+        setAvatarStatus('')
         setAvatarUrl(avatar_url)
       } else {
         setImage(avatar_url, 'avatar');
+        setAvatarStatus('')
       }
     }
     if (!avatar_url) setAvatarStatus('Missing');
