@@ -63,8 +63,7 @@ export default function ModalParty({ setCreateParty, party }) {
             role: 'Party Leader'
           }
         ]);
-        router.push('/parties/details?id='+slug)
-
+        router.push('/parties/details?id=' + slug);
       } catch (error) {
         alert(error.message);
       } finally {
@@ -82,7 +81,7 @@ export default function ModalParty({ setCreateParty, party }) {
           })
           .eq('id', id);
 
-          router.reload(window.location.pathname)
+        router.reload(window.location.pathname);
       } catch (error) {
         alert(error.message);
       } finally {
@@ -124,7 +123,7 @@ export default function ModalParty({ setCreateParty, party }) {
                       disabled={saving}
                       value={partyName || ''}
                       onChange={setPartyName}
-                      maxlength = "35"
+                      maxlength="35"
                     />
                   </div>
 
@@ -137,22 +136,34 @@ export default function ModalParty({ setCreateParty, party }) {
                         className="absolute ml-1.5 mt-1.5 text-sm fas fa-question-circle"
                       />
                     </div>
-                    <select
-                      id="challenge"
-                      name="challenge"
-                      disabled={saving}
-                      className="text-xl font-semibold rounded py-2 px-3 w-full transition duration-150 ease-in-out border border-accents-3"
-                      value={partyChallenge || ''}
-                      onChange={(e) => {
-                        setPartyChallenge(e.target.value);
-                      }}
-                    >
-                      <option value="1">Time Challenge</option>
-                      <option value="2">Slay Your Dragon</option>
-                    </select>
+                    {newParty ? (
+                      <select
+                        id="challenge"
+                        name="challenge"
+                        disabled={saving}
+                        className="text-xl font-semibold rounded py-2 px-3 w-full transition duration-150 ease-in-out border border-accents-3"
+                        value={partyChallenge || ''}
+                        onChange={(e) => {
+                          setPartyChallenge(e.target.value);
+                        }}
+                      >
+                        <option value="1">Time Challenge</option>
+                        <option value="2">Slay Your Dragon</option>
+                      </select>
+                    ) : (
+                      <Input
+                        className="text-xl font-semibold rounded"
+                        variant="dailies"
+                        type="text"
+                        disabled={true}
+                        value={partyChallenge == 1 ? "Time Challenge" : "Slay Your Dragon"}
+                      />
+                    )}
                   </div>
                   <div className="col-span-2">
-                    <div className="mb-2 font-semibold">Short Party Description</div>
+                    <div className="mb-2 font-semibold">
+                      Short Party Description
+                    </div>
                     <Input
                       className="text-xl font-semibold rounded"
                       type="text"
@@ -160,7 +171,7 @@ export default function ModalParty({ setCreateParty, party }) {
                       disabled={saving}
                       value={partyDescription || ''}
                       onChange={setPartyDescription}
-                      maxlength = "140"
+                      maxlength="140"
                     />
                   </div>
                 </div>
