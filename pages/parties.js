@@ -339,8 +339,8 @@ export default function parties() {
                         ></div>
                       </div>
                       <div className="flex flex-col gap-4">
-                        {activeParties ? (
-                          activeParties.length != 0 ? (
+                        {
+                          activeParties?.length != 0 ? (
                             activeParties.map((party) => (
                               <CardParty key={party.id} party={party} />
                             ))
@@ -349,7 +349,7 @@ export default function parties() {
                               You aren't a part of any parties.
                             </div>
                           )
-                        ) : null}
+                        }
                       </div>
                     </section>
                     <section>
