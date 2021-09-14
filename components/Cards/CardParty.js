@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { fetchPartyMembers } from '../Fetch/fetchMaster';
 import AvatarMember from '../Avatars/AvatarMember';
+import LoadingDots from '../ui/LoadingDots';
 
 export default function CardParty({ party }) {
   var start_date = new Date(party.party_start_date);
@@ -125,7 +126,7 @@ export default function CardParty({ party }) {
                   ? partyMembers.map((member) => (
                       <AvatarMember member={member} />
                     ))
-                  : null}
+                  : <div className="h-8"><LoadingDots/></div>}
               </div>
 
               <p className="row-start-3 col-span-4 sm:col-span-3 text-primary truncate">

@@ -122,7 +122,6 @@ export default function HomePage() {
             background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null)
           };
         }
-        console.log(newData)
         setData(newData);
 
   }
