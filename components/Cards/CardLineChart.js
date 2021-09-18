@@ -10,20 +10,20 @@ export default function CardLineChart( {weekWins} ) {
       type: "line",
       data: {
         labels: [
-          "Sun",
           "Mon",
           "Tue",
           "Wed",
           "Thu",
           "Fri",
           "Sat",
+          "Sun",
         ],
         datasets: [
           {
             label: "This Week",
             backgroundColor: "#10b981",
             borderColor: "#10b981",
-            data: [weekWins.w1d0, weekWins.w1d1, weekWins.w1d2, weekWins.w1d3, weekWins.w1d4, weekWins.w1d5, weekWins.w1d6],
+            data: [weekWins.w1d1, weekWins.w1d2, weekWins.w1d3, weekWins.w1d4, weekWins.w1d5, weekWins.w1d6, weekWins.w1d0,],
             fill: false,
           },
           {
@@ -31,7 +31,7 @@ export default function CardLineChart( {weekWins} ) {
             fill: false,
             backgroundColor: "#fff",
             borderColor: "#fff",
-            data: [weekWins.w0d0, weekWins.w0d1, weekWins.w0d2, weekWins.w0d3, weekWins.w0d4, weekWins.w0d5, weekWins.w0d6],
+            data: [weekWins.w0d1, weekWins.w0d2, weekWins.w0d3, weekWins.w0d4, weekWins.w0d5, weekWins.w0d6, weekWins.w0d0],
           },
         ],
       },
