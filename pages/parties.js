@@ -141,6 +141,8 @@ export default function parties() {
       // // only use the parties that are in progress
       // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
 
+      console.log("Active Parties:", parties_you_are_in);
+
       setActiveParties(parties_you_are_in);
 
       if (error && status !== 406) {
@@ -340,15 +342,15 @@ export default function parties() {
                       </div>
                       <div className="flex flex-col gap-4">
                         {
-                          activeParties?.length != 0 ? (
+                          activeParties ? (activeParties.length != 0 ? (
                             activeParties.map((party) => (
-                              <CardParty key={party.id} party={party} />
+                              <CardParty key={party.party_id} party={party} />
                             ))
                           ) : (
                             <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
                               You aren't a part of any parties.
                             </div>
-                          )
+                          )) : null
                         }
                       </div>
                     </section>

@@ -563,9 +563,9 @@ export async function fetchTitles() {
 export async function fetchParty(party_slug) {
   try {
     const { data, error } = await supabase
-      .from('party_details')
+      .from('party') // before - party_details
       .select('*')
-      .eq('slug', party_slug)
+      .eq('id', party_slug) // why is this the slug instead of the party's id?
       .single();
 
     console.log(data);
