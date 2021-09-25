@@ -34,7 +34,7 @@ export default function CardParty({ party }) {
   }
 
   return (
-    <Link href={`/parties/details/?id=${party.party_slug}`}>
+    <Link href={`/parties/details/?id=${party.party_id}`}>
       <div
         className="w-full bg-white shadow-xl rounded-lg overflow-hidden mx-auto mt-2 text-left cursor-pointer bg-cover bg-center object-cover transition duration-500 ease-out transform hover:-translate-y-1 hover:scale-105"
         style={{
