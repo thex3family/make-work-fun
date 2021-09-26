@@ -560,12 +560,12 @@ export async function fetchTitles() {
   }
 }
 
-export async function fetchParty(party_slug) {
+export async function fetchParty(party_id) {
   try {
     const { data, error } = await supabase
-      .from('party') // before - party_details
+      .from('party') // before - party_details (it wasn't in the development database)
       .select('*')
-      .eq('id', party_slug) // why is this the slug instead of the party's id?
+      .eq('id', party_id) // why was the slug used instead of the party's id? It's possible for an incorrect party to be returned if it had the same slug as the party that you actually wanted.
       .single();
 
     console.log(data);

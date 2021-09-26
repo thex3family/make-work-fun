@@ -77,6 +77,8 @@ export default function partyDetail() {
   const [startChallengeModal, setStartChallengeModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
 
+  const [playerDragons, setPlayerDragons] = useState(null);
+
   // Waits until database fetches user state before loading anything
 
   useEffect(() => {
@@ -123,6 +125,7 @@ export default function partyDetail() {
       triggerWinModal,
       setShowWinModal
     );
+    await fetchPlayerDragons();
   }
 
   async function refreshStats() {
@@ -298,7 +301,7 @@ export default function partyDetail() {
     }
   }
 
-  async function saveDragon(database_id, party_member_id) {
+  async function saveDragon(database_id, party_id, party_member_id) {
     setSaving(true);
     try {
       const user = supabase.auth.user();
@@ -322,18 +325,31 @@ export default function partyDetail() {
         setDragonID(database_id);
       }
       if (database_id.match(notionID)) {
-        const { data, error } = await supabase
-          .from('party_members')
-          .update({ notion_page_id: database_id })
-          .eq('id', specificPartyPlayer.party_member_id);
+        
+        const dragon = {
+          party_member_id: party_member_id,
+          party_id: party_id,
+          player: user.id,
+          dragon_page_id: database_id,
+          dragon_page_name: "",
+          dragon_bg_url: ""
+        };
 
-        console.log('error', data, error);
-        setShowValidateDragon(true);
+        try {
+          const user = supabase.auth.user();
+    
+          const { data, error } = await supabase.from('party_member_dragons').insert(dragon);
 
-        if (error && status !== 406) {
-          throw error;
-        } else {
-          changePlayerStatus('Ready');
+          setShowValidateDragon(true);
+    
+          if (error && status !== 406) {
+            throw error;
+          }
+        } catch (error) {
+          alert(error.message);
+        } finally {
+          setLoading(false);
+          fetchPlayerDragons();
         }
       }
     } catch (error) {
@@ -452,6 +468,73 @@ export default function partyDetail() {
       alert(error.message);
     } finally {
       refreshStats();
+    }
+  }
+
+  async function fetchPlayerDragons() {
+    try {
+      const user = supabase.auth.user();
+      
+      const { data, error } = await supabase
+        .from('party_member_dragons')
+        .select('*')
+        .eq('party_id', id)
+        .eq('player', user.id);
+      
+      var dragons = data;
+
+      console.log("Player's Dragons for the Current Party:", dragons);
+
+      setPlayerDragons(dragons);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function showSavedDragons() {
+    return (
+      <>
+        <h3 className="font-bold">Saved Dragons</h3>
+        { playerDragons.map((dragon) => (
+          <div key={ dragon.id } className="grid grid-cols-5 mb-4 items-center gap-3">
+            <div className="col-span-4">
+              <p>{dragon.dragon_page_id}</p>
+            </div>
+            <Button
+              className="col-span-1"
+              variant="incognito"
+              onClick={() => deleteSavedDragon(dragon.id)}
+              disabled={saving}
+            >
+              Delete
+            </Button>
+          </div>
+        )) }
+      </>
+    );
+  }
+
+  async function deleteSavedDragon(dragon_id) { // Using the actual row id and instead of the dragon page id 
+    try {
+      const { data, error } = await supabase
+        .from('party_member_dragons')
+        .delete()
+        .match({ id: dragon_id });
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
+      setLoading(false);
+      fetchPlayerDragons();
     }
   }
 
@@ -820,7 +903,7 @@ export default function partyDetail() {
                                         members what project you're fighting,
                                         and we'll pull wins downstream.
                                       </div>
-
+                                      { playerDragons ? (playerDragons.length != 0 ? showSavedDragons() : null) : null }
                                       <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
                                         <p className="font-semibold w-full sm:w-auto">
                                           🐉 Share Your Dragon!
@@ -844,19 +927,10 @@ export default function partyDetail() {
                                         <Button
                                           className="col-span-1"
                                           variant="incognito"
-                                          onClick={() => saveDragon(dragon_id)}
+                                          onClick={() => saveDragon(dragon_id, party.id, specificPartyPlayer.party_member_id)}
                                           disabled={saving}
                                         >
                                           {saving ? 'Saving...' : 'Save'}
-                                        </Button>
-                                      </div>
-                                      <div className="w-full flex flex-row justify-center">
-                                        <Button
-                                          //className="col-span-1"
-                                          variant="incognito"
-                                          onClick={() => console.log("Add another dragon")}
-                                          >
-                                            + Add another dragon
                                         </Button>
                                       </div>
                                       <div className="mt-2 flex flex-row text-sm font-semibold">
