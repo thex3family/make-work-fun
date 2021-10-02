@@ -234,7 +234,7 @@ export async function fetchSpecificWins(upstream_id, start_date, due_date) {
       .select(
         'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname'
       )
-      .eq('upstream_id', upstream_id)
+      .like('upstream_id', '%'+upstream_id+'%')
       .gte('closing_date', start_date)
       .lte('closing_date', due_date)
       .order('closing_date', { ascending: false })
