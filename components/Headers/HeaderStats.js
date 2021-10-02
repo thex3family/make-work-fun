@@ -46,7 +46,7 @@ export default function HeaderStats({
                 >
                   <CardAreaStats areaStats={areaStats} />
                 </div>
-                <div className={`${showHide ? '' : 'hidden'} animate-fade-in`}>
+                <div data-intercom-target="avatar" className={`${showHide ? '' : 'hidden'} animate-fade-in`}>
                   <Avatar
                     avatarUrl={avatarUrl}
                     onAvatarUpload={(url) => handleAvatarUpload(url)}
