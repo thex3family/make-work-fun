@@ -266,7 +266,7 @@ export default function HomePage() {
               href="#link1"
               role="tablist"
             >
-              Season 1
+              Season 2
               <div
                 className={
                   'text-xs text-white p-3 ml-2 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
