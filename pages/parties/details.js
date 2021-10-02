@@ -215,11 +215,13 @@ export default function partyDetail() {
   }, [specificPartyPlayer]);
 
   async function loadSpecificPartyPlayer() {
+    console.log(party.challenge, 'Running')
     if (party.challenge == 2) {
+      console.log('Running')
       setDailyTarget_Achieved(
         await fetchSpecificWins(
           specificPartyPlayer.notion_page_id,
-          moment().local().format('YYYY-MM-DD')
+          moment().local().format('YYYY-MM-DD'), party.due_date
         )
       );
     }
