@@ -29,7 +29,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   const [players, setPlayers] = useState([]);
-  const [s1Players, setS1Players] = useState([]);
+  const [sNPlayers, setsNPlayers] = useState([]);
   const [activePlayers, setActivePlayers] = useState([]);
 
   //pagination
@@ -56,10 +56,10 @@ export default function HomePage() {
   const [openTab, setOpenTab] = useState(1);
 
   useEffect(() => {
-    if (openTab == 1 && s1Players) setActivePlayers(s1Players);
+    if (openTab == 1 && sNPlayers) setActivePlayers(sNPlayers);
     if (openTab == 2 && players) setActivePlayers(players);
     setCurrentPage(1);
-  }, [openTab, s1Players]);
+  }, [openTab, sNPlayers]);
 
   // Redirects user to reset password
 
@@ -99,13 +99,13 @@ export default function HomePage() {
 
   async function refreshStats() {
     setPlayerStats(await fetchPlayerStats());
-    fetchLeaderboardStats(setS1Players, setLoading, '1S');
+    fetchLeaderboardStats(setsNPlayers, setLoading, '2S');
     fetchLeaderboardStats(setPlayers, setLoading);
   }
 
   useEffect(() => {
-    if(s1Players) loadPlayerImages(s1Players, setS1Players)
-  }, [s1Players]);
+    if(sNPlayers) loadPlayerImages(sNPlayers, setsNPlayers)
+  }, [sNPlayers]);
 
   useEffect(() => {
     if(players) loadPlayerImages(players, setPlayers)
@@ -185,21 +185,21 @@ export default function HomePage() {
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg">
                     <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      Season 1 Statistics
+                      Season 2 Statistics
                     </h1>
                     <p className="text-sm text-accents-3 font-semibold">
-                      July 1 - September 30
+                      October 1 - December 31
                     </p>
                     <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <LeaderboardStatistics
-                        players={s1Players.length}
+                        players={sNPlayers.length}
                         levels_earned={
-                          s1Players.reduce(
+                          sNPlayers.reduce(
                             (a, v) => (a = a + v.current_level),
                             0
-                          ) - s1Players.length
+                          ) - sNPlayers.length
                         }
-                        exp_earned={s1Players.reduce(
+                        exp_earned={sNPlayers.reduce(
                           (a, v) => (a = a + v.total_exp),
                           0
                         )}
@@ -275,7 +275,7 @@ export default function HomePage() {
                     : 'text-blueGray-500 border-blueGray-500')
                 }
               >
-                {s1Players.length}
+                {sNPlayers.length}
               </div>
             </div>
             <div
@@ -353,7 +353,7 @@ export default function HomePage() {
                           : 'text-blueGray-600 border-blueGray-600')
                       }
                     >
-                      {s1Players.length}
+                      {sNPlayers.length}
                     </div>
                   </a>
                 </li>
@@ -451,7 +451,7 @@ export default function HomePage() {
 
                 <Pagination
                   postsPerPage={postsPerPage}
-                  totalPosts={s1Players.length}
+                  totalPosts={sNPlayers.length}
                   paginate={paginate}
                   currentPage={currentPage}
                 />
