@@ -38,7 +38,7 @@ export default function CardPartyPlayer({
         setDragonBGUrl('/challenge/skyrim.jpg');
       }
     }
-  }, []);
+  }, [party]);
 
   async function loadAvatarURL() {
     if (player.avatar_url) {
