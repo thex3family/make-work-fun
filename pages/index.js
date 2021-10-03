@@ -55,6 +55,8 @@ export default function HomePage() {
 
   const [openTab, setOpenTab] = useState(1);
 
+  const [benefitTab, setBenefitTab] = useState(0);
+
   useEffect(() => {
     if (openTab == 1 && sNPlayers) setActivePlayers(sNPlayers);
     if (openTab == 2 && players) setActivePlayers(players);
@@ -144,29 +146,12 @@ export default function HomePage() {
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
                   <h1 className="mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                    Join Our Family
+                    Join us...
                   </h1>
                   <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
                     Unlock multiplayer for personal development.
                   </p>
-                  <div className="inline-block mx-auto md:mx-0">
-                    <a href="https://makeworkfun.club" target="_blank">
-                      <Button
-                        className="w-auto mx-auto mr-5 my-4"
-                        variant="incognito"
-                      >
-                        Learn More
-                      </Button>
-                    </a>
-                    <Link href="/player">
-                      <Button
-                        className="w-auto mx-auto md:mx-0"
-                        variant="prominent"
-                      >
-                        Get Started 🚀
-                      </Button>
-                    </Link>
-                  </div>
+                  
                 </div>
 
                 {/*  countdown for seasons
@@ -205,6 +190,12 @@ export default function HomePage() {
                         )}
                       />
                     </h1>
+                  </div>
+                  <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
+                    <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                      Top 12 Players Placeholder
+                    </h1>
+                    
                   </div>
                 </div>
               </div>
@@ -247,219 +238,37 @@ export default function HomePage() {
           </g>
         </svg>
       </div> */}
-        <div className="mb-8 animate-fade-in-up text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 h-20 sm:h-24 relative">
-          <h1 className="text-2xl sm:text-3xl font-bold text-center p-3 sm:p-4">
-            Leaderboard 🏆
-          </h1>
-          <div className="mx-auto absolute inset-x-0 -bottom-7 bg-gray-700 rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
-            <div
-              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
-                openTab == 1
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                  : 'text-blueGray-500'
-              }`}
-              onClick={(e) => {
-                e.preventDefault();
-                setOpenTab(1);
-              }}
-              data-toggle="tab"
-              href="#link1"
-              role="tablist"
-            >
-              Season 2
-              <div
-                className={
-                  'text-xs text-white p-3 ml-2 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
-                  (openTab === 1
-                    ? 'border-white'
-                    : 'text-blueGray-500 border-blueGray-500')
-                }
-              >
-                {sNPlayers.length}
-              </div>
-            </div>
-            <div
-              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
-                openTab == 2
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                  : 'text-blueGray-500'
-              }`}
-              onClick={(e) => {
-                e.preventDefault();
-                setOpenTab(2);
-              }}
-              data-toggle="tab"
-              href="#link1"
-              role="tablist"
-            >
-              All Time
-              <div
-                className={
-                  'text-xs text-white p-3 ml-2 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
-                  (openTab === 2
-                    ? 'border-white'
-                    : 'text-blueGray-500 border-blueGray-500')
-                }
-              >
-                {players.length}
-              </div>
-            </div>
-          </div>
-        </div>
-        {loading ? (
-          <div className="animate-fade-in-up mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10">
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-            <CardAvatarSkeleton />
-          </div>
-        ) : (
-          <div className="flex flex-wrap">
-            <div className="w-full">
-              {/* <ul
-                className="max-w-screen-lg mx-auto flex mb-0 mt-6 list-none flex-wrap pt-3 pb-4 flex-row"
-                role="tablist"
-              >
-                <li className="flex-auto text-center mx-2">
-                  <a
-                    className={
-                      'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
-                      (openTab === 1
-                        ? 'text-white bg-gradient-to-r from-emerald-500 to-blue-500'
-                        : 'text-blueGray-600 bg-white')
-                    }
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setOpenTab(1);
-                    }}
-                    data-toggle="tab"
-                    href="#link1"
-                    role="tablist"
-                  >
-                    Season One
-                    <div
-                      className={
-                        'text-white p-3 ml-1 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
-                        (openTab === 1
-                          ? 'border-white'
-                          : 'text-blueGray-600 border-blueGray-600')
-                      }
-                    >
-                      {sNPlayers.length}
-                    </div>
-                  </a>
-                </li>
-                <li className="mx-2 flex-auto text-center">
-                  <a
-                    className={
-                      'text-xs font-bold uppercase px-5 py-2 shadow-lg rounded block leading-normal ' +
-                      (openTab === 2
-                        ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                        : 'text-blueGray-600 bg-white')
-                    }
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setOpenTab(2);
-                    }}
-                    data-toggle="tab"
-                    href="#link2"
-                    role="tablist"
-                  >
-                    All Time{' '}
-                    <div
-                      className={
-                        'text-white p-3 ml-1 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
-                        (openTab === 2
-                          ? 'border-white'
-                          : 'text-blueGray-600 border-blueGray-600')
-                      }
-                    >
-                      {players.length}
-                    </div>
-                  </a>
-                </li>
-              </ul> */}
-              <div className="mb-24">
-                <div
-                  className={
-                    openTab === 1
-                      ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
-                      : 'hidden'
-                  }
-                  id="link1"
-                >
-                  {currentPlayers.map((player, i) => (
-                    <Avatar
-                      key={i}
-                      statRank={player.player_rank}
-                      statName={player.full_name}
-                      statLevel={player.current_level}
-                      statEXP={player.total_exp}
-                      statEXPProgress={player.exp_progress}
-                      statLevelEXP={player.level_exp}
-                      statGold={player.total_gold}
-                      statWinName={player.name}
-                      statWinType={player.type}
-                      statWinGold={player.gold_reward}
-                      statWinEXP={player.exp_reward}
-                      avatar_url={player.avatar_url}
-                      background_url={player.background_url}
-                      statTitle={player.title}
-                      statEXPEarnedToday={player.exp_earned_today}
-                      statGoldEarnedToday={player.gold_earned_today}
-                    />
-                  ))}
-                </div>
-                <div
-                  className={
-                    openTab === 2
-                      ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
-                      : 'hidden'
-                  }
-                  id="link2"
-                >
-                  {currentPlayers.map((player, i) => (
-                    <Avatar
-                      key={i}
-                      statRank={player.player_rank}
-                      statName={player.full_name}
-                      statLevel={player.current_level}
-                      statEXP={player.total_exp}
-                      statEXPProgress={player.exp_progress}
-                      statLevelEXP={player.level_exp}
-                      statGold={player.total_gold}
-                      statWinName={player.name}
-                      statWinType={player.type}
-                      statWinGold={player.gold_reward}
-                      statWinEXP={player.exp_reward}
-                      avatar_url={player.avatar_url}
-                      background_url={player.background_url}
-                      statTitle={player.title}
-                      statEXPEarnedToday={player.exp_earned_today}
-                      statGoldEarnedToday={player.gold_earned_today}
-                    />
-                  ))}
-                </div>
-
-                <Pagination
-                  postsPerPage={postsPerPage}
-                  totalPosts={sNPlayers.length}
-                  paginate={paginate}
-                  currentPage={currentPage}
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </section>
+      <section className="text-gray-600 body-font">
+        <div className="container px-5 py-24 mx-auto flex flex-wrap flex-col">
+          <div class="flex mx-auto flex-wrap mb-20">
+            <a onClick={() => setBenefitTab(0)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium inline-flex items-center leading-none tracking-wider ${ benefitTab == 0 ? 'bg-gray-100 border-green-500 text-green-500 rounded-t' : null}` }>
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>STEP 1
+            </a>
+            <a onClick={() => setBenefitTab(1)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider ${ benefitTab == 1 ? 'bg-gray-100 border-green-500 text-green-500 rounded-t' : null}`}>
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>STEP 2
+            </a>
+            <a onClick={() => setBenefitTab(2)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider ${ benefitTab == 2 ? 'bg-gray-100 border-green-500 text-green-500 rounded-t' : null}`}>
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="3"></circle>
+                <path d="M12 22V8M5 12H2a10 10 0 0020 0h-3"></path>
+              </svg>STEP 3
+            </a>
+            <a onClick={() => setBenefitTab(3)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider ${ benefitTab == 3 ? 'bg-gray-100 border-green-500 text-green-500 rounded-t' : null}`}>
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>STEP 4
+            </a>
+          </div>
+          <img className="xl:w-1/4 lg:w-1/3 md:w-1/2 w-2/3 block mx-auto mb-10 object-cover object-center rounded" alt="hero" src="https://dummyimage.com/720x600" />
+        </div>
+      </section>
+      
 
       {/* level up modal */}
       {levelUp ? (
