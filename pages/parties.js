@@ -9,6 +9,7 @@ import Kanban from '@/components/Parties/Kanban';
 import RecruitingBoard from '@/components/Parties/RecruitingBoard';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import {
+  fetchAllParties,
   fetchLatestWin,
   fetchPlayerStats
 } from '@/components/Fetch/fetchMaster';
@@ -17,6 +18,44 @@ import ModalParty from '@/components/Modals/ModalParty';
 import LoadingDots from '@/components/ui/LoadingDots';
 import Button from '@/components/ui/Button';
 import PartiesSkeleton from '@/components/Skeletons/PartiesSkeleton';
+import DataTable, { createTheme } from 'react-data-table-component';
+import RecentWinsSkeleton from '@/components/Skeletons/RecentWinsSkeleton';
+import moment from 'moment';
+
+createTheme('game', {
+  text: {
+    primary: '#ffffff',
+    secondary: 'rgba(255, 255, 255, 0.7)',
+    disabled: 'rgba(0,0,0,.12)'
+  },
+  background: {
+    default: '#111111'
+  },
+  context: {
+    background: '#cb4b16',
+    text: '#FFFFFF'
+  },
+  divider: {
+    default: '#ffffff'
+  },
+  button: {
+    default: '#FFFFFF',
+    focus: 'rgba(255, 255, 255, .54)',
+    hover: 'rgba(255, 255, 255, .12)',
+    disabled: 'rgba(255, 255, 255, .18)'
+  },
+  highlightOnHover: {
+    default: '#9CA3AF15',
+    text: 'rgba(255, 255, 255, 1)'
+  },
+  sortFocus: {
+    default: 'rgba(255, 255, 255, .54)'
+  },
+  selected: {
+    default: 'rgba(0, 0, 0, .7)',
+    text: '#FFFFFF'
+  }
+});
 
 export default function parties() {
   const [activeParties, setActiveParties] = useState(null);
@@ -38,6 +77,8 @@ export default function parties() {
   const [createParty, setCreateParty] = useState(null);
 
   const [activeTab, setActiveTab] = useState(1);
+
+  const [allParties, setAllParties] = useState(null);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -76,6 +117,7 @@ export default function parties() {
   async function refreshStats() {
     setPlayerStats(await fetchPlayerStats());
     setLoading(false);
+    setAllParties(await fetchAllParties());
   }
 
   useEffect(() => {
@@ -223,10 +265,83 @@ export default function parties() {
   //   );
   // }
 
+  const NameCustom = (row) => (
+    <div data-tag="allowRowEvents" className="text-left">
+      <p className="font-semibold text-sm mb-1 truncate w-32 sm:w-96">
+        {row.name}
+      </p>
+      <div>
+        {row.challenge == 1 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 last:mr-0 mr-1 mb-1">
+            ⏱ Time Challenge
+          </span>
+        ) : row.challenge == 2 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-indigo-600 bg-indigo-200 last:mr-0 mr-1 mb-1">
+            🐉 Slay Your Dragon
+          </span>
+        ) : (
+          ''
+        )}
+      </div>
+    </div>
+  );
+  const RankCustom = (row) => <div data-tag="allowRowEvents" className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">A</div>;
+  const DateCustom = (row) => <div className="text-left"><div data-tag="allowRowEvents">{row.start_date ? moment(row.start_date).local().format('YYYY-MM-DD hh:mm a') : "In Progress"}</div> <div data-tag="allowRowEvents">{moment(row.due_date).local().format('YYYY-MM-DD hh:mm a')}</div></div>;
+  const StatusCustom = (row) => <div data-tag="allowRowEvents">{moment(row.due_date).local().format('YYYY-MM-DD hh:mm a')}</div>;
+
+  const columns = [
+    {
+      name: 'RANK',
+      selector: 'rank',
+      center: true,
+      maxWidth: '25px',
+      cell: (row) => <RankCustom {...row} />
+    },
+    {
+      name: 'PARTY',
+      selector: 'name',
+      cell: (row) => <NameCustom {...row} />,
+      grow: 2
+    },
+    {
+      name: 'DATES',
+      selector: 'start_date',
+      right: true,
+      sortable: true,
+      cell: (row) => <DateCustom {...row} />
+    },
+  ];
+
+  const customStyles = {
+    headRow: {
+      style: {
+        backgroundColor: 'red',
+        backgroundImage: 'linear-gradient(to right, #10b981, #3b82f6)',
+        minHeight: '48px',
+        borderRadius: '6px 6px 0 0',
+        paddingLeft: '8px',
+        paddingRight: '8px'
+      }
+    },
+    headCells: {
+      style: {
+        fontSize: '14px',
+        fontWeight: 600,
+        paddingLeft: '16px',
+        paddingRight: '16px'
+      }
+    },
+    rows: {
+      style: {
+        minHeight: '72px', // override the row height
+        paddingLeft: '8px',
+        paddingRight: '8px'
+      }
+    }
+  };
+
   if (!playerStats) {
-    return (
-        <PartiesSkeleton/>
-    );
+    return <PartiesSkeleton />;
   }
 
   return (
@@ -339,17 +454,15 @@ export default function parties() {
                         ></div>
                       </div>
                       <div className="flex flex-col gap-4">
-                        {
-                          activeParties?.length != 0 ? (
-                            activeParties?.map((party) => (
-                              <CardParty key={party.id} party={party} />
-                            ))
-                          ) : (
-                            <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
-                              You aren't a part of any parties.
-                            </div>
-                          )
-                        }
+                        {activeParties?.length != 0 ? (
+                          activeParties?.map((party) => (
+                            <CardParty key={party.id} party={party} />
+                          ))
+                        ) : (
+                          <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
+                            You aren't a part of any parties.
+                          </div>
+                        )}
                       </div>
                     </section>
                     <section>
@@ -383,7 +496,33 @@ export default function parties() {
                 </>
               ) : (
                 <div className="animate-fade-in">
-                  <div className="font-semibold">Feature Coming Soon!</div>
+                  {allParties ? (<>
+                    <div className="flex flex-wrap mt-4">
+                      <div className="w-full pb-12 px-4">
+                        {/* <CardTable color="dark" data={wins} /> */}
+                        <DataTable
+                          className=""
+                          title="Recent Wins 👀"
+                          noHeader
+                          columns={columns}
+                          data={allParties}
+                          // highlightOnHover={true}
+                          pointerOnHover={true}
+                          fixedHeader={true}
+                          customStyles={customStyles}
+                          pagination={true}
+                          theme="game"
+                          paginationPerPage={5}
+                          paginationRowsPerPageOptions={[5, 10, 15, 20]}
+                        />
+                        {/* <TailwindTable wins={wins} /> */}
+                      </div>
+                    </div>
+                  <div className="font-semibold">More Features Coming Soon!</div>
+                  </>
+                  ) : (
+                    <RecentWinsSkeleton />
+                  )}
                 </div>
               )}
             </div>

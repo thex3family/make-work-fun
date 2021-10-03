@@ -424,6 +424,26 @@ export async function fetchPartyPlayers(party_id) {
   }
 }
 
+export async function fetchAllParties() {
+  try {
+    const { data, error } = await supabase
+      .from('party')
+      .select('*')
+      .order('due_date', { ascending: false })
+
+    if (data) {
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
 export async function fetchSpecificPlayers(id, setFriends) {
   try {
     const { data } = await supabase
