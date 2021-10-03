@@ -57,6 +57,13 @@ export default function HomePage() {
 
   const [benefitTab, setBenefitTab] = useState(0);
 
+  const benefitTabs = [
+    { image: "/img/benefits-1.png", header: "Header 1", body: "Body 1"},
+    { image: "/img/benefits-2.png", header: "Header 2", body: "Body 2"},
+    { image: "/img/benefits-3.png", header: "Header 3", body: "Body 3"},
+    { image: "/img/benefits-4.png", header: "Header 4", body: "Body 4"}
+  ];
+    
   useEffect(() => {
     if (openTab == 1 && sNPlayers) setActivePlayers(sNPlayers);
     if (openTab == 2 && players) setActivePlayers(players);
@@ -151,7 +158,16 @@ export default function HomePage() {
                   <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
                     Unlock multiplayer for personal development.
                   </p>
-                  
+                  <div className="inline-block mx-auto md:mx-0">
+                    <Link href="/player">
+                      <Button
+                        className="w-auto mx-auto my-4 md:mx-0"
+                        variant="prominent"
+                      >
+                        Get Started 🚀
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
 
                 {/*  countdown for seasons
@@ -239,57 +255,62 @@ export default function HomePage() {
         </svg>
       </div> */}
       </section>
-      <section className="text-gray-600 body-font bg-white">
+      <section className="text-gray-600 body-font bg-black">
         <div className="container px-5 py-24 mx-auto flex flex-wrap flex-col">
         <div className="w-full mb-4 flex flex-col items-center">
-          <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">Core Benefits</h1>
-          <p className="text-black">Be The Hero Of Your Own Adventure</p>
+          <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">Core Benefits</h1>
+          <p className="text-white">Be The Hero Of Your Own Adventure</p>
         </div>
           <div class="flex mx-auto flex-wrap mb-20">
-            <a onClick={() => setBenefitTab(0)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium inline-flex items-center leading-none tracking-wider ${ benefitTab == 0 ? 'bg-gray-100 border-green-500 text-green-500 rounded-t' : null}` }>
-              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+            <a onClick={() => setBenefitTab(0)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider bg-gray-100 border-green-500 text-green-500' ${ benefitTab == 0 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}` }>
+              <svg fill="none" stroke={benefitTab == 0 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>Connect
+              </svg><span className={benefitTab == 0 ? 'text-white' : 'text-black'}>Connect</span>
             </a>
-            <a onClick={() => setBenefitTab(1)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider ${ benefitTab == 1 ? 'bg-gray-100 border-green-500 text-green-500 rounded-t' : null}`}>
-              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+            <a onClick={() => setBenefitTab(1)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider bg-gray-100 border-green-500 text-green-500'  ${ benefitTab == 1 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}`}>
+              <svg fill="none" stroke={benefitTab == 1 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
                 <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-              </svg>Player
+              </svg><span className={benefitTab == 1 ? 'text-white' : 'text-black'}>Player</span>
             </a>
-            <a onClick={() => setBenefitTab(2)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider ${ benefitTab == 2 ? 'bg-gray-100 border-green-500 text-green-500 rounded-t' : null}`}>
-              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+            <a onClick={() => setBenefitTab(2)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider bg-gray-100 border-green-500 text-green-500'  ${ benefitTab == 2 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}`}>
+              <svg fill="none" stroke={benefitTab == 2 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
                 <circle cx="12" cy="5" r="3"></circle>
                 <path d="M12 22V8M5 12H2a10 10 0 0020 0h-3"></path>
-              </svg>Party
+              </svg><span className={benefitTab == 2 ? 'text-white' : 'text-black'}>Party</span>
             </a>
-            <a onClick={() => setBenefitTab(3)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider ${ benefitTab == 3 ? 'bg-gray-100 border-green-500 text-green-500 rounded-t' : null}`}>
-              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
+            <a onClick={() => setBenefitTab(3)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider bg-gray-100 border-green-500 text-green-500'  ${ benefitTab == 3 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}`}>
+              <svg fill="none" stroke={benefitTab == 3 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
                 <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
-              </svg>Dailies
+              </svg><span className={benefitTab == 3 ? 'text-white' : 'text-black'}>Dailies</span>
             </a>
           </div>
-          <img className="xl:w-1/4 lg:w-1/3 md:w-1/2 w-2/3 block mx-auto mb-10 object-cover object-center rounded" alt="hero" src="https://dummyimage.com/720x600" />
+          <img className="w-3/4 block mx-auto mb-10 object-cover object-center rounded" alt="hero" src={benefitTabs[benefitTab].image} />
+
+          {/* <div className="flex flex-col text-center w-full">
+            <h1 className="text-xl font-medium title-font mb-4 text-gray-900">{benefitTabs[benefitTab].header}</h1>
+            <p className="lg:w-2/3 mx-auto leading-relaxed text-black">{benefitTabs[benefitTab].body}</p>
+          </div> */}
         </div>
       </section>
-      <section class="text-gray-600 body-font bg-white">
+      <section class="text-gray-600 body-font bg-black">
         <div class="container px-5 py-24 mx-auto flex flex-wrap">
           <div class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
             <img alt="feature" class="object-cover object-center h-full w-full" src="https://dummyimage.com/460x500" />
           </div>
           <div class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center">
             <div class="flex flex-col mb-10 lg:items-start items-center">
-              <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">Embed Anywhere</h1>
+              <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">Embed Anywhere</h1>
               <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-green-100 text-green-500 mb-5">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+                <svg fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
                   <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                 </svg>
               </div>
               <div class="flex-grow">
-                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Shooting Stars</h2>
-                <p class="leading-relaxed text-black">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
-                <a class="mt-3 text-green-500 inline-flex items-center">Learn More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                <h2 class="text-white text-lg title-font font-medium mb-3">Shooting Stars</h2>
+                <p class="leading-relaxed text-white">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
+                <a class="mt-3 text-white inline-flex items-center">Learn More
+                  <svg fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
                 </a>
@@ -297,20 +318,25 @@ export default function HomePage() {
             </div>
             <div class="flex flex-col mb-10 lg:items-start items-center">
               <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-green-100 text-green-500 mb-5">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+                <svg fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
                   <circle cx="6" cy="6" r="3"></circle>
                   <circle cx="6" cy="18" r="3"></circle>
                   <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"></path>
                 </svg>
               </div>
               <div class="flex-grow">
-                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">The Catalyzer</h2>
-                <p class="leading-relaxed text-black">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
-                <a class="mt-3 text-green-500 inline-flex items-center">Learn More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                  </svg>
-                </a>
+                <h2 class="text-white text-lg title-font font-medium mb-3">The Catalyzer</h2>
+                <p class="leading-relaxed text-white">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
+                <div className="inline-block mx-auto md:mx-0">
+                    <Link href="/player">
+                      <Button
+                        className="w-auto mx-auto my-4 md:mx-0"
+                        variant="prominent"
+                      >
+                        Get Started 🚀
+                      </Button>
+                    </Link>
+                  </div>
               </div>
             </div>
           </div>
