@@ -150,17 +150,17 @@ export default function HomePage() {
                     Unlock multiplayer for personal development.
                   </p>
                   <div className="inline-block mx-auto md:mx-0">
-                    <a href="https://makeworkfun.club" target="_blank">
+                    {/* <a href="https://makeworkfun.club" target="_blank">
                       <Button
                         className="w-auto mx-auto mr-5 my-4"
                         variant="incognito"
                       >
                         Learn More
                       </Button>
-                    </a>
+                    </a> */}
                     <Link href="/player">
                       <Button
-                        className="w-auto mx-auto md:mx-0"
+                        className="w-auto mx-auto my-4 md:mx-0"
                         variant="prominent"
                       >
                         Get Started 🚀
