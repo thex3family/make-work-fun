@@ -147,7 +147,7 @@ export default function CardPartyPlayer({
             className="rounded-tl-md rounded-bl-md w-1/3 bg-cover bg-center flex-shrink-0 "
             style={{ backgroundImage: `url(${backgroundUrl})` }}
           >
-            <div className="bg-black bg-opacity-70 h-full flex">
+            <div className="bg-black bg-opacity-70 h-full flex items-center">
               {avatarURL == 'Missing' ? (
                 <img
                   className="avatar image mx-auto px-2 object-contain"
@@ -156,7 +156,7 @@ export default function CardPartyPlayer({
                 />
               ) : avatarURL ? (
                 <img
-                  className="avatar image mx-auto px-2 object-contain"
+                  className="avatar image mx-auto px-2 object-contain h-28"
                   src={avatarURL}
                   alt="Avatar"
                 />
