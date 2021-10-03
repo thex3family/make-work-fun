@@ -341,7 +341,7 @@ export default function parties() {
                       <div className="flex flex-col gap-4">
                         {
                           activeParties?.length != 0 ? (
-                            activeParties.map((party) => (
+                            activeParties?.map((party) => (
                               <CardParty key={party.id} party={party} />
                             ))
                           ) : (
