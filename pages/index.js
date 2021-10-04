@@ -153,7 +153,7 @@ export default function HomePage() {
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
                   <h1 className="mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                    Join Our Family
+                    Make Work Fun
                   </h1>
                   <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
                     Unlock multiplayer for personal development.
@@ -209,7 +209,7 @@ export default function HomePage() {
                   </div>
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
                     <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      Top 12 Players Placeholder
+                      Top Players This Season
                     </h1>
                     
                   </div>
@@ -261,8 +261,8 @@ export default function HomePage() {
           <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">Core Benefits</h1>
           <p className="text-white">Be The Hero Of Your Own Adventure</p>
         </div>
-          <div class="flex mx-auto flex-wrap mb-20">
-            <a onClick={() => setBenefitTab(0)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider bg-gray-100 border-green-500 text-green-500' ${ benefitTab == 0 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}` }>
+          <div class="flex mx-auto flex-wrap mb-20 cursor-pointer">
+            <a onClick={() => setBenefitTab(0)} className={`sm:rounded-l-full sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider bg-gray-100 border-green-500 text-green-500' ${ benefitTab == 0 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}` }>
               <svg fill="none" stroke={benefitTab == 0 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               </svg><span className={benefitTab == 0 ? 'text-white' : 'text-black'}>Connect</span>
@@ -278,7 +278,7 @@ export default function HomePage() {
                 <path d="M12 22V8M5 12H2a10 10 0 0020 0h-3"></path>
               </svg><span className={benefitTab == 2 ? 'text-white' : 'text-black'}>Party</span>
             </a>
-            <a onClick={() => setBenefitTab(3)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider bg-gray-100 border-green-500 text-green-500'  ${ benefitTab == 3 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}`}>
+            <a onClick={() => setBenefitTab(3)} className={`sm:rounded-r-full sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider bg-gray-100 border-green-500 text-green-500'  ${ benefitTab == 3 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}`}>
               <svg fill="none" stroke={benefitTab == 3 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
                 <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
