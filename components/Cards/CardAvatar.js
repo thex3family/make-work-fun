@@ -7,6 +7,7 @@ import { downloadImage } from '@/utils/downloadImage';
 import { truncateString } from '@/utils/truncateString';
 
 export default function Avatar({
+  displayMode,
   statRank,
   statName,
   statLevel,
@@ -84,7 +85,7 @@ export default function Avatar({
 
   return (
     <>
-      <div className="animate-fade-in w-full xs:w-1/2 sm:w-1/2 md:1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/5 shadow-xl">
+      <div className={`animate-fade-in shadow-xl text-left flex-shrink-0 ${displayMode == 'short' ? 'w-80' : 'w-full xs:w-1/2 sm:w-1/2 md:1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/5'}`}>
         <div className="bg-primary-2 rounded-md mx-auto overflow-hidden">
           <div
             className="rounded-tr-md rounded-tl-md w-auto bg-cover bg-center"
@@ -231,8 +232,8 @@ export default function Avatar({
                   <p className="text-white text-md font-semibold w-3/5">
                     Latest Win 👀
                   </p>
-                  <p className="text-white text-sm truncate">{statWinName}</p>
-                  <p className="text-xs mt-3 text-right">
+                  <div className="text-white text-sm truncate">{statWinName}</div>
+                  <p className="text-xs mt-3 text-right min-w-full">
                     <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-lightBlue-700 bg-lightBlue-200 last:mr-0 mr-1">
                       {truncateString(statWinType, 13)}
                     </span>

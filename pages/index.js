@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import Avatar from '@/components/Cards/CardAvatar';
 import LeaderboardStatistics from '@/components/Widgets/Statistics/LeaderboardStatistics';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
@@ -34,7 +34,7 @@ export default function HomePage() {
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(12);
+  const [postsPerPage] = useState(10);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -58,12 +58,22 @@ export default function HomePage() {
   const [benefitTab, setBenefitTab] = useState(0);
 
   const benefitTabs = [
-    { image: "/img/benefits-1.png", header: "Header 1", body: "Body 1"},
-    { image: "/img/benefits-2.png", header: "Header 2", body: "Body 2"},
-    { image: "/img/benefits-3.png", header: "Header 3", body: "Body 3"},
-    { image: "/img/benefits-4.png", header: "Header 4", body: "Body 4"}
+    { image: '/img/benefits-1.png', header: 'Header 1', body: 'Body 1' },
+    { image: '/img/benefits-2.png', header: 'Header 2', body: 'Body 2' },
+    { image: '/img/benefits-3.png', header: 'Header 3', body: 'Body 3' },
+    { image: '/img/benefits-4.png', header: 'Header 4', body: 'Body 4' }
   ];
-    
+
+  
+  const [embedTab, setEmbedTab] = useState(0);
+
+  const embedTabs = [
+    { image: '/img/benefits-1.png', header: 'Header 1', body: 'Body 1' },
+    { image: '/img/benefits-2.png', header: 'Header 2', body: 'Body 2' },
+    { image: '/img/benefits-3.png', header: 'Header 3', body: 'Body 3' },
+    { image: '/img/benefits-4.png', header: 'Header 4', body: 'Body 4' }
+  ];
+
   useEffect(() => {
     if (openTab == 1 && sNPlayers) setActivePlayers(sNPlayers);
     if (openTab == 2 && players) setActivePlayers(players);
@@ -112,28 +122,31 @@ export default function HomePage() {
     fetchLeaderboardStats(setPlayers, setLoading);
   }
 
-  useEffect(() => {
-    if(sNPlayers) loadPlayerImages(sNPlayers, setsNPlayers)
-  }, [sNPlayers]);
+  // useEffect(() => {
+  //   if (sNPlayers) loadPlayerImages(sNPlayers, setsNPlayers);
+  // }, [sNPlayers]);
 
-  useEffect(() => {
-    if(players) loadPlayerImages(players, setPlayers)
-  }, [players]);
+  // useEffect(() => {
+  //   if (players) loadPlayerImages(players, setPlayers);
+  // }, [players]);
 
-  async function loadPlayerImages(data, setData) {
-    var newData = data;
+  // async function loadPlayerImages(data, setData) {
+  //   var newData = data;
 
-        for (let i = 0; i < data.length; i++) {
-          let oldData = data[i];
-          newData[i] = {
-            ...oldData,
-            avatar_url: (oldData.avatar_url ? await downloadImage(oldData.avatar_url, 'avatar') : null),
-            background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null)
-          };
-        }
-        setData(newData);
-
-  }
+  //   for (let i = 0; i < data.length; i++) {
+  //     let oldData = data[i];
+  //     newData[i] = {
+  //       ...oldData,
+  //       avatar_url: oldData.avatar_url
+  //         ? await downloadImage(oldData.avatar_url, 'avatar')
+  //         : null,
+  //       background_url: oldData.background_url
+  //         ? await downloadImage(oldData.background_url, 'background')
+  //         : null
+  //     };
+  //   }
+  //   setData(newData);
+  // }
 
   if (recoveryToken) {
     return (
@@ -149,15 +162,38 @@ export default function HomePage() {
       <section className="justify-center">
         <div className="bg-player-pattern bg-fixed h-4/5">
           <div className="bg-black bg-opacity-90 h-4/5">
-            <div className="animate-fade-in-up  pt-8 md:pt-24 pb-10 max-w-7xl mx-auto">
+            <div className="animate-fade-in-up pt-8 md:pt-24 pb-10 max-w-8xl mx-auto">
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-                  <h1 className="mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+                  <h1 className="sm:-mt-8 mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                     Make Work Fun
                   </h1>
                   <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
-                    Unlock multiplayer for personal development.
+                    Unlock multiplayer for personal development!
                   </p>
+                  <div className="w-full pt-8 px-0 my-auto ">
+                    {/* <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                      Lifetime Statistics
+                    </h1> */}
+                    <p className="text-sm text-accents-3 font-semibold">
+                      Lifetime Statistics Since July 2021
+                    </p>
+                    <h1 className="rounded-lg w-11/12 sm:-ml-3 lg:w-full mx-auto text-sm font-semibold text-center sm:text-left lg:text-sm bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                      <LeaderboardStatistics
+                        players={players.length}
+                        levels_earned={
+                          players.reduce(
+                            (a, v) => (a = a + v.current_level),
+                            0
+                          ) - players.length
+                        }
+                        exp_earned={players.reduce(
+                          (a, v) => (a = a + v.total_exp),
+                          0
+                        )}
+                      />
+                    </h1>
+                  </div>
                   <div className="inline-block mx-auto md:mx-0">
                     <Link href="/player">
                       <Button
@@ -184,34 +220,49 @@ export default function HomePage() {
                 </div> */}
 
                 <div className="w-full md:w-3/5 py-6 text-center">
-                  <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg">
-                    <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      Season 2 Statistics
-                    </h1>
-                    <p className="text-sm text-accents-3 font-semibold">
-                      October 1 - December 31
-                    </p>
-                    <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      <LeaderboardStatistics
-                        players={sNPlayers.length}
-                        levels_earned={
-                          sNPlayers.reduce(
-                            (a, v) => (a = a + v.current_level),
-                            0
-                          ) - sNPlayers.length
-                        }
-                        exp_earned={sNPlayers.reduce(
-                          (a, v) => (a = a + v.total_exp),
-                          0
-                        )}
-                      />
-                    </h1>
-                  </div>
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
-                    <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      Top Players This Season
-                    </h1>
-                    
+                    <Link href="leaderboard">
+                      <h1 className="cursor-pointer text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                        Top Players This Season
+                      </h1>
+                    </Link>
+
+                    <div className="mx-5 flex flex-no-wrap flex-row max-w-screen-2xl gap-12 pt-10 overflow-x-scroll pb-10" id="container">
+                      {loading ? (
+                        <>
+                          <CardAvatarSkeleton displayMode={'short'} />
+                          <CardAvatarSkeleton displayMode={'short'} />
+                          <CardAvatarSkeleton displayMode={'short'} />
+                        </>
+                      ) : (
+                        <>
+                          {currentPlayers.map((player, i) => (
+                            <Avatar
+                              key={i}
+                              displayMode={'short'}
+                              statRank={player.player_rank}
+                              statName={player.full_name}
+                              statLevel={player.current_level}
+                              statEXP={player.total_exp}
+                              statEXPProgress={player.exp_progress}
+                              statLevelEXP={player.level_exp}
+                              statGold={player.total_gold}
+                              statWinName={player.name}
+                              statWinType={player.type}
+                              statWinGold={player.gold_reward}
+                              statWinEXP={player.exp_reward}
+                              avatar_url={player.avatar_url}
+                              background_url={player.background_url}
+                              statTitle={player.title}
+                              statEXPEarnedToday={player.exp_earned_today}
+                              statGoldEarnedToday={player.gold_earned_today}
+                            />
+                          ))}
+                          
+                          <CardAvatarSkeleton displayMode={'short'} />
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -257,35 +308,78 @@ export default function HomePage() {
       </section>
       <section className="text-gray-600 body-font bg-black">
         <div className="container px-5 py-24 mx-auto flex flex-wrap flex-col">
-        <div className="w-full mb-4 flex flex-col items-center">
-          <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">Core Benefits</h1>
-          <p className="text-white">Be The Hero Of Your Own Adventure</p>
-        </div>
-          <div class="flex mx-auto flex-wrap mb-20 cursor-pointer">
-            <a onClick={() => setBenefitTab(0)} className={`sm:rounded-l-full sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider bg-gray-100 border-green-500 text-green-500' ${ benefitTab == 0 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}` }>
-              <svg fill="none" stroke={benefitTab == 0 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg><span className={benefitTab == 0 ? 'text-white' : 'text-black'}>Connect</span>
+          <div className="w-full mb-4 flex flex-col items-center">
+            <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
+              Core Benefits
+            </h1>
+            {/* <p className="text-white">Be The Hero Of Your Own Adventure</p> */}
+          </div>
+          <div class="flex mx-auto flex-wrap mb-20 cursor-pointer bg-gray-700 rounded-xl align-middle shadow-xl text-lg font-medium px-2 py-1">
+            <a
+              onClick={() => setBenefitTab(0)}
+              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider ' ${
+                benefitTab == 0
+                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
+                  : null
+              }`}
+            >
+              <span
+                className={benefitTab == 0 ? 'text-white' : 'text-blueGray-500'}
+              >
+              <i className="fas fa-link mr-2"/>
+                Connect
+              </span>
             </a>
-            <a onClick={() => setBenefitTab(1)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider bg-gray-100 border-green-500 text-green-500'  ${ benefitTab == 1 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}`}>
-              <svg fill="none" stroke={benefitTab == 1 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-              </svg><span className={benefitTab == 1 ? 'text-white' : 'text-black'}>Player</span>
+            <a
+              onClick={() => setBenefitTab(1)}
+              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
+                benefitTab == 1
+                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
+                  : null
+              }`}
+            >
+              <span
+                className={benefitTab == 1 ? 'text-white' : 'text-blueGray-500'}
+              >
+                <i className="fas fa-user-circle mr-2"/>
+                Player
+              </span>
             </a>
-            <a onClick={() => setBenefitTab(2)} className={`sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider bg-gray-100 border-green-500 text-green-500'  ${ benefitTab == 2 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}`}>
-              <svg fill="none" stroke={benefitTab == 2 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
-                <circle cx="12" cy="5" r="3"></circle>
-                <path d="M12 22V8M5 12H2a10 10 0 0020 0h-3"></path>
-              </svg><span className={benefitTab == 2 ? 'text-white' : 'text-black'}>Party</span>
+            <a
+              onClick={() => setBenefitTab(2)}
+              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
+                benefitTab == 2
+                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
+                  : null
+              }`}
+            >
+              <span
+                className={benefitTab == 2 ? 'text-white' : 'text-blueGray-500'}
+              ><i className="fas fa-dragon mr-2"/>
+                Party
+              </span>
             </a>
-            <a onClick={() => setBenefitTab(3)} className={`sm:rounded-r-full sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none border-gray-200 hover:text-gray-900 tracking-wider bg-gray-100 border-green-500 text-green-500'  ${ benefitTab == 3 ? 'bg-gradient-to-r from-emerald-500 to-blue-500' : null}`}>
-              <svg fill="none" stroke={benefitTab == 3 ? 'white' : 'black'} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5 mr-3" viewBox="0 0 24 24">
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg><span className={benefitTab == 3 ? 'text-white' : 'text-black'}>Dailies</span>
+            <a
+              onClick={() => setBenefitTab(3)}
+              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
+                benefitTab == 3
+                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
+                  : null
+              }`}
+            >
+              <span
+                className={benefitTab == 3 ? 'text-white' : 'text-blueGray-500'}
+              >
+                <i className="fas fa-star mr-2"/>
+                Dailies
+              </span>
             </a>
           </div>
-          <img className="w-3/4 block mx-auto mb-10 object-cover object-center rounded" alt="hero" src={benefitTabs[benefitTab].image} />
+          <img
+            className="w-3/4 block mx-auto mb-10 object-cover object-center rounded"
+            alt="hero"
+            src={benefitTabs[benefitTab].image}
+          />
 
           {/* <div className="flex flex-col text-center w-full">
             <h1 className="text-xl font-medium title-font mb-4 text-gray-900">{benefitTabs[benefitTab].header}</h1>
@@ -295,54 +389,63 @@ export default function HomePage() {
       </section>
       <section class="text-gray-600 body-font bg-black">
         <div class="container px-5 py-24 mx-auto flex flex-wrap">
-          <div class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
-            <img alt="feature" class="object-cover object-center h-full w-full" src="https://dummyimage.com/460x500" />
+          <div class="lg:w-1/3 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
+            <img
+              alt="feature"
+              class="object-cover object-center w-full"
+              src={embedTabs[embedTab].image}
+            />
           </div>
-          <div class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center">
-            <div class="flex flex-col mb-10 lg:items-start items-center">
-              <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">Embed Anywhere</h1>
-              <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-green-100 text-green-500 mb-5">
-                <svg fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                </svg>
-              </div>
-              <div class="flex-grow">
-                <h2 class="text-white text-lg title-font font-medium mb-3">Shooting Stars</h2>
-                <p class="leading-relaxed text-white">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
-                <a class="mt-3 text-white inline-flex items-center">Learn More
-                  <svg fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                  </svg>
-                </a>
-              </div>
+          <div class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-2/3 lg:pl-12 lg:text-left text-center ">
+            <div class="flex flex-col mb-10 lg:items-start items-center px-5">
+              <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
+                Embed Anywhere
+              </h1>
             </div>
-            <div class="flex flex-col mb-10 lg:items-start items-center">
-              <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-green-100 text-green-500 mb-5">
-                <svg fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
-                  <circle cx="6" cy="6" r="3"></circle>
-                  <circle cx="6" cy="18" r="3"></circle>
-                  <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"></path>
-                </svg>
-              </div>
+            <div class="flex flex-col mb-10 lg:items-start items-center px-5">
               <div class="flex-grow">
-                <h2 class="text-white text-lg title-font font-medium mb-3">The Catalyzer</h2>
-                <p class="leading-relaxed text-white">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
-                <div className="inline-block mx-auto md:mx-0">
-                    <Link href="/player">
-                      <Button
-                        className="w-auto mx-auto my-4 md:mx-0"
-                        variant="prominent"
-                      >
-                        Get Started 🚀
-                      </Button>
-                    </Link>
-                  </div>
+                <div onClick={() => setEmbedTab(0)} className={`cursor-pointer text-left mb-6 ${embedTab == 0 ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3' : ''}`}>
+                  <h2 class="text-white text-lg title-font font-medium mb-3">
+                    1 . Customize Your Component
+                  </h2>
+                  <p class="leading-relaxed text-white">
+                    Set options like dark mode, notifications, friends, etc.
+                  </p>
+                </div>
+
+                <div onClick={() => setEmbedTab(1)} className={`cursor-pointer text-left mb-6 ${embedTab == 1 ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3' : ''}`}>
+                  <h2 class="text-white text-lg title-font font-medium mb-3">
+                  2 . Paste Anywhere You Want
+                  </h2>
+                  <p class="leading-relaxed text-white">
+                    Blue bottle crucifix vinyl post-ironic four dollar toast
+                    vegan taxidermy. Gastropub indxgo juice poutine.
+                  </p>
+                </div>
+                <div onClick={() => setEmbedTab(3)} className={`cursor-pointer text-left mb-6 ${embedTab == 3 ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3' : ''}`}>
+                  <h2 class="text-white text-lg title-font font-medium mb-3">
+                    3 . Get Updated On Your Wins In Real Time
+                  </h2>
+                  <p class="leading-relaxed text-white">
+                    Blue bottle crucifix vinyl post-ironic four dollar toast
+                    vegan taxidermy. Gastropub indxgo juice poutine.
+                  </p>
+                </div>
+                <div className="inline-block mx-auto md:mx-0 mt-4">
+                  <Link href="/player">
+                    <Button
+                      className="w-auto mx-auto my-4 md:mx-0"
+                      variant="prominent"
+                    >
+                      Get Started 🚀
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      
 
       {/* level up modal */}
       {levelUp ? (
