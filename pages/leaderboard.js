@@ -147,7 +147,7 @@ export default function HomePage() {
                     Join Our Family
                   </h1>
                   <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
-                    Unlock multiplayer for personal development.
+                    Unlock multiplayer for personal development!
                   </p>
                   <div className="inline-block mx-auto md:mx-0">
                     {/* <a href="https://makeworkfun.club" target="_blank">
