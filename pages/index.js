@@ -303,18 +303,6 @@ export default function HomePage() {
                       </Button>
                     </Link>
                   </div>
-                  <a
-                    href={PHLink}
-                    target="_blank"
-                    className="fixed left-5 bottom-6 z-50"
-                  >
-                    <img
-                      src={PHImg}
-                      alt="Make Work Fun - Gamify Notion Workspaces - Celebrate your wins + unlock multiplayer for personal growth | Product Hunt"
-                      width="250"
-                      height="54"
-                    />
-                  </a>
                 </div>
 
                 {/*  countdown for seasons
@@ -452,6 +440,18 @@ export default function HomePage() {
                 src="/img/companion-app.png"
               />
             </div>
+                  <a
+                    href={PHLink}
+                    target="_blank"
+                    className="mx-auto"
+                  >
+                    <img
+                      src={PHImg}
+                      alt="Make Work Fun - Gamify Notion Workspaces - Celebrate your wins + unlock multiplayer for personal growth | Product Hunt"
+                      width="250"
+                      height="54"
+                    />
+                  </a>
           </div>
 
           <div className="w-full mb-4 flex flex-col items-center">
