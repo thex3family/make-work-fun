@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase-client';
 import Input from '@/components/ui/Input';
 
-
 export default function HabitSquare({
   habit_id,
   habit_title,
@@ -19,13 +18,16 @@ export default function HabitSquare({
   fetchDailies,
   fetchDailiesCompletedToday,
   habitCounter,
-  setHabitCounter
+  setHabitCounter,
+  displayMode
 }) {
   const [saving, setSaving] = useState(false);
   const [habitCompletedToday, setHabitCompletedToday] = useState(false);
   const [details, setDetails] = useState(null);
   const [timeDenominator, setTimeDenominator] = useState('MINS');
-  
+
+  const [demoCompleted, setDemoCompleted] = useState(false);
+
   useEffect(() => {
     if (streak_end) wasHabitCompletedToday(streak_end);
   }, [streak_end]);
@@ -96,7 +98,7 @@ export default function HabitSquare({
         }
       } else if (fetchData.length >= 1) {
         // console.log('fetchData - second condition');
-        
+
         // if notes, just update
         if (inputDetails || inputDetails > 0) {
           const { data, error } = await supabase
@@ -130,29 +132,35 @@ export default function HabitSquare({
   }
 
   function handleHabitCompletionStatusChange(habit_id, type, inputDetails) {
+    if (displayMode == 'demo') {
+      setDetails(inputDetails);
+      setHabitCompletedToday(inputDetails ? true : !habitCompletedToday)
+      console.log('Demo Pressed')
+    } else {
       setDetails(inputDetails);
 
-    //console.log('handleHabitCompletionStatusChange');
-    toggleHabitStatus(habit_id, type, inputDetails).then(() => {
-      fetchDailies('click');
-    });
+      //console.log('handleHabitCompletionStatusChange');
+      toggleHabitStatus(habit_id, type, inputDetails).then(() => {
+        fetchDailies('click');
+      });
+    }
   }
 
-  function getTimeInMinutes(time){
-    setTimeDenominator('MINS')
-      return (time * 60);
+  function getTimeInMinutes(time) {
+    setTimeDenominator('MINS');
+    return time * 60;
   }
 
-  function getTimeInHours(time){
-    setTimeDenominator('HRS')
-    return (time / 60);
-}
+  function getTimeInHours(time) {
+    setTimeDenominator('HRS');
+    return time / 60;
+  }
 
-  function convertTime(denomination, time){
-    if(denomination == 'HRS'){
-      setDetails(getTimeInHours(time))
-    } else if (denomination == 'MINS'){
-      setDetails(getTimeInMinutes(time))
+  function convertTime(denomination, time) {
+    if (denomination == 'HRS') {
+      setDetails(getTimeInHours(time));
+    } else if (denomination == 'MINS') {
+      setDetails(getTimeInMinutes(time));
     }
   }
 
@@ -168,7 +176,11 @@ export default function HabitSquare({
       }
       className={`animate-fade-in-down my-4 mb-0 sm:mb-8 p-4 sm:p-6 w-full sm:w-64 relative ${
         habitCompletedToday
-          ? (details == 'meh' ? `bg-yellow-500 border-yellow-700` : details == 'unhappy' ? `bg-red-500 border-red-700` : `bg-emerald-500 border-emerald-700`)
+          ? details == 'meh'
+            ? `bg-yellow-500 border-yellow-700`
+            : details == 'unhappy'
+            ? `bg-red-500 border-red-700`
+            : `bg-emerald-500 border-emerald-700`
           : `bg-dailies-light border-dailies-dark`
       } rounded z-10 square shadow-lg border-4 ${
         habit_type == 'Checkbox' ? `cursor-pointer` : null
@@ -207,19 +219,19 @@ export default function HabitSquare({
       <div className="self-center flex flex-row sm:flex-none sm:flex-col">
         <div className="flex flex-col justify-center sm:mb-4 m-auto w-1/3 sm:w-full mr-3 sm:mr-0">
           <div className="flex justify-center">
-          <IconPickerItem
-            className=""
-            icon={habit_icon}
-            size={45}
-            color="#000"
-          />
+            <IconPickerItem
+              className=""
+              icon={habit_icon}
+              size={45}
+              color="#000"
+            />
           </div>
-          
-          <p className="text-xs mt-3">
-                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                  +{exp_reward} XP
-                </span>
-              </p>
+
+          <p className="text-xs mt-3 mx-auto">
+            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+              +{exp_reward} XP
+            </span>
+          </p>
         </div>
         {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
         <div className="flex-col text-left sm:text-center w-2/3 sm:w-full">
@@ -228,17 +240,19 @@ export default function HabitSquare({
           </h2>
           {habit_type == 'Checkbox' ? (
             <div>
-            <p className="text-sm sm:text-md mb-2 sm:mb-2 text-black">
-              {habit_progress_statement(streak_duration)}
-            </p>
-            <div className="flex justify-start sm:justify-center">
-                <i className="fas fa-check text-2xl sm:text-3xl self-center font-semibold text-black"/>
+              <p className="text-sm sm:text-md mb-2 sm:mb-2 text-black">
+                {habit_progress_statement(streak_duration)}
+              </p>
+              <div className="flex justify-start sm:justify-center">
+                <i className="fas fa-check text-2xl sm:text-3xl self-center font-semibold text-black" />
               </div>
             </div>
           ) : null}
           {habit_type == 'Feeling' ? (
             <div>
-              <p className="text-sm sm:text-md mb-2 text-black">How are you feeling?</p>
+              <p className="text-sm sm:text-md mb-2 text-black">
+                How are you feeling?
+              </p>
               <div className="flex-row flex gap-2 justify-start sm:justify-center mb-4">
                 <button
                   className={`cursor-pointer text-4xl text-black far fa-smile ${
@@ -252,7 +266,7 @@ export default function HabitSquare({
                     handleHabitCompletionStatusChange(
                       habit_id,
                       'Feeling',
-                      `${ details == 'happy' ? '' : 'happy' }`
+                      `${details == 'happy' ? '' : 'happy'}`
                     )
                   }
                   disabled={saving}
@@ -269,7 +283,7 @@ export default function HabitSquare({
                     handleHabitCompletionStatusChange(
                       habit_id,
                       'Feeling',
-                      `${ details == 'meh' ? '' : 'meh' }`
+                      `${details == 'meh' ? '' : 'meh'}`
                     )
                   }
                   disabled={saving}
@@ -286,7 +300,7 @@ export default function HabitSquare({
                     handleHabitCompletionStatusChange(
                       habit_id,
                       'Feeling',
-                      `${ details == 'unhappy' ? '' : 'unhappy' }`
+                      `${details == 'unhappy' ? '' : 'unhappy'}`
                     )
                   }
                   disabled={saving}
@@ -324,13 +338,15 @@ export default function HabitSquare({
               </p>
               <div className="flex-row flex gap-2 justify-start sm:justify-center mb-4">
                 <button
-                  className={`text-4xl opacity-10 text-black far fa-minus-square ${details > 0 ? `hover:opacity-100` : `` }`}
+                  className={`text-4xl opacity-10 text-black far fa-minus-square ${
+                    details > 0 ? `hover:opacity-100` : ``
+                  }`}
                   disabled={details > 0 ? false : true}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
                       habit_id,
                       'countdown',
-                      Number(details)-1
+                      Number(details) - 1
                     )
                   }
                 />
@@ -343,7 +359,7 @@ export default function HabitSquare({
                     handleHabitCompletionStatusChange(
                       habit_id,
                       'countup',
-                      Number(details)+1
+                      Number(details) + 1
                     )
                   }
                 />
@@ -366,7 +382,11 @@ export default function HabitSquare({
                 variant="slim"
                 disabled={saving}
                 onClick={() =>
-                  handleHabitCompletionStatusChange(habit_id, 'Location', details)
+                  handleHabitCompletionStatusChange(
+                    habit_id,
+                    'Location',
+                    details
+                  )
                 }
               >
                 {habitCompletedToday ? 'Update' : 'Save'}
@@ -376,56 +396,62 @@ export default function HabitSquare({
           {habit_type == 'Duration' ? (
             <div className="flex flex-col">
               <div className="flex flex-row align-middle">
-              <Input
-                className="text-xs sm:text-sm mt-0.5 sm:mt-1 mb-2 sm:mb-4 font-semibold rounded"
-                variant="dailies"
-                id="Note"
-                type="number"
-                placeholder="Add duration here!"
-                value={details || ''}
-                onChange={(v) => setDetails(v)}
-              />
-              <div className="flex flex-col">
-              <button
-                className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${timeDenominator=='HRS' ? `opacity-100` : `opacity-30`}`}
-                variant="slim"
-                disabled={timeDenominator=='HRS'}
-                onClick={() =>
-                  convertTime('HRS', details)
-                }
-              >
-                HRS
-              </button>
-              <button
-                className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${timeDenominator=='MINS' ? `opacity-100` : `opacity-30`}`}
-                variant="slim"
-                disabled={timeDenominator=='MINS'}
-                onClick={() =>
-                  convertTime('MINS', details)
-                }
-              >
-                MINS
-              </button>
-              </div>
+                <Input
+                  className="text-xs sm:text-sm mt-0.5 sm:mt-1 mb-2 sm:mb-4 font-semibold rounded"
+                  variant="dailies"
+                  id="Note"
+                  type="number"
+                  placeholder="Add duration here!"
+                  value={details || ''}
+                  onChange={(v) => setDetails(v)}
+                />
+                <div className="flex flex-col">
+                  <button
+                    className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${
+                      timeDenominator == 'HRS' ? `opacity-100` : `opacity-30`
+                    }`}
+                    variant="slim"
+                    disabled={timeDenominator == 'HRS'}
+                    onClick={() => convertTime('HRS', details)}
+                  >
+                    HRS
+                  </button>
+                  <button
+                    className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${
+                      timeDenominator == 'MINS' ? `opacity-100` : `opacity-30`
+                    }`}
+                    variant="slim"
+                    disabled={timeDenominator == 'MINS'}
+                    onClick={() => convertTime('MINS', details)}
+                  >
+                    MINS
+                  </button>
+                </div>
               </div>
               <button
                 className="font-semibold text-sm text-black self-start sm:self-center"
                 variant="slim"
                 disabled={saving}
                 onClick={() =>
-                  handleHabitCompletionStatusChange(habit_id, 'Duration', timeDenominator === 'HRS' ? getTimeInMinutes(details) : details)
+                  handleHabitCompletionStatusChange(
+                    habit_id,
+                    'Duration',
+                    timeDenominator === 'HRS'
+                      ? getTimeInMinutes(details)
+                      : details
+                  )
                 }
               >
                 {habitCompletedToday ? 'Update' : 'Save'}
               </button>
             </div>
           ) : null}
-            <div className="hidden sm:visible">
-              <p className="text-xs mt-3">
-                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                  +{exp_reward} XP
-                </span>
-              </p>
+          <div className="hidden sm:visible">
+            <p className="text-xs mt-3">
+              <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+                +{exp_reward} XP
+              </span>
+            </p>
           </div>
         </div>
       </div>

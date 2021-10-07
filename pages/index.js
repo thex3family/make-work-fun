@@ -23,6 +23,9 @@ import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import CardWin from '@/components/Cards/CardWin';
 import Pagination from '@/components/Pagination';
 import { downloadImage } from '@/utils/downloadImage';
+import PlayerCard from '@/components/Embeds/PlayerCard';
+import DailiesEntry from '@/components/Embeds/DailiesEntry';
+import CardParty from '@/components/Cards/CardParty';
 
 export default function HomePage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -55,7 +58,7 @@ export default function HomePage() {
 
   const [openTab, setOpenTab] = useState(1);
 
-  const [benefitTab, setBenefitTab] = useState(0);
+  const [benefitTab, setBenefitTab] = useState(1);
 
   const benefitTabs = [
     { image: '/img/benefits-1.png', header: 'Header 1', body: 'Body 1' },
@@ -64,7 +67,6 @@ export default function HomePage() {
     { image: '/img/benefits-4.png', header: 'Header 4', body: 'Body 4' }
   ];
 
-  
   const [embedTab, setEmbedTab] = useState(0);
 
   const embedTabs = [
@@ -72,6 +74,100 @@ export default function HomePage() {
     { image: '/img/benefits-2.png', header: 'Header 2', body: 'Body 2' },
     { image: '/img/benefits-3.png', header: 'Header 3', body: 'Body 3' },
     { image: '/img/benefits-4.png', header: 'Header 4', body: 'Body 4' }
+  ];
+
+  const demoParties = [
+    {
+      player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
+      notion_page_id: null,
+      role: 'Party Leader',
+      notion_page_name: null,
+      status: 'Ready',
+      health: 10,
+      dragon_bg_url: null,
+      full_name: 'Conrad',
+      avatar_url: '0.4857466039220286.png',
+      background_url: '0.5372695271833878.jpg',
+      party_id: 35,
+      party_member_id: 61,
+      party_slug: 'quaint-quiet-jewellery',
+      party_name: 'Time Challenge',
+      party_description:
+        "Let's race to see who can get the most wins in a week!",
+      party_challenge: 1,
+      party_start_date: null,
+      party_due_date: '2021-10-30T16:00:59+00:00',
+      party_status: 1,
+      health_modifier: null,
+      review_be_helpful: null,
+      review_party_rating: null
+    },
+    {
+      player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
+      notion_page_id: '33a1b5d4-a8eb-47ad-88dc-058d5089d506',
+      role: 'Adventurer',
+      notion_page_name: 'Staying On Top Of My Finances',
+      status: 'Ready',
+      health: 9,
+      dragon_bg_url: null,
+      full_name: 'Conrad',
+      avatar_url: '0.4857466039220286.png',
+      background_url: '0.5372695271833878.jpg',
+      party_id: 31,
+      party_member_id: 38,
+      party_slug: 'breezy-enough-teacher',
+      party_name: 'Slay That Dragon',
+      party_description:
+        "Got any tough projects you have to do that you've been putting off?",
+      party_challenge: 2,
+      party_start_date: '2021-09-11T17:27:18+00:00',
+      party_due_date: '2021-10-04T01:00:00+00:00',
+      party_status: 3,
+      health_modifier: null,
+      review_be_helpful: null,
+      review_party_rating: null
+    },
+
+    {
+      player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
+      notion_page_id: '33a1b5d4-a8eb-47ad-88dc-058d5089d506',
+      role: 'Adventurer',
+      notion_page_name: 'Staying On Top Of My Finances',
+      status: 'Ready',
+      health: 10,
+      party_slug: 'breezy-enough-teacher',
+      party_name: 'Your Next Party!',
+      party_description: 'Become a party leader and make your own party!',
+      party_challenge: 1,
+      party_start_date: '2021-09-11T17:27:18+00:00',
+      party_due_date: '2021-10-04T01:00:00+00:00',
+      party_status: 2,
+      health_modifier: null
+    }
+    // {
+    //   player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
+    //   notion_page_id: null,
+    //   role: 'Adventurer',
+    //   notion_page_name: null,
+    //   status: 'Fighting',
+    //   health: 4,
+    //   dragon_bg_url: null,
+    //   full_name: 'Conrad',
+    //   avatar_url: '0.4857466039220286.png',
+    //   background_url: '0.5372695271833878.jpg',
+    //   party_id: 32,
+    //   party_member_id: 45,
+    //   party_slug: 'prickly-nutty-woman',
+    //   party_name: 'Your Next Party',
+    //   party_description: 'Become A Party Leader And Make Your Own!',
+    //   party_challenge: 1,
+    //   party_start_date: '2021-09-12T18:48:59+00:00',
+    //   party_due_date: '2021-09-19T10:02:25+00:00',
+    //   party_status: 1,
+    //   health_modifier: null,
+    //   review_be_helpful: null,
+    //   review_party_rating: null
+    // }
   ];
 
   useEffect(() => {
@@ -162,10 +258,10 @@ export default function HomePage() {
       <section className="justify-center">
         <div className="bg-player-pattern bg-fixed h-4/5">
           <div className="bg-black bg-opacity-90 h-4/5">
-            <div className="animate-fade-in-up pt-8 md:pt-24 pb-10 max-w-8xl mx-auto">
+            <div className="animate-fade-in-up pt-8 md:pt-24 lg:pt-8 pb-10 max-w-8xl mx-auto">
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-                  <h1 className="sm:-mt-8 mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+                  <h1 className="sm:-mt-20 mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                     Make Work Fun
                   </h1>
                   <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
@@ -222,12 +318,17 @@ export default function HomePage() {
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
                     <Link href="leaderboard">
-                      <h1 className="cursor-pointer text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                        Top Players This Season
-                      </h1>
+                      <>
+                        <h1 className="cursor-pointer text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                          Top Players This Season
+                        </h1>
+                      </>
                     </Link>
 
-                    <div className="mx-5 flex flex-no-wrap flex-row max-w-screen-2xl gap-12 pt-10 overflow-x-scroll pb-10" id="container">
+                    <div
+                      className="mx-5 flex flex-no-wrap flex-row max-w-screen-2xl gap-12 pt-10 overflow-x-scroll pb-10"
+                      id="container"
+                    >
                       {loading ? (
                         <>
                           <CardAvatarSkeleton displayMode={'short'} />
@@ -258,8 +359,13 @@ export default function HomePage() {
                               statGoldEarnedToday={player.gold_earned_today}
                             />
                           ))}
-                          
-                          <CardAvatarSkeleton displayMode={'short'} />
+
+                          <Button
+                            className="w-auto flex-shrink-0 mx-10 my-auto"
+                            variant="prominent"
+                          >
+                            🏆 See Leaderboard
+                          </Button>
                         </>
                       )}
                     </div>
@@ -308,14 +414,37 @@ export default function HomePage() {
       </section>
       <section className="text-gray-600 body-font bg-black">
         <div className="container px-5 py-24 mx-auto flex flex-wrap flex-col">
+          <div class="animate-fade-in-up container w-full sm:w-3/4 mx-auto flex flex-row flex-wrap pt-10 mb-32">
+            <div class="w-full -mb-14 sm:-mb-40 rounded-lg overflow-hidden self-center">
+              <div class="flex flex-col mb-10 px-5 text-center">
+                <h1 className="text-3xl sm:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                  Works With Tools You Love.
+                </h1>
+                <p class="text-white text-xl mb-2 font-semibold">
+                  The ultimate companion app for Notion to gamify your
+                  productivity experience.
+                </p>
+                <p class="text-blueGray-500 text-sm font-semibold">
+                  Coming Up: Airtable, Clickup, and Jira support!
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col flex-wrap w-full">
+              <img
+                alt="feature"
+                class="object-cover object-center w-full"
+                src="/img/companion-app.png"
+              />
+            </div>
+          </div>
+
           <div className="w-full mb-4 flex flex-col items-center">
             <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
-              Core Benefits
+              Core Features
             </h1>
-            {/* <p className="text-white">Be The Hero Of Your Own Adventure</p> */}
           </div>
-          <div class="flex mx-auto flex-wrap mb-20 cursor-pointer bg-gray-700 rounded-xl align-middle shadow-xl text-lg font-medium px-2 py-1">
-            <a
+          <div class="flex mx-auto flex-wrap mb-14 cursor-pointer bg-gray-700 rounded-xl align-middle shadow-xl text-lg font-medium px-2 py-1">
+            {/* <a
               onClick={() => setBenefitTab(0)}
               className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider ' ${
                 benefitTab == 0
@@ -326,10 +455,10 @@ export default function HomePage() {
               <span
                 className={benefitTab == 0 ? 'text-white' : 'text-blueGray-500'}
               >
-              <i className="fas fa-link mr-2"/>
+                <i className="fas fa-link mr-2" />
                 Connect
               </span>
-            </a>
+            </a> */}
             <a
               onClick={() => setBenefitTab(1)}
               className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
@@ -341,7 +470,7 @@ export default function HomePage() {
               <span
                 className={benefitTab == 1 ? 'text-white' : 'text-blueGray-500'}
               >
-                <i className="fas fa-user-circle mr-2"/>
+                <i className="fas fa-user-circle mr-2" />
                 Player
               </span>
             </a>
@@ -355,13 +484,14 @@ export default function HomePage() {
             >
               <span
                 className={benefitTab == 2 ? 'text-white' : 'text-blueGray-500'}
-              ><i className="fas fa-dragon mr-2"/>
+              >
+                <i className="fas fa-dragon mr-2" />
                 Party
               </span>
             </a>
             <a
               onClick={() => setBenefitTab(3)}
-              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
+              className={`rounded-lg sm:px-6 py-3 w-full sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
                 benefitTab == 3
                   ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
                   : null
@@ -370,16 +500,88 @@ export default function HomePage() {
               <span
                 className={benefitTab == 3 ? 'text-white' : 'text-blueGray-500'}
               >
-                <i className="fas fa-star mr-2"/>
+                <i className="fas fa-star mr-2" />
                 Dailies
               </span>
             </a>
           </div>
-          <img
+          {/* <button
+            onClick={() => setDark(dark ? false : true)}
+            className={`text-lg font-semibold w-auto mx-auto items-center justify-center px-2 py-2 leading-none rounded text-emerald-700 bg-emerald-100 border-2 border-emerald-500 mb-10`}
+          >
+            <i className={`mr-2 mt-0.5 fas fa-check`} />
+            Show Example Win
+          </button> */}
+
+          <div
+            className={`w-full lg:w-3/4 mx-auto ${
+              benefitTab == 1 ? '' : 'hidden'
+            }`}
+          >
+            <div className="animate-fade-in-up flex items-center mb-6">
+              <div
+                className="border-t border-accents-2 flex-grow mr-3"
+                aria-hidden="true"
+              ></div>
+              <p className="text-center text-2xl font-bold mb-1 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                Track Your Life Progress In Real Time
+              </p>
+              <div
+                className="border-t border-accents-2 flex-grow ml-3"
+                aria-hidden="true"
+              ></div>
+            </div>
+            <iframe
+              id="player-details"
+              className={`w-full rounded-lg`}
+              height="725"
+              src="/embed/player-details?display=demo"
+            />
+          </div>
+
+          {benefitTab == 2 ? (
+            <div className="animate-fade-in-up w-full lg:w-3/4 mx-auto">
+              <div className="flex items-center mb-6">
+                <div
+                  className="border-t border-accents-2 flex-grow mr-3"
+                  aria-hidden="true"
+                ></div>
+                <p className="text-center text-2xl font-bold mb-1 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                  Join Party Quests To Level Up Together
+                </p>
+                <div
+                  className="border-t border-accents-2 flex-grow ml-3"
+                  aria-hidden="true"
+                ></div>
+              </div>
+              {demoParties?.map((party) => (
+                <CardParty key={party.id} party={party} displayMode="demo" />
+              ))}
+            </div>
+          ) : null}
+          {benefitTab == 3 ? (
+            <div className="animate-fade-in-up w-full lg:w-3/4 mx-auto">
+              <div className="flex items-center mb-6">
+                <div
+                  className="border-t border-accents-2 flex-grow mr-3"
+                  aria-hidden="true"
+                ></div>
+                <p className="text-center text-2xl font-bold mb-1 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                  Transform Your Daily Chores Into Daily Quests!
+                </p>
+                <div
+                  className="border-t border-accents-2 flex-grow ml-3"
+                  aria-hidden="true"
+                ></div>
+              </div>
+              <DailiesEntry />
+            </div>
+          ) : null}
+          {/* <img
             className="w-3/4 block mx-auto mb-10 object-cover object-center rounded"
             alt="hero"
             src={benefitTabs[benefitTab].image}
-          />
+          /> */}
 
           {/* <div className="flex flex-col text-center w-full">
             <h1 className="text-xl font-medium title-font mb-4 text-gray-900">{benefitTabs[benefitTab].header}</h1>
@@ -388,47 +590,69 @@ export default function HomePage() {
         </div>
       </section>
       <section class="text-gray-600 body-font bg-black">
-        <div class="container px-5 py-24 mx-auto flex flex-wrap">
+        <div class="container px-5 py-0 sm:py-24 mx-auto flex flex-wrap-reverse">
           <div class="lg:w-1/3 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
-            <img
-              alt="feature"
-              class="object-cover object-center w-full"
-              src={embedTabs[embedTab].image}
-            />
+            <div
+              className={`${embedTab == 0 || embedTab == 1 ? '' : 'hidden'}`}
+            >
+              <PlayerCard embedTab={embedTab} />
+            </div>
+            {embedTab == 2 ? <img src="/img/mobile-view.png" /> : null}
           </div>
-          <div class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-2/3 lg:pl-12 lg:text-left text-center ">
+          <div class="flex flex-col flex-wrap w-full lg:py-6 lg:w-2/3 lg:pl-12 lg:text-left text-center">
             <div class="flex flex-col mb-10 lg:items-start items-center px-5">
               <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
-                Embed Anywhere
+                Bring Your Character Anywhere.
               </h1>
             </div>
             <div class="flex flex-col mb-10 lg:items-start items-center px-5">
-              <div class="flex-grow">
-                <div onClick={() => setEmbedTab(0)} className={`cursor-pointer text-left mb-6 ${embedTab == 0 ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3' : ''}`}>
+              <div class="flex-grow w-full">
+                <div
+                  onClick={() => setEmbedTab(0)}
+                  className={`cursor-pointer text-left mb-6 ${
+                    embedTab == 0
+                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3'
+                      : ''
+                  }`}
+                >
                   <h2 class="text-white text-lg title-font font-medium mb-3">
                     1 . Customize Your Component
                   </h2>
                   <p class="leading-relaxed text-white">
-                    Set options like dark mode, notifications, friends, etc.
+                    Set options like dark mode, friends, win notifications, etc.
                   </p>
                 </div>
 
-                <div onClick={() => setEmbedTab(1)} className={`cursor-pointer text-left mb-6 ${embedTab == 1 ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3' : ''}`}>
+                <div
+                  onClick={() => setEmbedTab(1)}
+                  className={`cursor-pointer text-left mb-6 ${
+                    embedTab == 1
+                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3'
+                      : ''
+                  }`}
+                >
                   <h2 class="text-white text-lg title-font font-medium mb-3">
-                  2 . Paste Anywhere You Want
+                    2 . Paste Anywhere You Want
                   </h2>
                   <p class="leading-relaxed text-white">
-                    Blue bottle crucifix vinyl post-ironic four dollar toast
-                    vegan taxidermy. Gastropub indxgo juice poutine.
+                    Copy the embed link and bring it to your favourite Notion
+                    pages or websites!
                   </p>
                 </div>
-                <div onClick={() => setEmbedTab(3)} className={`cursor-pointer text-left mb-6 ${embedTab == 3 ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3' : ''}`}>
+                <div
+                  onClick={() => setEmbedTab(2)}
+                  className={`cursor-pointer text-left mb-6 ${
+                    embedTab == 2
+                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3'
+                      : ''
+                  }`}
+                >
                   <h2 class="text-white text-lg title-font font-medium mb-3">
-                    3 . Get Updated On Your Wins In Real Time
+                    3 . Celebrate Your Wins Anywhere, Anytime.
                   </h2>
                   <p class="leading-relaxed text-white">
-                    Blue bottle crucifix vinyl post-ironic four dollar toast
-                    vegan taxidermy. Gastropub indxgo juice poutine.
+                    From embeds to mobile apps, be excited about your wins
+                    everywhere you go.
                   </p>
                 </div>
                 <div className="inline-block mx-auto md:mx-0 mt-4">

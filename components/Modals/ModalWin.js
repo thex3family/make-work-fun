@@ -9,7 +9,8 @@ export default function WinModal({
   activeModalStats,
   setShowWinModal,
   playerStats,
-  refreshStats
+  refreshStats,
+  display
 }) {
   const [activeGIF, setActiveGIF] = useState(null);
   const [sharedWithFamily, setSharedWithFamily] = useState(false);
@@ -34,14 +35,18 @@ export default function WinModal({
       setActiveGIF(url);
 
       // update the database with the new GIF
-      const { data, error } = await supabase
-        .from('success_plan')
-        .update({ gif_url: url })
-        .eq('id', activeModalStats.id);
 
-      // updates the rest of the stats asynchronously
-      if (page === 'player') {
-        refreshStats();
+      // only if not demo
+      if (display !== 'demo') {
+        const { data, error } = await supabase
+          .from('success_plan')
+          .update({ gif_url: url })
+          .eq('id', activeModalStats.id);
+
+        // updates the rest of the stats asynchronously
+        if (page === 'player') {
+          refreshStats();
+        }
       }
     }
   }
@@ -61,7 +66,10 @@ export default function WinModal({
     <>
       <div className="animate-fade-in flex justify-center">
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none">
-        <div className="opacity-50 fixed inset-0 z-30 bg-black" onClick={() => closeModal()}></div>
+          <div
+            className="opacity-50 fixed inset-0 z-30 bg-black"
+            onClick={() => closeModal()}
+          ></div>
           <div className="relative my-6 mx-auto max-w-xl lg:max-w-4xl xl:max-w-5xl max-h-screen border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none align-middle z-40">
             {/*content*/}
             {/*header*/}
@@ -145,22 +153,36 @@ export default function WinModal({
               >
                 Close
               </button>
-                {page !== 'validator' ? sharedWithFamily ? <a href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat" target="_blank"><button
-                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
+              {page !== 'validator' ? (
+                sharedWithFamily ? (
+                  <a
+                    href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
+                    target="_blank"
                   >
-                    Shared! Go To Guilded
-                  </button></a> : (
+                    <button
+                      className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                    >
+                      Shared! Go To Guilded
+                    </button>
+                  </a>
+                ) : display !== 'demo' ? (
                   <button
                     className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() =>
-                      shareWithGuilded(playerStats, activeModalStats, activeGIF, setSharedWithFamily)
+                      shareWithGuilded(
+                        playerStats,
+                        activeModalStats,
+                        activeGIF,
+                        setSharedWithFamily
+                      )
                     }
                   >
                     Share With Family
                   </button>
-                ) : null}
+                ) : null
+              ) : null}
             </div>
             {page !== 'player' ? (
               <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
