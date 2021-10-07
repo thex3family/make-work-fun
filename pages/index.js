@@ -359,13 +359,14 @@ export default function HomePage() {
                               statGoldEarnedToday={player.gold_earned_today}
                             />
                           ))}
-
-                          <Button
-                            className="w-auto flex-shrink-0 mx-10 my-auto"
-                            variant="prominent"
-                          >
-                            🏆 See Leaderboard
-                          </Button>
+                          <Link href="leaderboard">
+                            <Button
+                              className="w-auto flex-shrink-0 mx-10 my-auto"
+                              variant="prominent"
+                            >
+                              🏆 See Leaderboard
+                            </Button>
+                          </Link>
                         </>
                       )}
                     </div>
