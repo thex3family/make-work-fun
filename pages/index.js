@@ -76,6 +76,9 @@ export default function HomePage() {
     { image: '/img/benefits-4.png', header: 'Header 4', body: 'Body 4' }
   ];
 
+  const PHLink = 'https://www.producthunt.com/newsletter/9234-make-work-fun-again&theme=light'
+  const PHImg = 'https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=314599'
+
   const demoParties = [
     {
       player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
@@ -300,6 +303,18 @@ export default function HomePage() {
                       </Button>
                     </Link>
                   </div>
+                  <a
+                    href={PHLink}
+                    target="_blank"
+                    className="fixed left-5 bottom-6 z-50"
+                  >
+                    <img
+                      src={PHImg}
+                      alt="Make Work Fun - Gamify Notion Workspaces - Celebrate your wins + unlock multiplayer for personal growth | Product Hunt"
+                      width="250"
+                      height="54"
+                    />
+                  </a>
                 </div>
 
                 {/*  countdown for seasons
