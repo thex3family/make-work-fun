@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase-client';
 
 export default function CardLineChart( {weekWins} ) {
-
-  React.useEffect(() => {
+  useEffect(() => {
     var config = {
       type: "line",
       data: {
@@ -23,7 +22,7 @@ export default function CardLineChart( {weekWins} ) {
             label: "This Week",
             backgroundColor: "#10b981",
             borderColor: "#10b981",
-            data: [weekWins.w1d1, weekWins.w1d2, weekWins.w1d3, weekWins.w1d4, weekWins.w1d5, weekWins.w1d6, weekWins.w1d0,],
+            data: [weekWins.w1d1, weekWins.w1d2, weekWins.w1d3, weekWins.w1d4, weekWins.w1d5, weekWins.w1d6, weekWins.w1d0],
             fill: false,
           },
           {
@@ -109,7 +108,7 @@ export default function CardLineChart( {weekWins} ) {
     };
     var ctx = document.getElementById("line-chart").getContext("2d");
     window.myLine = new Chart(ctx, config);
-  }, []);
+  }, [weekWins]);
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 sm:mb-0 shadow-lg rounded bg-primary-2">

@@ -184,6 +184,7 @@ export default function parties() {
       // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
 
       setActiveParties(parties_you_are_in);
+      console.log(parties_you_are_in)
 
       if (error && status !== 406) {
         throw error;

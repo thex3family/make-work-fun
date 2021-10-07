@@ -16,6 +16,7 @@ import {
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
+import Button from '@/components/ui/Button';
 
 export default function playerDetails() {
   const router = useRouter();
@@ -23,13 +24,129 @@ export default function playerDetails() {
   const [avatarStatus, setAvatarStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showHide, setShowHide] = useState(true);
-  const [areaStats, setAreaStats] = useState([]);
-  const [weekWins, setWeekWins] = useState([]);
+  const [areaStats, setAreaStats] = useState(null);
+  const [weekWins, setWeekWins] = useState(null);
   const [background_url, setBackgroundUrl] = useState('/');
+
+  const [avatar_url, setAvatarUrl] = useState(null);
+
+  const demoPlayerStats = {
+    player_rank: 17,
+    next_rank: 0,
+    full_name: 'Conrad',
+    current_level: 1,
+    total_exp: 75,
+    exp_progress: 75,
+    level_exp: 200,
+    total_gold: 25,
+    player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
+    name: 'Make My Bed',
+    type: 'Daily Quest',
+    exp_reward: 25,
+    gold_reward: 0,
+    avatar_url: '0.4857466039220286.png',
+    background_url: '0.5372695271833878.jpg',
+    role: 'Party Leader, Contributor',
+    title: 'Party Leader ✊',
+    previous_level: 1,
+    exp_earned_today: 25,
+    gold_earned_today: 0,
+    season: '2S',
+    latest: true
+  };
+
+  const demoAreaStats = [
+    {
+      area: 'Make Work Fun',
+      current_level: 19,
+      total_exp: 16025,
+      exp_progress: 950,
+      level_exp: 1550
+    },
+    {
+      area: 'Sustainable',
+      current_level: 9,
+      total_exp: 4375,
+      exp_progress: 675,
+      level_exp: 800
+    },
+    {
+      area: 'Mindset',
+      current_level: 9,
+      total_exp: 4325,
+      exp_progress: 625,
+      level_exp: 800
+    },
+    {
+      area: 'Knowledge',
+      current_level: 7,
+      total_exp: 2925,
+      exp_progress: 600,
+      level_exp: 650
+    },
+    {
+      area: 'Sharing',
+      current_level: 7,
+      total_exp: 2500,
+      exp_progress: 175,
+      level_exp: 650
+    },
+    {
+      area: 'Family',
+      current_level: 5,
+      total_exp: 1300,
+      exp_progress: 50,
+      level_exp: 500
+    }
+  ];
+
+  const demoWeekWins = {
+    w0d0: 4,
+    w0d1: 3,
+    w0d2: 7,
+    w0d3: 4,
+    w0d4: 5,
+    w0d5: 6,
+    w0d6: 3,
+    w0d7: 6,
+    w1d0: 8,
+    w1d1: 4,
+    w1d2: 5,
+    w1d3: 7,
+    w1d4: 2,
+    w1d5: 5,
+    w1d6: 6,
+    w1d7: 9
+  };
+
+  const demoModalStats = {
+    area: 'Make Work Fun',
+    closing_date: '2021-10-08',
+    database_nickname: null,
+    difficulty: 1,
+    do_date: '2021-10-07',
+    entered_on: '2021-10-07T16:19:54.619076Z',
+    exp_reward: 25,
+    gif_url: null,
+    gold_reward: 25,
+    health_reward: null,
+    id: 13015,
+    impact: '10x 🔺',
+    name: 'My First Win',
+    notion_id: '',
+    party_id: null,
+    player: '',
+    punctuality: +1,
+    trend: 'up',
+    type: 'Task',
+    upstream: 'Starting My Adventure',
+    upstream_id: ''
+  };
 
   const { player } = router.query;
   const { style } = router.query;
   const { opacity } = router.query;
+  const { display } = router.query;
 
   let bg_opacity = 'bg-opacity-50';
 
@@ -40,8 +157,8 @@ export default function playerDetails() {
   const [activeModalStats, setActiveModalStats] = useState(null);
 
   useEffect(() => {
-    if (player) refreshStats();
-    if (player)
+    if (player && display !== 'demo') refreshStats();
+    if (player && display !== 'demo')
       fetchLatestWin(
         setActiveModalStats,
         refreshStats,
@@ -51,6 +168,17 @@ export default function playerDetails() {
         player
       );
   }, [player]);
+
+  useEffect(() => {
+    if (display == 'demo') {
+      setPlayerStats(demoPlayerStats);
+      setAreaStats(demoAreaStats);
+      setWeekWins(demoWeekWins);
+      downloadImage(demoPlayerStats.avatar_url);
+      setActiveModalStats(demoModalStats);
+      setLoading(false);
+    }
+  }, [display]);
 
   async function refreshStats() {
     console.log('statsRefreshing');
@@ -62,7 +190,11 @@ export default function playerDetails() {
 
   useEffect(() => {
     if (playerStats) {
-      if (!playerStats.avatar_url) setAvatarStatus('Missing');
+      if (!playerStats.avatar_url) {
+        setAvatarStatus('Missing');
+      } else {
+        setAvatarUrl(playerStats.avatar_url);
+      }
       fetchPlayerBackground(playerStats.background_url);
     }
   }, [playerStats]);
@@ -121,7 +253,32 @@ export default function playerDetails() {
         className="animate-slow-fade-in bg-fixed bg-cover bg-center bg-dark responsiveBackground"
         style={{ backgroundImage: `url(${background_url})` }}
       >
-        <div className={style == 'dark' ? null : `bg-black ${bg_opacity} responsiveBackground`}>
+        <div
+          className={
+            style == 'dark'
+              ? null
+              : `bg-black ${bg_opacity} responsiveBackground`
+          }
+        >
+          {display == 'demo' ? (
+            <div className="flex flex-row gap-4 justify-center bg-dark">
+              <Button
+                className="w-auto mx-auto my-4 md:mx-0"
+                variant="incognito"
+                onClick={()=>setShowWinModal(true)}
+              >
+                Demo: New Win
+              </Button>
+
+              <Button
+                className="w-auto mx-auto my-4 md:mx-0"
+                variant="incognito"
+                onClick={()=>setLevelUp(2)}
+              >
+                Demo: Level Up!
+              </Button>
+            </div>
+          ) : null}
           <div className="px-4 md:px-10 mx-auto w-full">
             <div className="relative py-10">
               <div className="px-4 md:px-10 mx-auto w-full">
@@ -146,24 +303,23 @@ export default function playerDetails() {
                       >
                         {avatarStatus == 'Missing' ? (
                           <img
-                          className="avatar image h-auto m-auto cursor-pointer"
-                          src="/img/default_avatar.png"
-                          alt="Avatar"
-                          onClick={() => {
-                            showHide ? setShowHide(false) : setShowHide(true);
-                          }}
-                        />
-                          
-                        ) :  (
-                          <img
                             className="avatar image h-auto m-auto cursor-pointer"
-                            src={playerStats.avatar_url}
+                            src="/img/default_avatar.png"
                             alt="Avatar"
                             onClick={() => {
                               showHide ? setShowHide(false) : setShowHide(true);
                             }}
                           />
-                        ) }
+                        ) : (
+                          <img
+                            className="avatar image h-auto m-auto cursor-pointer"
+                            src={avatar_url}
+                            alt="Avatar"
+                            onClick={() => {
+                              showHide ? setShowHide(false) : setShowHide(true);
+                            }}
+                          />
+                        )}
                       </div>
                     </div>
                     <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
@@ -216,6 +372,7 @@ export default function playerDetails() {
             setShowWinModal={setShowWinModal}
             playerStats={playerStats}
             refreshStats={refreshStats}
+            display={display}
           />
         </>
       ) : null}

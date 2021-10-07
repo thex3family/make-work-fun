@@ -7,6 +7,7 @@ export default function RoutineSection({
   fetchDailies,
   fetchDailiesCompletedToday
 }) {
+  console.log(associated_habits)
   const [showHide, setShowHide] = useState(true);
   const [habitCounter, setHabitCounter] = useState([]);
   // console.log(associated_habits)

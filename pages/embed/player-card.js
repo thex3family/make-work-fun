@@ -35,6 +35,32 @@ export default function playerDetails() {
   const { style } = router.query;
   const { id } = router.query;
   const { opacity } = router.query;
+  const { display } = router.query;
+
+  const demoPlayerStats = {
+    player_rank: 17,
+    next_rank: 0,
+    full_name: 'Conrad',
+    current_level: 1,
+    total_exp: 75,
+    exp_progress: 75,
+    level_exp: 200,
+    total_gold: 25,
+    player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
+    name: 'Make My Bed',
+    type: 'Daily Quest',
+    exp_reward: 25,
+    gold_reward: 0,
+    avatar_url: '0.4857466039220286.png',
+    background_url: '0.5372695271833878.jpg',
+    role: 'Party Leader, Contributor',
+    title: 'Party Leader ✊',
+    previous_level: 1,
+    exp_earned_today: 2575,
+    gold_earned_today: 1250,
+    season: '2S',
+    latest: true
+  };
 
   let bg_opacity = 'bg-opacity-50';
 
@@ -83,6 +109,14 @@ export default function playerDetails() {
     setLoading(false);
   }
 
+  
+  useEffect(() => {
+    if (display == 'demo') {
+      setPlayerStats(demoPlayerStats);
+      setLoading(false);
+    }
+  }, [display]);
+
   // useEffect(() => {
   //   if (playerStats) {
   //     if (playerStats.avatar_url) downloadImage(playerStats.avatar_url);
@@ -130,7 +164,7 @@ export default function playerDetails() {
         }`}
       >
         <div className="mx-5 py-5">
-          {player ? (
+          {player || display == "demo" ? (
             <Avatar
               statRank={playerStats.player_rank}
               statName={playerStats.full_name}

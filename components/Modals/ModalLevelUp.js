@@ -5,7 +5,7 @@ let quote = Quotes[(Quotes.length * Math.random()) << 0];
 const ModalLevelUp = ({ playerLevel, setLevelUp }) => {
   return (
     <>
-      <div className="h-screen flex justify-center">
+      <div className="h-screen absolute flex justify-center">
         <div className="confetti">
           <Confetti />
         </div>

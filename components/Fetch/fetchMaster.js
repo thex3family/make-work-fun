@@ -304,6 +304,7 @@ export async function fetchWeekWins(player) {
         .single();
 
       if (data) {
+        console.log(data)
         return data;
       }
     }
@@ -461,8 +462,9 @@ export async function fetchSpecificPlayers(id, setFriends) {
 
     if (friends) {
       const { data, error } = await supabase
-        .from('leaderboard')
+        .from('season_leaderboard')
         .select('*')
+        .eq('latest', true)
         .order('total_exp', { ascending: false })
         .or(friends);
       return data;

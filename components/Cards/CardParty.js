@@ -4,7 +4,7 @@ import { fetchPartyMembers } from '../Fetch/fetchMaster';
 import AvatarMember from '../Avatars/AvatarMember';
 import LoadingDots from '../ui/LoadingDots';
 
-export default function CardParty({ party }) {
+export default function CardParty({ party, displayMode }) {
   var start_date = new Date(party.party_start_date);
   var due_date = new Date(party.party_due_date);
   var now = new Date();
@@ -30,11 +30,11 @@ export default function CardParty({ party }) {
   }, []);
 
   async function getPartyMembers() {
-    setPartyMembers(await fetchPartyMembers(party.party_id));
+    if(displayMode !== "demo") setPartyMembers(await fetchPartyMembers(party.party_id));
   }
 
   return (
-    <Link href={`/parties/details/?id=${party.party_slug}`}>
+    <Link href={displayMode !== "demo" ? `/parties/details/?id=${party.party_slug}` : '/parties'}>
       <div
         className="w-full bg-white shadow-xl rounded-lg overflow-hidden mx-auto mt-2 text-left cursor-pointer bg-cover bg-center object-cover transition duration-500 ease-out transform hover:-translate-y-1 hover:scale-105"
         style={{
@@ -126,7 +126,7 @@ export default function CardParty({ party }) {
                   ? partyMembers.map((member) => (
                       <AvatarMember member={member} />
                     ))
-                  : <div className="h-8"><LoadingDots/></div>}
+                  : displayMode !== "demo" ? <div className="h-8"><LoadingDots/></div> : null}
               </div>
 
               <p className="row-start-3 col-span-4 sm:col-span-3 text-primary truncate">
