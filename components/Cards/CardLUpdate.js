@@ -15,7 +15,7 @@ export default function CardLUpdate({ date, title, desc, desc2, img_url, button_
         <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-white">{title}</h2>
         <p className="text-lg sm:text-xl mb-5">{desc}</p>
         <p className="text-lg sm:text-xl mb-5">{desc2}</p>
-        <Link href={button_url}><img className="mb-4 m-auto cursor-pointer" src={img_url} /></Link>
+        <Link href={button_url}><img className="mb-4 m-auto cursor-pointer rounded-lg" src={img_url} /></Link>
         {button_url ? <div className="text-center"><Link href={button_url}><Button className="w-auto mx-auto" variant="prominent">See it in action!</Button></Link></div> : ""}
         <p className="text-sm font-semibold text-right mr-4">{version}</p>
       </div>
