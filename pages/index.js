@@ -548,7 +548,7 @@ export default function HomePage() {
             <iframe
               id="player-details"
               className={`w-full rounded-lg`}
-              height="725"
+              height="800"
               src="/embed/player-details?display=demo"
             />
           </div>
@@ -611,7 +611,7 @@ export default function HomePage() {
             >
               <PlayerCard embedTab={embedTab} />
             </div>
-            {embedTab == 2 ? <img src="/img/mobile-view.png" /> : null}
+            {embedTab == 2 ? <img src="/img/mobile-view.png" className="animate-fade-in pb-10"/> : null}
           </div>
           <div class="flex flex-col flex-wrap w-full lg:py-6 lg:w-2/3 lg:pl-12 lg:text-left text-center">
             <div class="flex flex-col mb-10 lg:items-start items-center px-5">
@@ -625,7 +625,7 @@ export default function HomePage() {
                   onClick={() => setEmbedTab(0)}
                   className={`cursor-pointer text-left mb-6 ${
                     embedTab == 0
-                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3'
+                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
                       : ''
                   }`}
                 >
@@ -641,7 +641,7 @@ export default function HomePage() {
                   onClick={() => setEmbedTab(1)}
                   className={`cursor-pointer text-left mb-6 ${
                     embedTab == 1
-                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3'
+                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
                       : ''
                   }`}
                 >
@@ -657,7 +657,7 @@ export default function HomePage() {
                   onClick={() => setEmbedTab(2)}
                   className={`cursor-pointer text-left mb-6 ${
                     embedTab == 2
-                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -ml-3'
+                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
                       : ''
                   }`}
                 >
