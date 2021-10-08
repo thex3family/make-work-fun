@@ -16,11 +16,35 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Oct 7, 2021"
+            title="Dedicated Landing Page"
+            desc="We want to make sure you can try out our app's capabilities to its full extent, so we created a playground for you to try out some of our core features - no login required."
+            img_url="updates/0.25.png"
+            button_url="/"
+            version="v.25"
+          />
+          <CardLUpdate
+            date="Oct 3, 2021"
+            title="Official Public Beta Launch!"
+            desc="After 4 months of building together with our family, we're finally ready to share our app to the world - for FREE! We hit the front page of Product Hunt - and couldn't have done it without you guys."
+            img_url="updates/0.24.PNG"
+            button_url="/player"
+            version="v.24"
+          />
+          <CardRUpdate
+            date="Sep 14, 2021"
+            title="Reflect After Questing"
+            desc="After each party quest, reflect together with your friends to see what went well, what could have been done better, and we can be more helpful to each other."
+            img_url="updates/0.23.png"
+            button_url="/parties"
+            version="v.23"
+          />
           <CardLUpdate
             date="Sep 05, 2021"
             title="Embark On Party Quests"
-            desc="Do tasks with your friends and get extra points! Get the motivation and accountability to get things done - with 2 exciting game modes to try!"
-            desc2="Join our first batch of parties - we'll announce new ones every week! 👇"
+            desc="Do tasks with your friends and get extra points! Get the motivation and accountability to get things done - with 2 exciting modes to try!"
+            desc2="Join our first batch of parties - we'll announce new ones every week!"
             img_url="updates/0.22.PNG"
             button_url="/parties"
             version="v.22"
