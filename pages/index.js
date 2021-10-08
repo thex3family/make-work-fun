@@ -321,11 +321,9 @@ export default function HomePage() {
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
                     <Link href="leaderboard">
-                      <>
                         <h1 className="cursor-pointer text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                           Top Players This Season
                         </h1>
-                      </>
                     </Link>
 
                     <div
