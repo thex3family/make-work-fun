@@ -77,9 +77,9 @@ export default function HomePage() {
   ];
 
   const PHLink =
-    'https://www.producthunt.com/newsletter/9234-make-work-fun-again&theme=light';
+    'https://www.producthunt.com/newsletter/9234-make-work-fun-again';
   const PHImg =
-    'https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=314599';
+    'https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=314599&theme=light';
 
   const demoParties = [
     {
