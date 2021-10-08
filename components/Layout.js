@@ -10,8 +10,8 @@ import { useUser } from '@/utils/useUser';
 export default function Layout({ children, meta: pageMeta }) {
   const router = useRouter();
   const meta = {
-    title: 'Co-x3 Family Connection',
-    description: 'Multiplayer for Personal Development.',
+    title: 'Make Work Fun',
+    description: 'The ultimate companion app for Notion to gamify your productivity and make work fun.',
     cardImage: '/og.png',
     ...pageMeta
   };

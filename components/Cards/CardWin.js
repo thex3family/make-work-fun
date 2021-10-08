@@ -49,18 +49,18 @@ export default function CardWin({
         position == 'top' ? 'mt-5' : 'mt-24'
       }`}
     >
-      <div className="mt-2 mx-2 flex flex-row items-center py-1 px-2">
+      <div className="mt-2 mx-2 flex flex-row gap-2 items-center h-24 py-1 px-5">
         {avatarUrl ? (
           <img
             className="avatar image m-auto mr-2 object-cover pb-2"
             src={avatarUrl}
             alt="Avatar"
-            height="80"
-            width="80"
+            height="60"
+            width="60"
           />
         ) : (
           <img
-            className="avatar image m-auto mr-2 object-cover"
+            className="avatar image m-auto mr-2 h-24 object-cover"
             src="/img/default_avatar.png"
             alt="Avatar"
             height="80"
@@ -69,9 +69,9 @@ export default function CardWin({
         )}
         <div className="">
           <p className="text-white text-sm font-semibold w-full">
-            🎉 {short_name} just shared a win!
+            {short_name} just shared a win!
             <i
-              className="cursor-pointer ml-3 text-base fas fa-times"
+              className="cursor-pointer ml-5 text-base fas fa-times"
               onClick={() => setShowCardWin(false)}
             />
           </p>
