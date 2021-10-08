@@ -76,8 +76,10 @@ export default function HomePage() {
     { image: '/img/benefits-4.png', header: 'Header 4', body: 'Body 4' }
   ];
 
-  const PHLink = 'https://www.producthunt.com/newsletter/9234-make-work-fun-again&theme=light'
-  const PHImg = 'https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=314599'
+  const PHLink =
+    'https://www.producthunt.com/newsletter/9234-make-work-fun-again&theme=light';
+  const PHImg =
+    'https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=314599';
 
   const demoParties = [
     {
@@ -275,7 +277,7 @@ export default function HomePage() {
                       Lifetime Statistics
                     </h1> */}
                     <p className="text-sm text-accents-3 font-semibold">
-                      Lifetime Statistics Since July 2021
+                      Lifetime Statistics Since June 2021
                     </p>
                     <h1 className="rounded-lg w-11/12 sm:-ml-3 lg:w-full mx-auto text-sm font-semibold text-center sm:text-left lg:text-sm bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <LeaderboardStatistics
@@ -321,9 +323,9 @@ export default function HomePage() {
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
                     <Link href="leaderboard">
-                        <h1 className="cursor-pointer text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                          Top Players This Season
-                        </h1>
+                      <h1 className="cursor-pointer text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                        Top Players This Season
+                      </h1>
                     </Link>
 
                     <div
@@ -360,14 +362,21 @@ export default function HomePage() {
                               statGoldEarnedToday={player.gold_earned_today}
                             />
                           ))}
-                          <Link href="leaderboard">
-                            <Button
-                              className="w-auto flex-shrink-0 mx-10 my-auto"
-                              variant="prominent"
-                            >
-                              🏆 See Leaderboard
-                            </Button>
-                          </Link>
+                          <div href="leaderboard" className="relative">
+                            <>
+                              <Button
+                                className="w-auto flex-shrink-0 my-auto absolute top-0 bottom-0 left-0 right-0 ml-16 z-50"
+                                variant="prominent"
+                              >
+                                🏆 See Leaderboard
+                              </Button>
+
+                              <CardAvatarSkeleton
+                                displayMode={'short'}
+                                className="absolute"
+                              />
+                            </>
+                          </div>
                         </>
                       )}
                     </div>
@@ -438,18 +447,14 @@ export default function HomePage() {
                 src="/img/companion-app.png"
               />
             </div>
-                  <a
-                    href={PHLink}
-                    target="_blank"
-                    className="mx-auto"
-                  >
-                    <img
-                      src={PHImg}
-                      alt="Make Work Fun - Gamify Notion Workspaces - Celebrate your wins + unlock multiplayer for personal growth | Product Hunt"
-                      width="250"
-                      height="54"
-                    />
-                  </a>
+            <a href={PHLink} target="_blank" className="mx-auto">
+              <img
+                src={PHImg}
+                alt="Make Work Fun - Gamify Notion Workspaces - Celebrate your wins + unlock multiplayer for personal growth | Product Hunt"
+                width="250"
+                height="54"
+              />
+            </a>
           </div>
 
           <div className="w-full mb-4 flex flex-col items-center">
@@ -611,7 +616,12 @@ export default function HomePage() {
             >
               <PlayerCard embedTab={embedTab} />
             </div>
-            {embedTab == 2 ? <img src="/img/mobile-view.png" className="animate-fade-in pb-10"/> : null}
+            {embedTab == 2 ? (
+              <img
+                src="/img/mobile-view.png"
+                className="animate-fade-in pb-10"
+              />
+            ) : null}
           </div>
           <div class="flex flex-col flex-wrap w-full lg:py-6 lg:w-2/3 lg:pl-12 lg:text-left text-center">
             <div class="flex flex-col mb-10 lg:items-start items-center px-5">
