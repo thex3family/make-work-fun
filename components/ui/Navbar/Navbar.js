@@ -4,10 +4,10 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router';
 
 const navigation = [
-  { name: 'Player 🐣', href: '/player' },
-  { name: 'Account 📋', href: '/account' },
-  { name: 'Map 🌍', href: '/map' },
-  { name: 'Updates ✨', href: '/new' },
+  { name: 'Player 🐣', href: '/player', display: null },
+  { name: 'Account 📋', href: '/account', display: 'user' },
+  { name: 'Map 🌍', href: '/map', display: 'user' },
+  { name: 'Updates ✨', href: '/new', display: null },
 ]
 
 import Link from 'next/link';
