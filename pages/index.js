@@ -60,21 +60,7 @@ export default function HomePage() {
 
   const [benefitTab, setBenefitTab] = useState(1);
 
-  const benefitTabs = [
-    { image: '/img/benefits-1.png', header: 'Header 1', body: 'Body 1' },
-    { image: '/img/benefits-2.png', header: 'Header 2', body: 'Body 2' },
-    { image: '/img/benefits-3.png', header: 'Header 3', body: 'Body 3' },
-    { image: '/img/benefits-4.png', header: 'Header 4', body: 'Body 4' }
-  ];
-
   const [embedTab, setEmbedTab] = useState(0);
-
-  const embedTabs = [
-    { image: '/img/benefits-1.png', header: 'Header 1', body: 'Body 1' },
-    { image: '/img/benefits-2.png', header: 'Header 2', body: 'Body 2' },
-    { image: '/img/benefits-3.png', header: 'Header 3', body: 'Body 3' },
-    { image: '/img/benefits-4.png', header: 'Header 4', body: 'Body 4' }
-  ];
 
   const PHLink =
     'https://www.producthunt.com/newsletter/9234-make-work-fun-again';
