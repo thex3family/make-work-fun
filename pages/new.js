@@ -20,7 +20,7 @@ export default function updates() {
             date="Oct 7, 2021"
             title="Dedicated Landing Page"
             desc="We want to make sure you can try out our app's capabilities to its full extent, so we created a playground for you to try out some of our core features - no login required."
-            img_url="updates/0.25.png"
+            img_url="updates/0.25.PNG"
             button_url="/"
             version="v.25"
           />
@@ -36,7 +36,7 @@ export default function updates() {
             date="Sep 14, 2021"
             title="Reflect After Questing"
             desc="After each party quest, reflect together with your friends to see what went well, what could have been done better, and we can be more helpful to each other."
-            img_url="updates/0.23.png"
+            img_url="updates/0.23.PNG"
             button_url="/parties"
             version="v.23"
           />
