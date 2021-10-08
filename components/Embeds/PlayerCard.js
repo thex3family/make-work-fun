@@ -75,7 +75,7 @@ export default function PlayerCard({ embedTab }) {
       <div className="my-6">
         {embedTab == 0 ? (
           <div>
-            <div className="flex flex-row mb-7 text-xl font-semibold gap-3 overflow-x-scroll pb-4">
+            <div className="flex flex-row mb-7 text-xl font-semibold gap-3 overflow-x-scroll pb-4 animate-fade-in">
               <button
                 onClick={() => setDark(dark ? false : true)}
                 className={`flex-shrink-0 font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${
@@ -115,7 +115,7 @@ export default function PlayerCard({ embedTab }) {
             
           </div>
         ) : (
-          <div className="grid grid-cols-3 mb-14 items-center gap-3">
+          <div className="grid grid-cols-3 mb-14 items-center gap-3 animate-fade-in">
             <div className="col-span-2">
               <Input
                 className="text-xl font-semibold rounded"

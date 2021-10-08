@@ -261,9 +261,9 @@ export default function playerDetails() {
           }
         >
           {display == 'demo' ? (
-            <div className="flex flex-row gap-4 justify-center bg-dark">
+            <div className="flex flex-col sm:flex-row gap-0 sm:gap-4 justify-center bg-dark py-2">
               <Button
-                className="w-auto mx-auto my-4 md:mx-0"
+                className="w-full sm:w-auto my-2 mx-2"
                 variant="incognito"
                 onClick={()=>setShowWinModal(true)}
               >
@@ -271,7 +271,7 @@ export default function playerDetails() {
               </Button>
 
               <Button
-                className="w-auto mx-auto my-4 md:mx-0"
+                className=" w-full sm:w-auto my-2 mx-2"
                 variant="incognito"
                 onClick={()=>setLevelUp(2)}
               >
