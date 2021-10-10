@@ -456,7 +456,7 @@ export default function Player() {
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <div className="bg-black bg-opacity-70 sm:bg-opacity-0">
-          <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+          <div className="max-w-6xl mx-auto py-8 md:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
             <div className="rounded sm:bg-black sm:bg-opacity-90 bg-none bg-opacity-100 opacity-95">
               <div className="pt-0 sm:pt-10 pb-5">
                 <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">

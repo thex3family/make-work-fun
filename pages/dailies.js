@@ -229,7 +229,7 @@ export default function dallies() {
       <section className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundUrl})` }}>
           
-        <div className=" max-w-6xl mx-auto py-0 sm:py-8 sm:pt-24 px-0 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+        <div className=" max-w-6xl mx-auto py-0 sm:py-8 md:pt-24 px-0 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
           <div className="animate-fade-in-up bg-dailies-default rounded-0 sm:rounded opacity-95">
             <div className="pb-5 py-10 px-4 sm:px-10">
               <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
