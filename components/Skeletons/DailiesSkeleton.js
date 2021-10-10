@@ -5,7 +5,7 @@ export default function DailiesSkeleton() {
   return (
     <>
       <section>
-        <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
+        <div className="max-w-6xl mx-auto py-8 md:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
           <div className="animate-fade-in-up rounded sm:bg-black sm:bg-opacity-90 bg-none bg-opacity-100 opacity-95">
             <div className="pt-10 pb-5">
               <div className="mx-auto max-w-lg w-96 h-12 sm:h-20 bg-gray-600 rounded animate-pulse mb-6" />
