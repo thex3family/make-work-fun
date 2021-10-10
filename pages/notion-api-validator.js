@@ -91,7 +91,7 @@ export default function NotionWizard({ response, nickname }) {
   return (
     <>
       <section className="animate-fade-in-up">
-        <div className="max-w-6xl mx-auto py-8 sm:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col h-auto justify-center">
+        <div className="max-w-6xl mx-auto py-8 md:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col h-auto justify-center">
           <div className="pb-10">
             <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
               Let's Get You Connected
