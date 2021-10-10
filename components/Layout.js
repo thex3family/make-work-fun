@@ -10,7 +10,7 @@ import { useUser } from '@/utils/useUser';
 export default function Layout({ children, meta: pageMeta }) {
   const router = useRouter();
   const meta = {
-    title: 'Make Work Fun',
+    title: 'Make Work Fun, Get Stuff Done',
     description: 'The ultimate companion app for Notion to gamify your productivity and make work fun.',
     cardImage: '/og.png',
     ...pageMeta

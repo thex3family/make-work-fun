@@ -252,7 +252,7 @@ export default function HomePage() {
             <div className="animate-fade-in-up pt-8 md:pt-24 lg:pt-8 pb-10 max-w-8xl mx-auto">
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-                  <h1 className="sm:-mt-20 mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+                  <h1 className="md:-mt-20 mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                     Make Work Fun
                   </h1>
                   <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
@@ -265,7 +265,7 @@ export default function HomePage() {
                     <p className="text-sm text-accents-3 font-semibold">
                       Lifetime Statistics Since June 2021
                     </p>
-                    <h1 className="rounded-lg w-11/12 sm:-ml-3 lg:w-full mx-auto text-sm font-semibold text-center sm:text-left lg:text-sm bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                    <h1 className="rounded-lg w-full md:w-11/12 sm:-ml-3 lg:w-full mx-auto text-sm font-semibold text-center md:text-left lg:text-sm bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <LeaderboardStatistics
                         players={players.length}
                         levels_earned={
@@ -412,7 +412,7 @@ export default function HomePage() {
       <section className="text-gray-600 body-font bg-black">
         <div className="container px-5 py-24 mx-auto flex flex-wrap flex-col">
           <div class="animate-fade-in-up container w-full sm:w-3/4 mx-auto flex flex-row flex-wrap pt-10 mb-32">
-            <div class="w-full -mb-14 sm:-mb-40 rounded-lg overflow-hidden self-center">
+            <div class="w-full -mb-14 md:-mb-24 lg:-mb-40 rounded-lg overflow-hidden self-center">
               <div class="flex flex-col mb-10 px-5 text-center">
                 <h1 className="text-3xl sm:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                   Works With Tools You Love.
