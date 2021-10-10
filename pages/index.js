@@ -265,7 +265,7 @@ export default function HomePage() {
                     <p className="text-sm text-accents-3 font-semibold">
                       Lifetime Statistics Since June 2021
                     </p>
-                    <h1 className="rounded-lg w-full md:w-11/12 sm:-ml-3 lg:w-full mx-auto text-sm font-semibold text-center md:text-left lg:text-sm bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                    <h1 className="rounded-lg w-full md:w-11/12 md:-ml-3 lg:w-full mx-auto text-sm font-semibold text-center md:text-left lg:text-sm bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <LeaderboardStatistics
                         players={players.length}
                         levels_earned={
@@ -350,12 +350,14 @@ export default function HomePage() {
                           ))}
                           <div href="leaderboard" className="relative">
                             <>
-                              <Button
-                                className="w-auto flex-shrink-0 my-auto absolute top-0 bottom-0 left-0 right-0 ml-16 z-50"
-                                variant="prominent"
-                              >
-                                🏆 See Leaderboard
-                              </Button>
+                              <Link href="/leaderboard">
+                                <Button
+                                  className="w-auto flex-shrink-0 my-auto absolute top-0 bottom-0 left-0 right-0 ml-16 z-50"
+                                  variant="prominent"
+                                >
+                                  🏆 See Leaderboard
+                                </Button>
+                              </Link>
 
                               <CardAvatarSkeleton
                                 displayMode={'short'}
