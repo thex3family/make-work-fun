@@ -16,7 +16,6 @@ export default function CardParty({ party, displayMode }) {
   var start_to_now_days =
     (now.getTime() - start_date.getTime()) / (1000 * 3600 * 24);
 
-
   // divide this number by the number of days and convert the result into a percentage
   var deadline_completion_percentage =
     (start_to_now_days / start_to_end_days) * 100;
@@ -30,11 +29,18 @@ export default function CardParty({ party, displayMode }) {
   }, []);
 
   async function getPartyMembers() {
-    if(displayMode !== "demo") setPartyMembers(await fetchPartyMembers(party.party_id));
+    if (displayMode !== 'demo')
+      setPartyMembers(await fetchPartyMembers(party.party_id));
   }
 
   return (
-    <Link href={displayMode !== "demo" ? `/parties/details/?id=${party.party_slug}` : '/parties'}>
+    <Link
+      href={
+        displayMode !== 'demo'
+          ? `/parties/details/?id=${party.party_slug}`
+          : '/parties'
+      }
+    >
       <div
         className="w-full bg-white shadow-xl rounded-lg overflow-hidden mx-auto mt-2 text-left cursor-pointer bg-cover bg-center object-cover transition duration-500 ease-out transform hover:-translate-y-1 hover:scale-105"
         style={{
@@ -122,11 +128,24 @@ export default function CardParty({ party, displayMode }) {
                 {party.party_name}
               </h2>
               <div className="row-start-2 justify-self-end hidden sm:flex mt-1">
-                {partyMembers
-                  ? partyMembers.map((member) => (
+                {partyMembers ? (
+                  <>
+                    {partyMembers.slice(0, 3).map((member) => (
                       <AvatarMember member={member} />
-                    ))
-                  : displayMode !== "demo" ? <div className="h-8"><LoadingDots/></div> : null}
+                    ))}{' '}
+                    <div
+                      className={`bg-cover bg-center object-cover rounded-full shadow-xl block w-8 h-8 overflow-hidden`}
+                    >
+                      <div className="w-8 h-8 p-0.5 flex justify-center items-center text-sm text-accents-4">
+                        <span>+{partyMembers.length - 3}</span>
+                      </div>
+                    </div>
+                  </>
+                ) : displayMode !== 'demo' ? (
+                  <div className="h-8">
+                    <LoadingDots />
+                  </div>
+                ) : null}
               </div>
 
               <p className="row-start-3 col-span-4 sm:col-span-3 text-primary truncate">
@@ -139,7 +158,9 @@ export default function CardParty({ party, displayMode }) {
                   className="bg-gradient-to-r from-emerald-500 to-blue-500 text-xs leading-none py-1 text-center text-white w-3/4 h-4 rounded-full "
                   style={{
                     width: party.party_start_date
-                      ? deadline_completion_percentage <= 100 ? deadline_completion_percentage+'%' : 100+'%'
+                      ? deadline_completion_percentage <= 100
+                        ? deadline_completion_percentage + '%'
+                        : 100 + '%'
                       : 0 + '%'
                   }}
                 ></div>
