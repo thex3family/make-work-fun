@@ -357,6 +357,7 @@ export default function edit({user}) {
       const { data, error } = await supabase
         .from('habit_group')
         .select('*')
+        .or('player.eq.'+user.id+', player.is.null')
         .order('id', { ascending: true });
 
       setGroups(data);
