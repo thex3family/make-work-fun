@@ -19,7 +19,7 @@ export default function Layout({ children, meta: pageMeta }) {
     ...pageMeta
   };
 
-  const { user, userOnboarding } = useUser();
+  const { user, userProfile, userOnboarding } = useUser();
 
   function detectMob() {
     return window.innerWidth <= 1024;
@@ -28,15 +28,18 @@ export default function Layout({ children, meta: pageMeta }) {
   useEffect(() => {
     const mobileDevice = detectMob();
     setupIntercom(mobileDevice);
+    console.log(userProfile?.full_name)
   }, [user]);
 
   
 function setupIntercom(mobileDevice) {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     window.intercomSettings = {
       app_id: 'dcx9wsn6',
       hide_default_launcher: mobileDevice,
-      email: user?.email
+      email: user?.email,
+      name: userProfile?.full_name,
+      custom_launcher_selector:'.launch_intercom'
     };
 
     (function () {

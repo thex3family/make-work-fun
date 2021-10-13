@@ -16,6 +16,15 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Oct 13, 2021"
+            title="Personalized Help Experiences"
+            desc="We've upgraded our chatbot so you can get personalized help if you need it. Simply click on the blue circle on the bottom right of your screen if you're ever stuck! If you're on mobile, click on ? in the navbar instead."
+            img_url="updates/0.26.png"
+            button_url="/new"
+            button_class="launch_intercom"
+            version="v.26"
+          />
           <CardRUpdate
             date="Oct 7, 2021"
             title="Dedicated Landing Page"

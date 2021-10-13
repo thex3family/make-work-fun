@@ -1,7 +1,7 @@
 {
-  "name": "co-x3-family-connection",
-  "version": "0.23",
-  "license": "MIT",
+  "name": "make-work-fun",
+  "version": "0.26",
+  "license": "(Creative Commons or Apache 2.0)",
   "scripts": {
     "dev": "next",
     "build": "next build",
