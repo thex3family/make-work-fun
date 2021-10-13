@@ -391,7 +391,7 @@ export default function HomePage() {
                 <div
                   className={
                     openTab === 1
-                      ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                      ? 'mx-5 pb-5 lg:pb-0 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-scroll lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                       : 'hidden'
                   }
                   id="link1"
@@ -421,7 +421,7 @@ export default function HomePage() {
                 <div
                   className={
                     openTab === 2
-                      ? 'mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                      ? 'mx-5 pb-5 lg:pb-0 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-scroll lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                       : 'hidden'
                   }
                   id="link2"
