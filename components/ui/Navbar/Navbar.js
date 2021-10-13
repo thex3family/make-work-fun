@@ -90,7 +90,7 @@ const Navbar = () => {
                         </span>
                       </a>
                       <div className="-mr-2 flex items-center md:hidden">
-                        <a className="mr-1.5 mt-1 text-xl fas fa-question-circle launch_intercom" />
+                        <a className="mr-1.5 text-lg fas fa-question-circle launch_intercom" />
                         <Popover.Button className="bg-primary-2 rounded-md p-2 inline-flex items-center justify-center text-white hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500">
                           <span className="sr-only">Open main menu</span>
                           <MenuIcon className="h-6 w-6" aria-hidden="true" />
