@@ -20,7 +20,7 @@ export default function ConnectNotion({
   const [nickname, setNickname] = useState(null);
 
   var api = /^secret_\w{43}$/;
-  var id = /^\(?([0-9a-zA-Z]{8})\)?[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{4})[-. ]?([0-9a-zA-Z]{12})$/;
+  var id = /^\(?([0-9a-zA-Z]{8})\)?[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{12})$/;
   var notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 
   useEffect(() => {
