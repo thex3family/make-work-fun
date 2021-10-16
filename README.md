@@ -1,11 +1,11 @@
 ![Companion App Image](https://www.makework.fun/img/companion-app.png)
 
 [![Follow us on Twitter!](https://img.shields.io/twitter/follow/thex3family?style=social)](https://twitter.com/thex3family)
-[![Version 25.0](https://img.shields.io/badge/version-25.0-brightgreen)](https://www.makework.fun/new)
+[![Version 26.0](https://img.shields.io/badge/version-26.0-brightgreen)](https://www.makework.fun/new)
 [![Read it in another languague](https://img.shields.io/badge/languages%20-5-orange)]()
 [<img align="right" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=314599&theme=light" alt="Make Work Fun - Gamify Notion Workspaces - Celebrate your wins + unlock multiplayer for personal growth | Product Hunt" style="width: 200px; height: 34px;" width="200" height="34" />](https://www.producthunt.com/newsletter/9234-make-work-fun-again&theme=light)
-[![Become a member in our community](https://img.shields.io/static/v1?label=members&message=534&color=F5C400&style=flat&logo=guilded&logoColor=F5C400)](https://www.guilded.gg/thex3family)
-[![767 followers](https://img.shields.io/static/v1?label=followers&message=770&color=yellowgreen&style=flat&logo=guilded&logoColor=F5C400)](https://www.guilded.gg/thex3family)
+[![Become a member in our community](https://img.shields.io/static/v1?label=members&message=539&color=F5C400&style=flat&logo=guilded&logoColor=F5C400)](https://www.guilded.gg/thex3family)
+[![776 followers](https://img.shields.io/static/v1?label=followers&message=770&color=yellowgreen&style=flat&logo=guilded&logoColor=F5C400)](https://www.guilded.gg/thex3family)
 
 
 # <div align="center">  [Make Work Fun!](https://www.makework.fun/) </div>
@@ -25,11 +25,16 @@ We're a community of co-creators and collaborators that want to effect positive 
 
 ## Current Status
 - Gamify any Notion database: ![Success](https://img.shields.io/badge/-success-brightgreen)
-- Embark on Party Quests: ![Success](https://img.shields.io/badge/-success-brightgreen)
-- Slay Multiple Dragons inside a Party Quest: ![Success](https://img.shields.io/badge/-success-brightgreen)
+- Embark on Party Quests (Complete Time Challenges and Slay Dragons): ![Success](https://img.shields.io/badge/-success-brightgreen)
 - Item Shop: ![In Progress](https://img.shields.io/badge/-in%20progress-yellow)
 - Custom embedable components: ![Success](https://img.shields.io/badge/-success-brightgreen)
 - Build streaks with daily quests: ![Success](https://img.shields.io/badge/-success-brightgreen)
+
+## Core Technologies
+- React
+- Next.js
+- Tailwind CSS
+- Supabase
 
 ## License 
 Make Work Fun uses the Commons-Clause and Apache 2.0 licenses ([Link to License](https://github.com/thex3family/family-connection/blob/master/LICENSE)).
