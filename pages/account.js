@@ -49,8 +49,6 @@ export default function Account({
 
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
 
-  console.log(subscriptionPurchaseRecord[0]);
-
   useEffect(() => {
     if (user) getProfile();
     if (user) getNotionCredentials();
