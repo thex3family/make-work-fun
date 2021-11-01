@@ -9,15 +9,20 @@ import { postData } from '@/utils/helpers';
 import Input from '@/components/ui/Input';
 
 import { supabase } from '@/utils/supabase-client';
-import { table, minifyRecords } from '@/utils/airtable';
+import {
+  subscription_table,
+  product_table,
+  minifyRecords
+} from '@/utils/airtable';
 import ConnectNotion from '@/components/API/ConnectNotion';
 import { fetchNotionCredentials } from '@/components/Fetch/fetchMaster';
+import { truncateString } from '@/utils/truncateString';
 
 function Card({ title, description, footer, children }) {
   return (
     <div className="border border-accents-1	max-w-3xl w-full p rounded-md m-auto my-8">
       <div className="px-5 py-4">
-        <h3 className="text-2xl mb-1 font-medium">{title}</h3>
+        <h3 className="text-2xl mb-1 font-medium ">{title}</h3>
         <p className="text-accents-5">{description}</p>
         {children}
       </div>
@@ -28,7 +33,10 @@ function Card({ title, description, footer, children }) {
   );
 }
 
-export default function Account({ initialPurchaseRecord }) {
+export default function Account({
+  initialPurchaseRecord,
+  subscriptionPurchaseRecord
+}) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
   const router = useRouter();
@@ -39,9 +47,15 @@ export default function Account({ initialPurchaseRecord }) {
   const { user, userLoaded, session, userDetails } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+
+  console.log(subscriptionPurchaseRecord[0]);
+
   useEffect(() => {
     if (user) getProfile();
     if (user) getNotionCredentials();
+    if (subscriptionPurchaseRecord)
+      getSubscriptionStatus(subscriptionPurchaseRecord[0]);
   }, [session]);
 
   async function getProfile() {
@@ -92,6 +106,19 @@ export default function Account({ initialPurchaseRecord }) {
       alert(error.message);
     } finally {
       setSaveLoading(false);
+    }
+  }
+
+  async function getSubscriptionStatus(subRecord) {
+    const subscription_name = JSON.stringify(
+      subRecord?.fields.subscription_name
+    );
+    if (subscription_name?.includes('Co-x2')) {
+      setSubscriptionStatus(1);
+    } else if (subscription_name?.includes('Co-x3')) {
+      setSubscriptionStatus(2);
+    } else if (subscription_name?.includes('Our 100')) {
+      setSubscriptionStatus(3);
     }
   }
 
@@ -206,8 +233,8 @@ export default function Account({ initialPurchaseRecord }) {
         </Card> */}
           <div className="form-widget">
             <Card
-              title="Your Toolbox Purchases"
-              description="Your one-stop dashboard to accessing all of your resources."
+              title="Your Personal Toolbox"
+              description="The resources you've unlocked to help you level up on your growth journey."
               footer={
                 <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
                   <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
@@ -226,7 +253,7 @@ export default function Account({ initialPurchaseRecord }) {
                 </div>
               }
             >
-              <div className="text-xl mt-8 mb-4 font-semibold">
+              <div className="mt-8 mb-4 font-semibold">
                 {!userLoaded ? (
                   <div className="h-12 mb-6">
                     <LoadingDots />
@@ -236,19 +263,40 @@ export default function Account({ initialPurchaseRecord }) {
                     <div className="pb-5 flex justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
                         <div className="flex flex-row items-center">
-                          <div className="truncate">
-                            {purchase.fields.product_name}
-                          </div>
-                          <span className="ml-2 text-xs font-semibold inline-block uppercase rounded text-accents-3">
-                            {purchase.fields.subscription_type}
-                          </span>
+                          {truncateString(
+                            JSON.stringify(purchase.fields.product_name)
+                              .replace('[', '')
+                              .replaceAll('"', '')
+                              .replace(']', ''),
+                            40
+                          )}
                         </div>
-
+                        <p className="text-sm font-semibold inline-block rounded">
+                          <span className="text-accents-5">Version: </span>
+                          <span className="px-1.5 mr-0.5 bg-gray-300 border border-gray-800 rounded-lg text-gray-800">
+                            Notion
+                          </span>
+                          {purchase.fields.subscription_type ? (
+                            <span className="px-1.5 bg-emerald-300 border border-emerald-800 rounded-lg text-emerald-800">
+                              {purchase.fields.subscription_type}
+                            </span>
+                          ) : (
+                            <span className="px-1.5 bg-yellow-300 border border-yellow-800 rounded-lg text-yellow-800">
+                              One-Off
+                            </span>
+                          )}
+                          {purchase.fields.update_page ? (
+                            <a
+                              href={purchase.fields.update_page}
+                              className="ml-2 text-emerald-500"
+                            >
+                              ✨ Get Latest Version! ✨
+                            </a>
+                          ) : null}
+                        </p>
                         <p className="text-accents-5 text-sm">
-                          {purchase.fields.type == 'One Off'
-                            ? 'Purchased On: '
-                            : 'Joined On: '}
-                          <span className="text-accents-3">
+                          Unlocked On:
+                          <span className="ml-1 text-accents-3">
                             {purchase.fields.purchase_date.split('T')[0]}
                           </span>
                         </p>
@@ -272,7 +320,7 @@ export default function Account({ initialPurchaseRecord }) {
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
                           >
-                            Download Template
+                            Download
                           </Button>
                         </a>
                       }
@@ -312,6 +360,305 @@ export default function Account({ initialPurchaseRecord }) {
                           </Button>
                         </a>
                       }
+                    </div>
+                  </div>
+                )}
+                <div
+                  className="border-t border-accents-2 my-5 mb-8 flex-grow mr-3"
+                  aria-hidden="true"
+                ></div>
+                {!userLoaded ? (
+                  <div className="h-12 mb-6">
+                    <LoadingDots />
+                  </div>
+                ) : (
+                  <div>
+                    {subscriptionPurchaseRecord[0] ? (
+                      <>
+                        <p className="text-2xl">
+                          {
+                            subscriptionPurchaseRecord[0].fields
+                              .subscription_name
+                          }
+                        </p>
+                        <p className="text-accents-5 font-normal">
+                          <p className="text-accents-5">
+                            Joined On:
+                            <span className="ml-1 text-accents-3">
+                              {
+                                subscriptionPurchaseRecord[0].fields.joined_on.split(
+                                  'T'
+                                )[0]
+                              }
+                            </span>
+                          </p>
+                          Streak:{' '}
+                          {Array.from(
+                            {
+                              length:
+                                subscriptionPurchaseRecord[0].fields.streak
+                            },
+                            (_, i) => (
+                              <span key={i}>⭐</span>
+                            )
+                          )}
+                        </p>
+                        <div className="mb-8">
+                          <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
+                            Manage My Subscription
+                          </a>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-2xl">
+                          Level Up 10x Faster With Unique Benefits For Our
+                          Patrons
+                        </p>
+                        <p className="text-accents-5 mb-8 font-normal">
+                          If you joined us with Patreon, please reach out via
+                          the{' '}
+                          <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
+                            chat
+                          </a>{' '}
+                          to get access to your resources.
+                        </p>
+                      </>
+                    )}
+                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="sm:pb-0 pb-3">
+                        <span
+                          className={
+                            subscriptionStatus == 1 ? 'text-emerald-500' : null
+                          }
+                        >
+                          Gamify Your Life
+                        </span>{' '}
+                        •{' '}
+                        <span
+                          className={
+                            subscriptionStatus == 2 ? 'text-emerald-500' : null
+                          }
+                        >
+                          L-CTRL System
+                        </span>{' '}
+                        •{' '}
+                        <span
+                          className={
+                            subscriptionStatus == 3 ? 'text-emerald-500' : null
+                          }
+                        >
+                          Entire Toolbox
+                        </span>
+                        <p className="text-accents-5 text-sm">
+                          Access to our most comprehensive, ready-made, fully
+                          customizable systems.
+                        </p>
+                      </p>
+                      {subscriptionStatus ? (
+                        <a
+                          href={
+                            subscriptionPurchaseRecord[0].fields.download_url
+                          }
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            Download
+                          </Button>
+                        </a>
+                      ) : (
+                        <a
+                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            🔓 Unlock
+                          </Button>
+                        </a>
+                      )}
+                    </div>
+                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="sm:pb-0 pb-3">
+                        Store Discount{' '}
+                        <span
+                          className={
+                            subscriptionStatus == 1 ? 'text-emerald-500' : null
+                          }
+                        >
+                          5%
+                        </span>{' '}
+                        •{' '}
+                        <span
+                          className={
+                            subscriptionStatus == 2 ? 'text-emerald-500' : null
+                          }
+                        >
+                          10%
+                        </span>{' '}
+                        •{' '}
+                        <span
+                          className={
+                            subscriptionStatus == 3 ? 'text-emerald-500' : null
+                          }
+                        >
+                          100%
+                        </span>
+                        <p className="text-accents-5 text-sm">
+                          Unlock all the resources you need at the right prices.
+                        </p>
+                      </p>
+                      {subscriptionStatus ? (
+                        <a href="https://toolbox.co-x3.com/" target="_blank">
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                            disabled={true}
+                          >
+                            Coming Soon
+                          </Button>
+                        </a>
+                      ) : (
+                        <a
+                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            🔓 Unlock
+                          </Button>
+                        </a>
+                      )}
+                    </div>
+                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="sm:pb-0 pb-3">
+                        Weekly Office Hours
+                        <p className="text-accents-5 text-sm">
+                          Ask burning questions and build new tools together
+                          with the family.
+                        </p>
+                      </p>
+                      {subscriptionStatus ? (
+                        <a
+                          href="https://join.co-x3.com/events/friday-live-build"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            Save Your Spot
+                          </Button>
+                        </a>
+                      ) : (
+                        <a
+                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            🔓 Unlock
+                          </Button>
+                        </a>
+                      )}
+                    </div>
+                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="sm:pb-0 pb-3">
+                        VIP Patron Space
+                        <p className="text-accents-5 text-sm">
+                          Get access to behind the scenes content, exclusive
+                          templates, and more.
+                        </p>
+                      </p>
+                      {subscriptionStatus ? (
+                        <a
+                          href="https://ask.co-x3.com/apply-as-patron"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            Join The Family
+                          </Button>
+                        </a>
+                      ) : (
+                        <a
+                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            🔓 Unlock
+                          </Button>
+                        </a>
+                      )}
+                    </div>
+                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="sm:pb-0 pb-3">
+                        Expert Consulting Every{' '}
+                        <span
+                          className={
+                            subscriptionStatus == 1 ? 'text-emerald-500' : null
+                          }
+                        >
+                          Year
+                        </span>{' '}
+                        •{' '}
+                        <span
+                          className={
+                            subscriptionStatus == 2 ? 'text-emerald-500' : null
+                          }
+                        >
+                          Quarter
+                        </span>{' '}
+                        •{' '}
+                        <span
+                          className={
+                            subscriptionStatus == 3 ? 'text-emerald-500' : null
+                          }
+                        >
+                          Month
+                        </span>
+                        <p className="text-accents-5 text-sm">
+                          Deep, focused sessions to help you get ready for the
+                          next season.
+                        </p>
+                      </p>
+                      {subscriptionStatus ? (
+                        <a href="https://toolbox.co-x3.com/" target="_blank">
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                            disabled={true}
+                          >
+                            Coming Soon
+                          </Button>
+                        </a>
+                      ) : (
+                        <a
+                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            🔓 Unlock
+                          </Button>
+                        </a>
+                      )}
                     </div>
                   </div>
                 )}
@@ -574,16 +921,25 @@ export async function getServerSideProps({ req }) {
 
     // Check for purchases from airtable
 
-    const purchaseRecord = await table
+    const purchaseRecord = await product_table
       .select({
         filterByFormula: `{customer_email} = '${user.email}'`,
-        view: 'App - Purchase List',
+        view: 'App - One-Off Purchases',
+        sort: [{ field: 'value', direction: 'desc' }]
+      })
+      .firstPage();
+
+    const subscriptionRecord = await subscription_table
+      .select({
+        filterByFormula: `{customer_email} = '${user.email}'`,
+        view: 'App - Active Subscriptions',
         sort: [{ field: 'value', direction: 'desc' }]
       })
       .firstPage();
     return {
       props: {
         initialPurchaseRecord: minifyRecords(purchaseRecord),
+        subscriptionPurchaseRecord: minifyRecords(subscriptionRecord),
         user
       }
     };
