@@ -1,8 +1,8 @@
-import { table, minifyRecords } from '@/utils/airtable';
+import { product_table, minifyRecords } from '@/utils/airtable';
 
 export default async (req, res) => {
   try {
-    const records = await table
+    const records = await product_table
       .select({
         filterByFormula: "{customer_email} = 'knamnguyen.work@gmail.com'",
         view: "App - Purchase List"
