@@ -271,15 +271,15 @@ export default function Account({
                         </div>
                         <p className="text-sm font-semibold inline-block rounded">
                           <span className="text-accents-5">Version: </span>
-                          <span className="px-1.5 mr-0.5 bg-gray-300 border border-gray-800 rounded-lg text-gray-800">
+                          <span className="px-1.5 mr-0.5 bg-gray-300 border border-gray-800 rounded text-gray-800">
                             Notion
                           </span>
                           {purchase.fields.subscription_type ? (
-                            <span className="px-1.5 bg-emerald-300 border border-emerald-800 rounded-lg text-emerald-800">
+                            <span className="px-1.5 bg-emerald-300 border border-emerald-800 rounded text-emerald-800">
                               {purchase.fields.subscription_type}
                             </span>
                           ) : (
-                            <span className="px-1.5 bg-yellow-300 border border-yellow-800 rounded-lg text-yellow-800">
+                            <span className="px-1.5 bg-yellow-300 border border-yellow-800 rounded text-yellow-800">
                               One-Off
                             </span>
                           )}
@@ -414,7 +414,7 @@ export default function Account({
                           Patrons
                         </p>
                         <p className="text-accents-5 mb-8 font-normal">
-                          If you joined us with Patreon, please reach out via
+                          If you joined us with Patreon/Gumroad, please reach out via
                           the{' '}
                           <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
                             chat
@@ -635,13 +635,14 @@ export default function Account({
                         </p>
                       </p>
                       {subscriptionStatus ? (
-                        <a href="https://toolbox.co-x3.com/" target="_blank">
+                        <a href={
+                          subscriptionPurchaseRecord[0].fields.consultation_url
+                        } target="_blank">
                           <Button
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
-                            disabled={true}
                           >
-                            Coming Soon
+                            Book Now
                           </Button>
                         </a>
                       ) : (
