@@ -4,7 +4,7 @@
     "description": "Make Work Fun, Get Stuff Done",
     "theme_color": "#2e3537",
     "background_color": "#2e3537",
-    "display": "standalone",
+    "display": "fullscreen",
     "orientation": "portrait-primary",
     "scope": "/",
     "start_url": "/",
