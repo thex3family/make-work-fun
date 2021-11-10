@@ -8,5 +8,7 @@ export async function generateGIF() {
     tag: 'excited dog cat',
     rating: 'g'
   });
-  return gifs.image_original_url;
+
+  console.log(gifs)
+  return gifs.images.original.url;
 }
