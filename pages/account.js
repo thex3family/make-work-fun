@@ -414,12 +414,11 @@ export default function Account({
                           Patrons
                         </p>
                         <p className="text-accents-5 mb-8 font-normal">
-                          If you joined us with Patreon/Gumroad, please reach out via
-                          the{' '}
+                          If you're having trouble seeing your active subscription, please{' '}
                           <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
-                            chat
+                          reach out
                           </a>{' '}
-                          to get access to your resources.
+                          to let us know.
                         </p>
                       </>
                     )}
