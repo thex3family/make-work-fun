@@ -51,6 +51,7 @@ const SignIn = ({user}) => {
     const { error } = await signIn({ email, password });
     if (error) {
       setMessage({ type: 'error', content: error.message });
+      setLoading(false)
     }
     if (!password) {
       setMessage({
