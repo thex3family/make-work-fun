@@ -585,7 +585,7 @@ export default function Account({
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
                           >
-                            Visit
+                            Get Access
                           </Button>
                         </a>
                       ) : (
