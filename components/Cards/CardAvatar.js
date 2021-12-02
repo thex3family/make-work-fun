@@ -154,7 +154,13 @@ export default function Avatar({
                     {statRank}
                   </div>
                 ) : (
-                  ''
+                  <div
+                    className={
+                      'text-gray-500 p-3 bg-gray-900 text-center inline-flex items-center justify-center w-3.5 h-3.5 border-2 border-gray-700 shadow-lg rounded-full font-bold text-xs'
+                    }
+                  >
+                    {statRank}
+                  </div>
                 )}
               </div>
             </div>
