@@ -578,14 +578,14 @@ export default function Account({
                       </p>
                       {subscriptionStatus ? (
                         <a
-                          href="https://ask.co-x3.com/apply-as-patron"
+                          href="https://academy.co-x3.com/en/articles/5122951-how-do-i-get-access-to-the-vip-patron-space"
                           target="_blank"
                         >
                           <Button
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
                           >
-                            Join The Family
+                            Visit
                           </Button>
                         </a>
                       ) : (
