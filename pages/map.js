@@ -66,7 +66,7 @@ export default function map() {
         </p>
           <div className="mt-6 grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
             <CardMap
-              name="Family Connect..."
+              name="Make Work Fun"
               img_url="img/family-connection.jpg"
               desc="Talk about the makework.fun app, and make friends with other players!"
               emojis="💬"
