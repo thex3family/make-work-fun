@@ -155,7 +155,7 @@ export default function partyDetail() {
     //   );
   }
 
-  async function savePartyDetails(target, deadline) {
+  async function savePartyDetails(target, deadline, status) {
     try {
       if (target) {
         const { data, error } = await supabase
@@ -175,6 +175,18 @@ export default function partyDetail() {
           .from('party')
           .update({
             due_date: deadline + moment().format('Z')
+          })
+          .eq('id', party.id);
+
+        if (error && status !== 406) {
+          throw error;
+        }
+      }
+      if (status) {
+        const { data, error } = await supabase
+          .from('party')
+          .update({
+            status: status
           })
           .eq('id', party.id);
 
@@ -219,7 +231,8 @@ export default function partyDetail() {
       setDailyTarget_Achieved(
         await fetchSpecificWins(
           specificPartyPlayer.notion_page_id,
-          moment().local().format('YYYY-MM-DD'), party.due_date
+          moment().local().format('YYYY-MM-DD'),
+          party.due_date
         )
       );
     }
@@ -552,7 +565,7 @@ export default function partyDetail() {
                             challenge ends. Earn ❤ by completing party missions!
                           </div>
                         </>
-                      ) : (
+                      ) : party.status == 3 ? (
                         <>
                           <div className="confetti">
                             <Snow />
@@ -572,8 +585,38 @@ export default function partyDetail() {
                             {!specificPartyPlayer ? 'Loading...' : 'Reflect ✨'}
                           </Button>
                           <div className="text-center text-accents-4 text-sm max-w-sm">
-                            Your challenge has ended and its time to reflect.
+                            Its time to reflect.
                           </div>
+                          {specificPartyPlayer?.role == 'Party Leader' ? (
+                            <Button
+                              variant="prominent"
+                              className="my-4"
+                              onClick={() => savePartyDetails(null, null, 4)}
+                              disabled={moment().isBefore(moment(party.due_date).add('days', 2))}
+                            >
+                              {moment().isBefore(moment(party.due_date).add('days', 2))
+                                ? 'Challenge completes ' + moment(moment(party.due_date).add(2, 'days')).fromNow()
+                                : 'Mark Challenge As Complete'}
+                            </Button>
+                          ) : null}
+                        </>
+                      ) : (
+                        <>
+                        <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                            STATUS: Complete
+                          </h1>
+                          <div className="bg-white p-4 rounded-lg mt-4 mb-2">
+                          <h2 className="text-6xl font-bold sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">A</h2>
+                          <span className="text-accents-2 font-semibold mt-2">Party Rank</span>
+                          </div>
+                          <Link href="/parties">
+                          <Button
+                            variant="prominent"
+                            className="my-4"
+                          >
+                            Join Another Party!
+                          </Button>
+                          </Link>
                         </>
                       )}
                     </div>
