@@ -444,7 +444,7 @@ export default function parties() {
                           aria-hidden="true"
                         ></div>
                         <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-primary mb-5">
-                          Your Parties{' '}
+                          Your Active Parties{' '}
                           <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">
                             {activeParties ? activeParties.length : 0}/
                             {partyLimitNo}
