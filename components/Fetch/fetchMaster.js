@@ -433,6 +433,7 @@ export async function fetchAllParties() {
       .order('due_date', { ascending: false })
 
     if (data) {
+      console.log(data)
       return data;
     }
 

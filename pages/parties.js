@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 import { supabase } from '../utils/supabase-client';
@@ -185,7 +186,7 @@ export default function parties() {
       // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
 
       setActiveParties(parties_you_are_in);
-      console.log(parties_you_are_in)
+      console.log(parties_you_are_in);
 
       if (error && status !== 406) {
         throw error;
@@ -287,9 +288,39 @@ export default function parties() {
       </div>
     </div>
   );
-  const RankCustom = (row) => <div data-tag="allowRowEvents" className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">A</div>;
-  const DateCustom = (row) => <div className="text-left"><div data-tag="allowRowEvents">{row.start_date ? moment(row.start_date).local().format('YYYY-MM-DD hh:mm a') : "In Progress"}</div> <div data-tag="allowRowEvents">{moment(row.due_date).local().format('YYYY-MM-DD hh:mm a')}</div></div>;
-  const StatusCustom = (row) => <div data-tag="allowRowEvents">{moment(row.due_date).local().format('YYYY-MM-DD hh:mm a')}</div>;
+  const RankCustom = (row) => (
+    <div
+      data-tag="allowRowEvents"
+      className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200"
+    >
+      A
+    </div>
+  );
+  const DateCustom = (row) => (
+    <div className="text-left">
+      <div data-tag="allowRowEvents">
+        {row.start_date
+          ? moment(row.start_date).local().format('YYYY-MM-DD hh:mm a')
+          : 'In Recruitment'}
+      </div>{' '}
+      <div data-tag="allowRowEvents">
+        {moment(row.due_date).local().format('YYYY-MM-DD hh:mm a')}
+      </div>
+    </div>
+  );
+  const StatusCustom = (row) => (
+    <div data-tag="allowRowEvents">
+      <Link href={`/parties/details/?id=`+row.slug}>
+        <Button
+          variant="prominent"
+          data-tag="allowRowEvents"
+          className="font-semibold text-sm"
+        >
+          {row.status == 1 ? 'Recruiting' : row.status == 2? 'In Progress' : row.status == 3 ? 'In Review' : 'Complete'}
+        </Button>
+        </Link>
+    </div>
+  );
 
   const columns = [
     {
@@ -306,12 +337,18 @@ export default function parties() {
       grow: 2
     },
     {
-      name: 'DATES',
+      name: 'QUEST DURATION',
       selector: 'start_date',
       right: true,
       sortable: true,
       cell: (row) => <DateCustom {...row} />
     },
+    {
+      name: 'STATUS',
+      cell: (row) => <StatusCustom {...row} />,
+      center: true
+    }
+    
   ];
 
   const customStyles = {
@@ -498,30 +535,33 @@ export default function parties() {
                 </>
               ) : (
                 <div className="animate-fade-in">
-                  {allParties ? (<>
-                    <div className="flex flex-wrap mt-4">
-                      <div className="w-full pb-12 px-4">
-                        {/* <CardTable color="dark" data={wins} /> */}
-                        <DataTable
-                          className=""
-                          title="Recent Wins 👀"
-                          noHeader
-                          columns={columns}
-                          data={allParties}
-                          // highlightOnHover={true}
-                          pointerOnHover={true}
-                          fixedHeader={true}
-                          customStyles={customStyles}
-                          pagination={true}
-                          theme="game"
-                          paginationPerPage={5}
-                          paginationRowsPerPageOptions={[5, 10, 15, 20]}
-                        />
-                        {/* <TailwindTable wins={wins} /> */}
+                  {allParties ? (
+                    <>
+                      <div className="flex flex-wrap mt-4">
+                        <div className="w-full pb-12 px-4">
+                          {/* <CardTable color="dark" data={wins} /> */}
+                          <DataTable
+                            className=""
+                            title="Recent Wins 👀"
+                            noHeader
+                            columns={columns}
+                            data={allParties}
+                            // highlightOnHover={true}
+                            // pointerOnHover={true}
+                            fixedHeader={true}
+                            customStyles={customStyles}
+                            pagination={true}
+                            theme="game"
+                            paginationPerPage={5}
+                            paginationRowsPerPageOptions={[5, 10, 15, 20]}
+                          />
+                          {/* <TailwindTable wins={wins} /> */}
+                        </div>
                       </div>
-                    </div>
-                  <div className="font-semibold">More Features Coming Soon!</div>
-                  </>
+                      <div className="font-semibold">
+                        More Features Coming Soon!
+                      </div>
+                    </>
                   ) : (
                     <RecentWinsSkeleton />
                   )}
