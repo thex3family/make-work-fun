@@ -176,6 +176,7 @@ export default function parties() {
         .from('party_member_details')
         .select('*')
         .order('party_status', { ascending: true })
+        .neq('party_status', 4)
         .eq('player', user.id);
 
       var parties_you_are_in = data;
