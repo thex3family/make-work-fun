@@ -16,6 +16,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Dec 5, 2021"
+            title="Party Quest Leaderboard"
+            desc="We've set up the leaderboard, so you can check out all the parties created this season. You can also now join any party in progress - but be aware, you'll be starting with lower health for being late!"
+            img_url="updates/0.27.png"
+            button_url="/parties"
+            version="v.27"
+          />
           <CardLUpdate
             date="Oct 13, 2021"
             title="Personalized Help Experiences"
