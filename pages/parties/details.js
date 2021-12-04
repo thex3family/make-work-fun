@@ -582,7 +582,7 @@ export default function partyDetail() {
                             onClick={() => setOpenReviewModal(true)}
                             disabled={!specificPartyPlayer}
                           >
-                            {!specificPartyPlayer ? 'Loading...' : 'Reflect ✨'}
+                            {!specificPartyPlayer ? anonymousAdventurer ? 'Party Members Are Reflecting...' : 'Loading...' : 'Reflect ✨'}
                           </Button>
                           <div className="text-center text-accents-4 text-sm max-w-sm">
                             Its time to reflect.
@@ -835,7 +835,7 @@ export default function partyDetail() {
                                   variant="prominent"
                                   className="w-full animate-fade-in-up text-center font-bold mx-auto"
                                   onClick={() => joinParty()}
-                                  disabled={saving}
+                                  disabled={saving || party.status >= 3}
                                 >
                                   {saving ? 'Joining...' : 'Join Party'}
                                 </Button>
