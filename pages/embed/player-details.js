@@ -234,7 +234,7 @@ export default function playerDetails() {
         } finally {
         }
       } else {
-        setBackgroundUrl('background/cityscape.jpg');
+        setBackgroundUrl('/background/cityscape.jpg');
       }
     }
   }
