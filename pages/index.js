@@ -205,7 +205,7 @@ export default function HomePage() {
 
   async function refreshStats() {
     setPlayerStats(await fetchPlayerStats());
-    fetchLeaderboardStats(setsNPlayers, setLoading, '2S');
+    fetchLeaderboardStats(setsNPlayers, setLoading, '3S');
     fetchLeaderboardStats(setPlayers, setLoading);
   }
 
