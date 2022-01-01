@@ -4,6 +4,11 @@ const runtimeCaching = require('next-pwa/cache')
 const prod = process.env.NODE_ENV === 'production'
 
 module.exports = withPWA({
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
   pwa: {
     dest: 'public',
     disable: prod ? false : true,
