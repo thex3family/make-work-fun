@@ -99,7 +99,7 @@ export default function HomePage() {
 
   async function refreshStats() {
     setPlayerStats(await fetchPlayerStats());
-    fetchLeaderboardStats(setsNPlayers, setLoading, '2S');
+    fetchLeaderboardStats(setsNPlayers, setLoading, '3S');
     fetchLeaderboardStats(setPlayers, setLoading);
   }
 
@@ -185,10 +185,10 @@ export default function HomePage() {
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg">
                     <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      Season 2 Statistics
+                      Season 3 Statistics
                     </h1>
                     <p className="text-sm text-accents-3 font-semibold">
-                      October 1 - December 31
+                      January 1 - March 31
                     </p>
                     <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <LeaderboardStatistics
@@ -266,7 +266,7 @@ export default function HomePage() {
               href="#link1"
               role="tablist"
             >
-              Season 2
+              Season 3
               <div
                 className={
                   'text-xs text-white p-3 ml-2 text-center inline-flex items-center justify-center relative leading-tight w-3 h-3 border-2 shadow-lg rounded-full font-bold ' +
@@ -391,7 +391,7 @@ export default function HomePage() {
                 <div
                   className={
                     openTab === 1
-                      ? 'mx-5 pb-5 lg:pb-0 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-scroll lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                      ? 'mx-5 pb-5 lg:pb-0 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-scroll lg:overflow-x-hidden lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                       : 'hidden'
                   }
                   id="link1"
