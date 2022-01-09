@@ -14,6 +14,7 @@ export default function WinModal({
 }) {
   const [activeGIF, setActiveGIF] = useState(null);
   const [sharedWithFamily, setSharedWithFamily] = useState(false);
+  const [deleteOption, setDeleteOption] = useState(null);
 
   useEffect(() => {
     initializeModal();
@@ -62,6 +63,26 @@ export default function WinModal({
     setBoxClass('');
   }
 
+  async function deleteWin(){
+    console.log(activeModalStats.id)
+    try {
+      const { data, error } = await supabase
+        .from('success_plan')
+        .delete()
+        .match({'id': activeModalStats.id});
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      // refresh the win table if in the player page, and the dailies page too... basically refresh anything that is loading leaderboard?
+      refreshStats();
+      closeModal();
+    }
+  }
+
   return (
     <>
       <div className="animate-fade-in flex justify-center">
@@ -81,12 +102,9 @@ export default function WinModal({
                 </span>
               </h3>
               <button
-                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                className="fas fa-times p-1 ml-auto bg-transparent border-0 text-white float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                 onClick={() => closeModal()}
               >
-                <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                  ×
-                </span>
               </button>
             </div>
             {/*body*/}
@@ -123,6 +141,41 @@ export default function WinModal({
                     </tr>
                   </tbody>
                 </table>
+                {page !== 'validator' ? (
+                  sharedWithFamily ? (
+                    <div className="inline-block mx-auto">
+                    <a
+                      href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
+                      target="_blank"
+                    >
+                      <button
+                        className="bg-gradient-to-r from-emerald-500 to-blue-500 border-2 bg-clip-text text-transparent active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                      >
+                        Shared! View In Guilded
+                      </button>
+                    </a>
+                    </div>
+                  ) : display !== 'demo' ? (
+                    <div className="inline-block mx-auto">
+                    <button
+                      className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() =>
+                        shareWithGuilded(
+                          playerStats,
+                          activeModalStats,
+                          activeGIF,
+                          setSharedWithFamily
+                        )
+                      }
+                    >
+                      Share With Family
+                    </button>
+                    
+                    </div>
+                  ) : null
+                ) : null}
               </div>
               <div>
                 <div className="w-full">
@@ -146,43 +199,35 @@ export default function WinModal({
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-              <button
-                className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                type="button"
-                onClick={() => closeModal()}
-              >
-                Close
-              </button>
-              {page !== 'validator' ? (
-                sharedWithFamily ? (
-                  <a
-                    href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
-                    target="_blank"
-                  >
-                    <button
-                      className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                    >
-                      Shared! Go To Guilded
-                    </button>
-                  </a>
-                ) : display !== 'demo' ? (
+              {!deleteOption ?
+                <button
+                  className="text-red-500 background-transparent font-bold uppercase mx-6 my-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={() => setDeleteOption(true)}
+                >
+                  Delete
+                </button>
+                :
+                <span className='text-gray-800 font-bold uppercase background-transparent mx-6 my-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'>
+                  Are You Sure?{' '}
                   <button
-                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="mx-2 text-red-500 font-bold uppercase hover:text-emerald-500"
                     type="button"
-                    onClick={() =>
-                      shareWithGuilded(
-                        playerStats,
-                        activeModalStats,
-                        activeGIF,
-                        setSharedWithFamily
-                      )
-                    }
+                    onClick={() => deleteWin()}
                   >
-                    Share With Family
+                    Yes
                   </button>
-                ) : null
-              ) : null}
+                  /
+                  <button
+                    className="ml-2 text-red-500 font-bold uppercase hover:text-emerald-500"
+                    type="button"
+                    onClick={() => setDeleteOption(false)}
+                  >
+                    No
+                  </button>
+                </span>
+              }
+
             </div>
             {page !== 'player' ? (
               <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
