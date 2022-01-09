@@ -35,7 +35,8 @@ function Card({ title, description, footer, children }) {
 
 export default function Account({
   initialPurchaseRecord,
-  subscriptionPurchaseRecord
+  subscriptionPurchaseRecord,
+  inactiveSubscriptionRecord
 }) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -361,6 +362,7 @@ export default function Account({
                     </div>
                   </div>
                 )}
+                
                 <div
                   className="border-t border-accents-2 my-5 mb-8 flex-grow mr-3"
                   aria-hidden="true"
@@ -371,58 +373,119 @@ export default function Account({
                   </div>
                 ) : (
                   <div>
+                    <p className="text-2xl">
+                      Level Up 10x Faster With Unique Benefits For Our
+                      Patrons
+                    </p>
+                    <p className="text-accents-5 mb-3 font-normal">
+                      If you're having trouble seeing your active subscription, please{' '}
+                      <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
+                        reach out
+                      </a>{' '}
+                      to let us know.
+                    </p>
                     {subscriptionPurchaseRecord[0] ? (
                       <>
-                        <p className="text-2xl">
-                          {
-                            subscriptionPurchaseRecord[0].fields
-                              .subscription_name
-                          }
-                        </p>
-                        <p className="text-accents-5 font-normal">
-                          <p className="text-accents-5">
-                            Joined On:
-                            <span className="ml-1 text-accents-3">
-                              {
-                                subscriptionPurchaseRecord[0].fields.joined_on.split(
-                                  'T'
-                                )[0]
-                              }
-                            </span>
+                        <div className="py-3 px-5 my-5 flex justify-between flex-col sm:flex-row sm:items-center bg-emerald-500 bg-opacity-20 border-2 border-emerald-500 border-opacity-80 rounded">
+                          <p className="sm:pb-0 pb-3">
+                            <div className="flex flex-row items-center">
+                              <span>
+                                {subscriptionPurchaseRecord[0].fields
+                                  .subscription_name}
+                              </span>
+                            </div>
+
+                            <p className="text-accents-5 text-sm">
+                              Status:
+                              <span className="ml-1.5 text-sm px-1 bg-emerald-300 border border-emerald-800 rounded text-emerald-800">
+                                Active
+                              </span>
+                            </p>
+                            <p className="text-accents-5 text-sm">
+                              Joined On:
+                              <span className="ml-1 text-accents-3">
+                                {
+                                  subscriptionPurchaseRecord[0].fields.joined_on.split(
+                                    'T'
+                                  )[0]
+                                }
+                              </span>
+                            </p>
+                            <p className="text-accents-5 text-sm">
+                              Streak:{' '}
+                              {Array.from(
+                                { length: subscriptionPurchaseRecord[0].fields.streak },
+                                (_, i) => (
+                                  <span key={i}>⭐</span>
+                                )
+                              )}
+                            </p>
+
                           </p>
-                          Streak:{' '}
-                          {Array.from(
-                            {
-                              length:
-                                subscriptionPurchaseRecord[0].fields.streak
-                            },
-                            (_, i) => (
-                              <span key={i}>⭐</span>
-                            )
-                          )}
-                        </p>
-                        <div className="mb-8">
-                          <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
-                            Manage My Subscription
-                          </a>
+                          {
+                            <a className="launch_intercom">
+                              <Button
+                                className="w-full sm:w-auto text-sm"
+                                variant="incognito"
+                              >
+                                Manage Subscription
+                              </Button>
+                            </a>
+                          }
                         </div>
                       </>
-                    ) : (
+                    ) : (inactiveSubscriptionRecord[0] ?
                       <>
-                        <p className="text-2xl">
-                          Level Up 10x Faster With Unique Benefits For Our
-                          Patrons
-                        </p>
-                        <p className="text-accents-5 mb-8 font-normal">
-                          If you're having trouble seeing your active subscription, please{' '}
-                          <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
-                          reach out
-                          </a>{' '}
-                          to let us know.
-                        </p>
+                        <div className="py-3 px-5 my-5 flex justify-between flex-col sm:flex-row sm:items-center bg-red-500 bg-opacity-20 border-2 border-red-500 border-opacity-80 rounded">
+                          <p className="sm:pb-0 pb-3">
+                            <div className="flex flex-row items-center">
+                              <span>
+                                {inactiveSubscriptionRecord[0].fields
+                                  .subscription_name}
+                              </span>
+                            </div>
+
+                            <p className="text-accents-5 text-sm">
+                              Status:<span className="ml-1.5 text-sm px-1 bg-red-300 border border-red-800 rounded text-red-800">
+                                Inactive
+                              </span>
+                            </p>
+                            <p className="text-accents-5 text-sm">
+                              Ended On:
+                              <span className="ml-1 text-accents-3">
+                                {
+                                  inactiveSubscriptionRecord[0].fields.expires_on.split(
+                                    'T'
+                                  )[0]
+                                }
+                              </span>
+                            </p>
+                            <p className="text-accents-5 text-sm">
+                              Streak:{' '}
+                              {Array.from(
+                                { length: inactiveSubscriptionRecord[0].fields.streak },
+                                (_, i) => (
+                                  <span key={i}>⭐</span>
+                                )
+                              )}
+                            </p>
+
+                          </p>
+                          {
+                            <a href="https://toolbox.co-x3.com/support-us?utm_content=resubscribe" target="_blank">
+                              <Button
+                                className="w-full sm:w-auto text-sm"
+                                variant="incognito"
+                              >
+                                Continue Support
+                              </Button>
+                            </a>
+                          }
+                        </div>
                       </>
+                      : null
                     )}
-                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <div className="pb-5 mt-8 flex items-start justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
                         <span
                           className={
@@ -934,10 +997,20 @@ export async function getServerSideProps({ req }) {
         sort: [{ field: 'value', direction: 'desc' }]
       })
       .firstPage();
+
+    const inactiveSubscriptionRecord = await subscription_table
+      .select({
+        filterByFormula: `{customer_email} = '${user.email}'`,
+        view: 'App - Inactive Subscriptions',
+        sort: [{ field: 'value', direction: 'desc' }]
+      })
+      .firstPage();
+
     return {
       props: {
         initialPurchaseRecord: minifyRecords(purchaseRecord),
         subscriptionPurchaseRecord: minifyRecords(subscriptionRecord),
+        inactiveSubscriptionRecord: minifyRecords(inactiveSubscriptionRecord),
         user
       }
     };
