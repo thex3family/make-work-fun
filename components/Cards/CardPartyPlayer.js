@@ -228,7 +228,7 @@ export default function CardPartyPlayer({
           </div>
         </div>
         {player.review_be_helpful ? (
-          <div class="speech-bubble text-primary-2 animate-soft-bounce">
+          <div className="speech-bubble text-primary-2 animate-soft-bounce">
             <p className=" font-bold">
               I would find it helpful in my next challenge if others can...
             </p>
