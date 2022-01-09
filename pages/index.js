@@ -413,25 +413,25 @@ export default function HomePage() {
       </section>
       <section className="text-gray-600 body-font bg-black">
         <div className="container px-5 py-24 mx-auto flex flex-wrap flex-col">
-          <div class="animate-fade-in-up container w-full sm:w-3/4 mx-auto flex flex-row flex-wrap pt-10 mb-32">
-            <div class="w-full -mb-14 md:-mb-24 lg:-mb-40 rounded-lg overflow-hidden self-center">
-              <div class="flex flex-col mb-10 px-5 text-center">
+          <div className="animate-fade-in-up container w-full sm:w-3/4 mx-auto flex flex-row flex-wrap pt-10 mb-32">
+            <div className="w-full -mb-14 md:-mb-24 lg:-mb-40 rounded-lg overflow-hidden self-center">
+              <div className="flex flex-col mb-10 px-5 text-center">
                 <h1 className="text-3xl sm:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                   Works With Tools You Love.
                 </h1>
-                <p class="text-white text-xl mb-2 font-semibold">
+                <p className="text-white text-xl mb-2 font-semibold">
                   The ultimate companion app for Notion to gamify your
                   productivity experience.
                 </p>
-                <p class="text-blueGray-500 text-sm font-semibold">
+                <p className="text-blueGray-500 text-sm font-semibold">
                   Coming Up: Airtable, Clickup, and Jira support!
                 </p>
               </div>
             </div>
-            <div class="flex flex-col flex-wrap w-full">
+            <div className="flex flex-col flex-wrap w-full">
               <img
                 alt="feature"
-                class="object-cover object-center w-full"
+                className="object-cover object-center w-full"
                 src="/img/companion-app.png"
               />
             </div>
@@ -446,11 +446,11 @@ export default function HomePage() {
           </div>
 
           <div className="w-full mb-4 flex flex-col items-center">
-            <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
+            <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
               Core Features
             </h1>
           </div>
-          <div class="flex mx-auto flex-wrap mb-14 cursor-pointer bg-gray-700 rounded-xl align-middle shadow-xl text-lg font-medium px-2 py-1">
+          <div className="flex mx-auto flex-wrap mb-14 cursor-pointer bg-gray-700 rounded-xl align-middle shadow-xl text-lg font-medium px-2 py-1">
             {/* <a
               onClick={() => setBenefitTab(0)}
               className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider ' ${
@@ -596,9 +596,9 @@ export default function HomePage() {
           </div> */}
         </div>
       </section>
-      <section class="text-gray-600 body-font bg-black">
-        <div class="container px-5 py-0 sm:py-24 mx-auto flex flex-wrap-reverse">
-          <div class="lg:w-1/3 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
+      <section className="text-gray-600 body-font bg-black">
+        <div className="container px-5 py-0 sm:py-24 mx-auto flex flex-wrap-reverse">
+          <div className="lg:w-1/3 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
             <div
               className={`${embedTab == 0 || embedTab == 1 ? '' : 'hidden'}`}
             >
@@ -611,14 +611,14 @@ export default function HomePage() {
               />
             ) : null}
           </div>
-          <div class="flex flex-col flex-wrap w-full lg:py-6 lg:w-2/3 lg:pl-12 lg:text-left text-center">
-            <div class="flex flex-col mb-10 lg:items-start items-center px-5">
-              <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
+          <div className="flex flex-col flex-wrap w-full lg:py-6 lg:w-2/3 lg:pl-12 lg:text-left text-center">
+            <div className="flex flex-col mb-10 lg:items-start items-center px-5">
+              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
                 Bring Your Character Anywhere.
               </h1>
             </div>
-            <div class="flex flex-col mb-10 lg:items-start items-center px-5">
-              <div class="flex-grow w-full">
+            <div className="flex flex-col mb-10 lg:items-start items-center px-5">
+              <div className="flex-grow w-full">
                 <div
                   onClick={() => setEmbedTab(0)}
                   className={`cursor-pointer text-left mb-6 ${
@@ -627,10 +627,10 @@ export default function HomePage() {
                       : ''
                   }`}
                 >
-                  <h2 class="text-white text-lg title-font font-medium mb-3">
+                  <h2 className="text-white text-lg title-font font-medium mb-3">
                     1 . Customize Your Component
                   </h2>
-                  <p class="leading-relaxed text-white">
+                  <p className="leading-relaxed text-white">
                     Set options like dark mode, friends, win notifications, etc.
                   </p>
                 </div>
@@ -643,10 +643,10 @@ export default function HomePage() {
                       : ''
                   }`}
                 >
-                  <h2 class="text-white text-lg title-font font-medium mb-3">
+                  <h2 className="text-white text-lg title-font font-medium mb-3">
                     2 . Paste Anywhere You Want
                   </h2>
-                  <p class="leading-relaxed text-white">
+                  <p className="leading-relaxed text-white">
                     Copy the embed link and bring it to your favourite Notion
                     pages or websites!
                   </p>
@@ -659,10 +659,10 @@ export default function HomePage() {
                       : ''
                   }`}
                 >
-                  <h2 class="text-white text-lg title-font font-medium mb-3">
+                  <h2 className="text-white text-lg title-font font-medium mb-3">
                     3 . Celebrate Your Wins Anywhere, Anytime.
                   </h2>
-                  <p class="leading-relaxed text-white">
+                  <p className="leading-relaxed text-white">
                     From embeds to mobile apps, be excited about your wins
                     everywhere you go.
                   </p>
