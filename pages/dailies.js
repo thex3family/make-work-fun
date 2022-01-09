@@ -84,6 +84,7 @@ export default function dallies() {
 
   async function refreshStats() {
     setPlayerStats(await fetchPlayerStats());
+    dailyBonusButtons();
     setLoading(false);
   }
 
@@ -206,7 +207,7 @@ export default function dallies() {
 
       // console.log(data.length);
       setDailiesCount(data.length);
-      dailyBonusButtons();
+      //dailyBonusButtons();
 
       if (error && status !== 406) {
         throw error;
