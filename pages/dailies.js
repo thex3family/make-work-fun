@@ -12,6 +12,7 @@ import HabitGroups from '@/components/Habits/habit_groups';
 
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import notifyMe from '@/components/Notify/win_notification';
+import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 
 // import Input from '@/components/ui/Input';
 
@@ -41,6 +42,8 @@ export default function dallies() {
   const [backgroundUrl, setBackgroundUrl] = useState(
     '/'
   );
+  
+  const [newToSeason, setNewToSeason] = useState(null);
 
   // const [entryDate, setEntryDate] = useState(moment().startOf('day').format('yyyy-MM-DD'));
   //const [entryDate, setEntryDate] = useState(null);
@@ -89,7 +92,7 @@ export default function dallies() {
   }
 
   async function refreshStats() {
-    setPlayerStats(await fetchPlayerStats());
+    setPlayerStats(await fetchPlayerStats(null, setNewToSeason));
     dailyBonusButtons();
     setLoading(false);
   }
@@ -229,7 +232,11 @@ export default function dallies() {
     return (
       <>
       <DailiesSkeleton />
-    
+        {
+          newToSeason ? 
+          <ModalOnboarding onboardingState={5} />
+          : null
+        }
     </>
     )
   }

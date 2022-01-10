@@ -120,7 +120,7 @@ export async function fetchLatestWin(
   }
 }
 
-export async function fetchPlayerStats(player) {
+export async function fetchPlayerStats(player, setNewToSeason) {
   try {
     // gets the latest information about the user from the latest leaderboard
     if (!player) {
@@ -141,6 +141,8 @@ export async function fetchPlayerStats(player) {
         };
 
         return newData;
+      } else {
+        setNewToSeason(true)
       }
     }
 
@@ -161,6 +163,8 @@ export async function fetchPlayerStats(player) {
         };
 
         return newData;
+      } else {
+        setNewToSeason(true)
       }
     }
 
