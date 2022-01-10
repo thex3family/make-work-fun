@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Button from '../ui/Button';
+import Router from 'next/router';
+import { supabase } from '@/utils/supabase-client';
 
 export default function ModalOnboarding({ onboardingState }) {
   const [header, setHeader] = useState(null);
@@ -8,6 +10,8 @@ export default function ModalOnboarding({ onboardingState }) {
   const [mediaLink, setMediaLink] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [handInSteps, setHandInSteps] = useState(null);
+  const [newSeason, setNewSeason] = useState(null);
+  const [customLink, setCustomLink] = useState(null);
 
   useEffect(() => {
     if (onboardingState) initializeDetails();
@@ -33,14 +37,45 @@ export default function ModalOnboarding({ onboardingState }) {
       );
       setMediaType('iframe');
     } else if (onboardingState == 5) {
-        setHeader("⚔ You don't have wins this season!");
-        setDescription("Hand in a win to initialize your avatar.");
-        setHandInSteps(true);
-        setMediaLink(
-          'https://www.loom.com/embed/e5eaaa19fcf64297b2859ed7c64171ad'
-        );
-        setMediaType('iframe');
+      setHeader("⚔ It's A Brand New Season!");
+      setDescription("It's a new season for learning and growth.");
+      setNewSeason(true);
+      setMediaLink('img/new_season_motivation.png');
+      setMediaType('img');
+      setCustomLink('Join The Adventure')
+    }
+  }
+
+  async function startSeason(){
+      try {
+        const user = supabase.auth.user();
+  
+        let testDateStr = new Date();
+        // console.log('testDateStr: ' + testDateStr);
+  
+        const { data, error } = await supabase.from('success_plan').insert([
+          {
+            player: user.id,
+            difficulty: 1,
+            do_date: testDateStr,
+            closing_date: testDateStr,
+            trend: 'check',
+            type: 'Bonus',
+            punctuality: 0,
+            exp_reward: 25,
+            gold_reward: 25,
+            name: 'My First Win This Season'
+          }
+        ]);
+        if (error && status !== 406) {
+          throw error;
+        }
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        Router.reload(window.location.pathname)
       }
+    
   }
 
   return (
@@ -49,7 +84,7 @@ export default function ModalOnboarding({ onboardingState }) {
         <div
           className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
         >
-        <div className="opacity-50 fixed inset-0 z-40 bg-black"></div>
+          <div className="opacity-50 fixed inset-0 z-40 bg-black"></div>
           <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen z-50">
             {/*content*/}
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -79,6 +114,19 @@ export default function ModalOnboarding({ onboardingState }) {
                       </li>
                     </ol>
                   ) : null}
+                  {newSeason ? (
+                    <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
+                      <li>
+                        1. Your wins and titles are safe and secure with us
+                      </li>
+                      <li>2. Seasonal leaderboard rankings have been reset</li>
+                      <li>
+                        3. Climb your way to the top this season! <span className="font-semibold">
+                        You can do it!
+                        </span>
+                      </li>
+                    </ol>
+                  ) : null}
                 </div>
               </div>
               {mediaType == 'iframe' ? (
@@ -100,18 +148,25 @@ export default function ModalOnboarding({ onboardingState }) {
               ) : null}
               {/* <img src="img/default_avatar.png" height="auto" className="w-3/4 mx-auto pb-2" /> */}
               {/*footer*/}
-                <div className="flex items-center p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <div className="text-center mx-auto">
-                    <Link href="/account">
-                      <Button
-                        variant="prominent"
-                        className="text-md font-semibold text-emerald-600"
-                      >
-                        Go To Account
-                      </Button>
-                    </Link>
-                  </div>
+              <div className="flex items-center p-6 border-t border-solid border-blueGray-200 rounded-b">
+                <div className="text-center mx-auto">
+                  {customLink ? <Button
+                      variant="prominent"
+                      className="text-md font-semibold text-emerald-600"
+                      onClick={()=>startSeason()}
+                    >
+                      {customLink}
+                    </Button> : <Link href="/account">
+                    <Button
+                      variant="prominent"
+                      className="text-md font-semibold text-emerald-600"
+                    >
+                      Go To Account
+                    </Button>
+                  </Link>}
+
                 </div>
+              </div>
             </div>
           </div>
         </div>

@@ -16,10 +16,18 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
-          <CardLUpdate
+          <CardRUpdate
             date="Jan 09, 2022"
             title="Manage Your Wins"
             desc="We've improved the interface for your win details, so you can easily delete or share it with the family whenever you want."
+            img_url="updates/0.29.png"
+            button_url="/player"
+            version="v.29"
+          />
+          <CardLUpdate
+            date="Jan 01, 2022"
+            title="Brand New Season"
+            desc="With every quarter we have opportunities for learning and growth. We've reset the seasonal leaderboards and improved navigation around the app."
             img_url="updates/0.28.png"
             button_url="/player"
             version="v.28"
