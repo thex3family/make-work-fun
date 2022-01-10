@@ -7,10 +7,8 @@ export default function RoutineSection({
   fetchDailies,
   fetchDailiesCompletedToday
 }) {
-  console.log(associated_habits)
   const [showHide, setShowHide] = useState(true);
   const [habitCounter, setHabitCounter] = useState([]);
-  // console.log(associated_habits)
 
   useEffect(() => {
     if (habitCounter.length !== 0) {
@@ -19,7 +17,6 @@ export default function RoutineSection({
   }, [habitCounter]);
 
   function determineShowHide() {
-    // console.log(habitCounter.length)
     if (associated_habits.length - habitCounter.length === 0) {
       setShowHide(false);
     } else {

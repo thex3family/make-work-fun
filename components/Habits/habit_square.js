@@ -34,12 +34,10 @@ export default function HabitSquare({
 
   function wasHabitCompletedToday(streak_end) {
     const habitCompletedToday =
-      new Date(streak_end).getDay() == new Date().getDay();
-    if (habitCompletedToday) {
-      setHabitCompletedToday(habitCompletedToday);
-      setHabitCounter((v) => [...v, 'Complete']);
-      setDetails(habit_detail);
-    }
+    moment(streak_end).format('yyyy-MM-DD') == moment().startOf('day').format('yyyy-MM-DD');
+    setHabitCompletedToday(habitCompletedToday);
+    setHabitCounter((v) => [...v, 'Complete']);
+    setDetails(habit_detail);
   }
 
   function habit_progress_statement(streak_duration) {
