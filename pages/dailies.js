@@ -421,7 +421,7 @@ export async function getServerSideProps({ req }) {
   if (!user) {
     return {
       redirect: {
-        destination: '/signin',
+        destination: '/signin?redirect=dailies',
         permanent: false,
       },
     }

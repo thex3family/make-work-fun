@@ -99,10 +99,18 @@ const SignIn = ({user}) => {
     if (!user) setLoading(false);
   }, [user]);
 
+  
+  const { redirect } = router.query;
+
   function initializePlayer() {
     try {
-      router.push('/player');
-      console.log('Redirecting to player page');
+      if(redirect){
+        router.push(redirect);
+        console.log('Redirecting to previous page');
+      } else {
+        router.push('/player');
+        console.log('Redirecting to player page');
+      }
     } catch (error) {
       alert(error.message);
     } finally {

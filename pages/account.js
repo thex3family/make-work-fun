@@ -362,7 +362,7 @@ export default function Account({
                     </div>
                   </div>
                 )}
-                
+
                 <div
                   className="border-t border-accents-2 my-5 mb-8 flex-grow mr-3"
                   aria-hidden="true"
@@ -974,7 +974,7 @@ export async function getServerSideProps({ req }) {
     if (!user) {
       return {
         redirect: {
-          destination: '/signin',
+          destination: '/signin?redirect=account',
           permanent: false
         }
       };
@@ -1018,7 +1018,7 @@ export async function getServerSideProps({ req }) {
     console.log(error);
     return {
       redirect: {
-        destination: '/signin',
+        destination: '/signin?redirect=account',
         permanent: false
       }
     };
