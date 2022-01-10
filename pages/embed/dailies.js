@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import React from 'react';
-import { supabase } from '../utils/supabase-client';
+import { supabase } from '@/utils/supabase-client';
 import { useState, useEffect } from 'react';
-import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import Countdown from '@/components/Widgets/DailiesCountdown/countdown';
@@ -11,7 +10,6 @@ import Countdown from '@/components/Widgets/DailiesCountdown/countdown';
 import HabitGroups from '@/components/Habits/habit_groups';
 
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
-import notifyMe from '@/components/Notify/win_notification';
 import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 
 // import Input from '@/components/ui/Input';
@@ -31,7 +29,7 @@ import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
 import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 
-export default function dailies({user}) {
+export default function dailies() {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dailiesCount, setDailiesCount] = useState(0);
@@ -46,16 +44,39 @@ export default function dailies({user}) {
   const [backgroundUrl, setBackgroundUrl] = useState(
     '/'
   );
-  
+
   const [newToSeason, setNewToSeason] = useState(null);
 
-  // const [entryDate, setEntryDate] = useState(moment().startOf('day').format('yyyy-MM-DD'));
-  //const [entryDate, setEntryDate] = useState(null);
-
   const router = useRouter();
-  const {
-    userOnboarding,
-  } = useUser();
+
+  // grab details from URL
+
+  const { player } = router.query;
+  const { style } = router.query;
+  const { opacity } = router.query;
+
+  const [userOnboarding, setUserOnboarding] = useState(null);
+  
+  // if there is a player, check for onboarding state
+
+  useEffect(() => {
+    if (player) checkUserOnboarding();
+  }, [player]);
+
+  async function checkUserOnboarding() {
+    try {
+      const { data, error } = await supabase.from('onboarding').select('*').eq('id', player).single().limit(1);
+      setUserOnboarding(data);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message)
+    } finally {
+    }
+  }
+
+  // if there is an onboarding state, load player
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -66,6 +87,7 @@ export default function dailies({user}) {
       if (userOnboarding.onboarding_state.includes('4')) {
         loadPlayer();
       } else {
+        // this needs to show an error message to go to the app to continue setup
         router.replace('/player');
       }
     } catch (error) {
@@ -75,7 +97,6 @@ export default function dailies({user}) {
     }
   }
 
-  const player = user.id;
 
   // If player is ready to load, go for it!
 
@@ -111,16 +132,17 @@ export default function dailies({user}) {
     }
   }
 
+
   if (!playerStats) {
     return (
       <>
-      <DailiesSkeleton />
+        <DailiesSkeleton />
         {
-          newToSeason ? 
-          <ModalOnboarding onboardingState={5} />
-          : null
+          newToSeason ?
+            <ModalOnboarding onboardingState={5} />
+            : null
         }
-    </>
+      </>
     )
   }
 
@@ -157,7 +179,7 @@ export default function dailies({user}) {
                         <Button
                           variant="prominent"
                           className="animate-fade-in-up mt-5 text-center font-bold"
-                          onClick={() => claimDailyBonus()}
+                          onClick={() => claimDailyBonus(player, setDailyBonus)}
                         >
                           Claim Rewards
                         </Button>
@@ -261,7 +283,7 @@ export default function dailies({user}) {
                       habits={habits}
                       fetchDailies={fetchDailies}
                       fetchDailiesCompletedToday={fetchDailiesCompletedToday}
-                      player={user.id}
+                      player = {player}
                       setHabits = {setHabits} 
                       setLevelUp = {setLevelUp} 
                       setDailiesCount = {setDailiesCount}
@@ -304,27 +326,10 @@ export default function dailies({user}) {
             setShowWinModal={setShowWinModal}
             playerStats={playerStats}
             refreshStats={refreshStats}
+
           />
         </>
       ) : null}
     </>
   );
-}
-
-export async function getServerSideProps({ req }) {
-  // Get the user's session based on the request
-  const { user } = await supabase.auth.api.getUserByCookie(req);
-
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/signin?redirect=dailies',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: { user },
-  }
 }
