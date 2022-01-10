@@ -13,6 +13,8 @@ import HabitGroups from '@/components/Habits/habit_groups';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import notifyMe from '@/components/Notify/win_notification';
 
+// import Input from '@/components/ui/Input';
+
 // functions
 import {
   fetchPlayerStats,
@@ -39,6 +41,9 @@ export default function dallies() {
   const [backgroundUrl, setBackgroundUrl] = useState(
     '/'
   );
+
+  // const [entryDate, setEntryDate] = useState(moment().startOf('day').format('yyyy-MM-DD'));
+  //const [entryDate, setEntryDate] = useState(null);
 
   const router = useRouter();
   const {
@@ -67,6 +72,7 @@ export default function dallies() {
     }
   }
 
+
   // If player is ready to load, go for it!
 
   async function loadPlayer() {
@@ -93,12 +99,12 @@ export default function dallies() {
   }, [playerStats]);
 
   async function loadBackgroundURL() {
-    if(playerStats.background_url){
-    setBackgroundUrl(await downloadImage(playerStats.background_url, 'background'));
-    }else{
+    if (playerStats.background_url) {
+      setBackgroundUrl(await downloadImage(playerStats.background_url, 'background'));
+    } else {
       setBackgroundUrl('/background/dailies.jpg')
     }
-  }  
+  }
 
   async function fetchDailies(click) {
     try {
@@ -221,7 +227,7 @@ export default function dallies() {
 
   if (!playerStats) {
     return (
-        <DailiesSkeleton/>
+      <DailiesSkeleton />
     );
   }
 
@@ -229,7 +235,7 @@ export default function dallies() {
     <>
       <section className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundUrl})` }}>
-          
+
         <div className=" max-w-6xl mx-auto py-0 sm:py-8 md:pt-24 px-0 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
           <div className="animate-fade-in-up bg-dailies-default rounded-0 sm:rounded opacity-95">
             <div className="pb-5 py-10 px-4 sm:px-10">
@@ -335,37 +341,51 @@ export default function dallies() {
                     <Countdown date={moment().endOf('day').utc().format()} />
                   </div>
                 )}
+                {/* <div className="w-72 mx-auto">
+                  <div className="mb-2 font-semibold text-dailies text-left">
+                    Time Travel
+                  </div>
+
+                  <div className="">
+                    <Input
+                      className="text-xl font-semibold rounded"
+                      type="date"
+                      value={entryDate || ''}
+                      onChange={setEntryDate}
+                    />
+                  </div>
+                </div> */}
               </div>
             </div>
             {/* <button onClick={() => console.log(habits)}>
           Push me to check if data is pulled properly
         </button>  */}
-        <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
-            <div className="text-center">
-              {habits != null ? (
-                habits.length != 0 ? (
-                  <HabitGroups
-                    habits={habits}
-                    fetchDailies={fetchDailies}
-                    fetchDailiesCompletedToday={fetchDailiesCompletedToday}
-                  />
-                ) : (
-                  <span className="text-center text-dailies font-semibold text-md">
-                    You have no active habits...let's change that!
-                  </span>
-                )
-              ) : null}
-            </div>
+            <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
+              <div className="text-center">
+                {habits != null ? (
+                  habits.length != 0 ? (
+                    <HabitGroups
+                      habits={habits}
+                      fetchDailies={fetchDailies}
+                      fetchDailiesCompletedToday={fetchDailiesCompletedToday}
+                    />
+                  ) : (
+                    <span className="text-center text-dailies font-semibold text-md">
+                      You have no active habits...let's change that!
+                    </span>
+                  )
+                ) : null}
+              </div>
 
-            <div className="text-center my-5">
-              <Link href="/dailies/edit">
-                <button className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded hover:border-white hover:text-white">
-                  Edit Dailies
-                </button>
-              </Link>
+              <div className="text-center my-5">
+                <Link href="/dailies/edit">
+                  <button className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded hover:border-white hover:text-white">
+                    Edit Dailies
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
       {/* level up modal */}
