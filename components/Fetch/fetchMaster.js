@@ -126,7 +126,7 @@ export async function fetchPlayerStats(player) {
     if (!player) {
       const user = supabase.auth.user();
       const { data, error } = await supabase
-        .from('season_leaderboard')
+        .from('leaderboard_season')
         .select('*')
         .eq('player', user.id)
         .eq('latest', true)
@@ -146,7 +146,7 @@ export async function fetchPlayerStats(player) {
 
     if (player) {
       const { data, error } = await supabase
-        .from('season_leaderboard')
+        .from('leaderboard_season')
         .select('*')
         .eq('player', player)
         .eq('latest', true)
@@ -322,7 +322,7 @@ export async function fetchLeaderboardStats(setPlayers, setLoading, season) {
   try {
     if (season) {
       const { data, error } = await supabase
-        .from('season_leaderboard')
+        .from('leaderboard_season')
         .select('*')
         .order('total_exp', { ascending: false })
         .eq('season', season);
@@ -463,7 +463,7 @@ export async function fetchSpecificPlayers(id, setFriends) {
 
     if (friends) {
       const { data, error } = await supabase
-        .from('season_leaderboard')
+        .from('leaderboard_season')
         .select('*')
         .eq('latest', true)
         .order('total_exp', { ascending: false })
