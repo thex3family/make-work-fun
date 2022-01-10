@@ -63,7 +63,7 @@ export default function dallies() {
       if (userOnboarding.onboarding_state.includes('4')) {
         loadPlayer();
       } else {
-        router.replace('/account');
+        router.replace('/player');
       }
     } catch (error) {
       alert(error.message);
@@ -227,8 +227,11 @@ export default function dallies() {
 
   if (!playerStats) {
     return (
+      <>
       <DailiesSkeleton />
-    );
+    
+    </>
+    )
   }
 
   return (
