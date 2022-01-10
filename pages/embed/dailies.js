@@ -53,6 +53,8 @@ export default function dailies() {
 
   const { player } = router.query;
   const { style } = router.query;
+  const { win } = router.query;
+  const { lvl } = router.query;
   const { opacity } = router.query;
 
   const [userOnboarding, setUserOnboarding] = useState(null);
@@ -308,7 +310,7 @@ export default function dailies() {
         </div>
       </section>
       {/* level up modal */}
-      {levelUp ? (
+      {levelUp && lvl ? (
         <ModalLevelUp
           playerLevel={levelUp}
           setLevelUp={setLevelUp}
@@ -318,7 +320,7 @@ export default function dailies() {
       )}
 
       {/* // Modal Section */}
-      {showWinModal ? (
+      {showWinModal && win ? (
         <>
           <WinModal
             page={'dailies'}

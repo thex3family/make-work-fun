@@ -145,6 +145,8 @@ export default function playerDetails() {
 
   const { player } = router.query;
   const { style } = router.query;
+  const { win } = router.query;
+  const { lvl } = router.query;
   const { opacity } = router.query;
   const { display } = router.query;
 
@@ -364,7 +366,7 @@ export default function playerDetails() {
       </section>
 
       {/* // Modal Section */}
-      {showWinModal ? (
+      {showWinModal && win ? (
         <>
           <WinModal
             page={'player'}
@@ -378,7 +380,7 @@ export default function playerDetails() {
       ) : null}
 
       {/* level up modal */}
-      {levelUp ? (
+      {levelUp && lvl ? (
         <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
       ) : null}
     </>
