@@ -21,3 +21,7 @@
 .root[type='datetime-local']::-webkit-calendar-picker-indicator{
   @apply filter invert cursor-pointer;
 }
+
+.root[type='date']::-webkit-calendar-picker-indicator{
+  @apply filter invert cursor-pointer;
+}
