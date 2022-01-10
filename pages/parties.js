@@ -583,7 +583,7 @@ export async function getServerSideProps({ req }) {
   if (!user) {
     return {
       redirect: {
-        destination: '/signin',
+        destination: '/signin?redirect=parties',
         permanent: false
       }
     };
