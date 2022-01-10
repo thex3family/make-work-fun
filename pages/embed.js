@@ -632,7 +632,47 @@ export default function embed() {
             ) :
               // dailies component
               <div className="my-6">
-                
+                <div className="flex flex-row mb-6 text-xl font-semibold gap-3">
+                  <button
+                    onClick={() => setDark(dark ? false : true)}
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      }`}
+                  >
+                    <i
+                      className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                        }`}
+                    />
+                    Dark Mode
+                  </button>
+                  <button
+                    onClick={() => setFriends(friends ? false : true)}
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${friends
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      }`}
+                  >
+                    <i
+                      className={`mr-2 ${friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                        }`}
+                    />
+                    Win Notification
+                  </button>
+                  <button
+                    onClick={() => setFriends(friends ? false : true)}
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${friends
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      }`}
+                  >
+                    <i
+                      className={`mr-2 ${friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                        }`}
+                    />
+                    Level Up Notification
+                  </button>
+                </div>
                 <div className="grid grid-cols-3 mb-8 items-center gap-3">
                   <div className="col-span-2">
                     <Input
