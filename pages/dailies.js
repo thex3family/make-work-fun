@@ -19,7 +19,11 @@ import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 // functions
 import {
   fetchPlayerStats,
-  fetchLatestWin
+  fetchLatestWin,
+  fetchDailies,
+  fetchDailiesCompletedToday,
+  dailyBonusButtons,
+  claimDailyBonus
 } from '@/components/Fetch/fetchMaster';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
@@ -27,7 +31,7 @@ import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
 import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 
-export default function dallies() {
+export default function dailies({user}) {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dailiesCount, setDailiesCount] = useState(0);
@@ -50,10 +54,6 @@ export default function dallies() {
 
   const router = useRouter();
   const {
-    user,
-    userLoaded,
-    session,
-    userDetails,
     userOnboarding,
   } = useUser();
 
@@ -75,25 +75,27 @@ export default function dallies() {
     }
   }
 
+  const player = user.id;
 
   // If player is ready to load, go for it!
 
   async function loadPlayer() {
     console.log('Loading Player');
-    fetchDailies();
+    fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
     refreshStats();
     fetchLatestWin(
       setActiveModalStats,
       refreshStats,
       setLevelUp,
       triggerWinModal,
-      setShowWinModal
+      setShowWinModal,
+      player
     );
   }
 
   async function refreshStats() {
-    setPlayerStats(await fetchPlayerStats(null, setNewToSeason));
-    dailyBonusButtons();
+    setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
+    dailyBonusButtons(player, setDailyBonus);
     setLoading(false);
   }
 
@@ -106,125 +108,6 @@ export default function dallies() {
       setBackgroundUrl(await downloadImage(playerStats.background_url, 'background'));
     } else {
       setBackgroundUrl('/background/dailies.jpg')
-    }
-  }
-
-  async function fetchDailies(click) {
-    try {
-      const user = supabase.auth.user();
-
-      const { data, error } = await supabase
-        .from('dailies')
-        .select('*')
-        .eq('player', user.id)
-        .eq('is_active', true);
-
-      setHabits(data);
-
-      if (click === 'click') {
-        const player = await fetchPlayerStats();
-
-        // check if user leveled up
-        if (player.current_level > player.previous_level) {
-          // level up animation
-          setLevelUp(player.current_level);
-          notifyMe('level', player.current_level);
-        }
-      }
-
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      // alert(error.message)
-    } finally {
-      setLoading(false);
-      fetchDailiesCompletedToday();
-      // console.log(habits);
-    }
-  }
-
-  async function dailyBonusButtons() {
-    try {
-      const user = supabase.auth.user();
-
-      // See if bonus has already been claimed
-      const { data, error } = await supabase
-        .from('success_plan')
-        .select('*')
-        .eq('player', user.id)
-        .eq('name', 'Daily Quest Bonus Reward')
-        .gte('entered_on', moment().startOf('day').utc().format());
-
-      if (error && status !== 406) {
-        throw error;
-      }
-      const fetchData = data;
-
-      if (fetchData.length == 0) {
-        setDailyBonus(true);
-      } else {
-        setDailyBonus(false);
-      }
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      // How do I show the null state?
-    }
-  }
-
-  async function claimDailyBonus() {
-    try {
-      const user = supabase.auth.user();
-
-      let testDateStr = new Date();
-      // console.log('testDateStr: ' + testDateStr);
-
-      const { data, error } = await supabase.from('success_plan').insert([
-        {
-          player: user.id,
-          difficulty: 1,
-          do_date: testDateStr,
-          closing_date: testDateStr,
-          trend: 'check',
-          type: 'Bonus',
-          punctuality: 0,
-          exp_reward: 100,
-          gold_reward: 50,
-          name: 'Daily Quest Bonus Reward'
-        }
-      ]);
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      setDailyBonus(false);
-    }
-  }
-
-  async function fetchDailiesCompletedToday() {
-    try {
-      const user = supabase.auth.user();
-
-      const { data, error } = await supabase
-        .from('completed_habits')
-        .select('*')
-        .eq('player', user.id)
-        .gte('closing_date', moment().startOf('day').utc().format());
-
-      // console.log(data.length);
-      setDailiesCount(data.length);
-      //dailyBonusButtons();
-
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      // alert(error.message)
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -378,6 +261,10 @@ export default function dallies() {
                       habits={habits}
                       fetchDailies={fetchDailies}
                       fetchDailiesCompletedToday={fetchDailiesCompletedToday}
+                      player={user.id}
+                      setHabits = {setHabits} 
+                      setLevelUp = {setLevelUp} 
+                      setDailiesCount = {setDailiesCount}
                     />
                   ) : (
                     <span className="text-center text-dailies font-semibold text-md">

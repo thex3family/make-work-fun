@@ -1,6 +1,7 @@
 import { supabase } from '@/utils/supabase-client';
 import notifyMe from '@/components/Notify/win_notification';
 import { downloadImage } from '@/utils/downloadImage';
+import moment from 'moment';
 
 export async function fetchLatestWin(
   setActiveModalStats,
@@ -671,5 +672,118 @@ export async function fetchNotionCredentials() {
     alert(error.message);
   } finally {
     // setLoading(false);
+  }
+}
+
+export async function fetchDailies(player, setHabits, setLevelUp, setDailiesCount, click) {
+  try {
+    const { data, error } = await supabase
+      .from('dailies')
+      .select('*')
+      .eq('player', player)
+      .eq('is_active', true);
+
+    setHabits(data);
+
+    if (click === 'click') {
+      const player = await fetchPlayerStats(player);
+
+      // check if user leveled up
+      if (player.current_level > player.previous_level) {
+        // level up animation
+        setLevelUp(player.current_level);
+        notifyMe('level', player.current_level);
+      }
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+    setDailiesCount(await fetchDailiesCompletedToday(player));
+    // console.log(habits);
+  }
+}
+
+export async function fetchDailiesCompletedToday(player) {
+  try {
+    const { data, error } = await supabase
+      .from('completed_habits')
+      .select('*')
+      .eq('player', player)
+      .gte('closing_date', moment().startOf('day').utc().format());
+
+    // console.log(data.length);
+    if(data){
+      return data.length;
+    }
+    //dailyBonusButtons();
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
+export async function dailyBonusButtons(player, setDailyBonus) {
+  try {
+
+    // See if bonus has already been claimed
+    const { data, error } = await supabase
+      .from('success_plan')
+      .select('*')
+      .eq('player', player)
+      .eq('name', 'Daily Quest Bonus Reward')
+      .gte('entered_on', moment().startOf('day').utc().format());
+
+    if (error && status !== 406) {
+      throw error;
+    }
+    const fetchData = data;
+
+    if (fetchData.length == 0) {
+      setDailyBonus(true);
+    } else {
+      setDailyBonus(false);
+    }
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    // How do I show the null state?
+  }
+}
+
+export async function claimDailyBonus(player, setDailyBonus) {
+  try {
+
+    let testDateStr = new Date();
+    // console.log('testDateStr: ' + testDateStr);
+
+    const { data, error } = await supabase.from('success_plan').insert([
+      {
+        player: player,
+        difficulty: 1,
+        do_date: testDateStr,
+        closing_date: testDateStr,
+        trend: 'check',
+        type: 'Bonus',
+        punctuality: 0,
+        exp_reward: 100,
+        gold_reward: 50,
+        name: 'Daily Quest Bonus Reward'
+      }
+    ]);
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    setDailyBonus(false);
   }
 }

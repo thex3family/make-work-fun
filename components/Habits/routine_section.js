@@ -5,7 +5,8 @@ export default function RoutineSection({
   habit_group_name,
   associated_habits,
   fetchDailies,
-  fetchDailiesCompletedToday
+  fetchDailiesCompletedToday,
+  player, setHabits, setLevelUp, setDailiesCount
 }) {
   const [showHide, setShowHide] = useState(true);
   const [habitCounter, setHabitCounter] = useState([]);
@@ -81,6 +82,10 @@ export default function RoutineSection({
             fetchDailiesCompletedToday={fetchDailiesCompletedToday}
             habitCounter={habitCounter}
             setHabitCounter={setHabitCounter}
+            player = {player}
+            setHabits = {setHabits} 
+            setLevelUp = {setLevelUp} 
+            setDailiesCount = {setDailiesCount}
           />
         ))}
       </div>

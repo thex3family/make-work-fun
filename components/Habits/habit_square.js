@@ -19,7 +19,8 @@ export default function HabitSquare({
   fetchDailiesCompletedToday,
   habitCounter,
   setHabitCounter,
-  displayMode
+  displayMode,
+  player, setHabits, setLevelUp, setDailiesCount
 }) {
   const [saving, setSaving] = useState(false);
   const [habitCompletedToday, setHabitCompletedToday] = useState(false);
@@ -51,13 +52,11 @@ export default function HabitSquare({
   async function toggleHabitStatus(habit_id, type, inputDetails) {
     setSaving(true);
     try {
-      const user = supabase.auth.user();
-
       // See if the habit has been completed today
       const { data, error } = await supabase
         .from('completed_habits')
         .select('*')
-        .eq('player', user.id)
+        .eq('player', player)
         .eq('habit', habit_id)
         .gte('closing_date', moment().startOf('day').utc().format());
 
@@ -83,7 +82,7 @@ export default function HabitSquare({
 
         const { data, error } = await supabase.from('completed_habits').insert([
           {
-            player: user.id,
+            player: player,
             closing_date: testDateStr,
             exp_reward: 25,
             details: inputDetails,
@@ -123,7 +122,7 @@ export default function HabitSquare({
     } catch (e) {
       alert(e.message);
     } finally {
-      fetchDailiesCompletedToday();
+      setDailiesCount(await fetchDailiesCompletedToday(player));
       setSaving(false);
       // setLoading(false);
     }
@@ -139,7 +138,7 @@ export default function HabitSquare({
 
       //console.log('handleHabitCompletionStatusChange');
       toggleHabitStatus(habit_id, type, inputDetails).then(() => {
-        fetchDailies('click');
+        fetchDailies(player, setHabits, setLevelUp, setDailiesCount,'click');
       });
     }
   }

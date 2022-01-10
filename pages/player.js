@@ -92,6 +92,8 @@ export default function Player() {
 
   const [onboardingState, setOnboardingState] = useState(null);
 
+  const [newToSeason, setNewToSeason] = useState(null);
+
   const currentHour = new Date().getHours();
   const greetingMessage =
     currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
@@ -256,7 +258,7 @@ export default function Player() {
 
   async function refreshStats() {
     console.log('statsRefreshing');
-    setPlayerStats(await fetchPlayerStats());
+    setPlayerStats(await fetchPlayerStats(null, setNewToSeason));
     setWeekWins(await fetchWeekWins());
     setLoading(false);
     setTitles(await fetchTitles());
@@ -345,7 +347,7 @@ export default function Player() {
     </>;
   }
 
-  if (!loading && !playerStats) {
+  if (newToSeason && !playerStats) {
     // need to add a case to handle if no wins this season, how can they initialize their character
 
     return (
