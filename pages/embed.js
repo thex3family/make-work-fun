@@ -41,6 +41,8 @@ export default function embed() {
   const [embedComponent, setEmbedComponent] = useState(1);
   const { user } = useUser();
   const router = useRouter();
+  const [win, setWin] = useState(true);
+  const [lvl, setLvl] = useState(true);
 
   const { component } = router.query;
 
@@ -57,14 +59,19 @@ export default function embed() {
   }, [component]);
 
 
-  async function handleEmbedLink(dark) {
-    console.log(friendshipLink);
+  async function handleEmbedLink() {
     var t = window.location.href;
     if (embedComponent == 1) {
       var embed_link_temp = `${t.substr(
         0,
         t.lastIndexOf('/')
       )}/embed/player-details?player=${user.id}`;
+      if (win) {
+        embed_link_temp = embed_link_temp + '&win=true';
+      }
+      if (lvl) {
+        embed_link_temp = embed_link_temp + '&lvl=true';
+      }
     }
     if (embedComponent == 2) {
       if (friends && friendshipLink) {
@@ -79,17 +86,24 @@ export default function embed() {
         )}/embed/player-card?player=${user.id}`;
       }
     }
-
     if (embedComponent == 3){
       var embed_link_temp = `${t.substr(
         0,
         t.lastIndexOf('/')
       )}/embed/dailies?player=${user.id}`;
+
+      if (win) {
+        embed_link_temp = embed_link_temp + '&win=true';
+      }
+      if (lvl) {
+        embed_link_temp = embed_link_temp + '&lvl=true';
+      }
     }
 
     if (dark) {
       embed_link_temp = embed_link_temp + '&style=dark';
     }
+
     setEmbedLink(embed_link_temp);
   }
 
@@ -129,7 +143,7 @@ export default function embed() {
 
   useEffect(() => {
     if (user) handleEmbedLink(dark);
-  }, [user, dark, embedComponent, friends, friendshipLink]);
+  }, [user, dark, embedComponent, friends, friendshipLink, win, lvl]);
 
   useEffect(() => {
     fetchPlayers(setPlayers);
@@ -397,7 +411,7 @@ export default function embed() {
                 in Notion and your website!
               </p>
             </div>
-            <div className="relative w-auto pl-4 flex-initial">
+            <div className="relative w-auto pl-4 flex-initial mb-4">
               <button
                 className="text-lg font-semibold button primary block cursor-pointer py-2 rounded outline-none border border-accents-4 mt-6 w-1/2 md:w-full lg:w-1/4 mx-auto focus:outline-none"
                 type="button"
@@ -460,6 +474,32 @@ export default function embed() {
                     />
                     Dark Mode
                   </button>
+                  <button
+                    onClick={() => setWin(win ? false : true)}
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      }`}
+                  >
+                    <i
+                      className={`mr-2 ${win ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                        }`}
+                    />
+                    Win Notification
+                  </button>
+                  <button
+                    onClick={() => setLvl(lvl ? false : true)}
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      }`}
+                  >
+                    <i
+                      className={`mr-2 ${lvl ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                        }`}
+                    />
+                    Level Up Notification
+                  </button>
                 </div>
                 <div className="text-lg mb-2 font-semibold">
                   Modifiable Soon...
@@ -469,8 +509,6 @@ export default function embed() {
                   <Feature name="Areas" status={true} />
                   <Feature name="Player Card" status={true} />
                   <Feature name="Week's Wins" status={true} />
-                  <Feature name="Win Notification" status={true} />
-                  <Feature name="Level Up Notification" status={true} />
                 </div>
                 <div className="grid grid-cols-3 mb-8 items-center gap-3">
                   <div className="col-span-2">
@@ -647,27 +685,27 @@ export default function embed() {
                     Dark Mode
                   </button>
                   <button
-                    onClick={() => setFriends(friends ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${friends
+                    onClick={() => setWin(win ? false : true)}
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
                         ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
                         : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
-                      className={`mr-2 ${friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                      className={`mr-2 ${win ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
                         }`}
                     />
                     Win Notification
                   </button>
                   <button
-                    onClick={() => setFriends(friends ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${friends
+                    onClick={() => setLvl(lvl ? false : true)}
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
                         ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
                         : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
-                      className={`mr-2 ${friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                      className={`mr-2 ${lvl ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
                         }`}
                     />
                     Level Up Notification
