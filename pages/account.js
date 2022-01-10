@@ -51,16 +51,15 @@ export default function Account({
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
 
   useEffect(() => {
-    if (user) getProfile();
-    if (user) getNotionCredentials();
-    if (subscriptionPurchaseRecord)
+    if (user && session) getProfile();
+    if (user && session) getNotionCredentials();
+    if (subscriptionPurchaseRecord && session)
       getSubscriptionStatus(subscriptionPurchaseRecord[0]);
   }, [session]);
 
   async function getProfile() {
     try {
       setLoading(true);
-      // const user = supabase.auth.user();
 
       let { data, error, status } = await supabase
         .from('users')
