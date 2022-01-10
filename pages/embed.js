@@ -7,6 +7,7 @@ import { supabase } from '@/utils/supabase-client';
 import { createPopper } from '@popperjs/core';
 
 import { useUser } from '@/utils/useUser';
+import { useRouter } from 'next/router';
 
 import DataTable, { createTheme } from 'react-data-table-component';
 import {
@@ -18,16 +19,14 @@ import {
 function Feature({ name, status }) {
   return (
     <div
-      className={`inline-flex items-center justify-center px-2 py-2 leading-none border-2 rounded ${
-        status
+      className={`inline-flex items-center justify-center px-2 py-2 leading-none border-2 rounded ${status
           ? 'text-emerald-700 bg-emerald-100 border-emerald-500'
           : 'text-red-700 bg-red-100 border-red-500'
-      }`}
+        }`}
     >
       <i
-        className={`mr-2 ${
-          status ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
-        }`}
+        className={`mr-2 ${status ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+          }`}
       />
       {name}
     </div>
@@ -41,6 +40,22 @@ export default function embed() {
   const [copyText, setCopyText] = useState('Copy');
   const [embedComponent, setEmbedComponent] = useState(1);
   const { user } = useUser();
+  const router = useRouter();
+
+  const { component } = router.query;
+
+  useEffect(() => {
+    if(component == 'details'){
+      setEmbedComponent(1);
+    }
+    if(component == 'card'){
+      setEmbedComponent(2);
+    }
+    if(component == 'dailies'){
+      setEmbedComponent(3);
+    }
+  }, [component]);
+
 
   async function handleEmbedLink(dark) {
     console.log(friendshipLink);
@@ -50,7 +65,8 @@ export default function embed() {
         0,
         t.lastIndexOf('/')
       )}/embed/player-details?player=${user.id}`;
-    } else {
+    }
+    if (embedComponent == 2) {
       if (friends && friendshipLink) {
         var embed_link_temp = `${t.substr(
           0,
@@ -62,6 +78,13 @@ export default function embed() {
           t.lastIndexOf('/')
         )}/embed/player-card?player=${user.id}`;
       }
+    }
+
+    if (embedComponent == 3){
+      var embed_link_temp = `${t.substr(
+        0,
+        t.lastIndexOf('/')
+      )}/embed/dailies?player=${user.id}`;
     }
 
     if (dark) {
@@ -91,9 +114,10 @@ export default function embed() {
     setDropdownPopoverShow(false);
   };
 
-  async function changeEmbed(embed_id) {
+  async function changeEmbed(embed_id, embed_url) {
     closeDropdownPopover();
     setEmbedComponent(embed_id);
+    router.push(`embed/?component=${embed_url}`, undefined, {shallow:true})
   }
 
   // friendship table
@@ -384,7 +408,7 @@ export default function embed() {
                     : openDropdownPopover();
                 }}
               >
-                {embedComponent == 1 ? 'Player Details' : 'Player Card'}
+                {embedComponent == 1 ? 'Player Details' : embedComponent == 2 ? 'Player Card' : 'Manage Dailies'}
                 <i
                   className={
                     (dropdownPopoverShow
@@ -401,16 +425,22 @@ export default function embed() {
                 }
               >
                 <a
-                  onClick={() => changeEmbed(1)}
+                  onClick={() => changeEmbed(1, 'details')}
                   className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                 >
                   Player Details
                 </a>
                 <a
-                  onClick={() => changeEmbed(2)}
+                  onClick={() => changeEmbed(2, 'card')}
                   className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                 >
                   Player Card
+                </a>
+                <a
+                  onClick={() => changeEmbed(3, 'dailies')}
+                  className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                >
+                  Dailies
                 </a>
               </div>
             </div>
@@ -419,16 +449,14 @@ export default function embed() {
                 <div className="flex flex-row mb-6 text-xl font-semibold gap-3">
                   <button
                     onClick={() => setDark(dark ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${
-                      dark
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
                         ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
                         : 'text-red-700 bg-red-100 border-2 border-red-500'
-                    }`}
+                      }`}
                   >
                     <i
-                      className={`mr-2 ${
-                        dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
-                      }`}
+                      className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                        }`}
                     />
                     Dark Mode
                   </button>
@@ -467,36 +495,32 @@ export default function embed() {
                   src={embed_link}
                 />
               </div>
-            ) : (
+            ) : embedComponent == 2 ? (
               <div className="my-6">
                 <div className="flex flex-row mb-6 text-xl font-semibold gap-3">
                   <button
                     onClick={() => setDark(dark ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${
-                      dark
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
                         ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
                         : 'text-red-700 bg-red-100 border-2 border-red-500'
-                    }`}
+                      }`}
                   >
                     <i
-                      className={`mr-2 ${
-                        dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
-                      }`}
+                      className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                        }`}
                     />
                     Dark Mode
                   </button>
                   <button
                     onClick={() => setFriends(friends ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${
-                      friends
+                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${friends
                         ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
                         : 'text-red-700 bg-red-100 border-2 border-red-500'
-                    }`}
+                      }`}
                   >
                     <i
-                      className={`mr-2 ${
-                        friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
-                      }`}
+                      className={`mr-2 ${friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                        }`}
                     />
                     Show Friends
                   </button>
@@ -605,7 +629,41 @@ export default function embed() {
                   </div>
                 )}
               </div>
-            )}
+            ) :
+              // dailies component
+              <div className="my-6">
+                
+                <div className="grid grid-cols-3 mb-8 items-center gap-3">
+                  <div className="col-span-2">
+                    <Input
+                      className="text-xl font-semibold rounded"
+                      value={embed_link}
+                    />
+                  </div>
+                  <Button
+                    className=""
+                    variant="slim"
+                    onClick={() => copyEmbedLink()}
+                  >
+                    {copyText}
+                  </Button>
+                </div>
+                <div className="mb-1 font-semibold text-accents-2">Preview</div>
+                <iframe
+                  id="player-details"
+                  className="w-full resize"
+                  height="650"
+                  src={embed_link}
+                />
+              </div>
+              // skip options for now
+
+              // copy link only - later on we need to make this a secret link
+
+              // embed space 
+
+
+            }
           </div>
         </div>
       </section>
