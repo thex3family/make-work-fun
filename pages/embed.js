@@ -13,15 +13,16 @@ import DataTable, { createTheme } from 'react-data-table-component';
 import {
   fetchPlayers,
   fetchFriendships,
-  fetchFriendshipLink
+  fetchFriendshipLink,
+  fetchAuthenticationLink
 } from '@/components/Fetch/fetchMaster';
 
 function Feature({ name, status }) {
   return (
     <div
       className={`inline-flex items-center justify-center px-2 py-2 leading-none border-2 rounded ${status
-          ? 'text-emerald-700 bg-emerald-100 border-emerald-500'
-          : 'text-red-700 bg-red-100 border-red-500'
+        ? 'text-emerald-700 bg-emerald-100 border-emerald-500'
+        : 'text-red-700 bg-red-100 border-red-500'
         }`}
     >
       <i
@@ -34,6 +35,7 @@ function Feature({ name, status }) {
 }
 
 export default function embed() {
+  const [loading, setLoading] = useState(true);
   const [dark, setDark] = useState(false);
   const [friends, setFriends] = useState(false);
   const [embed_link, setEmbedLink] = useState(null);
@@ -47,13 +49,13 @@ export default function embed() {
   const { component } = router.query;
 
   useEffect(() => {
-    if(component == 'details'){
+    if (component == 'player-details') {
       setEmbedComponent(1);
     }
-    if(component == 'card'){
+    if (component == 'player-card') {
       setEmbedComponent(2);
     }
-    if(component == 'dailies'){
+    if (component == 'dailies') {
       setEmbedComponent(3);
     }
   }, [component]);
@@ -62,16 +64,21 @@ export default function embed() {
   async function handleEmbedLink() {
     var t = window.location.href;
     if (embedComponent == 1) {
-      var embed_link_temp = `${t.substr(
-        0,
-        t.lastIndexOf('/')
-      )}/embed/player-details?player=${user.id}`;
-      if (win) {
-        embed_link_temp = embed_link_temp + '&win=true';
+      if(detailsAuthLink){
+        var embed_link_temp = `${t.substr(
+          0,
+          t.lastIndexOf('/')
+        )}/embed/player-details?auth=${detailsAuthLink}`;
+        if (win) {
+          embed_link_temp = embed_link_temp + '&win=true';
+        }
+        if (lvl) {
+          embed_link_temp = embed_link_temp + '&lvl=true';
+        }
+      } else {
+        var embed_link_temp = '/embed/player-details?display=demo';
       }
-      if (lvl) {
-        embed_link_temp = embed_link_temp + '&lvl=true';
-      }
+
     }
     if (embedComponent == 2) {
       if (friends && friendshipLink) {
@@ -86,17 +93,21 @@ export default function embed() {
         )}/embed/player-card?player=${user.id}`;
       }
     }
-    if (embedComponent == 3){
-      var embed_link_temp = `${t.substr(
-        0,
-        t.lastIndexOf('/')
-      )}/embed/dailies?player=${user.id}`;
+    if (embedComponent == 3) {
+      if (dailiesAuthLink) {
+        var embed_link_temp = `${t.substr(
+          0,
+          t.lastIndexOf('/')
+        )}/embed/dailies?auth=${dailiesAuthLink}`;
 
-      if (win) {
-        embed_link_temp = embed_link_temp + '&win=true';
-      }
-      if (lvl) {
-        embed_link_temp = embed_link_temp + '&lvl=true';
+        if (win) {
+          embed_link_temp = embed_link_temp + '&win=true';
+        }
+        if (lvl) {
+          embed_link_temp = embed_link_temp + '&lvl=true';
+        }
+      } else {
+        var embed_link_temp = '/embed/dailies?display=demo';
       }
     }
 
@@ -131,7 +142,7 @@ export default function embed() {
   async function changeEmbed(embed_id, embed_url) {
     closeDropdownPopover();
     setEmbedComponent(embed_id);
-    router.push(`embed/?component=${embed_url}`, undefined, {shallow:true})
+    router.push(`embed/?component=${embed_url}`, undefined, { shallow: true })
   }
 
   // friendship table
@@ -141,14 +152,21 @@ export default function embed() {
   const [saving, setSaving] = useState(null);
   const [generating, setGenerating] = useState(null);
 
+  const [dailiesAuthLink, setDailiesAuthLink] = useState(null);
+  const [detailsAuthLink, setDetailsAuthLink] = useState(null);
+  const [cardAuthLink, setCardAuthLink] = useState(null);
+
   useEffect(() => {
     if (user) handleEmbedLink(dark);
-  }, [user, dark, embedComponent, friends, friendshipLink, win, lvl]);
+  }, [user, dark, embedComponent, friends, friendshipLink, win, lvl, dailiesAuthLink, detailsAuthLink]);
 
   useEffect(() => {
     fetchPlayers(setPlayers);
     fetchFriendships(setFriendships);
     fetchFriendshipLink(setFriendshipLink);
+    fetchAuthenticationLink('dailies', setDailiesAuthLink, setLoading);
+    fetchAuthenticationLink('player-details', setDetailsAuthLink, setLoading);
+    fetchAuthenticationLink('player-card', setCardAuthLink, setLoading);
   }, []);
 
   useEffect(() => {
@@ -158,7 +176,7 @@ export default function embed() {
 
   useEffect(() => {
     setGenerating(false);
-  }, [friendshipLink]);
+  }, [friendshipLink, dailiesAuthLink, detailsAuthLink, cardAuthLink]);
 
   const columns = [
     {
@@ -366,7 +384,7 @@ export default function embed() {
     } catch (error) {
       alert(error.message);
     } finally {
-      reloadIframe();
+      reloadIframe('player-card');
     }
   }
 
@@ -386,12 +404,62 @@ export default function embed() {
       alert(error.message);
     } finally {
       setFriendshipLink(null);
-      reloadIframe();
+      reloadIframe('player-card');
     }
   }
 
-  async function reloadIframe() {
-    var iframe = document.getElementById('player-card');
+  // generate secret link
+
+  async function generateSecretLink(utility) {
+    setGenerating(true);
+    try {
+      const user = supabase.auth.user();
+      const { data, error } = await supabase.from('authentication_links').insert([
+        {
+          user: user.id,
+          utility: utility
+        }
+      ]);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      fetchAuthenticationLink(utility, utility == 'dailies' ? setDailiesAuthLink : utility == 'player-details' ? setDetailsAuthLink : utility == 'player-card' ? setCardAuthLink : null, setLoading);
+    }
+  }
+
+  async function deleteSecretLink(utility) {
+    setGenerating(true);
+    try {
+      const user = supabase.auth.user();
+      const { data, error } = await supabase
+        .from('authentication_links')
+        .delete()
+        .eq('user', user.id)
+        .eq('utility', utility);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      if (utility == 'dailies') {
+        setDailiesAuthLink(null)
+      }
+      if (utility == 'player-details') {
+        setDetailsAuthLink(null)
+      }
+      if (utility == 'player-card') {
+        setCardAuthLink(null)
+      }
+      reloadIframe(utility);
+    }
+  }
+
+  async function reloadIframe(utility) {
+    var iframe = document.getElementById(utility);
     if (iframe) {
       iframe.src = iframe.src;
     }
@@ -439,13 +507,13 @@ export default function embed() {
                 }
               >
                 <a
-                  onClick={() => changeEmbed(1, 'details')}
+                  onClick={() => changeEmbed(1, 'player-details')}
                   className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                 >
                   Player Details
                 </a>
                 <a
-                  onClick={() => changeEmbed(2, 'card')}
+                  onClick={() => changeEmbed(2, 'player-card')}
                   className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                 >
                   Player Card
@@ -464,8 +532,8 @@ export default function embed() {
                   <button
                     onClick={() => setDark(dark ? false : true)}
                     className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                      : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
@@ -477,8 +545,8 @@ export default function embed() {
                   <button
                     onClick={() => setWin(win ? false : true)}
                     className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                      : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
@@ -490,8 +558,8 @@ export default function embed() {
                   <button
                     onClick={() => setLvl(lvl ? false : true)}
                     className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                      : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
@@ -510,21 +578,45 @@ export default function embed() {
                   <Feature name="Player Card" status={true} />
                   <Feature name="Week's Wins" status={true} />
                 </div>
-                <div className="grid grid-cols-3 mb-8 items-center gap-3">
-                  <div className="col-span-2">
-                    <Input
-                      className="text-xl font-semibold rounded"
-                      value={embed_link}
-                    />
-                  </div>
-                  <Button
-                    className=""
-                    variant="slim"
-                    onClick={() => copyEmbedLink()}
-                  >
-                    {copyText}
-                  </Button>
-                </div>
+
+                {!detailsAuthLink ?
+                  <div className="mb-6 items-center w-full">
+                    <Button
+                      className="w-full"
+                      variant="slim"
+                      onClick={() => generateSecretLink('player-details')}
+                      disabled={generating || loading}
+                    >
+                      {generating ? 'Generating...' : 'Generate Secret Embed Link'}
+                    </Button>
+                  </div> :
+                  <div className="mb-8">
+                    <div className="grid grid-cols-3 items-center gap-3">
+                      <div className="col-span-2">
+                        <Input
+                          className="text-xl font-semibold rounded"
+                          value={embed_link}
+                        />
+                      </div>
+                      <Button
+                        className=""
+                        variant="slim"
+                        onClick={() => copyEmbedLink()}
+                      >
+                        {copyText}
+                      </Button>
+                    </div>
+                    {detailsAuthLink ? (
+                      <button
+                        onClick={() => deleteSecretLink('player-details')}
+                        className="text-red-500 mt-2 mr-5 font-semibold"
+                        disabled={generating}
+                      >
+                        {generating ? 'Deleting...' : 'Delete Generated Link'}
+                      </button>
+                    ) : null}
+                  </div>}
+
                 <div className="mb-1 font-semibold text-accents-2">Preview</div>
                 <iframe
                   id="player-details"
@@ -539,8 +631,8 @@ export default function embed() {
                   <button
                     onClick={() => setDark(dark ? false : true)}
                     className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                      : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
@@ -552,8 +644,8 @@ export default function embed() {
                   <button
                     onClick={() => setFriends(friends ? false : true)}
                     className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${friends
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                      : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
@@ -563,6 +655,7 @@ export default function embed() {
                     Show Friends
                   </button>
                 </div>
+                
                 {friends ? (
                   <>
                     <div className="mb-6 items-center w-full">
@@ -618,7 +711,7 @@ export default function embed() {
                       onClick={() => generateFriendshipLink(friendships)}
                       disabled={generating || !friendships}
                     >
-                      {generating ? 'Generating...' : 'Generate Embed Link'}
+                      {generating ? 'Generating...' : 'Generate Secret Embed Link'}
                     </Button>
                   </div>
                 ) : (
@@ -674,8 +767,8 @@ export default function embed() {
                   <button
                     onClick={() => setDark(dark ? false : true)}
                     className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                      : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
@@ -687,8 +780,8 @@ export default function embed() {
                   <button
                     onClick={() => setWin(win ? false : true)}
                     className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                      : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
@@ -700,8 +793,8 @@ export default function embed() {
                   <button
                     onClick={() => setLvl(lvl ? false : true)}
                     className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                      : 'text-red-700 bg-red-100 border-2 border-red-500'
                       }`}
                   >
                     <i
@@ -711,24 +804,48 @@ export default function embed() {
                     Level Up Notification
                   </button>
                 </div>
-                <div className="grid grid-cols-3 mb-8 items-center gap-3">
-                  <div className="col-span-2">
-                    <Input
-                      className="text-xl font-semibold rounded"
-                      value={embed_link}
-                    />
-                  </div>
-                  <Button
-                    className=""
-                    variant="slim"
-                    onClick={() => copyEmbedLink()}
-                  >
-                    {copyText}
-                  </Button>
-                </div>
+
+                {!dailiesAuthLink ?
+                  <div className="mb-6 items-center w-full">
+                    <Button
+                      className="w-full"
+                      variant="slim"
+                      onClick={() => generateSecretLink('dailies')}
+                      disabled={generating || loading}
+                    >
+                      {generating ? 'Generating...' : 'Generate Secret Embed Link'}
+                    </Button>
+                  </div> :
+                  <div className="mb-8">
+                    <div className="grid grid-cols-3 items-center gap-3">
+                      <div className="col-span-2">
+                        <Input
+                          className="text-xl font-semibold rounded"
+                          value={embed_link}
+                        />
+                      </div>
+                      <Button
+                        className=""
+                        variant="slim"
+                        onClick={() => copyEmbedLink()}
+                      >
+                        {copyText}
+                      </Button>
+
+                    </div>
+                    {dailiesAuthLink ? (
+                      <button
+                        onClick={() => deleteSecretLink('dailies')}
+                        className="text-red-500 mt-2 mr-5 font-semibold"
+                        disabled={generating}
+                      >
+                        {generating ? 'Deleting...' : 'Delete Generated Link'}
+                      </button>
+                    ) : null}
+                  </div>}
                 <div className="mb-1 font-semibold text-accents-2">Preview</div>
                 <iframe
-                  id="player-details"
+                  id="dailies"
                   className="w-full resize"
                   height="650"
                   src={embed_link}

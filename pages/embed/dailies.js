@@ -21,7 +21,8 @@ import {
   fetchDailies,
   fetchDailiesCompletedToday,
   dailyBonusButtons,
-  claimDailyBonus
+  claimDailyBonus,
+  lookupPlayerFromAuth
 } from '@/components/Fetch/fetchMaster';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
@@ -51,11 +52,19 @@ export default function dailies() {
 
   // grab details from URL
 
-  const { player } = router.query;
+  const { auth } = router.query;
   const { style } = router.query;
   const { win } = router.query;
   const { lvl } = router.query;
   const { opacity } = router.query;
+
+  // check on the player using the auth key
+
+  const [player, setPlayer] = useState(null);
+
+  useEffect(() => {
+    if (auth) (lookupPlayerFromAuth(auth, setPlayer));
+  }, [auth]);
 
   const [userOnboarding, setUserOnboarding] = useState(null);
   
