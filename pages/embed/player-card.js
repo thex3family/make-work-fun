@@ -13,7 +13,8 @@ import {
   fetchAreaStats,
   fetchWeekWins,
   fetchLatestWin,
-  fetchSpecificPlayers
+  fetchSpecificPlayers,
+  lookupPlayerFromAuth
 } from '@/components/Fetch/fetchMaster';
 
 import { triggerWinModal, triggerCardWin } from '@/components/Modals/ModalHandler';
@@ -31,11 +32,20 @@ export default function playerDetails() {
   const [weekWins, setWeekWins] = useState([]);
   const [background_url, setBackgroundUrl] = useState('/');
 
-  const { player } = router.query;
+  const { auth } = router.query;
   const { style } = router.query;
   const { id } = router.query;
   const { opacity } = router.query;
   const { display } = router.query;
+
+  // check on the player using the auth key
+
+  const [player, setPlayer] = useState(null);
+
+  useEffect(() => {
+    if (auth) (lookupPlayerFromAuth(auth, setPlayer));
+  }, [auth]);
+
 
   const demoPlayerStats = {
     player_rank: 17,
