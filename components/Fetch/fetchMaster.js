@@ -787,3 +787,50 @@ export async function claimDailyBonus(player, setDailyBonus) {
     setDailyBonus(false);
   }
 }
+
+export async function fetchAuthenticationLink(utility, setAuthenticationLink, setLoading) {
+  try {
+    const user = supabase.auth.user();
+    const { data, error } = await supabase
+      .from('authentication_links')
+      .select('*')
+      .eq('user', user.id)
+      .eq('utility', utility)
+      .single()
+      .limit(1);
+
+    if (data) {
+      setAuthenticationLink(data.id);
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+    setLoading(false)
+  }
+}
+
+
+export async function lookupPlayerFromAuth(auth, setPlayer) {
+  try {
+    const { data, error } = await supabase
+      .from('authentication_links')
+      .select('*')
+      .eq('id', auth)
+      .single()
+
+    if(data){
+      setPlayer(data.user);
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}

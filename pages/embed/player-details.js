@@ -10,7 +10,8 @@ import {
   fetchPlayerStats,
   fetchAreaStats,
   fetchWeekWins,
-  fetchLatestWin
+  fetchLatestWin,
+  lookupPlayerFromAuth
 } from '@/components/Fetch/fetchMaster';
 
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
@@ -143,7 +144,7 @@ export default function playerDetails() {
     upstream_id: ''
   };
 
-  const { player } = router.query;
+  const { auth } = router.query;
   const { style } = router.query;
   const { win } = router.query;
   const { lvl } = router.query;
@@ -151,6 +152,14 @@ export default function playerDetails() {
   const { display } = router.query;
 
   let bg_opacity = 'bg-opacity-50';
+
+  // check on the player using the auth key
+
+  const [player, setPlayer] = useState(null);
+
+  useEffect(() => {
+    if (auth) (lookupPlayerFromAuth(auth, setPlayer));
+  }, [auth]);
 
   // win modal stuff
 
@@ -366,7 +375,7 @@ export default function playerDetails() {
       </section>
 
       {/* // Modal Section */}
-      {showWinModal && win ? (
+      {showWinModal && (win || display == 'demo') ? (
         <>
           <WinModal
             page={'player'}
@@ -380,7 +389,7 @@ export default function playerDetails() {
       ) : null}
 
       {/* level up modal */}
-      {levelUp && lvl ? (
+      {levelUp && (lvl || display == 'demo') ? (
         <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
       ) : null}
     </>
