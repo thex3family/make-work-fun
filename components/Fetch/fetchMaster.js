@@ -683,7 +683,9 @@ export async function fetchDailies(player, setHabits, setLevelUp, setDailiesCoun
       .eq('player', player)
       .eq('is_active', true);
 
-    setHabits(data);
+    if (data) {
+      setHabits(data);
+    }
 
     if (click === 'click') {
       const player = await fetchPlayerStats(player);
