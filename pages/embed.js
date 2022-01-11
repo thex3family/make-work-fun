@@ -64,7 +64,7 @@ export default function embed() {
   async function handleEmbedLink() {
     var t = window.location.href;
     if (embedComponent == 1) {
-      if(detailsAuthLink){
+      if (detailsAuthLink) {
         var embed_link_temp = `${t.substr(
           0,
           t.lastIndexOf('/')
@@ -81,16 +81,22 @@ export default function embed() {
 
     }
     if (embedComponent == 2) {
-      if (friends && friendshipLink) {
-        var embed_link_temp = `${t.substr(
-          0,
-          t.lastIndexOf('/')
-        )}/embed/player-card?id=${friendshipLink.id}`;
+      if (!friends) {
+        if (cardAuthLink){
+          var embed_link_temp = `${t.substr(
+            0,
+            t.lastIndexOf('/')
+          )}/embed/player-card?auth=${cardAuthLink}`;
+        } else {
+          var embed_link_temp = '/embed/player-card?display=demo';
+        }
       } else {
-        var embed_link_temp = `${t.substr(
-          0,
-          t.lastIndexOf('/')
-        )}/embed/player-card?player=${user.id}`;
+        if (friendshipLink){
+          var embed_link_temp = `${t.substr(
+            0,
+            t.lastIndexOf('/')
+          )}/embed/player-card?id=${friendshipLink.id}`;
+        }
       }
     }
     if (embedComponent == 3) {
@@ -158,7 +164,7 @@ export default function embed() {
 
   useEffect(() => {
     if (user) handleEmbedLink(dark);
-  }, [user, dark, embedComponent, friends, friendshipLink, win, lvl, dailiesAuthLink, detailsAuthLink]);
+  }, [user, dark, embedComponent, friends, friendshipLink, win, lvl, dailiesAuthLink, detailsAuthLink, cardAuthLink]);
 
   useEffect(() => {
     fetchPlayers(setPlayers);
@@ -655,7 +661,7 @@ export default function embed() {
                     Show Friends
                   </button>
                 </div>
-                
+
                 {friends ? (
                   <>
                     <div className="mb-6 items-center w-full">
@@ -703,19 +709,22 @@ export default function embed() {
                   <Feature name="Recent Win Announcement" status={true} />
                   <Feature name="Show Guild Members" status={false} />
                 </div>
-                {friends && !friendshipLink ? (
-                  <div className="mb-6 items-center w-full">
-                    <Button
-                      className="w-full"
-                      variant="slim"
-                      onClick={() => generateFriendshipLink(friendships)}
-                      disabled={generating || !friendships}
-                    >
-                      {generating ? 'Generating...' : 'Generate Secret Embed Link'}
-                    </Button>
-                  </div>
-                ) : (
-                  <>
+
+                {friends ?
+                  (!friendshipLink ? (
+                    // if friends but no link
+                    <div className="mb-6 items-center w-full">
+                      <Button
+                        className="w-full"
+                        variant="slim"
+                        onClick={() => generateFriendshipLink(friendships)}
+                        disabled={generating || !friendships}
+                      >
+                        {generating ? 'Generating...' : 'Generate Secret Embed Link'}
+                      </Button>
+                    </div>
+                  ) :
+                    // if friends and have friendship link
                     <div className="mb-8">
                       <div className="grid grid-cols-3 items-center gap-3">
                         <div className="col-span-2">
@@ -732,18 +741,58 @@ export default function embed() {
                           {copyText}
                         </Button>
                       </div>
-                      {friends && friendshipLink ? (
-                        <button
-                          onClick={() => deleteFriendshipLink(friendships)}
-                          className="text-red-500 mt-2 mr-5 font-semibold"
-                          disabled={generating}
-                        >
-                          {generating ? 'Deleting...' : 'Delete Generated Link'}
-                        </button>
-                      ) : null}
+
+                      <button
+                        onClick={() => deleteFriendshipLink(friendships)}
+                        className="text-red-500 mt-2 mr-5 font-semibold"
+                        disabled={generating}
+                      >
+                        {generating ? 'Deleting...' : 'Delete Generated Link'}
+                      </button>
                     </div>
-                  </>
-                )}
+                  ) : (
+                    // if not friends
+                    !cardAuthLink ?
+                      <div className="mb-6 items-center w-full">
+                        <Button
+                          className="w-full"
+                          variant="slim"
+                          onClick={() => generateSecretLink('player-card')}
+                          disabled={generating || loading}
+                        >
+                          {generating ? 'Generating...' : 'Generate Secret Embed Link'}
+                        </Button>
+                      </div>
+                      :
+                      <div className="mb-8">
+                        <div className="grid grid-cols-3 items-center gap-3">
+                          <div className="col-span-2">
+                            <Input
+                              className="text-xl font-semibold rounded"
+                              value={embed_link}
+                            />
+                          </div>
+                          <Button
+                            className=""
+                            variant="slim"
+                            onClick={() => copyEmbedLink()}
+                          >
+                            {copyText}
+                          </Button>
+                        </div>
+                        {cardAuthLink ? (
+                          <button
+                            onClick={() => deleteSecretLink('player-card')}
+                            className="text-red-500 mt-2 mr-5 font-semibold"
+                            disabled={generating}
+                          >
+                            {generating ? 'Deleting...' : 'Delete Generated Link'}
+                          </button>
+                        ) : null}
+                      </div>
+                  )}
+
+
                 {friends && !friendshipLink ? null : (
                   <div className="overflow-x-auto">
                     <div className="mb-1 font-semibold text-accents-2">
