@@ -231,7 +231,7 @@ export default function WinModal({
               }
 
             </div>
-            {page !== 'player' ? (
+            {page !== 'player' && display !== 'demo' ? (
               <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
                 <Link href="/player">
                   <button
