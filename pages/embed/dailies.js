@@ -68,7 +68,7 @@ export default function dailies() {
   }, [auth]);
 
   const [userOnboarding, setUserOnboarding] = useState(null);
-  
+
   // if there is a player, check for onboarding state
 
   useEffect(() => {
@@ -170,271 +170,296 @@ export default function dailies() {
     latest: true
   };
 
-  const demoHabits = 
+  const demoHabits =
     [
       {
-          "id": 112,
-          "habit": "Drink Water!",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Recurring",
-          "group_sort": 1,
-          "exp_reward": 25,
-          "icon": "FaFillDrip",
-          "habit_type": "Counter",
-          "sort": 1,
-          "latest_details": "1"
+        "id": 112,
+        "habit": "Drink Water!",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Recurring",
+        "group_sort": 1,
+        "exp_reward": 25,
+        "icon": "FaFillDrip",
+        "habit_type": "Counter",
+        "sort": 1,
+        "latest_details": "1"
       },
       {
-          "id": 440,
-          "habit": "Review",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Recurring",
-          "group_sort": 1,
-          "exp_reward": 25,
-          "icon": "FaThinkPeaks",
-          "habit_type": "Counter",
-          "sort": 1,
-          "latest_details": "1"
+        "id": 440,
+        "habit": "Review",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Recurring",
+        "group_sort": 1,
+        "exp_reward": 25,
+        "icon": "FaThinkPeaks",
+        "habit_type": "Counter",
+        "sort": 1,
+        "latest_details": "1"
       },
       {
-          "id": 14,
-          "habit": "Meditate",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Recurring",
-          "group_sort": 1,
-          "exp_reward": 25,
-          "icon": "FaPray",
-          "habit_type": "Counter",
-          "sort": 2,
-          "latest_details": "1"
+        "id": 14,
+        "habit": "Meditate",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Recurring",
+        "group_sort": 1,
+        "exp_reward": 25,
+        "icon": "FaPray",
+        "habit_type": "Counter",
+        "sort": 2,
+        "latest_details": "1"
       },
       {
-          "id": 86,
-          "habit": "Morning Mood",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Morning",
-          "group_sort": 2,
-          "exp_reward": 25,
-          "icon": "FaStreetView",
-          "habit_type": "Feeling",
-          "sort": 0,
-          "latest_details": "happy"
+        "id": 86,
+        "habit": "Morning Mood",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Morning",
+        "group_sort": 2,
+        "exp_reward": 25,
+        "icon": "FaStreetView",
+        "habit_type": "Feeling",
+        "sort": 0,
+        "latest_details": "happy"
       },
       {
-          "id": 12,
-          "habit": "Make My Bed",
-          "description": null,
-          "streak_duration": 1,
-          "streak_start": "2022-01-10T19:06:22.328+00:00",
-          "streak_end": "2022-01-10T19:06:22.328+00:00",
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Morning",
-          "group_sort": 2,
-          "exp_reward": 25,
-          "icon": "FaBed",
-          "habit_type": "Checkbox",
-          "sort": 3,
-          "latest_details": null
+        "id": 12,
+        "habit": "Make My Bed",
+        "description": null,
+        "streak_duration": 1,
+        "streak_start": "2022-01-10T19:06:22.328+00:00",
+        "streak_end": "2022-01-10T19:06:22.328+00:00",
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Morning",
+        "group_sort": 2,
+        "exp_reward": 25,
+        "icon": "FaBed",
+        "habit_type": "Checkbox",
+        "sort": 3,
+        "latest_details": null
       },
       {
-          "id": 37,
-          "habit": "Plan My Day",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Morning",
-          "group_sort": 2,
-          "exp_reward": 25,
-          "icon": "FaBrain",
-          "habit_type": "Checkbox",
-          "sort": 5,
-          "latest_details": null
+        "id": 37,
+        "habit": "Plan My Day",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Morning",
+        "group_sort": 2,
+        "exp_reward": 25,
+        "icon": "FaBrain",
+        "habit_type": "Checkbox",
+        "sort": 5,
+        "latest_details": null
       },
       {
-          "id": 104,
-          "habit": "Mid-Day Mood",
-          "description": null,
-          "streak_duration": 1,
-          "streak_start": "2022-01-10T19:06:55.166+00:00",
-          "streak_end": "2022-01-10T19:06:55.166+00:00",
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Mid-Day",
-          "group_sort": 5,
-          "exp_reward": 25,
-          "icon": "FaSun",
-          "habit_type": "Feeling",
-          "sort": 0,
-          "latest_details": "happy"
+        "id": 104,
+        "habit": "Mid-Day Mood",
+        "description": null,
+        "streak_duration": 1,
+        "streak_start": "2022-01-10T19:06:55.166+00:00",
+        "streak_end": "2022-01-10T19:06:55.166+00:00",
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Mid-Day",
+        "group_sort": 5,
+        "exp_reward": 25,
+        "icon": "FaSun",
+        "habit_type": "Feeling",
+        "sort": 0,
+        "latest_details": "happy"
       },
       {
-          "id": 16,
-          "habit": "Intercom + Emails",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Mid-Day",
-          "group_sort": 5,
-          "exp_reward": 25,
-          "icon": "FaMailBulk",
-          "habit_type": "Checkbox",
-          "sort": 1,
-          "latest_details": null
+        "id": 16,
+        "habit": "Intercom + Emails",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Mid-Day",
+        "group_sort": 5,
+        "exp_reward": 25,
+        "icon": "FaMailBulk",
+        "habit_type": "Checkbox",
+        "sort": 1,
+        "latest_details": null
       },
       {
-          "id": 2,
-          "habit": "Take A Picture",
-          "description": null,
-          "streak_duration": 1,
-          "streak_start": "2022-01-10T19:06:53.39+00:00",
-          "streak_end": "2022-01-10T19:06:53.39+00:00",
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Mid-Day",
-          "group_sort": 5,
-          "exp_reward": 25,
-          "icon": "FaCameraRetro",
-          "habit_type": "Checkbox",
-          "sort": 2,
-          "latest_details": null
+        "id": 2,
+        "habit": "Take A Picture",
+        "description": null,
+        "streak_duration": 1,
+        "streak_start": "2022-01-10T19:06:53.39+00:00",
+        "streak_end": "2022-01-10T19:06:53.39+00:00",
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Mid-Day",
+        "group_sort": 5,
+        "exp_reward": 25,
+        "icon": "FaCameraRetro",
+        "habit_type": "Checkbox",
+        "sort": 2,
+        "latest_details": null
       },
       {
-          "id": 105,
-          "habit": "Evening Mood",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Evening",
-          "group_sort": 6,
-          "exp_reward": 25,
-          "icon": "FaPersonBooth",
-          "habit_type": "Feeling",
-          "sort": 0,
-          "latest_details": "happy"
+        "id": 105,
+        "habit": "Evening Mood",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Evening",
+        "group_sort": 6,
+        "exp_reward": 25,
+        "icon": "FaPersonBooth",
+        "habit_type": "Feeling",
+        "sort": 0,
+        "latest_details": "happy"
       },
       {
-          "id": 13,
-          "habit": "Clean Up Inbox",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Evening",
-          "group_sort": 6,
-          "exp_reward": 25,
-          "icon": "FaRegLightbulb",
-          "habit_type": "Checkbox",
-          "sort": 1,
-          "latest_details": null
+        "id": 13,
+        "habit": "Clean Up Inbox",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Evening",
+        "group_sort": 6,
+        "exp_reward": 25,
+        "icon": "FaRegLightbulb",
+        "habit_type": "Checkbox",
+        "sort": 1,
+        "latest_details": null
       },
       {
-          "id": 9,
-          "habit": "Tidy Up",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Evening",
-          "group_sort": 6,
-          "exp_reward": 25,
-          "icon": "FaBroom",
-          "habit_type": "Location",
-          "sort": 3,
-          "latest_details": "Did Laundry"
+        "id": 9,
+        "habit": "Tidy Up",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Evening",
+        "group_sort": 6,
+        "exp_reward": 25,
+        "icon": "FaBroom",
+        "habit_type": "Location",
+        "sort": 3,
+        "latest_details": "Did Laundry"
       },
       {
-          "id": 110,
-          "habit": "Bedtime Mood",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Bedtime",
-          "group_sort": 7,
-          "exp_reward": 25,
-          "icon": "FaAngellist",
-          "habit_type": "Feeling",
-          "sort": 0,
-          "latest_details": "happy"
+        "id": 110,
+        "habit": "Bedtime Mood",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Bedtime",
+        "group_sort": 7,
+        "exp_reward": 25,
+        "icon": "FaAngellist",
+        "habit_type": "Feeling",
+        "sort": 0,
+        "latest_details": "happy"
       },
       {
-          "id": 38,
-          "habit": "Personal Hygeine",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Bedtime",
-          "group_sort": 7,
-          "exp_reward": 25,
-          "icon": "FaTeeth",
-          "habit_type": "Checkbox",
-          "sort": 1,
-          "latest_details": null
+        "id": 38,
+        "habit": "Personal Hygeine",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Bedtime",
+        "group_sort": 7,
+        "exp_reward": 25,
+        "icon": "FaTeeth",
+        "habit_type": "Checkbox",
+        "sort": 1,
+        "latest_details": null
       },
       {
-          "id": 6,
-          "habit": "Reflection",
-          "description": null,
-          "streak_duration": null,
-          "streak_start": null,
-          "streak_end": null,
-          "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-          "is_active": true,
-          "habit_group": "Bedtime",
-          "group_sort": 7,
-          "exp_reward": 25,
-          "icon": "FaBookReader",
-          "habit_type": "Checkbox",
-          "sort": 4,
-          "latest_details": null
+        "id": 6,
+        "habit": "Reflection",
+        "description": null,
+        "streak_duration": null,
+        "streak_start": null,
+        "streak_end": null,
+        "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
+        "is_active": true,
+        "habit_group": "Bedtime",
+        "group_sort": 7,
+        "exp_reward": 25,
+        "icon": "FaBookReader",
+        "habit_type": "Checkbox",
+        "sort": 4,
+        "latest_details": null
       }
-  ]
-  
+    ]
+
+    const demoModalStats = {
+      area: 'Make Work Fun',
+      closing_date: '2021-10-08',
+      database_nickname: null,
+      difficulty: 1,
+      do_date: '2021-10-07',
+      entered_on: '2021-10-07T16:19:54.619076Z',
+      exp_reward: 25,
+      gif_url: null,
+      gold_reward: 25,
+      health_reward: null,
+      id: 0,
+      impact: '10x 🔺',
+      name: 'My First Win',
+      notion_id: '',
+      party_id: null,
+      player: '',
+      punctuality: +1,
+      trend: 'up',
+      type: 'Task',
+      upstream: 'Starting My Adventure',
+      upstream_id: ''
+    };
+
 
   useEffect(() => {
     if (display == 'demo') {
       setPlayerStats(demoPlayerStats);
       setHabits(demoHabits);
       setLoading(false);
+      setActiveModalStats(demoModalStats);
     }
   }, [display]);
 
@@ -456,7 +481,25 @@ export default function dailies() {
     <>
       <section className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center bg-dark"
         style={{ backgroundImage: `url(${backgroundUrl})` }}>
+        {display == 'demo' ? (
+          <div className="flex flex-col sm:flex-row gap-4 justify-center bg-dark py-4 px-4">
+            <Button
+              className="w-full sm:w-auto"
+              variant="incognito"
+              onClick={() => setShowWinModal(true)}
+            >
+              Demo: New Win
+            </Button>
 
+            <Button
+              className=" w-full sm:w-auto"
+              variant="incognito"
+              onClick={() => setLevelUp(2)}
+            >
+              Demo: Level Up!
+            </Button>
+          </div>
+        ) : null}
         <div className=" max-w-6xl mx-auto py-0 sm:py-8 md:pt-24 px-0 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
           <div className="animate-fade-in-up bg-dailies-default rounded-0 sm:rounded opacity-95">
             <div className="pb-5 py-10 px-4 sm:px-10">
@@ -589,11 +632,11 @@ export default function dailies() {
                       habits={habits}
                       fetchDailies={fetchDailies}
                       fetchDailiesCompletedToday={fetchDailiesCompletedToday}
-                      player = {player}
-                      setHabits = {setHabits} 
-                      setLevelUp = {setLevelUp} 
-                      setDailiesCount = {setDailiesCount}
-                      display = {display}
+                      player={player}
+                      setHabits={setHabits}
+                      setLevelUp={setLevelUp}
+                      setDailiesCount={setDailiesCount}
+                      display={display}
                     />
                   ) : (
                     <span className="text-center text-dailies font-semibold text-md">
@@ -603,20 +646,20 @@ export default function dailies() {
                 ) : null}
               </div>
               {display != 'demo' ?
-              <div className="text-center my-5">
-                <Link href="/dailies/edit">
-                  <button className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded hover:border-white hover:text-white">
-                    Edit Dailies
-                  </button>
-                </Link>
-              </div> 
-              : null}
+                <div className="text-center my-5">
+                  <Link href="/dailies/edit">
+                    <button className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded hover:border-white hover:text-white">
+                      Edit Dailies
+                    </button>
+                  </Link>
+                </div>
+                : null}
             </div>
           </div>
         </div>
       </section>
       {/* level up modal */}
-      {levelUp && lvl ? (
+      {levelUp && (lvl || display == 'demo')? (
         <ModalLevelUp
           playerLevel={levelUp}
           setLevelUp={setLevelUp}
@@ -626,7 +669,7 @@ export default function dailies() {
       )}
 
       {/* // Modal Section */}
-      {showWinModal && win ? (
+      {showWinModal && (win || display == 'demo') ? (
         <>
           <WinModal
             page={'dailies'}
@@ -634,7 +677,7 @@ export default function dailies() {
             setShowWinModal={setShowWinModal}
             playerStats={playerStats}
             refreshStats={refreshStats}
-
+            display={display}
           />
         </>
       ) : null}
