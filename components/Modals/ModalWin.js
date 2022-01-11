@@ -64,23 +64,25 @@ export default function WinModal({
   }
 
   async function deleteWin(){
-    console.log(activeModalStats.id)
-    try {
-      const { data, error } = await supabase
-        .from('success_plan')
-        .delete()
-        .match({'id': activeModalStats.id});
-
-      if (error && status !== 406) {
-        throw error;
+    if (display != 'demo'){
+      try {
+        const { data, error } = await supabase
+          .from('success_plan')
+          .delete()
+          .match({'id': activeModalStats.id});
+  
+        if (error && status !== 406) {
+          throw error;
+        }
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        // refresh the win table if in the player page, and the dailies page too... basically refresh anything that is loading leaderboard?
+        refreshStats();
+        closeModal();
       }
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      // refresh the win table if in the player page, and the dailies page too... basically refresh anything that is loading leaderboard?
-      refreshStats();
-      closeModal();
     }
+    closeModal();
   }
 
   return (
