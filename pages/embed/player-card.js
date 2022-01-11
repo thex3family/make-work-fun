@@ -56,7 +56,7 @@ export default function playerDetails() {
     exp_progress: 75,
     level_exp: 200,
     total_gold: 25,
-    player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
+    player: '0',
     name: 'Make My Bed',
     type: 'Daily Quest',
     exp_reward: 25,

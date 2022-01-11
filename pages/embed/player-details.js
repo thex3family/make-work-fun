@@ -40,7 +40,7 @@ export default function playerDetails() {
     exp_progress: 75,
     level_exp: 200,
     total_gold: 25,
-    player: '17ae471a-3096-4c57-af41-1cf67e52dd67',
+    player: '0',
     name: 'Make My Bed',
     type: 'Daily Quest',
     exp_reward: 25,
@@ -131,7 +131,7 @@ export default function playerDetails() {
     gif_url: null,
     gold_reward: 25,
     health_reward: null,
-    id: 13015,
+    id: 0,
     impact: '10x 🔺',
     name: 'My First Win',
     notion_id: '',
@@ -158,7 +158,7 @@ export default function playerDetails() {
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    if (auth) (lookupPlayerFromAuth(auth, setPlayer));
+    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer));
   }, [auth]);
 
   // win modal stuff
@@ -168,8 +168,8 @@ export default function playerDetails() {
   const [activeModalStats, setActiveModalStats] = useState(null);
 
   useEffect(() => {
-    if (player && display !== 'demo') refreshStats();
-    if (player && display !== 'demo')
+    if (player) refreshStats();
+    if (player)
       fetchLatestWin(
         setActiveModalStats,
         refreshStats,
