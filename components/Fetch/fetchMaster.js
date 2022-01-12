@@ -816,23 +816,27 @@ export async function fetchAuthenticationLink(utility, setAuthenticationLink, se
 }
 
 
-export async function lookupPlayerFromAuth(auth, setPlayer) {
-  try {
-    const { data, error } = await supabase
-      .from('authentication_links')
-      .select('*')
-      .eq('id', auth)
-      .single()
-
-    if(data){
-      setPlayer(data.user);
+export async function lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials) {
+ 
+    try {
+      const { data, error } = await supabase
+        .from('authentication_links')
+        .select('*')
+        .eq('id', auth)
+        .single()
+  
+      if(data){
+        setPlayer(data.user);
+      } else {
+        setInvalidCredentials(true)
+      }
+  
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message)
+    } finally {
     }
-
-    if (error && status !== 406) {
-      throw error;
-    }
-  } catch (error) {
-    // alert(error.message)
-  } finally {
-  }
+  
 }

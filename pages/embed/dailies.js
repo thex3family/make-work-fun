@@ -62,9 +62,10 @@ export default function dailies() {
   // check on the player using the auth key
 
   const [player, setPlayer] = useState(null);
+  const [invalidCredentials, setInvalidCredentials] = useState(null);
 
   useEffect(() => {
-    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer));
+    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
   }, [auth]);
 
   const [userOnboarding, setUserOnboarding] = useState(null);
@@ -293,7 +294,7 @@ export default function dailies() {
       },
       {
         "id": 16,
-        "habit": "Intercom + Emails",
+        "habit": "Emails",
         "description": null,
         "streak_duration": null,
         "streak_start": null,
@@ -429,29 +430,29 @@ export default function dailies() {
       }
     ]
 
-    const demoModalStats = {
-      area: 'Make Work Fun',
-      closing_date: '2021-10-08',
-      database_nickname: null,
-      difficulty: 1,
-      do_date: '2021-10-07',
-      entered_on: '2021-10-07T16:19:54.619076Z',
-      exp_reward: 25,
-      gif_url: null,
-      gold_reward: 25,
-      health_reward: null,
-      id: 0,
-      impact: '10x 🔺',
-      name: 'My First Win',
-      notion_id: '',
-      party_id: null,
-      player: '',
-      punctuality: +1,
-      trend: 'up',
-      type: 'Task',
-      upstream: 'Starting My Adventure',
-      upstream_id: ''
-    };
+  const demoModalStats = {
+    area: 'Make Work Fun',
+    closing_date: '2021-10-08',
+    database_nickname: null,
+    difficulty: 1,
+    do_date: '2021-10-07',
+    entered_on: '2021-10-07T16:19:54.619076Z',
+    exp_reward: 25,
+    gif_url: null,
+    gold_reward: 25,
+    health_reward: null,
+    id: 0,
+    impact: '10x 🔺',
+    name: 'My First Win',
+    notion_id: '',
+    party_id: null,
+    player: '',
+    punctuality: +1,
+    trend: 'up',
+    type: 'Task',
+    upstream: 'Starting My Adventure',
+    upstream_id: ''
+  };
 
 
   useEffect(() => {
@@ -463,11 +464,15 @@ export default function dailies() {
     }
   }, [display]);
 
-
   if (!playerStats) {
     return (
       <>
         <DailiesSkeleton />
+        {
+          invalidCredentials ?
+            <ModalOnboarding onboardingState={'invalid_auth'} />
+            : null
+        }
         {
           newToSeason ?
             <ModalOnboarding onboardingState={5} />
@@ -659,7 +664,7 @@ export default function dailies() {
         </div>
       </section>
       {/* level up modal */}
-      {levelUp && (lvl || display == 'demo')? (
+      {levelUp && (lvl || display == 'demo') ? (
         <ModalLevelUp
           playerLevel={levelUp}
           setLevelUp={setLevelUp}

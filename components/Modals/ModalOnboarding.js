@@ -9,8 +9,7 @@ export default function ModalOnboarding({ onboardingState }) {
   const [description, setDescription] = useState(null);
   const [mediaLink, setMediaLink] = useState(null);
   const [mediaType, setMediaType] = useState(null);
-  const [handInSteps, setHandInSteps] = useState(null);
-  const [newSeason, setNewSeason] = useState(null);
+  const [steps, setSteps] = useState(null);
   const [customLink, setCustomLink] = useState(null);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function ModalOnboarding({ onboardingState }) {
     } else if (onboardingState == 3) {
       setHeader('⚔ Your Database Is Connected!');
       setDescription("It's time to hand in your first quest!");
-      setHandInSteps(true);
+      setSteps('hand-in')
       setMediaLink(
         'https://www.loom.com/embed/e5eaaa19fcf64297b2859ed7c64171ad'
       );
@@ -39,43 +38,53 @@ export default function ModalOnboarding({ onboardingState }) {
     } else if (onboardingState == 5) {
       setHeader("⚔ It's A Brand New Season!");
       setDescription("It's a new season for learning and growth.");
-      setNewSeason(true);
-      setMediaLink('img/new_season_motivation.png');
+      setSteps('new-season')
+      setMediaLink('/img/new_season_motivation.png');
       setMediaType('img');
-      setCustomLink('Join The Adventure')
+      setCustomLink('new-season')
+    }
+    else if (onboardingState == 'invalid_auth') {
+      setHeader("⚠️ Your Authentication Link Is Invalid");
+      setDescription("This may be because...");
+      setSteps('invalid-auth')
+      setMediaLink(
+        'https://www.loom.com/embed/e5eaaa19fcf64297b2859ed7c64171ad'
+      );
+      setMediaType('iframe');
+      setCustomLink('invalid-auth')
     }
   }
 
-  async function startSeason(){
-      try {
-        const user = supabase.auth.user();
-  
-        let testDateStr = new Date();
-        // console.log('testDateStr: ' + testDateStr);
-  
-        const { data, error } = await supabase.from('success_plan').insert([
-          {
-            player: user.id,
-            difficulty: 1,
-            do_date: testDateStr,
-            closing_date: testDateStr,
-            trend: 'check',
-            type: 'Bonus',
-            punctuality: 0,
-            exp_reward: 25,
-            gold_reward: 25,
-            name: 'My First Win This Season'
-          }
-        ]);
-        if (error && status !== 406) {
-          throw error;
+  async function startSeason() {
+    try {
+      const user = supabase.auth.user();
+
+      let testDateStr = new Date();
+      // console.log('testDateStr: ' + testDateStr);
+
+      const { data, error } = await supabase.from('success_plan').insert([
+        {
+          player: user.id,
+          difficulty: 1,
+          do_date: testDateStr,
+          closing_date: testDateStr,
+          trend: 'check',
+          type: 'Bonus',
+          punctuality: 0,
+          exp_reward: 25,
+          gold_reward: 25,
+          name: 'My First Win This Season'
         }
-      } catch (error) {
-        alert(error.message);
-      } finally {
-        Router.reload(window.location.pathname)
+      ]);
+      if (error && status !== 406) {
+        throw error;
       }
-    
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      Router.reload(window.location.pathname)
+    }
+
   }
 
   return (
@@ -100,7 +109,7 @@ export default function ModalOnboarding({ onboardingState }) {
                   <p className="text-xl text-primary-2 font-semibold">
                     {description}
                   </p>
-                  {handInSteps ? (
+                  {steps == 'hand-in' ? (
                     <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
                       <li>
                         1. Make sure the required properties have been set
@@ -114,7 +123,7 @@ export default function ModalOnboarding({ onboardingState }) {
                       </li>
                     </ol>
                   ) : null}
-                  {newSeason ? (
+                  {steps == 'new-season' ? (
                     <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
                       <li>
                         1. Your wins and titles are safe and secure with us
@@ -122,10 +131,24 @@ export default function ModalOnboarding({ onboardingState }) {
                       <li>2. Seasonal leaderboard rankings have been reset</li>
                       <li>
                         3. Climb your way to the top this season! <span className="font-semibold">
-                        You can do it!
+                          You can do it!
                         </span>
                       </li>
                     </ol>
+                  ) : null}
+                  {steps == 'invalid-auth' ? (
+                    <>
+                    <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
+                      <li>
+                        1. Your embed has been updated to a new version
+                      </li>
+                      <li>2. You have refreshed your secret embed link</li>
+                    </ol>
+                    
+                  <p className="text-lg text-primary-2 mt-5 font-semibold">
+                    Get a new link by following the instructions below!
+                  </p>
+                  </>
                   ) : null}
                 </div>
               </div>
@@ -150,13 +173,19 @@ export default function ModalOnboarding({ onboardingState }) {
               {/*footer*/}
               <div className="flex items-center p-6 border-t border-solid border-blueGray-200 rounded-b">
                 <div className="text-center mx-auto">
-                  {customLink ? <Button
-                      variant="prominent"
-                      className="text-md font-semibold text-emerald-600"
-                      onClick={()=>startSeason()}
-                    >
-                      {customLink}
-                    </Button> : <Link href="/account">
+                  {customLink == 'new-season' ? <Button
+                    variant="prominent"
+                    className="text-md font-semibold text-emerald-600"
+                    onClick={() => startSeason()}
+                  >
+                    Join The Adventure
+                  </Button> : customLink == 'invalid-auth' ? <a href="/embed" target="_blank"><Button
+                    variant="prominent"
+                    className="text-md font-semibold text-emerald-600"
+                  >
+                    Generate New Secret Embed Link
+                  </Button></a> :
+                   <Link href="/account">
                     <Button
                       variant="prominent"
                       className="text-md font-semibold text-emerald-600"
