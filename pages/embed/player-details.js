@@ -5,6 +5,7 @@ import { supabase } from '@/utils/supabase-client';
 import { useRouter } from 'next/router';
 import CardAreaStats from '@/components/Cards/CardAreaStats';
 import CardLineChart from 'components/Cards/CardLineChart.js';
+import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 
 import {
   fetchPlayerStats,
@@ -28,6 +29,8 @@ export default function playerDetails() {
   const [areaStats, setAreaStats] = useState(null);
   const [weekWins, setWeekWins] = useState(null);
   const [background_url, setBackgroundUrl] = useState('/');
+
+  const [newToSeason, setNewToSeason] = useState(null);
 
   const [avatar_url, setAvatarUrl] = useState(null);
 
@@ -156,9 +159,10 @@ export default function playerDetails() {
   // check on the player using the auth key
 
   const [player, setPlayer] = useState(null);
+  const [invalidCredentials, setInvalidCredentials] = useState(null);
 
   useEffect(() => {
-    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer));
+    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
   }, [auth]);
 
   // win modal stuff
@@ -193,7 +197,7 @@ export default function playerDetails() {
 
   async function refreshStats() {
     console.log('statsRefreshing');
-    setPlayerStats(await fetchPlayerStats(player));
+    setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
     setAreaStats(await fetchAreaStats(player));
     setWeekWins(await fetchWeekWins(player));
     setLoading(false);
@@ -251,11 +255,21 @@ export default function playerDetails() {
   }
 
   if (loading) {
-    return (
+    return <>
       <div className="h-screen flex justify-center">
         <LoadingDots />
       </div>
-    );
+      {
+        invalidCredentials ?
+          <ModalOnboarding onboardingState={'invalid_auth'} />
+          : null
+      }
+      {
+        newToSeason ?
+          <ModalOnboarding onboardingState={5} />
+          : null
+      }
+    </>
   }
 
   return (
