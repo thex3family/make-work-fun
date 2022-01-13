@@ -34,6 +34,10 @@ export default function playerDetails() {
 
   const [avatar_url, setAvatarUrl] = useState(null);
 
+  useEffect(() => {
+    console.log('avatar_url', avatar_url)
+  }, [avatar_url]);
+
   const demoPlayerStats = {
     player_rank: 17,
     next_rank: 0,
@@ -200,7 +204,6 @@ export default function playerDetails() {
       setPlayerStats(demoPlayerStats);
       setAreaStats(demoAreaStats);
       setWeekWins(demoWeekWins);
-      downloadImage(demoPlayerStats.avatar_url);
       setActiveModalStats(demoModalStats);
       setLoading(false);
     }
@@ -219,7 +222,11 @@ export default function playerDetails() {
       if (!playerStats.avatar_url) {
         setAvatarStatus('Missing');
       } else {
-        setAvatarUrl(playerStats.avatar_url);
+        if (playerStats.avatar_url.includes('blob:')){
+          setAvatarUrl(playerStats.avatar_url);
+        } else {
+          downloadImage(playerStats.avatar_url)
+        }
       }
       fetchPlayerBackground(playerStats.background_url);
     }
@@ -344,7 +351,7 @@ export default function playerDetails() {
                               showHide ? setShowHide(false) : setShowHide(true);
                             }}
                           />
-                        ) : (
+                        ) : avatar_url ? (
                           <img
                             className="avatar image h-auto m-auto cursor-pointer"
                             src={avatar_url}
@@ -353,7 +360,7 @@ export default function playerDetails() {
                               showHide ? setShowHide(false) : setShowHide(true);
                             }}
                           />
-                        )}
+                        ) : <LoadingDots/>}
                       </div>
                     </div>
                     <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
