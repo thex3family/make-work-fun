@@ -35,6 +35,17 @@ export default function playerDetails() {
 
   const [newToSeason, setNewToSeason] = useState(null);
   
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    // codes using router.query
+    const { auth } = router.query;
+    if (!auth) {
+      setInvalidCredentials(true);
+    }
+
+  }, [router.isReady]);
+  
   const { auth } = router.query;
   const { style } = router.query;
   const { id } = router.query;
@@ -163,7 +174,7 @@ export default function playerDetails() {
   //   }
   // }
 
-  if (!playerStats) {
+  if (!playerStats || loading) {
     return <>
       <div className="h-screen flex justify-center">
         <LoadingDots />

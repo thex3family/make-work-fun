@@ -51,6 +51,17 @@ export default function dailies() {
   const router = useRouter();
 
   // grab details from URL
+  
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    // codes using router.query
+    const { auth } = router.query;
+    if (!auth) {
+      setInvalidCredentials(true);
+    }
+
+  }, [router.isReady]);
 
   const { auth } = router.query;
   const { style } = router.query;

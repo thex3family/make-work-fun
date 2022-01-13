@@ -147,6 +147,17 @@ export default function playerDetails() {
     upstream_id: ''
   };
 
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    // codes using router.query
+    const { auth } = router.query;
+    if (!auth) {
+      setInvalidCredentials(true);
+    }
+
+  }, [router.isReady]);
+
   const { auth } = router.query;
   const { style } = router.query;
   const { win } = router.query;
@@ -254,7 +265,7 @@ export default function playerDetails() {
     }
   }
 
-  if (!playerStats) {
+  if (!playerStats || loading) {
     return <>
       <div className="h-screen flex justify-center">
         <LoadingDots />
@@ -290,7 +301,7 @@ export default function playerDetails() {
               <Button
                 className="w-full sm:w-auto"
                 variant="incognito"
-                onClick={()=>setShowWinModal(true)}
+                onClick={() => setShowWinModal(true)}
               >
                 Demo: New Win
               </Button>
@@ -298,7 +309,7 @@ export default function playerDetails() {
               <Button
                 className=" w-full sm:w-auto"
                 variant="incognito"
-                onClick={()=>setLevelUp(2)}
+                onClick={() => setLevelUp(2)}
               >
                 Demo: Level Up!
               </Button>
@@ -312,9 +323,8 @@ export default function playerDetails() {
                   <div className="flex flex-wrap md:flex-nowrap items-center gap-5 opacity-90">
                     <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 2xl:w-1/3 h-full text-center relative">
                       <div
-                        className={`${
-                          showHide ? 'hidden' : ''
-                        } animate-fade-in`}
+                        className={`${showHide ? 'hidden' : ''
+                          } animate-fade-in`}
                         onClick={() => {
                           showHide ? setShowHide(false) : setShowHide(true);
                         }}
@@ -322,9 +332,8 @@ export default function playerDetails() {
                         <CardAreaStats areaStats={areaStats} />
                       </div>
                       <div
-                        className={`${
-                          showHide ? '' : 'hidden'
-                        } animate-fade-in`}
+                        className={`${showHide ? '' : 'hidden'
+                          } animate-fade-in`}
                       >
                         {avatarStatus == 'Missing' ? (
                           <img
@@ -361,7 +370,7 @@ export default function playerDetails() {
                             statEXPPercent={Math.floor(
                               (playerStats.exp_progress /
                                 playerStats.level_exp) *
-                                100
+                              100
                             )}
                             statGold={playerStats.total_gold}
                             statArrow="up"
