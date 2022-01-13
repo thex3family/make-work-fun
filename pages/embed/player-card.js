@@ -40,7 +40,7 @@ export default function playerDetails() {
 
     // codes using router.query
     const { auth } = router.query;
-    if (!auth) {
+    if (!auth && !id) {
       setInvalidCredentials(true);
     }
 
@@ -132,6 +132,7 @@ export default function playerDetails() {
     console.log('statsRefreshing');
     if (player) setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
     if (id) setSpecificPlayers(await fetchSpecificPlayers(id, setFriends));
+    if (id) setPlayerStats("Placeholder");
     setLoading(false);
   }
 
