@@ -22,6 +22,7 @@ import PartiesSkeleton from '@/components/Skeletons/PartiesSkeleton';
 import DataTable, { createTheme } from 'react-data-table-component';
 import RecentWinsSkeleton from '@/components/Skeletons/RecentWinsSkeleton';
 import moment from 'moment';
+import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 
 createTheme('game', {
   text: {
@@ -80,6 +81,8 @@ export default function parties() {
   const [activeTab, setActiveTab] = useState(1);
 
   const [allParties, setAllParties] = useState(null);
+  
+  const [newToSeason, setNewToSeason] = useState(null);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -116,7 +119,7 @@ export default function parties() {
   }
 
   async function refreshStats() {
-    setPlayerStats(await fetchPlayerStats());
+    setPlayerStats(await fetchPlayerStats(null, setNewToSeason));
     setLoading(false);
     setAllParties(await fetchAllParties());
   }
@@ -379,8 +382,18 @@ export default function parties() {
     }
   };
 
-  if (!playerStats) {
-    return <PartiesSkeleton />;
+  if (!playerStats || loading) {
+    return (
+      <>
+        <PartiesSkeleton />
+          
+      {
+        newToSeason ?
+          <ModalOnboarding onboardingState={5} />
+          : null
+      }
+      </>
+    );
   }
 
   return (
