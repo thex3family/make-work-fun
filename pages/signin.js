@@ -290,12 +290,12 @@ const SignIn = ({ user }) => {
 
   if (!user)
     return (
-      <div className='animate-slow-fade-in grid grid-cols-5'>
+      <div className='animate-slow-fade-in grid grid-cols-5 height-screen-helper'>
         {signLoading ?
           <div className="flex justify-center col-span-5 lg:col-span-2">
             <LoadingDots />
           </div> : signType == 'signin' ?
-            <div className="flex justify-center height-screen-helper col-span-5 lg:col-span-2">
+            <div className="flex justify-center h-full col-span-5 lg:col-span-2">
               <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
                 <Link href="/" ><i className="fas fa-chevron-circle-left cursor-pointer text-xl w-4" /></Link>
                 <div className="flex justify-center pb-12 ">
