@@ -486,7 +486,7 @@ export default function dailies() {
         }
         {
           newToSeason ?
-            <ModalOnboarding onboardingState={5} />
+            <ModalOnboarding onboardingState={'new_season_embed'} />
             : null
         }
       </>

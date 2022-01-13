@@ -277,7 +277,7 @@ export default function playerDetails() {
       }
       {
         newToSeason ?
-          <ModalOnboarding onboardingState={5} />
+          <ModalOnboarding onboardingState={'new_season_embed'} />
           : null
       }
     </>
