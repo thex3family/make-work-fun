@@ -20,9 +20,9 @@ import {
 function Feature({ name, status }) {
   return (
     <div
-      className={`inline-flex items-center justify-center px-2 py-2 leading-none border-2 rounded ${status
-        ? 'text-emerald-700 bg-emerald-100 border-emerald-500'
-        : 'text-red-700 bg-red-100 border-red-500'
+      className={`cursor-not-allowed inline-flex items-center justify-center px-2 py-2 leading-none border-2 rounded ${status
+        ? 'text-gray-700 bg-gray-100 border-gray-500'
+        : 'text-gray-700 bg-gray-100 border-gray-500'
         }`}
     >
       <i
@@ -82,7 +82,7 @@ export default function embed() {
     }
     if (embedComponent == 2) {
       if (!friends) {
-        if (cardAuthLink){
+        if (cardAuthLink) {
           var embed_link_temp = `${t.substr(
             0,
             t.lastIndexOf('/')
@@ -91,7 +91,7 @@ export default function embed() {
           var embed_link_temp = '/embed/player-card?display=demo';
         }
       } else {
-        if (friendshipLink){
+        if (friendshipLink) {
           var embed_link_temp = `${t.substr(
             0,
             t.lastIndexOf('/')
@@ -481,8 +481,7 @@ export default function embed() {
                 Generate Embeddable Components
               </h1>
               <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto mb-2">
-                Adjust your settings and generate a sharable link you can embed
-                in Notion and your website!
+                to interact with your avatar in your Notion pages and website!
               </p>
               <a href="https://academy.co-x3.com/en/articles/5882142-how-can-i-embed-the-make-work-fun-app-into-notion-or-my-websites" target="_blank" className="text-lg text-emerald-600 font-semibold">
                 Learn More
@@ -537,55 +536,57 @@ export default function embed() {
             </div>
             {embedComponent == 1 ? (
               <div className="my-6">
-                <div className="flex flex-row mb-6 text-xl font-semibold gap-3">
-                  <button
-                    onClick={() => setDark(dark ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
-                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                      : 'text-red-700 bg-red-100 border-2 border-red-500'
-                      }`}
-                  >
-                    <i
-                      className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                <div className='px-4 pt-4 mb-4 rounded border-2 border-gray-500'>
+                  <div className="text-lg mb-4 font-semibold text-accents-4">
+                    Customization Options
+                  </div>
+                  <div className="flex flex-row flex-wrap mb-4 text-xl font-semibold gap-2">
+                    <button
+                      onClick={() => setDark(dark ? false : true)}
+                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
                         }`}
-                    />
-                    Dark Mode
-                  </button>
-                  <button
-                    onClick={() => setWin(win ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
-                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                      : 'text-red-700 bg-red-100 border-2 border-red-500'
-                      }`}
-                  >
-                    <i
-                      className={`mr-2 ${win ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                    >
+                      <i
+                        className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                          }`}
+                      />
+                      Dark Mode
+                    </button>
+                    <button
+                      onClick={() => setWin(win ? false : true)}
+                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
                         }`}
-                    />
-                    Win Notification
-                  </button>
-                  <button
-                    onClick={() => setLvl(lvl ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
-                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                      : 'text-red-700 bg-red-100 border-2 border-red-500'
-                      }`}
-                  >
-                    <i
-                      className={`mr-2 ${lvl ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                    >
+                      <i
+                        className={`mr-2 ${win ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                          }`}
+                      />
+                      Win Notification
+                    </button>
+                    <button
+                      onClick={() => setLvl(lvl ? false : true)}
+                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
                         }`}
-                    />
-                    Level Up Notification
-                  </button>
-                </div>
-                <div className="text-lg mb-2 font-semibold">
-                  Modifiable Soon...
-                </div>
-                <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
-                  <Feature name="Avatar" status={true} />
-                  <Feature name="Areas" status={true} />
-                  <Feature name="Player Card" status={true} />
-                  <Feature name="Week's Wins" status={true} />
+                    >
+                      <i
+                        className={`mr-2 ${lvl ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                          }`}
+                      />
+                      Level Up Notification
+                    </button>
+                  </div>
+                  <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
+                    <Feature name="Avatar" status={true} />
+                    <Feature name="Areas" status={true} />
+                    <Feature name="Player Card" status={true} />
+                    <Feature name="Week's Wins" status={true} />
+                  </div>
                 </div>
 
                 {!detailsAuthLink ?
@@ -599,34 +600,54 @@ export default function embed() {
                       {generating ? 'Generating...' : 'Generate Secret Embed Link'}
                     </Button>
                   </div> :
-                  <div className="mb-8">
-                    <div className="grid grid-cols-3 items-center gap-3">
-                      <div className="col-span-2">
+                  <div className="mb-6">
+                    <div className="grid grid-cols-8 items-center gap-3">
+                      <div className="col-span-4">
                         <Input
                           className="text-xl font-semibold rounded"
                           value={embed_link}
                         />
                       </div>
                       <Button
-                        className=""
+                        className="col-span-3"
                         variant="slim"
                         onClick={() => copyEmbedLink()}
+                        disabled={generating}
                       >
                         {copyText}
                       </Button>
-                    </div>
-                    {detailsAuthLink ? (
-                      <button
+                      <Button
+                        className="col-span-1"
+                        variant="delete"
                         onClick={() => deleteSecretLink('player-details')}
-                        className="text-red-500 mt-2 mr-5 font-semibold"
                         disabled={generating}
                       >
-                        {generating ? 'Deleting...' : 'Delete Generated Link'}
-                      </button>
-                    ) : null}
+                        <i className='fas fa-trash-alt text-white' />
+                      </Button>
+                    </div>
+                    {/* {detailsAuthLink ? (
+                      <>
+                        <div className='flex-row flex gap-1'><div className='text-accents-4 mt-2 font-semibold'>With power comes great responsibility! To invalidate this link,</div>
+                          <button
+                            onClick={() => deleteSecretLink('player-details')}
+                            className="text-red-500 mt-2 font-semibold"
+                            disabled={generating}
+                          >
+                            {generating ? 'deleting...' : 'click here.'}
+                          </button></div></>
+                    ) : null} */}
                   </div>}
-
-                <div className="mb-1 font-semibold text-accents-2">Preview</div>
+                <div className="flex items-center mt-6 mb-3">
+                  <div
+                    className="border-t border-accents-2 flex-grow mr-3"
+                    aria-hidden="true"
+                  ></div>
+                  <div className="text-accents-4">Preview</div>
+                  <div
+                    className="border-t border-accents-2 flex-grow ml-3"
+                    aria-hidden="true"
+                  ></div>
+                </div>
                 <iframe
                   id="player-details"
                   className="w-full"
@@ -636,87 +657,89 @@ export default function embed() {
               </div>
             ) : embedComponent == 2 ? (
               <div className="my-6">
-                <div className="flex flex-row mb-6 text-xl font-semibold gap-3">
-                  <button
-                    onClick={() => setDark(dark ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
-                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                      : 'text-red-700 bg-red-100 border-2 border-red-500'
-                      }`}
-                  >
-                    <i
-                      className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                <div className='px-4 pt-4 mb-4 rounded border-2 border-gray-500'>
+                  <div className="text-lg mb-4 font-semibold text-accents-4">
+                    Customization Options
+                  </div>
+                  <div className="flex flex-row flex-wrap mb-4 text-xl font-semibold gap-2">
+                    <button
+                      onClick={() => setDark(dark ? false : true)}
+                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
                         }`}
-                    />
-                    Dark Mode
-                  </button>
-                  <button
-                    onClick={() => setFriends(friends ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${friends
-                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                      : 'text-red-700 bg-red-100 border-2 border-red-500'
-                      }`}
-                  >
-                    <i
-                      className={`mr-2 ${friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
-                        }`}
-                    />
-                    Show Friends
-                  </button>
-                </div>
-
-                {friends ? (
-                  <>
-                    <div className="mb-6 items-center w-full">
-                      <Input
-                        className="text-xl font-semibold rounded"
-                        id="search"
-                        type="text"
-                        placeholder="Add someone from the family as a friend!"
-                        value={filterText || ''}
-                        onChange={setFilterText}
+                    >
+                      <i
+                        className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                          }`}
                       />
-                    </div>
-                    <div className="flex flex-wrap mt-4 mb-8">
-                      <div className="w-full">
-                        {/* <CardTable color="dark" data={wins} /> */}
-                        <DataTable
-                          className=""
-                          title="Friendships"
-                          noHeader
-                          columns={columns}
-                          data={filteredItems}
-                          // subHeader
-                          // subHeaderComponent={subHeaderComponentMemo}
-                          // highlightOnHover={true}
-                          // pointerOnHover={true}
-                          fixedHeader={true}
-                          customStyles={customStyles}
-                          pagination={true}
-                          paginationPerPage={3}
-                          paginationRowsPerPageOptions={[3, 5, 10]}
-                          theme="game"
-                        />
-                        {/* <TailwindTable wins={wins} /> */}
-                      </div>
-                    </div>
-                  </>
-                ) : null}
-                <div className="text-lg mb-2 font-semibold">
-                  Modifiable Soon...
-                </div>
-                <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
-                  <Feature name="Player Card" status={true} />
-                  <Feature name="Today's Earnings" status={true} />
-                  <Feature name="Latest Win" status={true} />
-                  <Feature name="Recent Win Announcement" status={true} />
-                  <Feature name="Show Guild Members" status={false} />
-                </div>
+                      Dark Mode
+                    </button>
+                    <button
+                      onClick={() => setFriends(friends ? false : true)}
+                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${friends
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                        }`}
+                    >
+                      <i
+                        className={`mr-2 ${friends ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                          }`}
+                      />
+                      Show Friends
+                    </button>
+                  </div>
 
+                  {friends ? (
+                    <>
+                      <div className="mb-6 items-center w-full">
+                        <Input
+                          className="text-xl font-semibold rounded"
+                          id="search"
+                          type="text"
+                          placeholder="Add someone from the family as a friend!"
+                          value={filterText || ''}
+                          onChange={setFilterText}
+                        />
+                      </div>
+                      <div className="flex flex-wrap mt-4 mb-8">
+                        <div className="w-full">
+                          {/* <CardTable color="dark" data={wins} /> */}
+                          <DataTable
+                            className=""
+                            title="Friendships"
+                            noHeader
+                            columns={columns}
+                            data={filteredItems}
+                            // subHeader
+                            // subHeaderComponent={subHeaderComponentMemo}
+                            // highlightOnHover={true}
+                            // pointerOnHover={true}
+                            fixedHeader={true}
+                            customStyles={customStyles}
+                            pagination={true}
+                            paginationPerPage={3}
+                            paginationRowsPerPageOptions={[3, 5, 10]}
+                            theme="game"
+                          />
+                          {/* <TailwindTable wins={wins} /> */}
+                        </div>
+                      </div>
+                    </>
+                  ) : null}
+                  <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
+                    <Feature name="Player Card" status={true} />
+                    <Feature name="Today's Earnings" status={true} />
+                    <Feature name="Latest Win" status={true} />
+                    <Feature name="Recent Win Announcement" status={true} />
+                    <Feature name="Show Guild Members" status={false} />
+                  </div>
+
+                </div>
                 {friends ?
                   (!friendshipLink ? (
                     // if friends but no link
-                    <div className="mb-6 items-center w-full">
+                    <div className="items-center w-full">
                       <Button
                         className="w-full"
                         variant="slim"
@@ -728,35 +751,44 @@ export default function embed() {
                     </div>
                   ) :
                     // if friends and have friendship link
-                    <div className="mb-8">
-                      <div className="grid grid-cols-3 items-center gap-3">
-                        <div className="col-span-2">
+                    <div className="">
+                      <div className="grid grid-cols-8 items-center gap-3">
+                        <div className="col-span-4">
                           <Input
                             className="text-xl font-semibold rounded"
                             value={embed_link}
                           />
                         </div>
                         <Button
-                          className=""
+                          className="col-span-3"
                           variant="slim"
                           onClick={() => copyEmbedLink()}
+                          disabled={generating}
                         >
                           {copyText}
                         </Button>
+                        <Button
+                          className="col-span-1"
+                          variant="delete"
+                          onClick={() => deleteFriendshipLink(friendships)}
+                          disabled={generating}
+                        >
+                          <i className='fas fa-trash-alt text-white' />
+                        </Button>
                       </div>
-
-                      <button
-                        onClick={() => deleteFriendshipLink(friendships)}
-                        className="text-red-500 mt-2 mr-5 font-semibold"
-                        disabled={generating}
-                      >
-                        {generating ? 'Deleting...' : 'Delete Generated Link'}
-                      </button>
+                      {/* 
+                        <button
+                          onClick={() => deleteFriendshipLink(friendships)}
+                          className="text-red-500 mt-2 mr-5 font-semibold"
+                          disabled={generating}
+                        >
+                          {generating ? 'Deleting...' : 'Delete Generated Link'}
+                        </button> */}
                     </div>
                   ) : (
                     // if not friends
                     !cardAuthLink ?
-                      <div className="mb-6 items-center w-full">
+                      <div className="items-center w-full">
                         <Button
                           className="w-full"
                           variant="slim"
@@ -767,23 +799,32 @@ export default function embed() {
                         </Button>
                       </div>
                       :
-                      <div className="mb-8">
-                        <div className="grid grid-cols-3 items-center gap-3">
-                          <div className="col-span-2">
+                      <div className="">
+                        <div className="grid grid-cols-8 items-center gap-3">
+                          <div className="col-span-4">
                             <Input
                               className="text-xl font-semibold rounded"
                               value={embed_link}
                             />
                           </div>
                           <Button
-                            className=""
+                            className="col-span-3"
                             variant="slim"
                             onClick={() => copyEmbedLink()}
+                            disabled={generating}
                           >
                             {copyText}
                           </Button>
+                          <Button
+                            className="col-span-1"
+                            variant="delete"
+                            onClick={() => deleteSecretLink('player-card')}
+                            disabled={generating}
+                          >
+                            <i className='fas fa-trash-alt text-white' />
+                          </Button>
                         </div>
-                        {cardAuthLink ? (
+                        {/* {cardAuthLink ? (
                           <button
                             onClick={() => deleteSecretLink('player-card')}
                             className="text-red-500 mt-2 mr-5 font-semibold"
@@ -791,15 +832,21 @@ export default function embed() {
                           >
                             {generating ? 'Deleting...' : 'Delete Generated Link'}
                           </button>
-                        ) : null}
+                        ) : null} */}
                       </div>
                   )}
-
-
                 {friends && !friendshipLink ? null : (
                   <div className="overflow-x-auto">
-                    <div className="mb-1 font-semibold text-accents-2">
-                      Preview
+                    <div className="flex items-center mt-6 mb-3">
+                      <div
+                        className="border-t border-accents-2 flex-grow mr-3"
+                        aria-hidden="true"
+                      ></div>
+                      <div className="text-accents-4">Preview</div>
+                      <div
+                        className="border-t border-accents-2 flex-grow ml-3"
+                        aria-hidden="true"
+                      ></div>
                     </div>
                     <iframe
                       id="player-card"
@@ -815,48 +862,53 @@ export default function embed() {
             ) :
               // dailies component
               <div className="my-6">
-                <div className="flex flex-row mb-6 text-xl font-semibold gap-3">
-                  <button
-                    onClick={() => setDark(dark ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
-                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                      : 'text-red-700 bg-red-100 border-2 border-red-500'
-                      }`}
-                  >
-                    <i
-                      className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                <div className='px-4 pt-4 mb-4 rounded border-2 border-gray-500'>
+                  <div className="text-lg mb-4 font-semibold text-accents-4">
+                    Customization Options
+                  </div>
+                  <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
+                    <button
+                      onClick={() => setDark(dark ? false : true)}
+                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
                         }`}
-                    />
-                    Dark Mode
-                  </button>
-                  <button
-                    onClick={() => setWin(win ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
-                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                      : 'text-red-700 bg-red-100 border-2 border-red-500'
-                      }`}
-                  >
-                    <i
-                      className={`mr-2 ${win ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                    >
+                      <i
+                        className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                          }`}
+                      />
+                      Dark Mode
+                    </button>
+                    <button
+                      onClick={() => setWin(win ? false : true)}
+                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
                         }`}
-                    />
-                    Win Notification
-                  </button>
-                  <button
-                    onClick={() => setLvl(lvl ? false : true)}
-                    className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
-                      ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                      : 'text-red-700 bg-red-100 border-2 border-red-500'
-                      }`}
-                  >
-                    <i
-                      className={`mr-2 ${lvl ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                    >
+                      <i
+                        className={`mr-2 ${win ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                          }`}
+                      />
+                      Win Notification
+                    </button>
+                    <button
+                      onClick={() => setLvl(lvl ? false : true)}
+                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
+                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                        : 'text-red-700 bg-red-100 border-2 border-red-500'
                         }`}
-                    />
-                    Level Up Notification
-                  </button>
-                </div>
+                    >
+                      <i
+                        className={`mr-2 ${lvl ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                          }`}
+                      />
+                      Level Up Notification
+                    </button>
+                  </div>
 
+                </div>
                 {!dailiesAuthLink ?
                   <div className="mb-6 items-center w-full">
                     <Button
@@ -869,22 +921,32 @@ export default function embed() {
                     </Button>
                   </div> :
                   <div className="mb-8">
-                    <div className="grid grid-cols-3 items-center gap-3">
-                      <div className="col-span-2">
+                    <div className="grid grid-cols-8 items-center gap-3">
+                      <div className="col-span-4">
                         <Input
                           className="text-xl font-semibold rounded"
                           value={embed_link}
                         />
                       </div>
                       <Button
-                        className=""
-                        variant="slim"
-                        onClick={() => copyEmbedLink()}
-                      >
-                        {copyText}
-                      </Button>
+                            className="col-span-3"
+                            variant="slim"
+                            onClick={() => copyEmbedLink()}
+                            disabled={generating}
+                          >
+                            {copyText}
+                          </Button>
+                          <Button
+                            className="col-span-1"
+                            variant="delete"
+                            onClick={() => deleteSecretLink('dailies')}
+                            disabled={generating}
+                          >
+                            <i className='fas fa-trash-alt text-white' />
+                          </Button>
 
                     </div>
+{/* 
                     {dailiesAuthLink ? (
                       <button
                         onClick={() => deleteSecretLink('dailies')}
@@ -893,9 +955,20 @@ export default function embed() {
                       >
                         {generating ? 'Deleting...' : 'Delete Generated Link'}
                       </button>
-                    ) : null}
+                    ) : null} */}
                   </div>}
-                <div className="mb-1 font-semibold text-accents-2">Preview</div>
+
+                <div className="flex items-center mt-6 mb-3">
+                  <div
+                    className="border-t border-accents-2 flex-grow mr-3"
+                    aria-hidden="true"
+                  ></div>
+                  <div className="text-accents-4">Preview</div>
+                  <div
+                    className="border-t border-accents-2 flex-grow ml-3"
+                    aria-hidden="true"
+                  ></div>
+                </div>
                 <iframe
                   id="dailies"
                   className="w-full resize"

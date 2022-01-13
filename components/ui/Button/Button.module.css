@@ -23,6 +23,11 @@
   @apply bg-emerald-500 border-emerald-700 text-white;
 }
 
+.delete {
+  @apply py-2 transform-none normal-case;
+  @apply bg-red-500 border-red-700 text-white;
+}
+
 .prominent {
   @apply py-2 transform-none normal-case;
   @apply bg-gradient-to-r from-emerald-500 to-blue-500 border-emerald-500 text-white;
