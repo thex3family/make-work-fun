@@ -4,7 +4,7 @@ import Button from '../ui/Button';
 import Router from 'next/router';
 import { supabase } from '@/utils/supabase-client';
 
-export default function ModalOnboarding({ onboardingState }) {
+export default function ModalOnboarding({ onboardingState, player }) {
   const [header, setHeader] = useState(null);
   const [description, setDescription] = useState(null);
   const [mediaLink, setMediaLink] = useState(null);
@@ -37,11 +37,16 @@ export default function ModalOnboarding({ onboardingState }) {
       setMediaType('iframe');
     } else if (onboardingState == 5) {
       setHeader("⚔ It's A Brand New Season!");
-      setDescription("It's a new season for learning and growth.");
+      setDescription("It's a new season for growth.");
       setSteps('new-season')
       setMediaLink('/img/new_season_motivation.png');
       setMediaType('img');
       setCustomLink('new-season')
+    } else if (onboardingState == 'new_season_embed') {
+      setHeader("⚔ It's A Brand New Season!");
+      setDescription("It's a new season for growth.");
+      setSteps('new-season')
+      setCustomLink('new-season-embed')
     }
     else if (onboardingState == 'invalid_auth') {
       setHeader("⚠️ Your Authentication Link Is Invalid");
@@ -57,10 +62,10 @@ export default function ModalOnboarding({ onboardingState }) {
 
   async function startSeason() {
     try {
+      // only for signed in users
       const user = supabase.auth.user();
 
       let testDateStr = new Date();
-      // console.log('testDateStr: ' + testDateStr);
 
       const { data, error } = await supabase.from('success_plan').insert([
         {
@@ -130,25 +135,25 @@ export default function ModalOnboarding({ onboardingState }) {
                       </li>
                       <li>2. Seasonal leaderboard rankings have been reset</li>
                       <li>
-                        3. Climb your way to the top this season! <span className="font-semibold">
-                          You can do it!
+                        3. Climb your way to the top - <span className="font-semibold">
+                          you got this!
                         </span>
                       </li>
                     </ol>
                   ) : null}
                   {steps == 'invalid-auth' ? (
                     <>
-                    <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
-                      <li>
-                        1. Your embed has been updated to a new version
-                      </li>
-                      <li>2. You have refreshed your secret embed link</li>
-                    </ol>
-                    
-                  <p className="text-lg text-primary-2 mt-5 font-semibold">
-                    Get a new link by following the instructions below!
-                  </p>
-                  </>
+                      <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
+                        <li>
+                          1. Your embed has been updated to a new version
+                        </li>
+                        <li>2. You have refreshed your secret embed link</li>
+                      </ol>
+
+                      <p className="text-lg text-primary-2 mt-5 font-semibold">
+                        Get a new link by following the instructions below!
+                      </p>
+                    </>
                   ) : null}
                 </div>
               </div>
@@ -179,20 +184,26 @@ export default function ModalOnboarding({ onboardingState }) {
                     onClick={() => startSeason()}
                   >
                     Join The Adventure
-                  </Button> : customLink == 'invalid-auth' ? <a href="/embed" target="_blank"><Button
-                    variant="prominent"
-                    className="text-md font-semibold text-emerald-600"
-                  >
-                    Generate New Secret Embed Link
-                  </Button></a> :
-                   <Link href="/account">
-                    <Button
+                  </Button> : customLink == 'new-season-embed' ?
+                    <a href="/player" target="_blank"><Button
                       variant="prominent"
                       className="text-md font-semibold text-emerald-600"
                     >
-                      Go To Account
-                    </Button>
-                  </Link>}
+                      Go To Player Page
+                    </Button></a> : customLink == 'invalid-auth' ? <a href="/embed" target="_blank"><Button
+                      variant="prominent"
+                      className="text-md font-semibold text-emerald-600"
+                    >
+                      Generate New Secret Embed Link
+                    </Button></a> :
+                      <Link href="/account">
+                        <Button
+                          variant="prominent"
+                          className="text-md font-semibold text-emerald-600"
+                        >
+                          Go To Account
+                        </Button>
+                      </Link>}
 
                 </div>
               </div>
