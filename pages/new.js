@@ -19,7 +19,7 @@ export default function updates() {
           <CardLUpdate
             date="Jan 13, 2022"
             title="Level Up Anytime, Anywhere"
-            desc="You have a new embed component to help you hand in dailies directly from Notion. We've also created new customization options together with destructable secret keys to give you full control over your embeds!"
+            desc="You have a new embed component to help you hand in dailies directly from Notion. We've also created new customization options together with destructible secret keys to give you full control over your embeds!"
             img_url="updates/0.30.png"
             button_url="/embed"
             version="v.30"
