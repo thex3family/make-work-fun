@@ -145,9 +145,9 @@ export default function ModalOnboarding({ onboardingState, player }) {
                     <>
                       <ol className="text-sm text-black text-left sm:text-lg max-w-2xl m-auto px-0 sm:px-8 pt-6">
                         <li>
-                          1. Your embed has been updated to a new version
+                          1. Your embed has been updated to a <a href="/new" className='text-emerald-600 font-semibold' target="_blank">new version</a>
                         </li>
-                        <li>2. You have refreshed your secret embed link</li>
+                        <li>2. You have created a new secret embed link</li>
                       </ol>
 
                       <p className="text-lg text-primary-2 mt-5 font-semibold">
