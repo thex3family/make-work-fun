@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, createRef } from 'react';
+import { createPopper } from '@popperjs/core';
+
 import { supabase } from '../utils/supabase-client';
 
 import Button from '@/components/ui/Button';
@@ -279,6 +281,22 @@ const SignIn = ({ user }) => {
     setWeekWins(demoWeekWins);
   }, []);
 
+
+  // popover stuff
+
+
+  const [popoverShow, setPopoverShow] = React.useState(false);
+  const btnRef = React.createRef();
+  const popoverRef = React.createRef();
+  const openTooltip = () => {
+    createPopper(btnRef.current, popoverRef.current, {
+      placement: 'top'
+    });
+    setPopoverShow(true);
+  };
+  const closeTooltip = () => {
+    setPopoverShow(false);
+  };
 
   if (loading) {
     return (
@@ -560,14 +578,33 @@ const SignIn = ({ user }) => {
                           >
 
                             <img
-                              className="avatar image h-auto m-auto cursor-pointer"
+                              className="avatar image h-auto m-auto cursor-pointer animate-wiggle"
                               src="/img/default_avatar.png"
                               alt="Avatar"
                               onClick={() => {
                                 showHide ? setShowHide(false) : setShowHide(true);
                               }}
+
+                              onMouseEnter={openTooltip}
+                              onMouseLeave={closeTooltip}
+                              ref={btnRef}
                             />
 
+                          </div>
+                          <div
+                            className={
+                              (popoverShow ? '' : 'hidden ') +
+                              'caption-bubble bg-blueGray-900 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg'
+                            }
+                            ref={popoverRef}
+                          >
+                            <div className='p-2'>
+                              <p className="text-lg bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 font-bold">We're here to help your growth journey.</p>
+                              <p className="text-lg text-white ">✅ Track your life progress in real time<br/>
+                              ✅ Join party quests to level up together<br/>
+                              ✅ Turn daily chores into daily quests<br/>
+                              </p>
+                            </div>
                           </div>
                         </div>
                         <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
