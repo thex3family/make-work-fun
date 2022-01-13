@@ -30,9 +30,10 @@ const SignIn = ({ user }) => {
   const [password, setPassword] = useState('');
   const [authView, setAuthView] = useState('magic');
   const [loading, setLoading] = useState(true);
+  const [signLoading, setSignLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
   const router = useRouter();
-  const { signIn, passwordReset, userOnboarding, session } = useUser();
+  const { signIn, passwordReset, userOnboarding, session, signUp } = useUser();
 
   // This is a dirty way to make sure the cookie stays active if the session is...
   useEffect
@@ -52,27 +53,27 @@ const SignIn = ({ user }) => {
   const handleSignin = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    setSignLoading(true);
     setMessage({});
 
     const { error } = await signIn({ email, password });
     if (error) {
       setMessage({ type: 'error', content: error.message });
-      setLoading(false)
+      setSignLoading(false)
     }
     if (!password) {
       setMessage({
         type: 'note',
         content: 'Check your email for the magic link.'
       });
-      setLoading(false);
+      setSignLoading(false);
     }
   };
 
   const handlePasswordReset = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    setSignLoading(true);
     setMessage({});
 
     const { error } = await passwordReset(email);
@@ -86,16 +87,16 @@ const SignIn = ({ user }) => {
           'If your account exists, you will receive an email with reset instructions.'
       });
     }
-    setLoading(false);
+    setSignLoading(false);
   };
 
   const handleOAuthSignIn = async (provider) => {
-    setLoading(true);
+    setSignLoading(true);
     const { error } = await signIn({ provider });
     if (error) {
       setMessage({ type: 'error', content: error.message });
     }
-    setLoading(false);
+    setSignLoading(false);
   };
 
   useEffect(() => {
@@ -124,6 +125,28 @@ const SignIn = ({ user }) => {
       console.log('InitializedPlayer');
     }
   }
+
+  // signup logic
+  const [signType, setSignType] = useState('signin');
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    setSignLoading(true);
+    setMessage({});
+    const { error, user } = await signUp({ email, password });
+    if (error) {
+      setMessage({ type: 'error', content: error.message });
+    }
+    if (user) {
+      setMessage({
+        type: 'note',
+        content: "Check your email for a confirmation link from 'mail.app.supabase.io.'"
+      });
+    }
+    setSignLoading(false);
+  };
+
 
   // demo deets
 
@@ -267,165 +290,167 @@ const SignIn = ({ user }) => {
 
   if (!user)
     return (
-      <div className='grid grid-cols-5'>
-        <div className="flex justify-center height-screen-helper col-span-5 lg:col-span-2">
-          <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
-          <Link href="/" ><i className="fas fa-chevron-circle-left cursor-pointer text-xl w-4"/></Link>
-            <div className="flex justify-center pb-12 ">
-              <Link href="/" ><img src="logo-white.svg" width="64px" height="64px" className="cursor-pointer"/></Link>
-            </div>
-            <div className="flex flex-col space-y-4">
-              {message.content && (
-                <div
-                  className={`${message.type === 'error' ? 'text-error' : 'text-green'
-                    } border ${message.type === 'error' ? 'border-error' : 'border-green'
-                    } p-3`}
-                >
-                  {message.content}
+      <div className='animate-slow-fade-in grid grid-cols-5'>
+        {signLoading ?
+          <div className="flex justify-center col-span-5 lg:col-span-2">
+            <LoadingDots />
+          </div> : signType == 'signin' ?
+            <div className="flex justify-center height-screen-helper col-span-5 lg:col-span-2">
+              <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
+                <Link href="/" ><i className="fas fa-chevron-circle-left cursor-pointer text-xl w-4" /></Link>
+                <div className="flex justify-center pb-12 ">
+                  <Link href="/" ><img src="logo-white.svg" width="64px" height="64px" className="cursor-pointer" /></Link>
                 </div>
-              )}
-
-              {authView === 'magic' && (
-                <form
-                  onSubmit={handleSignin}
-                  className="animate-fade-in-up flex flex-col space-y-4 mb-2"
-                >
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={setEmail}
-                    required
-                  />
-                  <Button
-                    variant="prominent"
-                    type="submit"
-                    loading={loading}
-                    disabled={!email.length}
-                  >
-                    Send magic link
-                  </Button>
-                </form>
-              )}
-
-              {authView === 'password' && (
-                <form
-                  onSubmit={handleSignin}
-                  className="animate-fade-in-up flex flex-col space-y-4"
-                >
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={setEmail}
-                    required
-                  />
-                  <Input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={setPassword}
-                    required
-                  />
-                  <Button
-                    className="mt-1"
-                    variant="prominent"
-                    type="submit"
-                    loading={loading}
-                    disabled={!password.length || !email.length}
-                  >
-                    Sign in
-                  </Button>
-                </form>
-              )}
-
-              {authView === 'reset' && (
-                <form
-                  onSubmit={handlePasswordReset}
-                  className="animate-fade-in-up flex flex-col space-y-4 mb-2"
-                >
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={setEmail}
-                    required
-                  />
-                  <Button
-                    variant="prominent"
-                    type="submit"
-                    loading={loading}
-                    disabled={!email.length}
-                  >
-                    Reset Password
-                  </Button>
-                </form>
-              )}
-
-              {authView === 'password' ? (
-                <div className="pt-2 text-center text-sm">
-                  <span className="text-accents-7">Forgot your password?</span>
-                  {` `}
-                  <a
-                    href="#"
-                    className="text-accents-7 text-accent-9 font-bold hover:underline cursor-pointer"
-                    onClick={() => {
-                      if (authView == 'password') setPassword('');
-                      setAuthView('reset');
-                      setMessage({});
-                    }}
-                  >
-                    Reset.
-                  </a>
-                  <div className="flex items-center my-6">
+                <div className="flex flex-col space-y-4">
+                  {message.content && (
                     <div
-                      className="border-t border-accents-2 flex-grow mr-3"
-                      aria-hidden="true"
-                    ></div>
-                    <div className="text-accents-4">Or</div>
-                    <div
-                      className="border-t border-accents-2 flex-grow ml-3"
-                      aria-hidden="true"
-                    ></div>
-                  </div>
+                      className={`${message.type === 'error' ? 'text-error' : 'text-green'
+                        } border ${message.type === 'error' ? 'border-error' : 'border-green'
+                        } p-3`}
+                    >
+                      {message.content}
+                    </div>
+                  )}
+
+                  {authView === 'magic' && (
+                    <form
+                      onSubmit={handleSignin}
+                      className="animate-fade-in-up flex flex-col space-y-4 mb-2"
+                    >
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={setEmail}
+                        required
+                      />
+                      <Button
+                        variant="prominent"
+                        type="submit"
+                        loading={loading}
+                        disabled={!email.length}
+                      >
+                        Send magic link
+                      </Button>
+                    </form>
+                  )}
+
+                  {authView === 'password' && (
+                    <form
+                      onSubmit={handleSignin}
+                      className="animate-fade-in-up flex flex-col space-y-4"
+                    >
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={setEmail}
+                        required
+                      />
+                      <Input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={setPassword}
+                        required
+                      />
+                      <Button
+                        className="mt-1"
+                        variant="prominent"
+                        type="submit"
+                        loading={loading}
+                        disabled={!password.length || !email.length}
+                      >
+                        Sign in
+                      </Button>
+                    </form>
+                  )}
+
+                  {authView === 'reset' && (
+                    <form
+                      onSubmit={handlePasswordReset}
+                      className="animate-fade-in-up flex flex-col space-y-4 mb-2"
+                    >
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={setEmail}
+                        required
+                      />
+                      <Button
+                        variant="prominent"
+                        type="submit"
+                        loading={loading}
+                        disabled={!email.length}
+                      >
+                        Reset Password
+                      </Button>
+                    </form>
+                  )}
+
+                  {authView === 'password' ? (
+                    <div className="pt-2 text-center text-sm">
+                      <span className="text-accents-7">Forgot your password?</span>
+                      {` `}
+                      <a
+                        href="#"
+                        className="text-accents-7 text-accent-9 font-bold hover:underline cursor-pointer"
+                        onClick={() => {
+                          if (authView == 'password') setPassword('');
+                          setAuthView('reset');
+                          setMessage({});
+                        }}
+                      >
+                        Reset.
+                      </a>
+                      <div className="flex items-center my-6">
+                        <div
+                          className="border-t border-accents-2 flex-grow mr-3"
+                          aria-hidden="true"
+                        ></div>
+                        <div className="text-accents-4">Or</div>
+                        <div
+                          className="border-t border-accents-2 flex-grow ml-3"
+                          aria-hidden="true"
+                        ></div>
+                      </div>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+
+                  <span className="text-center text-sm">
+                    <a
+                      href="#"
+                      className="text-accents-7 text-accent-9 hover:underline cursor-pointer"
+                      onClick={() => {
+                        if (authView) {
+                          setPassword('');
+                          setMessage({});
+                          if (authView === 'magic') {
+                            setAuthView('password');
+                          } else {
+                            setAuthView('magic');
+                          }
+                        }
+                      }}
+                    >
+                      {`Sign in with ${authView === 'magic' ? 'password' : 'magic link'
+                        }.`}
+                    </a>
+                  </span>
+
+                  <span className="pt-1 text-center text-sm">
+                    <span className="text-accents-7">Don't have an account?</span>
+                    {` `}
+                    <a className="text-accent-9 font-bold hover:underline cursor-pointer" onClick={() => setSignType('signup')}>
+                      Sign up.
+                    </a>
+                  </span>
                 </div>
-              ) : (
-                ''
-              )}
 
-              <span className="text-center text-sm">
-                <a
-                  href="#"
-                  className="text-accents-7 text-accent-9 hover:underline cursor-pointer"
-                  onClick={() => {
-                    if (authView) {
-                      setPassword('');
-                      setMessage({});
-                      if (authView === 'magic') {
-                        setAuthView('password');
-                      } else {
-                        setAuthView('magic');
-                      }
-                    }
-                  }}
-                >
-                  {`Sign in with ${authView === 'magic' ? 'password' : 'magic link'
-                    }.`}
-                </a>
-              </span>
-
-              <span className="pt-1 text-center text-sm">
-                <span className="text-accents-7">Don't have an account?</span>
-                {` `}
-                <Link href="/signup">
-                  <a className="text-accent-9 font-bold hover:underline cursor-pointer">
-                    Sign up.
-                  </a>
-                </Link>
-              </span>
-            </div>
-
-            {/* <div className="flex items-center my-6">
+                {/* <div className="flex items-center my-6">
             <div
               className="border-t border-accents-2 flex-grow mr-3"
               aria-hidden="true"
@@ -437,7 +462,7 @@ const SignIn = ({ user }) => {
             ></div>
           </div> */}
 
-            {/* <Button
+                {/* <Button
             variant="slim"
             type="submit"
             disabled={loading}
@@ -446,13 +471,66 @@ const SignIn = ({ user }) => {
             <GitHub />
             <span className="ml-2">Continue with GitHub</span>
           </Button> */}
-          </div>
-        </div>
+              </div>
+            </div>
+            :
+            <div className="flex justify-center height-screen-helper col-span-5 lg:col-span-2">
+              <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
+                <i className="fas fa-chevron-circle-left cursor-pointer text-xl w-4" onClick={() => setSignType('signin')} />
+                <div className="flex justify-center pb-12 ">
+                  <Link href="/" ><img src="logo-white.svg" width="64px" height="64px" className="cursor-pointer" /></Link>
+                </div>
+                <form
+                  onSubmit={handleSignup}
+                  className="animate-fade-in-up flex flex-col space-y-4"
+                >
+                  {message.content && (
+                    <div
+                      className={`${message.type === 'error' ? 'text-pink' : 'text-green'
+                        } border ${message.type === 'error' ? 'border-pink' : 'border-green'
+                        } p-3`}
+                    >
+                      {message.content}
+                    </div>
+                  )}
+                  {/* <Input placeholder="Name" onChange={setName} /> */}
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    onChange={setEmail}
+                    required
+                  />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    onChange={setPassword}
+                  />
+                  <div className="pt-2 w-full flex flex-col">
+                    <Button
+                      variant="prominent"
+                      type="submit"
+                      loading={loading}
+                      disabled={loading || !email.length || !password.length}
+                    >
+                      Sign up
+                    </Button>
+                  </div>
+
+                  <span className="pt-1 text-center text-sm">
+                    <span className="text-accents-7">Do you have an account?</span>
+                    {` `}
+                    <a className="text-accent-9 font-bold hover:underline cursor-pointer" onClick={() => setSignType('signin')}>
+                      Sign in.
+                    </a>
+                  </span>
+                </form>
+              </div>
+            </div>}
 
         <div className="hidden lg:flex justify-center height-screen-helper col-span-3 ">
 
           <section
-            className="animate-slow-fade-in bg-fixed bg-cover bg-center w-full responsiveBackground"
+            className="bg-fixed bg-cover bg-center w-full responsiveBackground"
             style={{ backgroundImage: `url(${background_url})` }}
           >
             <div
