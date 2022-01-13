@@ -34,10 +34,6 @@ export default function playerDetails() {
 
   const [avatar_url, setAvatarUrl] = useState(null);
 
-  useEffect(() => {
-    console.log('avatar_url', avatar_url)
-  }, [avatar_url]);
-
   const demoPlayerStats = {
     player_rank: 17,
     next_rank: 0,
@@ -387,6 +383,7 @@ export default function playerDetails() {
                             statIconName="fas fa-cogs"
                             statIconColor="bg-transparent-500"
                             statPlayer={player}
+                            displayMode={display}
                           />
                         </div>
                         <div className="2xl:w-1/2 w-full 2xl:pt-0">

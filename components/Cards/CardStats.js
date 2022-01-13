@@ -22,7 +22,8 @@ export default function CardStats({
   statIconName,
   statIconColor,
   setShowTitleModal,
-  statPlayer
+  statPlayer,
+  displayMode
 }) {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
@@ -73,7 +74,7 @@ export default function CardStats({
                 &nbsp;/ {statMaxLevel}
               </span>
             </div>
-
+            {displayMode !== 'demo' ?
             <div className="relative w-auto pl-4 flex-initial">
               <button
                 ref={btnDropdownRef}
@@ -114,7 +115,7 @@ export default function CardStats({
                   </a>
                 </Link>
               </div>
-            </div>
+            </div> : null }
           </div>
           <div className="font-semibold text-sm text-right -mt-3">
             {statEXP} / {statLevelEXP - statEXPProgress + statEXP} XP

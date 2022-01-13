@@ -103,7 +103,7 @@ function setupIntercom(mobileDevice) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
       </Head>
-      {!router.asPath.includes('embed/') ? <Navbar /> : null}
+      {!router.asPath.includes('embed/') && !router.asPath.includes('signin') ? <Navbar /> : null}
       <main id="skip">{children}</main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
