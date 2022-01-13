@@ -52,10 +52,10 @@ export default function ModalOnboarding({ onboardingState, player }) {
       setHeader("⚠️ Your Authentication Link Is Invalid");
       setDescription("This may be because...");
       setSteps('invalid-auth')
-      setMediaLink(
-        'https://www.loom.com/embed/e5eaaa19fcf64297b2859ed7c64171ad'
-      );
-      setMediaType('iframe');
+      // setMediaLink(
+      //   'https://www.loom.com/embed/e5eaaa19fcf64297b2859ed7c64171ad'
+      // );
+      // setMediaType('iframe');
       setCustomLink('invalid-auth')
     }
   }

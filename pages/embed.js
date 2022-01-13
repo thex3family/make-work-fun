@@ -476,14 +476,17 @@ export default function embed() {
       <section className="animate-slow-fade-in bg-fixed bg-cover bg-center">
         <div className="max-w-6xl mx-auto pt-8 md:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:flex-col sm:align-center">
-            <div className="mb-6">
+            <div className="mb-6 text-center">
               <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                 Generate Embeddable Components
               </h1>
-              <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
+              <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto mb-2">
                 Adjust your settings and generate a sharable link you can embed
                 in Notion and your website!
               </p>
+              <a href="https://academy.co-x3.com/en/articles/5882142-how-can-i-embed-the-make-work-fun-app-into-notion-or-my-websites" target="_blank" className="text-lg text-emerald-600 font-semibold">
+                Learn More
+              </a>
             </div>
             <div className="relative w-auto pl-4 flex-initial mb-4">
               <button
