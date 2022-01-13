@@ -254,7 +254,7 @@ export default function playerDetails() {
     }
   }
 
-  if (loading) {
+  if (!playerStats) {
     return <>
       <div className="h-screen flex justify-center">
         <LoadingDots />

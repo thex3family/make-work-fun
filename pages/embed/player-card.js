@@ -20,6 +20,7 @@ import {
 import { triggerWinModal, triggerCardWin } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
+import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 
 export default function playerDetails() {
   const router = useRouter();
@@ -32,6 +33,8 @@ export default function playerDetails() {
   const [weekWins, setWeekWins] = useState([]);
   const [background_url, setBackgroundUrl] = useState('/');
 
+  const [newToSeason, setNewToSeason] = useState(null);
+  
   const { auth } = router.query;
   const { style } = router.query;
   const { id } = router.query;
@@ -41,10 +44,12 @@ export default function playerDetails() {
   // check on the player using the auth key
 
   const [player, setPlayer] = useState(null);
+  const [invalidCredentials, setInvalidCredentials] = useState(null);
 
   useEffect(() => {
-    if (auth) (lookupPlayerFromAuth(auth, setPlayer));
+    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
   }, [auth]);
+
 
 
   const demoPlayerStats = {
@@ -114,7 +119,7 @@ export default function playerDetails() {
 
   async function refreshStats() {
     console.log('statsRefreshing');
-    if (player) setPlayerStats(await fetchPlayerStats(player));
+    if (player) setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
     if (id) setSpecificPlayers(await fetchSpecificPlayers(id, setFriends));
     setLoading(false);
   }
@@ -158,12 +163,22 @@ export default function playerDetails() {
   //   }
   // }
 
-  if (loading) {
-    return (
+  if (!playerStats) {
+    return <>
       <div className="h-screen flex justify-center">
         <LoadingDots />
       </div>
-    );
+      {
+        invalidCredentials ?
+          <ModalOnboarding onboardingState={'invalid_auth'} />
+          : null
+      }
+      {
+        newToSeason ?
+          <ModalOnboarding onboardingState={5} />
+          : null
+      }
+    </>
   }
 
   return (
