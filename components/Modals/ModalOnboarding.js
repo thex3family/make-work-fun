@@ -11,6 +11,7 @@ export default function ModalOnboarding({ onboardingState, player }) {
   const [mediaType, setMediaType] = useState(null);
   const [steps, setSteps] = useState(null);
   const [customLink, setCustomLink] = useState(null);
+  const [customLinkLoading, setCustomLinkLoading] = useState(null);
 
   useEffect(() => {
     if (onboardingState) initializeDetails();
@@ -62,6 +63,8 @@ export default function ModalOnboarding({ onboardingState, player }) {
 
   async function startSeason() {
     try {
+      setCustomLinkLoading(true);
+
       // only for signed in users
       const user = supabase.auth.user();
 
@@ -182,6 +185,7 @@ export default function ModalOnboarding({ onboardingState, player }) {
                     variant="prominent"
                     className="text-md font-semibold text-emerald-600"
                     onClick={() => startSeason()}
+                    disabled={customLinkLoading}
                   >
                     Join The Adventure
                   </Button> : customLink == 'new-season-embed' ?
