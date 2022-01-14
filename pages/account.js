@@ -20,7 +20,7 @@ import { truncateString } from '@/utils/truncateString';
 
 function Card({ title, description, footer, children }) {
   return (
-    <div className="border border-accents-1	max-w-3xl w-full p rounded-md m-auto my-8">
+    <div className="border border-accents-1	max-w-3xl w-full p rounded-md m-auto my-8 bg-black">
       <div className="px-5 py-4">
         <h3 className="text-2xl mb-1 font-medium ">{title}</h3>
         <p className="text-accents-5">{description}</p>
@@ -49,6 +49,7 @@ export default function Account({
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+  const [activeTab, setActiveTab] = useState(1);
 
   useEffect(() => {
     if (user && session) getProfile();
@@ -173,7 +174,7 @@ export default function Account({
 
   return (
     <>
-      <section className="animate-fade-in-up bg-black mb-32">
+      <section className="animate-fade-in-up bg-black">
         <div className="max-w-6xl mx-auto pt-8 md:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:flex-col sm:align-center">
             <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
@@ -184,547 +185,525 @@ export default function Account({
             </p>
           </div>
         </div>
-        <div className="p-4">
-          {/* <Card
-          title="Your Plan"
-          description={
-            subscriptionName &&
-            `You are currently on the ${subscriptionName} plan.`
-          }
-          footer={
-            <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-              <p className="pb-4 sm:pb-0">
-                Manage your subscription.
-              </p>
-              <Button className="w-full sm:w-auto"
-                variant="slim"
-                loading={loading}
-                disabled={loading || !subscription}
-                onClick={redirectToCustomerPortal}
-              >
-                Open customer portal
-              </Button>
+        <div className="text-center bg-dark bg-opacity-40 px-4 sm:px-10 rounded-0 sm:rounded-b relative mt-7 pt-14">
+          <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 rounded-0 sm:rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
+            <div
+              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 1
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                : 'text-blueGray-500'
+                }`}
+              onClick={() => setActiveTab(1)}
+            >
+              Toolbox
             </div>
-          }
-        >
-          <div className="text-xl mt-8 mb-4 font-semibold">
-            {!userLoaded ? (
-              <div className="h-12 mb-6">
-                <LoadingDots />
-              </div>
-            ) : subscriptionPrice ? (
-              `${subscriptionPrice}/${subscription.prices.interval}`
-            ) : (
-              <Link href="/">
-                <a className="text-emerald-500">EARLY ACCESS - Thank you for being a very important member of our family.</a>
-              </Link>
-            )}
+            <div
+              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 2
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                : 'text-blueGray-500'
+                }`}
+              onClick={() => setActiveTab(2)}
+            >
+              Profile
+            </div>
           </div>
-        </Card>
-        
-        <Card
-          title="Your Email"
+        </div>
+        <div className='py-4 bg-dark bg-opacity-40'>
+        {activeTab == 1 ?
+          <Card
+            title="Your Personal Toolbox"
+            description="The resources you've unlocked to help you level up on your growth journey."
+            footer={
+              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
+                  Not seeing everything? Your resources are tied to your
+                  email. You are currently logged in as{' '}
+                  <b>{user ? user.email : <LoadingDots />}</b>
+                </p>
+                <a
+                  href="https://toolbox.co-x3.com/?utm_source=makeworkfun"
+                  target="_blank"
+                >
+                  <Button className="w-full sm:w-auto" variant="incognito">
+                    Visit Toolbox
+                  </Button>
+                </a>
+              </div>
+            }
           >
-            <p className="text-xl mt-8 mb-4 font-semibold">
-              {user ? user.email : undefined}
-            </p>
-        </Card> */}
-          <div className="form-widget">
-            <Card
-              title="Your Personal Toolbox"
-              description="The resources you've unlocked to help you level up on your growth journey."
-              footer={
-                <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                  <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
-                    Not seeing everything? Your resources are tied to your
-                    email. You are currently logged in as{' '}
-                    <b>{user ? user.email : <LoadingDots />}</b>
-                  </p>
+            <div className="mt-8 mb-4 font-semibold">
+              {!userLoaded ? (
+                <div className="h-12 mb-6">
+                  <LoadingDots />
+                </div>
+              ) : initialPurchaseRecord.length != 0 ? (
+                initialPurchaseRecord.map((purchase) => (
+                  <div className="pb-5 flex justify-between flex-col sm:flex-row sm:items-center">
+                    <p className="sm:pb-0 pb-3">
+                      <div className="flex flex-row items-center">
+                        {truncateString(
+                          JSON.stringify(purchase.fields.product_name)
+                            .replace('[', '')
+                            .replaceAll('"', '')
+                            .replace(']', ''),
+                          40
+                        )}
+                      </div>
+                      <p className="text-sm font-semibold inline-block rounded">
+                        <span className="text-accents-5">Version: </span>
+                        <span className="px-1.5 mr-0.5 bg-gray-300 border border-gray-800 rounded text-gray-800">
+                          Notion
+                        </span>
+                        {purchase.fields.subscription_type ? (
+                          <span className="px-1.5 bg-emerald-300 border border-emerald-800 rounded text-emerald-800">
+                            {purchase.fields.subscription_type}
+                          </span>
+                        ) : (
+                          <span className="px-1.5 bg-yellow-300 border border-yellow-800 rounded text-yellow-800">
+                            One-Off
+                          </span>
+                        )}
+                        {purchase.fields.update_page ? (
+                          <a
+                            href={purchase.fields.update_page}
+                            className="ml-2 text-emerald-500"
+                          >
+                            ✨ Get Latest Version! ✨
+                          </a>
+                        ) : null}
+                      </p>
+                      <p className="text-accents-5 text-sm">
+                        Unlocked On:
+                        <span className="ml-1 text-accents-3">
+                          {purchase.fields.purchase_date.split('T')[0]}
+                        </span>
+                      </p>
+                      {purchase.fields.streak ? (
+                        <p className="text-accents-5 text-sm">
+                          Streak:{' '}
+                          {Array.from(
+                            { length: purchase.fields.streak },
+                            (_, i) => (
+                              <span key={i}>⭐</span>
+                            )
+                          )}
+                        </p>
+                      ) : (
+                        ''
+                      )}
+                    </p>
+                    {
+                      <a href={purchase.fields.download_url} target="_blank">
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          Download
+                        </Button>
+                      </a>
+                    }
+                  </div>
+                ))
+              ) : (
+                <div>
                   <a
                     href="https://toolbox.co-x3.com/?utm_source=makeworkfun"
                     target="_blank"
+                    className="text-emerald-500"
                   >
-                    <Button className="w-full sm:w-auto" variant="incognito">
-                      Visit Our Toolbox
-                    </Button>
+                    You haven't unlocked any resources yet. Let's change that.
                   </a>
-                </div>
-              }
-            >
-              <div className="mt-8 mb-4 font-semibold">
-                {!userLoaded ? (
-                  <div className="h-12 mb-6">
-                    <LoadingDots />
+                  <div
+                    className="border-t border-accents-2 my-5 flex-grow mr-3"
+                    aria-hidden="true"
+                  ></div>
+                  <p className="mb-3">Start with...</p>
+                  <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <p className="sm:pb-0 pb-3">
+                      Gamify Your Life (FREE Notion Template)
+                      <p className="text-accents-5 text-sm">
+                        Task management, habit tracking, and more.
+                      </p>
+                    </p>
+                    {
+                      <a
+                        href="http://makeworkfun.club/personal/?utm_source=makeworkfun"
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          Get Template
+                        </Button>
+                      </a>
+                    }
                   </div>
-                ) : initialPurchaseRecord.length != 0 ? (
-                  initialPurchaseRecord.map((purchase) => (
-                    <div className="pb-5 flex justify-between flex-col sm:flex-row sm:items-center">
-                      <p className="sm:pb-0 pb-3">
-                        <div className="flex flex-row items-center">
-                          {truncateString(
-                            JSON.stringify(purchase.fields.product_name)
-                              .replace('[', '')
-                              .replaceAll('"', '')
-                              .replace(']', ''),
-                            40
-                          )}
-                        </div>
-                        <p className="text-sm font-semibold inline-block rounded">
-                          <span className="text-accents-5">Version: </span>
-                          <span className="px-1.5 mr-0.5 bg-gray-300 border border-gray-800 rounded text-gray-800">
-                            Notion
-                          </span>
-                          {purchase.fields.subscription_type ? (
-                            <span className="px-1.5 bg-emerald-300 border border-emerald-800 rounded text-emerald-800">
-                              {purchase.fields.subscription_type}
+                </div>
+              )}
+
+              <div
+                className="border-t border-accents-2 my-5 mb-8 flex-grow mr-3"
+                aria-hidden="true"
+              ></div>
+              {!userLoaded ? (
+                <div className="h-12 mb-6">
+                  <LoadingDots />
+                </div>
+              ) : (
+                <div>
+                  <p className="text-2xl">
+                    Level Up 10x Faster With Benefits For Our
+                    Patrons
+                  </p>
+                  <p className="text-accents-5 mb-3 font-normal">
+                    If you're having trouble seeing your active subscription, please{' '}
+                    <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
+                      let us know.
+                    </a>
+                  </p>
+                  {subscriptionPurchaseRecord[0] ? (
+                    <>
+                      <div className="py-3 px-5 my-5 flex justify-between flex-col sm:flex-row sm:items-center bg-emerald-500 bg-opacity-20 border-2 border-emerald-500 border-opacity-80 rounded">
+                        <p className="sm:pb-0 pb-3">
+                          <div className="flex flex-row items-center">
+                            <span>
+                              {subscriptionPurchaseRecord[0].fields
+                                .subscription_name}
                             </span>
-                          ) : (
-                            <span className="px-1.5 bg-yellow-300 border border-yellow-800 rounded text-yellow-800">
-                              One-Off
+                          </div>
+
+                          <p className="text-accents-5 text-sm">
+                            Status:
+                            <span className="ml-1.5 text-sm px-1 bg-emerald-300 border border-emerald-800 rounded text-emerald-800">
+                              Active
                             </span>
-                          )}
-                          {purchase.fields.update_page ? (
-                            <a
-                              href={purchase.fields.update_page}
-                              className="ml-2 text-emerald-500"
-                            >
-                              ✨ Get Latest Version! ✨
-                            </a>
-                          ) : null}
-                        </p>
-                        <p className="text-accents-5 text-sm">
-                          Unlocked On:
-                          <span className="ml-1 text-accents-3">
-                            {purchase.fields.purchase_date.split('T')[0]}
-                          </span>
-                        </p>
-                        {purchase.fields.streak ? (
+                          </p>
+                          <p className="text-accents-5 text-sm">
+                            Joined On:
+                            <span className="ml-1 text-accents-3">
+                              {
+                                subscriptionPurchaseRecord[0].fields.joined_on.split(
+                                  'T'
+                                )[0]
+                              }
+                            </span>
+                          </p>
                           <p className="text-accents-5 text-sm">
                             Streak:{' '}
                             {Array.from(
-                              { length: purchase.fields.streak },
+                              { length: subscriptionPurchaseRecord[0].fields.streak },
                               (_, i) => (
                                 <span key={i}>⭐</span>
                               )
                             )}
                           </p>
-                        ) : (
-                          ''
-                        )}
-                      </p>
-                      {
-                        <a href={purchase.fields.download_url} target="_blank">
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            Download
-                          </Button>
-                        </a>
-                      }
-                    </div>
-                  ))
-                ) : (
-                  <div>
-                    <a
-                      href="https://toolbox.co-x3.com/?utm_source=makeworkfun"
-                      target="_blank"
-                      className="text-emerald-500"
-                    >
-                      You haven't unlocked any resources yet. Let's change that.
-                    </a>
-                    <div
-                      className="border-t border-accents-2 my-5 flex-grow mr-3"
-                      aria-hidden="true"
-                    ></div>
-                    <p className="mb-3">Start with...</p>
-                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                      <p className="sm:pb-0 pb-3">
-                        Gamify Your Life (FREE Notion Template)
-                        <p className="text-accents-5 text-sm">
-                          Task management, habit tracking, and more.
+
                         </p>
+                        {
+                          <a className="launch_intercom">
+                            <Button
+                              className="w-full sm:w-auto text-sm"
+                              variant="incognito"
+                            >
+                              Manage Subscription
+                            </Button>
+                          </a>
+                        }
+                      </div>
+                    </>
+                  ) : (inactiveSubscriptionRecord[0] ?
+                    <>
+                      <div className="py-3 px-5 my-5 flex justify-between flex-col sm:flex-row sm:items-center bg-red-500 bg-opacity-20 border-2 border-red-500 border-opacity-80 rounded">
+                        <p className="sm:pb-0 pb-3">
+                          <div className="flex flex-row items-center">
+                            <span>
+                              {inactiveSubscriptionRecord[0].fields
+                                .subscription_name}
+                            </span>
+                          </div>
+
+                          <p className="text-accents-5 text-sm">
+                            Status:<span className="ml-1.5 text-sm px-1 bg-red-300 border border-red-800 rounded text-red-800">
+                              Inactive
+                            </span>
+                          </p>
+                          <p className="text-accents-5 text-sm">
+                            Ended On:
+                            <span className="ml-1 text-accents-3">
+                              {
+                                inactiveSubscriptionRecord[0].fields.expires_on.split(
+                                  'T'
+                                )[0]
+                              }
+                            </span>
+                          </p>
+                          <p className="text-accents-5 text-sm">
+                            Streak:{' '}
+                            {Array.from(
+                              { length: inactiveSubscriptionRecord[0].fields.streak },
+                              (_, i) => (
+                                <span key={i}>⭐</span>
+                              )
+                            )}
+                          </p>
+
+                        </p>
+                        {
+                          <a href="https://toolbox.co-x3.com/support-us?utm_content=resubscribe" target="_blank">
+                            <Button
+                              className="w-full sm:w-auto text-sm"
+                              variant="incognito"
+                            >
+                              Continue Support
+                            </Button>
+                          </a>
+                        }
+                      </div>
+                    </>
+                    : null
+                  )}
+                  <div className="pb-5 mt-8 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <p className="sm:pb-0 pb-3">
+                      <span
+                        className={
+                          subscriptionStatus == 1 ? 'text-emerald-500' : null
+                        }
+                      >
+                        Gamify Your Life
+                      </span>{' '}
+                      •{' '}
+                      <span
+                        className={
+                          subscriptionStatus == 2 ? 'text-emerald-500' : null
+                        }
+                      >
+                        L-CTRL System
+                      </span>{' '}
+                      •{' '}
+                      <span
+                        className={
+                          subscriptionStatus == 3 ? 'text-emerald-500' : null
+                        }
+                      >
+                        Entire Toolbox
+                      </span>
+                      <p className="text-accents-5 text-sm">
+                        Access to our most comprehensive, ready-made, fully
+                        customizable systems.
                       </p>
-                      {
-                        <a
-                          href="http://makeworkfun.club/personal/?utm_source=makeworkfun"
-                          target="_blank"
+                    </p>
+                    {subscriptionStatus ? (
+                      <a
+                        href={
+                          subscriptionPurchaseRecord[0].fields.download_url
+                        }
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
                         >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            Get Template
-                          </Button>
-                        </a>
-                      }
-                    </div>
-                  </div>
-                )}
-
-                <div
-                  className="border-t border-accents-2 my-5 mb-8 flex-grow mr-3"
-                  aria-hidden="true"
-                ></div>
-                {!userLoaded ? (
-                  <div className="h-12 mb-6">
-                    <LoadingDots />
-                  </div>
-                ) : (
-                  <div>
-                    <p className="text-2xl">
-                      Level Up 10x Faster With Unique Benefits For Our
-                      Patrons
-                    </p>
-                    <p className="text-accents-5 mb-3 font-normal">
-                      If you're having trouble seeing your active subscription, please{' '}
-                      <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
-                        reach out
-                      </a>{' '}
-                      to let us know.
-                    </p>
-                    {subscriptionPurchaseRecord[0] ? (
-                      <>
-                        <div className="py-3 px-5 my-5 flex justify-between flex-col sm:flex-row sm:items-center bg-emerald-500 bg-opacity-20 border-2 border-emerald-500 border-opacity-80 rounded">
-                          <p className="sm:pb-0 pb-3">
-                            <div className="flex flex-row items-center">
-                              <span>
-                                {subscriptionPurchaseRecord[0].fields
-                                  .subscription_name}
-                              </span>
-                            </div>
-
-                            <p className="text-accents-5 text-sm">
-                              Status:
-                              <span className="ml-1.5 text-sm px-1 bg-emerald-300 border border-emerald-800 rounded text-emerald-800">
-                                Active
-                              </span>
-                            </p>
-                            <p className="text-accents-5 text-sm">
-                              Joined On:
-                              <span className="ml-1 text-accents-3">
-                                {
-                                  subscriptionPurchaseRecord[0].fields.joined_on.split(
-                                    'T'
-                                  )[0]
-                                }
-                              </span>
-                            </p>
-                            <p className="text-accents-5 text-sm">
-                              Streak:{' '}
-                              {Array.from(
-                                { length: subscriptionPurchaseRecord[0].fields.streak },
-                                (_, i) => (
-                                  <span key={i}>⭐</span>
-                                )
-                              )}
-                            </p>
-
-                          </p>
-                          {
-                            <a className="launch_intercom">
-                              <Button
-                                className="w-full sm:w-auto text-sm"
-                                variant="incognito"
-                              >
-                                Manage Subscription
-                              </Button>
-                            </a>
-                          }
-                        </div>
-                      </>
-                    ) : (inactiveSubscriptionRecord[0] ?
-                      <>
-                        <div className="py-3 px-5 my-5 flex justify-between flex-col sm:flex-row sm:items-center bg-red-500 bg-opacity-20 border-2 border-red-500 border-opacity-80 rounded">
-                          <p className="sm:pb-0 pb-3">
-                            <div className="flex flex-row items-center">
-                              <span>
-                                {inactiveSubscriptionRecord[0].fields
-                                  .subscription_name}
-                              </span>
-                            </div>
-
-                            <p className="text-accents-5 text-sm">
-                              Status:<span className="ml-1.5 text-sm px-1 bg-red-300 border border-red-800 rounded text-red-800">
-                                Inactive
-                              </span>
-                            </p>
-                            <p className="text-accents-5 text-sm">
-                              Ended On:
-                              <span className="ml-1 text-accents-3">
-                                {
-                                  inactiveSubscriptionRecord[0].fields.expires_on.split(
-                                    'T'
-                                  )[0]
-                                }
-                              </span>
-                            </p>
-                            <p className="text-accents-5 text-sm">
-                              Streak:{' '}
-                              {Array.from(
-                                { length: inactiveSubscriptionRecord[0].fields.streak },
-                                (_, i) => (
-                                  <span key={i}>⭐</span>
-                                )
-                              )}
-                            </p>
-
-                          </p>
-                          {
-                            <a href="https://toolbox.co-x3.com/support-us?utm_content=resubscribe" target="_blank">
-                              <Button
-                                className="w-full sm:w-auto text-sm"
-                                variant="incognito"
-                              >
-                                Continue Support
-                              </Button>
-                            </a>
-                          }
-                        </div>
-                      </>
-                      : null
+                          Download
+                        </Button>
+                      </a>
+                    ) : (
+                      <a
+                        href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          🔓 Unlock
+                        </Button>
+                      </a>
                     )}
-                    <div className="pb-5 mt-8 flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                      <p className="sm:pb-0 pb-3">
-                        <span
-                          className={
-                            subscriptionStatus == 1 ? 'text-emerald-500' : null
-                          }
-                        >
-                          Gamify Your Life
-                        </span>{' '}
-                        •{' '}
-                        <span
-                          className={
-                            subscriptionStatus == 2 ? 'text-emerald-500' : null
-                          }
-                        >
-                          L-CTRL System
-                        </span>{' '}
-                        •{' '}
-                        <span
-                          className={
-                            subscriptionStatus == 3 ? 'text-emerald-500' : null
-                          }
-                        >
-                          Entire Toolbox
-                        </span>
-                        <p className="text-accents-5 text-sm">
-                          Access to our most comprehensive, ready-made, fully
-                          customizable systems.
-                        </p>
-                      </p>
-                      {subscriptionStatus ? (
-                        <a
-                          href={
-                            subscriptionPurchaseRecord[0].fields.download_url
-                          }
-                          target="_blank"
-                        >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            Download
-                          </Button>
-                        </a>
-                      ) : (
-                        <a
-                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
-                          target="_blank"
-                        >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            🔓 Unlock
-                          </Button>
-                        </a>
-                      )}
-                    </div>
-                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                      <p className="sm:pb-0 pb-3">
-                        Store Discount{' '}
-                        <span
-                          className={
-                            subscriptionStatus == 1 ? 'text-emerald-500' : null
-                          }
-                        >
-                          5%
-                        </span>{' '}
-                        •{' '}
-                        <span
-                          className={
-                            subscriptionStatus == 2 ? 'text-emerald-500' : null
-                          }
-                        >
-                          10%
-                        </span>{' '}
-                        •{' '}
-                        <span
-                          className={
-                            subscriptionStatus == 3 ? 'text-emerald-500' : null
-                          }
-                        >
-                          100%
-                        </span>
-                        <p className="text-accents-5 text-sm">
-                          Unlock all the resources you need at the right prices.
-                        </p>
-                      </p>
-                      {subscriptionStatus ? (
-                        <a href="https://toolbox.co-x3.com/" target="_blank">
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                            disabled={true}
-                          >
-                            Coming Soon
-                          </Button>
-                        </a>
-                      ) : (
-                        <a
-                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
-                          target="_blank"
-                        >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            🔓 Unlock
-                          </Button>
-                        </a>
-                      )}
-                    </div>
-                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                      <p className="sm:pb-0 pb-3">
-                        Weekly Office Hours
-                        <p className="text-accents-5 text-sm">
-                          Ask burning questions and build new tools together
-                          with the family.
-                        </p>
-                      </p>
-                      {subscriptionStatus ? (
-                        <a
-                          href="https://join.co-x3.com/events/friday-live-build"
-                          target="_blank"
-                        >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            Save Your Spot
-                          </Button>
-                        </a>
-                      ) : (
-                        <a
-                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
-                          target="_blank"
-                        >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            🔓 Unlock
-                          </Button>
-                        </a>
-                      )}
-                    </div>
-                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                      <p className="sm:pb-0 pb-3">
-                        VIP Patron Space
-                        <p className="text-accents-5 text-sm">
-                          Get access to behind the scenes content, exclusive
-                          templates, and more.
-                        </p>
-                      </p>
-                      {subscriptionStatus ? (
-                        <a
-                          href="https://academy.co-x3.com/en/articles/5122951-how-do-i-get-access-to-the-vip-patron-space"
-                          target="_blank"
-                        >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            Get Access
-                          </Button>
-                        </a>
-                      ) : (
-                        <a
-                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
-                          target="_blank"
-                        >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            🔓 Unlock
-                          </Button>
-                        </a>
-                      )}
-                    </div>
-                    <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                      <p className="sm:pb-0 pb-3">
-                        Expert Consulting Every{' '}
-                        <span
-                          className={
-                            subscriptionStatus == 1 ? 'text-emerald-500' : null
-                          }
-                        >
-                          Year
-                        </span>{' '}
-                        •{' '}
-                        <span
-                          className={
-                            subscriptionStatus == 2 ? 'text-emerald-500' : null
-                          }
-                        >
-                          Quarter
-                        </span>{' '}
-                        •{' '}
-                        <span
-                          className={
-                            subscriptionStatus == 3 ? 'text-emerald-500' : null
-                          }
-                        >
-                          Month
-                        </span>
-                        <p className="text-accents-5 text-sm">
-                          Deep, focused sessions to help you get ready for the
-                          next season.
-                        </p>
-                      </p>
-                      {subscriptionStatus ? (
-                        <a href={
-                          subscriptionPurchaseRecord[0].fields.consultation_url
-                        } target="_blank">
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            Book Now
-                          </Button>
-                        </a>
-                      ) : (
-                        <a
-                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
-                          target="_blank"
-                        >
-                          <Button
-                            className="w-full sm:w-auto text-sm"
-                            variant="incognito"
-                          >
-                            🔓 Unlock
-                          </Button>
-                        </a>
-                      )}
-                    </div>
                   </div>
-                )}
-              </div>
-            </Card>
-            <div className="mx-auto max-w-3xl pt-5">
+                  <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <p className="sm:pb-0 pb-3">
+                      Store Discount{' '}
+                      <span
+                        className={
+                          subscriptionStatus == 1 ? 'text-emerald-500' : null
+                        }
+                      >
+                        5%
+                      </span>{' '}
+                      •{' '}
+                      <span
+                        className={
+                          subscriptionStatus == 2 ? 'text-emerald-500' : null
+                        }
+                      >
+                        10%
+                      </span>{' '}
+                      •{' '}
+                      <span
+                        className={
+                          subscriptionStatus == 3 ? 'text-emerald-500' : null
+                        }
+                      >
+                        100%
+                      </span>
+                      <p className="text-accents-5 text-sm">
+                        Unlock all the resources you need at the right prices.
+                      </p>
+                    </p>
+                    {subscriptionStatus ? (
+                      <a href="https://toolbox.co-x3.com/" target="_blank">
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                          disabled={true}
+                        >
+                          Coming Soon
+                        </Button>
+                      </a>
+                    ) : (
+                      <a
+                        href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          🔓 Unlock
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                  <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <p className="sm:pb-0 pb-3">
+                      Weekly Office Hours
+                      <p className="text-accents-5 text-sm">
+                        Ask burning questions and build new tools together
+                        with the family.
+                      </p>
+                    </p>
+                    {subscriptionStatus ? (
+                      <a
+                        href="https://join.co-x3.com/events/friday-live-build"
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          Save Your Spot
+                        </Button>
+                      </a>
+                    ) : (
+                      <a
+                        href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          🔓 Unlock
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                  <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <p className="sm:pb-0 pb-3">
+                      VIP Patron Space
+                      <p className="text-accents-5 text-sm">
+                        Get access to behind the scenes content, exclusive
+                        templates, and more.
+                      </p>
+                    </p>
+                    {subscriptionStatus ? (
+                      <a
+                        href="https://academy.co-x3.com/en/articles/5122951-how-do-i-get-access-to-the-vip-patron-space"
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          Get Access
+                        </Button>
+                      </a>
+                    ) : (
+                      <a
+                        href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          🔓 Unlock
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                  <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <p className="sm:pb-0 pb-3">
+                      Expert Consulting Every{' '}
+                      <span
+                        className={
+                          subscriptionStatus == 1 ? 'text-emerald-500' : null
+                        }
+                      >
+                        Year
+                      </span>{' '}
+                      •{' '}
+                      <span
+                        className={
+                          subscriptionStatus == 2 ? 'text-emerald-500' : null
+                        }
+                      >
+                        Quarter
+                      </span>{' '}
+                      •{' '}
+                      <span
+                        className={
+                          subscriptionStatus == 3 ? 'text-emerald-500' : null
+                        }
+                      >
+                        Month
+                      </span>
+                      <p className="text-accents-5 text-sm">
+                        Deep, focused sessions to help you get ready for the
+                        next season.
+                      </p>
+                    </p>
+                    {subscriptionStatus ? (
+                      <a href={
+                        subscriptionPurchaseRecord[0].fields.consultation_url
+                      } target="_blank">
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          Book Now
+                        </Button>
+                      </a>
+                    ) : (
+                      <a
+                        href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                        target="_blank"
+                      >
+                        <Button
+                          className="w-full sm:w-auto text-sm"
+                          variant="incognito"
+                        >
+                          🔓 Unlock
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </Card>
+          : <div className="form-widget">
+            {/* <div className="mx-auto max-w-3xl pt-5">
               <h1 className="text-3xl text-center sm:text-left sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                 Let's adventure together.
               </h1>
@@ -732,7 +711,7 @@ export default function Account({
                 Make the best use of your productivity software by integrating
                 it into our app.
               </p>
-            </div>
+            </div> */}
             <Card
               title="Your Name"
               description="Please enter your first name, or a display name you are comfortable with."
@@ -777,14 +756,14 @@ export default function Account({
                     use your data and calculate your wins.
                   </p>
                   {/* <Button
-                    className="w-full sm:w-auto"
-                    variant="incognito"
-                    type="submit"
-                    onClick={() => setShowSaveModal(true)}
-                    disabled={saveLoading}
-                  >
-                    {saveLoading ? 'Loading ...' : 'Continue'}
-                  </Button> */}
+                className="w-full sm:w-auto"
+                variant="incognito"
+                type="submit"
+                onClick={() => setShowSaveModal(true)}
+                disabled={saveLoading}
+              >
+                {saveLoading ? 'Loading ...' : 'Continue'}
+              </Button> */}
                 </div>
               }
             >
@@ -870,40 +849,41 @@ export default function Account({
                     </a>
                   </p>
                   {/* <Button className="w-full sm:w-auto"
-                variant="slim"
-              >
-                Learn More
-              </Button> */}
+            variant="slim"
+          >
+            Learn More
+          </Button> */}
                 </div>
               }
             ></Card>
             {/* <Card
-              footer={
-                <div className="text-center">
-                  <p className="pb-4 sm:pb-0">
-                    By continuing, you are agreeing to our privacy policy and
-                    terms of use.
-                  </p>
-                </div>
-              }
-            >
-              <Button
-                className="w-full"
-                variant="prominent"
-                type="submit"
-                onClick={() =>
-                  updateProfile({
-                    full_name,
-                    notion_api_secret,
-                    notion_success_plan
-                  })
-                }
-                disabled={saveLoading}
-              >
-                {saveLoading ? 'Loading ...' : 'Save & Test Connection'}
-              </Button>
-            </Card> */}
+          footer={
+            <div className="text-center">
+              <p className="pb-4 sm:pb-0">
+                By continuing, you are agreeing to our privacy policy and
+                terms of use.
+              </p>
+            </div>
+          }
+        >
+          <Button
+            className="w-full"
+            variant="prominent"
+            type="submit"
+            onClick={() =>
+              updateProfile({
+                full_name,
+                notion_api_secret,
+                notion_success_plan
+              })
+            }
+            disabled={saveLoading}
+          >
+            {saveLoading ? 'Loading ...' : 'Save & Test Connection'}
+          </Button>
+        </Card> */}
           </div>
+        }
         </div>
       </section>
 
