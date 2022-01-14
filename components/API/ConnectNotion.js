@@ -19,6 +19,9 @@ export default function ConnectNotion({
   const [userMessage, setUserMessage] = useState(null);
   const [nickname, setNickname] = useState(null);
 
+  const [deleteOption, setDeleteOption] = useState(null);
+  const [editState, setEditState] = useState(true);
+
   var api = /^secret_\w{43}$/;
   var id = /^\(?([0-9a-zA-Z]{8})\)?[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{12})$/;
   var notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
@@ -68,7 +71,6 @@ export default function ConnectNotion({
       alert(error.message);
     } finally {
       getNotionCredentials();
-      setSaving(false);
     }
   }
 
@@ -179,7 +181,7 @@ export default function ConnectNotion({
   }
 
   return (
-    <div className="mb-4 mt-4 border-dotted border border-gray-200 px-4 rounded">
+    <div className="mb-4 mt-4 border border-gray-600 px-4 rounded">
       {APIMessage || databaseMessage || userMessage ? (
         <div className="flex flex-col space-y-4">
           <div className="mt-4 text-error border border-error p-3">
@@ -273,14 +275,33 @@ export default function ConnectNotion({
           onChange={setCollaborator}
         />
       </div>
-      <div className="flex justify-between my-4">
-        <button
-          onClick={() => removeCredentials(credentials.id)}
-          className="text-red-500 mr-5 font-semibold"
-          disabled={saving}
-        >
-          {saving ? <LoadingDots /> : 'Remove'}
-        </button>
+      <div className="flex justify-between my-4 items-center">
+        {deleteOption ? <>
+          <span className='text-white font-semibold ease-linear transition-all duration-150'>
+            Are You Sure?{' '}
+            <button
+              onClick={() => removeCredentials(credentials.id)}
+              className="text-red-500 mr-1 font-semibold"
+              disabled={saving}
+            >
+              {saving ? <LoadingDots /> : 'Yes'}
+            </button>
+            /
+            <button
+              onClick={() => setDeleteOption(false)}
+              className="text-red-500 ml-1 font-semibold"
+            >
+              {saving ? <LoadingDots /> : 'No'}
+            </button>
+          </span>
+        </> :
+          <button
+            onClick={() => setDeleteOption(true)}
+            className="text-red-500 mr-5 font-semibold"
+            disabled={saving}
+          >
+            {saving ? <LoadingDots /> : 'Remove'}
+          </button>}
         <Button
           className="w-full sm:w-auto"
           variant="incognito"

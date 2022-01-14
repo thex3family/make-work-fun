@@ -58,7 +58,7 @@ export default function embed() {
     if (component == 'dailies') {
       setEmbedComponent(3);
     }
-  }, [component]);
+  }, []);
 
 
   async function handleEmbedLink() {
