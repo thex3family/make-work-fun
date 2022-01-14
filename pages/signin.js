@@ -593,7 +593,7 @@ const SignIn = ({ user }) => {
                           </div>
                           <div
                             className={
-                              (popoverShow ? 'invisible sm:visible' : 'hidden ') +
+                              (popoverShow ? '' : 'hidden ') +
                               'caption-bubble bg-blueGray-900 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg'
                             }
                             ref={popoverRef}
