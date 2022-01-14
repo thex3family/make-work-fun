@@ -562,7 +562,7 @@ const SignIn = ({ user }) => {
                     <div>
                       {/* Card stats */}
                       <div className="flex flex-wrap xl:flex-nowrap items-center gap-5 opacity-90">
-                        <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 3xl:w-1/3 h-full text-center relative">
+                        <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-full 3xl:w-1/3 h-full text-center relative">
                           <div
                             className={`${showHide ? 'hidden' : ''
                               } animate-fade-in`}
@@ -593,7 +593,7 @@ const SignIn = ({ user }) => {
                           </div>
                           <div
                             className={
-                              (popoverShow ? '' : 'hidden ') +
+                              (popoverShow ? 'invisible sm:visible' : 'hidden ') +
                               'caption-bubble bg-blueGray-900 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg'
                             }
                             ref={popoverRef}
