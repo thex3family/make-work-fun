@@ -599,7 +599,7 @@ const SignIn = ({ user }) => {
                             ref={popoverRef}
                           >
                             <div className='p-2'>
-                              <p className="text-lg bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 font-bold">We're here to help your growth journey.</p>
+                              <p className="text-lg bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 font-bold">We're here to help your growth journey!</p>
                               <p className="text-lg text-white ">✅ Track your life progress in real time<br/>
                               ✅ Join party quests to level up together<br/>
                               ✅ Turn daily chores into daily quests<br/>
