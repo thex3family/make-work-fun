@@ -157,7 +157,7 @@ export default function dailies({user}) {
                         <Button
                           variant="prominent"
                           className="animate-fade-in-up mt-5 text-center font-bold"
-                          onClick={() => claimDailyBonus()}
+                          onClick={() => claimDailyBonus(player, setDailyBonus)}
                         >
                           Claim Rewards
                         </Button>
