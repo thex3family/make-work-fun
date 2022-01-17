@@ -760,7 +760,7 @@ export default function Account({
                   </div>
                 }
               >
-                {full_name ?
+                {!loading ?
                 <Input
                   htmlFor="full_name"
                   className="text-xl mt-8 mb-4 font-semibold rounded"
