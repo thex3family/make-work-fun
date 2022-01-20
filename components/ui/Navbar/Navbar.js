@@ -126,7 +126,7 @@ const Navbar = () => {
                   {/* manage the main menu  */}
 
                   <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
-
+                    {user ? 
                     <Menu as="div" className="relative inline-block text-left">
                       <div>
                         <Menu.Button className={`ring-0 ${s.link}`}>
@@ -146,7 +146,7 @@ const Navbar = () => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-700 bg-opacity-90 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-700 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <div className="px-1.5 py-1.5 flex-col flex gap-1.5">
 
                             {play_menu.map((  item) => (
@@ -168,6 +168,7 @@ const Navbar = () => {
                         </Menu.Items>
                       </Transition>
                     </Menu>
+                    : null }
 
                     {main_navigation.map((item) => (
                       <Link href={item.href}>
