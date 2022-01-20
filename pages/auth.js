@@ -32,7 +32,7 @@ export default function Auth() {
   }, []);
 
   useEffect(() => {
-    if (user && !recoveryToken) router.push('/player');
+    if (user && !url) router.push('/player');
   }, [user]);
 
   if (recoveryToken) {
