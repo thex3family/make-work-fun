@@ -1,6 +1,6 @@
 import LoadingDots from '@/components/ui/LoadingDots';
 import { useUser } from '@/utils/useUser';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
 
