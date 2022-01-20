@@ -8,10 +8,6 @@ export default function Auth() {
   const { user } = useUser();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) router.push('/player');
-  }, [user]);
-
   // Redirects user to reset password
   
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -34,6 +30,10 @@ export default function Auth() {
       setRecoveryToken(result.access_token);
     }
   }, []);
+  
+  useEffect(() => {
+    if (user && !recoveryToken) router.push('/player');
+  }, [user]);
 
   if (recoveryToken) {
     return (
@@ -43,6 +43,7 @@ export default function Auth() {
       />
     );
   }
+  
 
     return (
         <section className="justify-center ">
