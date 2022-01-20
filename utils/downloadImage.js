@@ -25,7 +25,7 @@ export async function downloadImage(path, type) {
         return url;
       }
     } catch (error) {
-      console.log('Error downloading image: ', error.message);
+      console.log('Error downloading image: ', path, error.message);
     } finally {
     }
   }
