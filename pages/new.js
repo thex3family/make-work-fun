@@ -16,6 +16,14 @@ export default function updates() {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Jan 20, 2022"
+            title="Weekly Leaderboard and Navigation"
+            desc="Track how you're measuring against your family on a weekly basis, and enjoy a brand new navigation bar experience in the app."
+            img_url="updates/0.31.png"
+            button_url="/leaderboard"
+            version="v.31"
+          />
           <CardLUpdate
             date="Jan 13, 2022"
             title="Level Up Anytime, Anywhere"

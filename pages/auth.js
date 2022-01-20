@@ -33,7 +33,6 @@ export default function Auth() {
       result[item[0]] = decodeURIComponent(item[1]);
     });
 
-
     console.log(result)
 
     if (result.type === 'recovery') {
@@ -55,7 +54,7 @@ export default function Auth() {
 
   // need to capture when there is a 404. 
 
-  if (recoveryToken) {
+  if (recoveryToken && authState == 'recovery') {
     return (
       <RecoverPassword
         token={recoveryToken}
