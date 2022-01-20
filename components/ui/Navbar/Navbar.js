@@ -230,7 +230,7 @@ const Navbar = () => {
                     </div>
                     <div className="px-2 pt-2 pb-3 space-y-1">
                       <Popover.Button className="w-full">
-                      { user ? <div className='bg-dark rounded-md mb-1 bg-opacity-30'>{play_menu.map((item) => (
+                      { user ? <div className='bg-dark rounded-md py-1 bg-opacity-30'>{play_menu.map((item) => (
                           <Link href={item.href}>
                             <a
                               key={item.name}
