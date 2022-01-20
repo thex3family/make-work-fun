@@ -28,7 +28,7 @@ import DailiesEntry from '@/components/Embeds/DailiesEntry';
 import CardParty from '@/components/Cards/CardParty';
 
 export default function HomePage() {
-  const [recoveryToken, setRecoveryToken] = useState(null);
+  // const [recoveryToken, setRecoveryToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [players, setPlayers] = useState([]);
@@ -169,24 +169,24 @@ export default function HomePage() {
 
   // Redirects user to reset password
 
-  useEffect(() => {
-    /* Recovery url is of the form
-     * <SITE_URL>#access_token=x&refresh_token=y&expires_in=z&token_type=bearer&type=recovery
-     * Read more on https://supabase.io/docs/reference/javascript/reset-password-email#notes
-     */
-    let url = window.location.hash;
-    let query = url.substr(1);
-    let result = {};
+  // useEffect(() => {
+  //   /* Recovery url is of the form
+  //    * <SITE_URL>#access_token=x&refresh_token=y&expires_in=z&token_type=bearer&type=recovery
+  //    * Read more on https://supabase.io/docs/reference/javascript/reset-password-email#notes
+  //    */
+  //   let url = window.location.hash;
+  //   let query = url.substr(1);
+  //   let result = {};
 
-    query.split('&').forEach((part) => {
-      const item = part.split('=');
-      result[item[0]] = decodeURIComponent(item[1]);
-    });
+  //   query.split('&').forEach((part) => {
+  //     const item = part.split('=');
+  //     result[item[0]] = decodeURIComponent(item[1]);
+  //   });
 
-    if (result.type === 'recovery') {
-      setRecoveryToken(result.access_token);
-    }
-  }, []);
+  //   if (result.type === 'recovery') {
+  //     setRecoveryToken(result.access_token);
+  //   }
+  // }, []);
 
   useEffect(() => {
     refreshStats();
@@ -235,14 +235,14 @@ export default function HomePage() {
   //   setData(newData);
   // }
 
-  if (recoveryToken) {
-    return (
-      <RecoverPassword
-        token={recoveryToken}
-        setRecoveryToken={setRecoveryToken}
-      />
-    );
-  }
+  // if (recoveryToken) {
+  //   return (
+  //     <RecoverPassword
+  //       token={recoveryToken}
+  //       setRecoveryToken={setRecoveryToken}
+  //     />
+  //   );
+  // }
 
   return (
     <>
