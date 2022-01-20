@@ -104,25 +104,25 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if(sNPlayers) loadPlayerImages(sNPlayers, setsNPlayers)
+    if (sNPlayers) loadPlayerImages(sNPlayers, setsNPlayers)
   }, [sNPlayers]);
 
   useEffect(() => {
-    if(players) loadPlayerImages(players, setPlayers)
+    if (players) loadPlayerImages(players, setPlayers)
   }, [players]);
 
   async function loadPlayerImages(data, setData) {
     var newData = data;
 
-        for (let i = 0; i < data.length; i++) {
-          let oldData = data[i];
-          newData[i] = {
-            ...oldData,
-            avatar_url: (oldData.avatar_url ? await downloadImage(oldData.avatar_url, 'avatar') : null),
-            background_url: (oldData.background_url ? await downloadImage(oldData.background_url, 'background') : null)
-          };
-        }
-        setData(newData);
+    for (let i = 0; i < data.length; i++) {
+      let oldData = data[i];
+      newData[i] = {
+        ...oldData,
+        avatar_url: (oldData.avatar_url ? (oldData.avatar_url.includes('blob:') ? oldData.avatar_url : await downloadImage(oldData.avatar_url, 'avatar')) : null),
+        background_url: (oldData.background_url ? (oldData.background_url.includes('blob:') ? oldData.background_url : await downloadImage(oldData.background_url, 'background')) : null)
+      };
+    }
+    setData(newData);
 
   }
 
@@ -251,13 +251,28 @@ export default function HomePage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-center p-3 sm:p-4">
             Leaderboard 🏆
           </h1>
-          <div className="mx-auto absolute inset-x-0 -bottom-7 bg-gray-700 rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
+          <div className="mx-auto absolute inset-x-0 -bottom-7 bg-gray-700 rounded-xl max-w-lg h-14 align-middle shadow-xl grid grid-cols-3 place-items-center text-lg fontmedium px-2 gap-2">
             <div
-              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
-                openTab == 1
+              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${openTab == 3
                   ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                   : 'text-blueGray-500'
-              }`}
+                }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenTab(3);
+              }}
+              data-toggle="tab"
+              href="#link1"
+              role="tablist"
+            >
+              This Week
+
+            </div>
+            <div
+              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${openTab == 1
+                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                  : 'text-blueGray-500'
+                }`}
               onClick={(e) => {
                 e.preventDefault();
                 setOpenTab(1);
@@ -279,11 +294,10 @@ export default function HomePage() {
               </div>
             </div>
             <div
-              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
-                openTab == 2
+              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${openTab == 2
                   ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                   : 'text-blueGray-500'
-              }`}
+                }`}
               onClick={(e) => {
                 e.preventDefault();
                 setOpenTab(2);
