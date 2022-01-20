@@ -162,8 +162,8 @@ export default function HomePage() {
   ];
 
   useEffect(() => {
-    if (openTab == 1 && sNPlayers) setActivePlayers(sNPlayers);
-    if (openTab == 2 && players) setActivePlayers(players);
+    if (openTab == 1 && sNPlayers) setActivePlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']));
+    // if (openTab == 2 && players) setActivePlayers(players);
     setCurrentPage(1);
   }, [openTab, sNPlayers]);
 
@@ -309,9 +309,11 @@ export default function HomePage() {
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
                     <Link href="leaderboard">
-                      <h1 className="cursor-pointer text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                        Top Players This Season
+                      <div className="cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                      <h1 className="text-2xl font-bold sm:text-3xl ">
+                        Top Players This Week
                       </h1>
+                      </div>
                     </Link>
 
                     <div
@@ -344,9 +346,9 @@ export default function HomePage() {
                               avatar_url={player.avatar_url}
                               background_url={player.background_url}
                               statTitle={player.title}
-                              statEXPEarned={player.exp_earned_today}
-                              statGoldEarned={player.exp_earned_today}
-                              statEarnedDuration={'today'}
+                              statEXPEarned={player.exp_earned_week}
+                              statGoldEarned={player.exp_earned_week}
+                              statEarnedDuration={'week'}
                             />
                           ))}
                           <div href="leaderboard" className="relative">
