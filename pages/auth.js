@@ -28,11 +28,13 @@ export default function Auth() {
 
     if (result.type === 'recovery') {
       setRecoveryToken(result.access_token);
+    } else {
+      setRecoveryToken('empty')
     }
   }, []);
 
   useEffect(() => {
-    if (user && !url) router.push('/player');
+    if (user && recoveryToken('empty')) router.push('/player');
   }, [user]);
 
   if (recoveryToken) {
