@@ -217,8 +217,9 @@ export default function playerDetails() {
               avatar_url={playerStats.avatar_url}
               background_url={playerStats.background_url}
               statTitle={playerStats.title}
-              statEXPEarnedToday={playerStats.exp_earned_today}
-              statGoldEarnedToday={playerStats.gold_earned_today}
+              statEXPEarned={player.exp_earned_today}
+              statGoldEarned={player.exp_earned_today}
+              statEarnedDuration={'today'}
             />
           ) : null}
         </div>
@@ -241,8 +242,9 @@ export default function playerDetails() {
                 avatar_url={player.avatar_url}
                 background_url={player.background_url}
                 statTitle={player.title}
-                statEXPEarnedToday={player.exp_earned_today}
-                statGoldEarnedToday={player.gold_earned_today}
+                statEXPEarned={player.exp_earned_today}
+                statGoldEarned={player.exp_earned_today}
+                statEarnedDuration={'today'}
               />
             ))}
           </div>

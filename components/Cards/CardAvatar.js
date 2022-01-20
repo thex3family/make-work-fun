@@ -22,8 +22,9 @@ export default function Avatar({
   avatar_url,
   background_url,
   statTitle,
-  statEXPEarnedToday,
-  statGoldEarnedToday
+  statEXPEarned,
+  statGoldEarned,
+  statEarnedDuration
 }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
@@ -196,14 +197,14 @@ export default function Avatar({
               >
                 <i
                   className={
-                    statGoldEarnedToday > 0
-                      ? statGoldEarnedToday >= 1000
+                    statGoldEarned > 0
+                      ? statGoldEarned >= 1000
                         ? 'fas fa-angle-double-up text-emerald-500'
                         : 'fas fa-angle-up text-emerald-600'
                       : 'fas fa-grip-lines text-red-600'
                   }
                 ></i>{' '}
-                {statGoldEarnedToday ? +statGoldEarnedToday : 0} 💰
+                {statGoldEarned ? +statGoldEarned : 0} 💰
               </div>
               <div
                 variant="slim"
@@ -211,14 +212,14 @@ export default function Avatar({
               >
                 <i
                   className={
-                    statEXPEarnedToday > 0
-                      ? statEXPEarnedToday >= 1000
+                    statEXPEarned > 0
+                      ? statEXPEarned >= 1000
                         ? 'fas fa-angle-double-up text-emerald-500'
                         : 'fas fa-angle-up text-emerald-600'
                       : 'fas fa-grip-lines text-red-600'
                   }
                 ></i>{' '}
-                {statEXPEarnedToday ? +statEXPEarnedToday : 0} XP
+                {statEXPEarned ? +statEXPEarned : 0} XP
               </div>
             </div>
             <div
@@ -229,7 +230,7 @@ export default function Avatar({
               ref={popoverRef}
             >
               <div>
-                <div className="text-white p-3">⭐ Today's Earnings!</div>
+                <div className="text-white p-3">⭐ {statEarnedDuration == 'today' ? "Today's " : "This Week's " } Earnings!</div>
               </div>
             </div>
             <div className="mt-6">
