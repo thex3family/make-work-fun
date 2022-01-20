@@ -1,5 +1,5 @@
-import { Fragment } from 'react';
-import { Popover, Transition } from '@headlessui/react';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { Popover, Transition, Menu } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 
@@ -10,10 +10,34 @@ const navigation = [
   { name: 'Updates ✨', href: '/new', display: null }
 ];
 
+
+const main_navigation = [
+  { name: 'Leaderboard 🏆', href: '/leaderboard'},
+  { name: 'Map 🌍', href: '/map'},
+  { name: 'Updates ✨', href: '/new'}
+];
+
+const play_menu = [
+  { name: 'Player 🐣', href: '/player' },
+  { name: 'Parties 🐉', href: '/parties' },
+  { name: 'Dailies ⭐', href: '/dailies' },
+  { name: 'Account 📋', href: '/account' },
+  { name: 'Embed 🔗', href: '/embed' },
+];
+
 import Link from 'next/link';
 import s from './Navbar.module.css';
 
 import { useUser } from '@/utils/useUser';
+
+function MyLink(props) {
+  let { href, children, ...rest } = props
+  return (
+    <Link href={href}>
+      <a {...rest}>{children}</a>
+    </Link>
+  )
+}
 
 const Navbar = () => {
   const { user, signOut } = useUser();
@@ -98,14 +122,59 @@ const Navbar = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* manage the main menu  */}
+
                   <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
-                    {navigation.map((item) => (
+
+                    <Menu as="div" className="relative inline-block text-left">
+                      <div>
+                        <Menu.Button className={`ring-0 ${s.link}`}>
+                          Play
+                          <i
+                            className="fas fa-chevron-down w-5 h-5 ml-2 -mr-1"
+                            aria-hidden="true"
+                          />
+                        </Menu.Button>
+                      </div>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-700 bg-opacity-90 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <div className="px-1.5 py-1.5 flex-col flex gap-1.5">
+
+                            {play_menu.map((  item) => (
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <MyLink href={item.href}><button
+                                    className={`${active || router.pathname.includes(item.href) ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                                      }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                                  >
+
+                                    {item.name}
+                                  </button>
+                                  </MyLink>
+                                )}
+                              </Menu.Item>
+
+                            ))}
+                          </div>
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+
+                    {main_navigation.map((item) => (
                       <Link href={item.href}>
                         <a
                           key={item.name}
-                          className={`${s.link} ${
-                            router.pathname == item.href ? s.activeLink : null
-                          }`}
+                          className={`${s.link} ${router.pathname == item.href ? s.activeLink : null
+                            }`}
                         >
                           {item.name}
                         </a>
@@ -118,13 +187,13 @@ const Navbar = () => {
                           className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9 hover:border-blue-500"
                           onClick={() => signOut()}
                         >
-                          Sign out
+                          Log Out
                         </a>
                       </Link>
                     ) : (
                       <Link href="/signin">
                         <a className="px-4 py-2 text-center font-medium text-primary rounded border border-emerald-500 hover:text-accents-9 hover:border-blue-500">
-                          Sign in
+                          Play Now
                         </a>
                       </Link>
                     )}
@@ -171,11 +240,10 @@ const Navbar = () => {
                           <Link href={item.href}>
                             <a
                               key={item.name}
-                              className={`${s.mobile} ${
-                                router.pathname == item.href
-                                  ? s.activeMobileLink
-                                  : null
-                              }`}
+                              className={`${s.mobile} ${router.pathname == item.href
+                                ? s.activeMobileLink
+                                : null
+                                }`}
                             >
                               {item.name}
                             </a>
@@ -190,13 +258,13 @@ const Navbar = () => {
                             className="block w-full px-5 py-3 text-center font-medium text-primary bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9"
                             onClick={() => signOut()}
                           >
-                            Sign out
+                            Log Out
                           </a>
                         </Link>
                       ) : (
                         <Link href="/signin">
                           <a className="block w-full px-5 py-3 text-center font-medium text-primary bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9">
-                            Sign in
+                            Play Now
                           </a>
                         </Link>
                       )}
