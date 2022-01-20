@@ -9,7 +9,7 @@ export default function Auth() {
   const router = useRouter();
 
   // Redirects user to reset password
-  
+
   const [recoveryToken, setRecoveryToken] = useState(null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function Auth() {
       setRecoveryToken(result.access_token);
     }
   }, []);
-  
+
   useEffect(() => {
     if (user && !recoveryToken) router.push('/player');
   }, [user]);
@@ -43,21 +43,18 @@ export default function Auth() {
       />
     );
   }
-  
 
-    return (
-        <section className="justify-center ">
-            <div className="animate-fade-in-up max-w-6xl mx-auto py-8 md:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col h-screen">
+
+  return (
+    <section className="justify-center h-screen flex">
+      {/* <div className="animate-fade-in-up max-w-6xl mx-auto py-8 md:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col h-screen">
                 <div className="pb-10 m-auto flex flex-col justify-center">
                     <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                         Loading Your Avatar...
-                    </h1>
-                    <div className='mx-auto'>
-                        <LoadingDots />
-                    </div>
-                </div>
-
-            </div>
-        </section>
-    )
+                    </h1> */}
+      <LoadingDots />
+      {/* </div>
+            </div> */}
+    </section>
+  )
 }
