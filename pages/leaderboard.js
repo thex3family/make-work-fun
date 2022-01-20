@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
 
+import { useRouter } from 'next/router';
+
 // functions
 
 import {
@@ -56,12 +58,50 @@ export default function HomePage() {
 
   const [openTab, setOpenTab] = useState(1);
 
+  const router = useRouter();
+
+  const { view } = router.query;
+
   useEffect(() => {
-    if (openTab == 1 && sNPlayers) setActivePlayers(sNPlayers);
-    if (openTab == 2 && players) setActivePlayers(players);
-    if (openTab == 3 && sNPlayers) setActivePlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']))
+    if (view == 'season') {
+      setOpenTab(1);
+    }
+    if (view == 'all') {
+      setOpenTab(2);
+    }
+    if (view == 'week') {
+      setOpenTab(3);
+      console.log('week')
+    }
+  }, [view]);
+
+  useEffect(() => {
+    if (openTab == 1 && sNPlayers) {
+      setActivePlayers(sNPlayers);
+    }
+    if (openTab == 2 && players) {
+      setActivePlayers(players);
+    }
+    if (openTab == 3 && sNPlayers) {
+      setActivePlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']))
+    } 
     setCurrentPage(1);
   }, [openTab, sNPlayers]);
+
+  async function changeTab(tab){
+    if (tab == 1) {
+      setActivePlayers(sNPlayers);
+      router.push(`leaderboard/?view=season`, undefined, { shallow: true })
+    }
+    if (tab == 2) {
+      setActivePlayers(players);
+      router.push(`leaderboard/?view=all`, undefined, { shallow: true })
+    }
+    if (tab == 3) {
+      setActivePlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']))
+      router.push(`leaderboard/?view=week`, undefined, { shallow: true })
+    } 
+  }
 
   // Redirects user to reset password
 
@@ -260,7 +300,7 @@ export default function HomePage() {
                 }`}
               onClick={(e) => {
                 e.preventDefault();
-                setOpenTab(3);
+                changeTab(3);
               }}
               data-toggle="tab"
               href="#link3"
@@ -276,7 +316,7 @@ export default function HomePage() {
                 }`}
               onClick={(e) => {
                 e.preventDefault();
-                setOpenTab(1);
+                changeTab(1);
               }}
               data-toggle="tab"
               href="#link1"
@@ -301,7 +341,7 @@ export default function HomePage() {
                 }`}
               onClick={(e) => {
                 e.preventDefault();
-                setOpenTab(2);
+                changeTab(2);
               }}
               data-toggle="tab"
               href="#link1"
