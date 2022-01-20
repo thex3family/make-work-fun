@@ -28,7 +28,7 @@ export default function PlayerCard({ embedTab }) {
   const [copyText, setCopyText] = useState('Copy');
   const [embedComponent, setEmbedComponent] = useState(2);
   const [friendshipLink, setFriendshipLink] = useState(
-    '2abc9380-353c-4541-b220-1c271dc19868'
+    '88368a02-1924-4d6c-a484-ef0e7a0926d7'
   );
 
   async function handleEmbedLink(dark) {
