@@ -3,13 +3,6 @@ import { Popover, Transition, Menu } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 
-const navigation = [
-  { name: 'Player 🐣', href: '/player', display: null },
-  { name: 'Account 📋', href: '/account', display: 'user' },
-  { name: 'Map 🌍', href: '/map', display: 'user' },
-  { name: 'Updates ✨', href: '/new', display: null }
-];
-
 
 const main_navigation = [
   { name: 'Leaderboard 🏆', href: '/leaderboard'},
@@ -237,7 +230,20 @@ const Navbar = () => {
                     </div>
                     <div className="px-2 pt-2 pb-3 space-y-1">
                       <Popover.Button className="w-full">
-                        {navigation.map((item) => (
+                      { user ? <div className='bg-dark rounded-md mb-1 bg-opacity-30'>{play_menu.map((item) => (
+                          <Link href={item.href}>
+                            <a
+                              key={item.name}
+                              className={`${s.mobile_play} ${router.pathname == item.href
+                                ? s.activeMobileLink
+                                : null
+                                }`}
+                            >
+                              {item.name}
+                            </a>
+                          </Link>
+                        ))}</div> : null}
+                        {main_navigation.map((item) => (
                           <Link href={item.href}>
                             <a
                               key={item.name}
