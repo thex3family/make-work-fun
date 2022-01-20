@@ -18,6 +18,18 @@
   @apply outline-none text-accents-8;
 }
 
+.mobile_play {
+  @apply block py-2 rounded-md text-base font-medium text-primary text-center;
+}
+
+.mobile_play:hover {
+  @apply text-emerald-400;
+}
+
+.mobile_play:focus {
+  @apply outline-none text-accents-8;
+}
+
 .activeMobileLink {
   @apply text-emerald-400;
 }
