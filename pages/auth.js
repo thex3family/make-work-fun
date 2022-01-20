@@ -12,6 +12,7 @@ export default function Auth() {
 
   const [recoveryToken, setRecoveryToken] = useState(null);
 
+
   useEffect(() => {
     /* Recovery url is of the form
      * <SITE_URL>#access_token=x&refresh_token=y&expires_in=z&token_type=bearer&type=recovery
@@ -32,9 +33,9 @@ export default function Auth() {
       setRecoveryToken('empty')
     }
   }, []);
-
+  
   useEffect(() => {
-    if (user && recoveryToken('empty')) router.push('/player');
+    if (user && recoveryToken == ('empty')) router.push('/player');
   }, [user]);
 
   if (recoveryToken) {
@@ -45,7 +46,6 @@ export default function Auth() {
       />
     );
   }
-
 
   return (
     <section className="justify-center h-screen flex">
@@ -58,5 +58,5 @@ export default function Auth() {
       {/* </div>
             </div> */}
     </section>
-  )
+  );
 }
