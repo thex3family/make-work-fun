@@ -30,6 +30,7 @@ export default function HomePage() {
 
   const [players, setPlayers] = useState([]);
   const [sNPlayers, setsNPlayers] = useState([]);
+  const [wPlayers, setWPlayers] = useState([]);
   const [activePlayers, setActivePlayers] = useState([]);
 
   //pagination
@@ -58,6 +59,7 @@ export default function HomePage() {
   useEffect(() => {
     if (openTab == 1 && sNPlayers) setActivePlayers(sNPlayers);
     if (openTab == 2 && players) setActivePlayers(players);
+    if (openTab == 3 && sNPlayers) setActivePlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']))
     setCurrentPage(1);
   }, [openTab, sNPlayers]);
 
@@ -123,7 +125,6 @@ export default function HomePage() {
       };
     }
     setData(newData);
-
   }
 
   if (recoveryToken) {
@@ -254,15 +255,15 @@ export default function HomePage() {
           <div className="mx-auto absolute inset-x-0 -bottom-7 bg-gray-700 rounded-xl max-w-lg h-14 align-middle shadow-xl grid grid-cols-3 place-items-center text-lg fontmedium px-2 gap-2">
             <div
               className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${openTab == 3
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                  : 'text-blueGray-500'
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                : 'text-blueGray-500'
                 }`}
               onClick={(e) => {
                 e.preventDefault();
                 setOpenTab(3);
               }}
               data-toggle="tab"
-              href="#link1"
+              href="#link3"
               role="tablist"
             >
               This Week
@@ -270,8 +271,8 @@ export default function HomePage() {
             </div>
             <div
               className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${openTab == 1
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                  : 'text-blueGray-500'
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                : 'text-blueGray-500'
                 }`}
               onClick={(e) => {
                 e.preventDefault();
@@ -295,8 +296,8 @@ export default function HomePage() {
             </div>
             <div
               className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${openTab == 2
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                  : 'text-blueGray-500'
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                : 'text-blueGray-500'
                 }`}
               onClick={(e) => {
                 e.preventDefault();
@@ -405,7 +406,7 @@ export default function HomePage() {
                 <div
                   className={
                     openTab === 1
-                      ? 'mx-5 pb-5 lg:pb-0 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-scroll lg:overflow-x-hidden lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                      ? 'mx-5 pb-5 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-auto lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                       : 'hidden'
                   }
                   id="link1"
@@ -427,15 +428,16 @@ export default function HomePage() {
                       avatar_url={player.avatar_url}
                       background_url={player.background_url}
                       statTitle={player.title}
-                      statEXPEarnedToday={player.exp_earned_today}
-                      statGoldEarnedToday={player.gold_earned_today}
+                      statEXPEarned={player.exp_earned_today}
+                      statGoldEarned={player.exp_earned_today}
+                      statEarnedDuration={'today'}
                     />
                   ))}
                 </div>
                 <div
                   className={
                     openTab === 2
-                      ? 'mx-5 pb-5 lg:pb-0 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-scroll lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                      ? 'mx-5 pb-5 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-auto lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
                       : 'hidden'
                   }
                   id="link2"
@@ -457,15 +459,47 @@ export default function HomePage() {
                       avatar_url={player.avatar_url}
                       background_url={player.background_url}
                       statTitle={player.title}
-                      statEXPEarnedToday={player.exp_earned_today}
-                      statGoldEarnedToday={player.gold_earned_today}
+                      statEXPEarned={player.exp_earned_today}
+                      statGoldEarned={player.exp_earned_today}
+                      statEarnedDuration={'today'}
+                    />
+                  ))}
+                </div>
+                <div
+                  className={
+                    openTab === 3
+                      ? 'mx-5 pb-5 lg:mx-auto flex lg:justify-center flex-row flex-nowrap overflow-x-auto lg:flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10'
+                      : 'hidden'
+                  }
+                  id="link3"
+                >
+                  {currentPlayers.map((player, i) => (
+                    <Avatar
+                      key={i}
+                      statRank={player.player_rank}
+                      statName={player.full_name}
+                      statLevel={player.current_level}
+                      statEXP={player.total_exp}
+                      statEXPProgress={player.exp_progress}
+                      statLevelEXP={player.level_exp}
+                      statGold={player.total_gold}
+                      statWinName={player.name}
+                      statWinType={player.type}
+                      statWinGold={player.gold_reward}
+                      statWinEXP={player.exp_reward}
+                      avatar_url={player.avatar_url}
+                      background_url={player.background_url}
+                      statTitle={player.title}
+                      statEXPEarned={player.exp_earned_week}
+                      statGoldEarned={player.exp_earned_week}
+                      statEarnedDuration={'week'}
                     />
                   ))}
                 </div>
 
                 <Pagination
                   postsPerPage={postsPerPage}
-                  totalPosts={sNPlayers.length}
+                  totalPosts={activePlayers.length}
                   paginate={paginate}
                   currentPage={currentPage}
                 />
