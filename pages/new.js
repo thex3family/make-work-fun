@@ -21,7 +21,7 @@ export default function updates() {
             title="Weekly Leaderboard and Navigation"
             desc="Track how you're measuring against your family on a weekly basis, and enjoy a brand new navigation bar experience in the app."
             img_url="updates/0.31.png"
-            button_url="/leaderboard"
+            button_url="/leaderboard?view=week"
             version="v.31"
           />
           <CardLUpdate
