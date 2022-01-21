@@ -5,9 +5,9 @@ import { useRouter } from 'next/router';
 
 
 const main_navigation = [
-  { name: 'Leaderboard 🏆', href: '/leaderboard'},
-  { name: 'Map 🌍', href: '/map'},
-  { name: 'Updates ✨', href: '/new'}
+  { name: 'Leaderboard 🏆', href: '/leaderboard' },
+  { name: 'Map 🌍', href: '/map' },
+  { name: 'Updates ✨', href: '/new',}
 ];
 
 const play_menu = [
@@ -118,61 +118,68 @@ const Navbar = () => {
 
                   {/* manage the main menu  */}
 
-                  <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
-                    {user ? 
-                    <Menu as="div" className="relative inline-block text-left">
-                      <div>
-                        <Menu.Button className={`ring-0 ${s.link}`}>
-                          Play
-                          <i
-                            className="fas fa-chevron-down w-5 h-5 ml-2 -mr-1"
-                            aria-hidden="true"
-                          />
-                        </Menu.Button>
-                      </div>
-                      <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-100"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                      >
-                        <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-700 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          <div className="px-1.5 py-1.5 flex-col flex gap-1.5">
+                  <div className="hidden md:block items-center md:ml-10 md:pr-4 md:space-x-8">
+                    {user ?
+                      <Menu as="div" className="relative inline-block text-left">
+                        <div>
+                          <Menu.Button className={`ring-0 bg-gray-700 ${s.link}`}>
+                            Play
+                            <i
+                              className="fas fa-chevron-down w-5 h-5 ml-2 -mr-1"
+                              aria-hidden="true"
+                            />
+                          </Menu.Button>
+                        </div>
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-700 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="px-1.5 py-1.5 flex-col flex gap-1.5">
 
-                            {play_menu.map((  item) => (
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <MyLink href={item.href}><button
-                                    className={`${active || router.pathname.includes(item.href) ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
-                                      }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
-                                  >
+                              {play_menu.map((item) => (
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <MyLink href={item.href}><button
+                                      className={`${active || router.pathname.includes(item.href) ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                                        }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                                    >
 
-                                    {item.name}
-                                  </button>
-                                  </MyLink>
-                                )}
-                              </Menu.Item>
+                                      {item.name}
+                                    </button>
+                                    </MyLink>
+                                  )}
+                                </Menu.Item>
 
-                            ))}
-                          </div>
-                        </Menu.Items>
-                      </Transition>
-                    </Menu>
-                    : null }
+                              ))}
+                            </div>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                      : null}
 
                     {main_navigation.map((item) => (
                       <Link href={item.href}>
                         <a
                           key={item.name}
-                          className={`${s.link} ${router.pathname == item.href ? s.activeLink : null
+                          className={`${s.link} relative ${router.pathname == item.href ? s.activeLink : null
                             }`}
                         >
                           {item.name}
+                          {item.badge ?
+                          <span class="absolute -top-2 -right-1.5">
+                            <div class="inline-flex items-center h-4 w-4 border-2 border-white rounded-full text-xs font-semibold leading-4 bg-red-500 text-white">
+                              {/* {item.badge} Leave blank for now */}
+                            </div>
+                          </span> : null}
                         </a>
                       </Link>
+
                     ))}
 
                     {user ? (
@@ -230,7 +237,7 @@ const Navbar = () => {
                     </div>
                     <div className="px-2 pt-2 pb-3 space-y-1">
                       <Popover.Button className="w-full">
-                      { user ? <div className='bg-dark rounded-md py-1 bg-opacity-30'>{play_menu.map((item) => (
+                        {user ? <div className='bg-dark rounded-md py-1 bg-opacity-30'>{play_menu.map((item) => (
                           <Link href={item.href}>
                             <a
                               key={item.name}
