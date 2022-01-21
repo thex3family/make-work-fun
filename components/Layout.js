@@ -81,7 +81,10 @@ export default function Layout({ children, meta: pageMeta }) {
   return (
     <>
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
         <link rel="manifest" href="/manifest.json" />
         <link
           href="/favicon-16x16.png"
@@ -109,15 +112,7 @@ export default function Layout({ children, meta: pageMeta }) {
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.cardImage} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@thex3family" />
-        <meta name="twitter:title" content={meta.title} />
-        <meta name="twitter:description" content={meta.description} />
-        <meta name="twitter:image" content={meta.cardImage} />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
+        
       </Head>
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       <main id="skip">{children}</main>
