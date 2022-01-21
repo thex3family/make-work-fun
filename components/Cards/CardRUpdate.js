@@ -2,13 +2,19 @@ import React from 'react';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
 
-export default function CardRUpdate({ date, title, desc, img_url, button_url, version }) {
+export default function CardRUpdate({ date, title, desc, img_url, button_url, version, latest }) {
   return (
     <>
       {/* right card start */}
       <div className="col-start-1 col-end-4 text-center z-10">
-        <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
+        <span className="text-lg relative font-semibold inline-block py-1 mb-2 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
           {date}
+          {latest ?
+          <span class="absolute -top-2.5 -right-1.5">
+            <div class="inline-flex items-center h-4 w-4 border-2 border-white rounded-full text-xs font-semibold leading-4 bg-red-500 text-white">
+            </div>
+          </span>
+          : null}
         </span>
       </div>
       <div className="sm:col-start-1 col-span-3 md:col-start-2 col-end-4 my-4 mb-12 p-8 bg-primary-2 rounded w-full z-10">

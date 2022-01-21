@@ -23,6 +23,7 @@ export default function updates() {
             img_url="updates/0.31.png"
             button_url="/leaderboard?view=week"
             version="v.31"
+            latest={true}
           />
           <CardLUpdate
             date="Jan 13, 2022"
