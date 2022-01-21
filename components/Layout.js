@@ -112,7 +112,7 @@ export default function Layout({ children, meta: pageMeta }) {
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.cardImage} />
-        
+
       </Head>
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       <main id="skip">{children}</main>
