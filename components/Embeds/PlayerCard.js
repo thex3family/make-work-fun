@@ -56,7 +56,6 @@ export default function PlayerCard({ embedTab }) {
       embed_link_temp = embed_link_temp + '&style=dark';
     }
     setEmbedLink(embed_link_temp);
-    console.log(embed_link_temp);
   }
 
   async function copyEmbedLink() {

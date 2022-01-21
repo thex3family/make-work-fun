@@ -28,7 +28,6 @@ export default function Layout({ children, meta: pageMeta }) {
   useEffect(() => {
     const mobileDevice = detectMob();
     setupIntercom(mobileDevice);
-    console.log(userProfile?.full_name)
   }, [user]);
 
 
