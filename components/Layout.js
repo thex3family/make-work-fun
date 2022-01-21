@@ -33,7 +33,8 @@ export default function Layout({ children, meta: pageMeta }) {
 
   
 function setupIntercom(mobileDevice) {
-  if (process.env.NODE_ENV === 'production') {
+  // hide it on embeds until I figure out a good way to pass user credentials to intercom
+  if (process.env.NODE_ENV === 'production' && !router.asPath.includes('embed/')) {
     window.intercomSettings = {
       app_id: 'dcx9wsn6',
       hide_default_launcher: mobileDevice,
@@ -86,7 +87,7 @@ function setupIntercom(mobileDevice) {
         <meta content={meta.description} name="description" />
         <meta
           property="og:url"
-          content={`https://app.co-x3.com${router.asPath}`}
+          content={`https://makework.fun/${router.asPath}`}
         />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={meta.title} />
