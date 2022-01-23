@@ -5,7 +5,7 @@ export default function CardAvatarSkeleton({ displayMode }) {
         className={`shadow-xl flex-shrink-0 ${
           displayMode == 'short'
             ? 'w-80'
-            : 'w-full xs:w-1/2 sm:w-1/2 md:1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/5'
+            : 'w-full xs:w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/5'
         }`}
       >
         <div className="bg-primary-2 rounded mx-auto">
