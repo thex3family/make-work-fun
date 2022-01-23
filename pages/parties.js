@@ -59,7 +59,7 @@ createTheme('game', {
   }
 });
 
-export default function parties() {
+export default function parties({metaBase, setMeta}) {
   const [activeParties, setActiveParties] = useState(null);
   const [recruitingParties, setRecruitingParties] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -83,6 +83,16 @@ export default function parties() {
   const [allParties, setAllParties] = useState(null);
   
   const [newToSeason, setNewToSeason] = useState(null);
+
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: 'Parties - ' + metaBase.titleBase,
+      description: 'Do tasks with your friends and get extra points!'
+    }
+    setMeta(meta)
+  }, []);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();

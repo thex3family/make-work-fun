@@ -2,6 +2,9 @@ import { useEffect } from 'react';
 import '@/assets/main.css';
 import '@/assets/chrome-bug.css';
 
+import { useState } from 'react';
+
+
 import Layout from '@/components/Layout';
 import { UserContextProvider } from '@/utils/useUser';
 
@@ -28,6 +31,16 @@ import Head from 'next/head';
 // }
 
 export default function MyApp({ Component, pageProps }) {
+  const metaBase = {
+    title: 'Make Work Fun, Get Stuff Done',
+    titleBase: 'Make Work Fun',
+    description:
+      'The ultimate companion app for Notion to gamify your productivity and make work fun.',
+    cardImage: '/og.png',
+  };
+  
+  const [meta, setMeta] = useState(metaBase);
+
 
   // useEffect(() => {
   //   const mobileDevice = detectMob();
@@ -43,8 +56,8 @@ export default function MyApp({ Component, pageProps }) {
     <>
       <div className="bg-primary">
         <UserContextProvider>
-          <Layout>
-            <Component {...pageProps} />
+          <Layout meta={meta}>
+            <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} />
           </Layout>
         </UserContextProvider>
       </div>

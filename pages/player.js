@@ -73,11 +73,10 @@ createTheme('game', {
   }
 });
 
-export default function Player() {
+export default function Player({ metaBase, setMeta }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
-
   const [wins, setWins] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
@@ -99,19 +98,19 @@ export default function Player() {
     currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
       ? 'Morning'
       : currentHour >= 12 && currentHour <= 17 // after 12:00PM and before 6:00pm
-      ? 'Afternoon'
-      : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
-      ? 'Evening' // if for some reason the calculation didn't work
-      : 'Welcome';
+        ? 'Afternoon'
+        : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
+          ? 'Evening' // if for some reason the calculation didn't work
+          : 'Welcome';
 
   const greetingBlurb =
     currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
       ? 'Are you ready for your next adventure?'
       : currentHour >= 12 && currentHour <= 17 // after 12:00PM and before 6:00pm
-      ? 'Keep it up - you can do it!'
-      : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
-      ? 'Remember to take a breather to relax.' // if for some reason the calculation didn't work
-      : 'Are you ready for your next adventure?';
+        ? 'Keep it up - you can do it!'
+        : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
+          ? 'Remember to take a breather to relax.' // if for some reason the calculation didn't work
+          : 'Are you ready for your next adventure?';
 
   const NameCustom = (row) => (
     <div data-tag="allowRowEvents" className="">
@@ -144,10 +143,10 @@ export default function Player() {
         row.trend === 'up'
           ? 'fas fa-arrow-up text-emerald-600'
           : row.trend === 'down'
-          ? 'fas fa-arrow-down text-red-600'
-          : row.trend === 'check'
-          ? 'fas fa-check text-emerald-600'
-          : ''
+            ? 'fas fa-arrow-down text-red-600'
+            : row.trend === 'check'
+              ? 'fas fa-check text-emerald-600'
+              : ''
       }
     />
   );
@@ -210,6 +209,15 @@ export default function Player() {
       }
     }
   };
+
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: 'Player - ' + metaBase.titleBase
+    }
+    setMeta(meta)
+  }, []);
 
   // Waits until database fetches user state before loading anything
 
@@ -340,8 +348,8 @@ export default function Player() {
 
   if (loading) {
     return <>
-    <PlayerSkeleton />
-    {onboardingState ? (
+      <PlayerSkeleton />
+      {onboardingState ? (
         <ModalOnboarding onboardingState={onboardingState} />
       ) : null}
     </>;
@@ -353,7 +361,7 @@ export default function Player() {
     return (
       <>
         <PlayerSkeleton />
-          <ModalOnboarding onboardingState={5} />
+        <ModalOnboarding onboardingState={5} />
       </>
     );
   }
@@ -506,7 +514,7 @@ export default function Player() {
                         pagination={true}
                         theme="game"
                         paginationPerPage={5}
-                        paginationRowsPerPageOptions={[5,10,15,20]}
+                        paginationRowsPerPageOptions={[5, 10, 15, 20]}
                       />
                       {/* <TailwindTable wins={wins} /> */}
                     </div>

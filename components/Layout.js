@@ -9,16 +9,8 @@ import { useEffect } from 'react';
 import { useUser } from '@/utils/useUser';
 
 
-export default function Layout({ children, meta: pageMeta }) {
-  const meta = {
-    title: 'Make Work Fun, Get Stuff Done',
-    description:
-      'The ultimate companion app for Notion to gamify your productivity and make work fun.',
-    cardImage: '/og.png',
-    ...pageMeta
-  };
+export default function Layout({ children, meta }) {
   const router = useRouter();
-
   const { user, userProfile, userOnboarding } = useUser();
 
   function detectMob() {

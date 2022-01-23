@@ -26,7 +26,7 @@ import CardWin from '@/components/Cards/CardWin';
 import Pagination from '@/components/Pagination';
 import { downloadImage } from '@/utils/downloadImage';
 
-export default function HomePage() {
+export default function HomePage({metaBase, setMeta}) {
   const [recoveryToken, setRecoveryToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,6 +61,15 @@ export default function HomePage() {
   const router = useRouter();
 
   const { view } = router.query;
+
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: 'Leaderboard - ' + metaBase.titleBase
+    }
+    setMeta(meta)
+  }, []);
 
   useEffect(() => {
     if (view == 'season') {

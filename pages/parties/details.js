@@ -32,7 +32,7 @@ import ValidateDragon from '@/components/Modals/ModalValidateDragon';
 import Snow from '@/components/Widgets/snow';
 import ModalReview from '@/components/Modals/ModalReview';
 
-export default function partyDetail() {
+export default function partyDetail({metaBase, setMeta}) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = router.query;
@@ -78,6 +78,15 @@ export default function partyDetail() {
   const [openReviewModal, setOpenReviewModal] = useState(false);
 
   // Waits until database fetches user state before loading anything
+
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: (party ? party.name : 'Party Details') + ' - ' + metaBase.titleBase
+    }
+    setMeta(meta)
+  }, [party]);
 
   useEffect(() => {
     if (userOnboarding && id) initializePlayer();

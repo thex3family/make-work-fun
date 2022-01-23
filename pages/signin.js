@@ -27,7 +27,7 @@ const postData = (url, data = {}) =>
   }).then((res) => res.json());
 
 
-const SignIn = ({ user }) => {
+const SignIn = ({ user, metaBase, setMeta }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authView, setAuthView] = useState('magic');
@@ -36,6 +36,13 @@ const SignIn = ({ user }) => {
   const [message, setMessage] = useState({ type: '', content: '' });
   const router = useRouter();
   const { signIn, passwordReset, userOnboarding, session, signUp } = useUser();
+
+  useEffect(() => {
+    const meta = {
+      title: 'Play - ' + metaBase.titleBase
+    }
+    setMeta(meta)
+  }, []);
 
   // This is a dirty way to make sure the cookie stays active if the session is...
   useEffect
