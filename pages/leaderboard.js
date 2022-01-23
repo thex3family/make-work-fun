@@ -288,11 +288,11 @@ export default function HomePage() {
           </g>
         </svg>
       </div> */}
-        <div className="mb-8 animate-fade-in-up text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 h-20 sm:h-24 relative">
+        <div className="mb-32 sm:mb-8 animate-fade-in-up text-xl sm:text-3xl font-bold text-center bg-gradient-to-r from-emerald-500 to-blue-500 h-20 sm:h-24 relative">
           <h1 className="text-2xl sm:text-3xl font-bold text-center p-3 sm:p-4">
             Leaderboard 🏆
           </h1>
-          <div className="mx-auto absolute inset-x-0 -bottom-7 bg-gray-700 rounded-xl max-w-lg h-14 align-middle shadow-xl grid grid-cols-3 place-items-center text-lg fontmedium px-2 gap-2">
+          <div className="mx-auto absolute inset-x-0 -bottom-38 sm:-bottom-7 bg-gray-700 rounded-xl max-w-lg py-2 sm:py-0 sm:h-14 align-middle shadow-xl grid sm:grid-cols-3 place-items-center text-lg fontmedium px-2 gap-2 grid-cols-1">
             <div
               className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${openTab == 3
                 ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
