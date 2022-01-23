@@ -31,7 +31,7 @@ import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
 import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 
-export default function dailies({user}) {
+export default function dailies({user, metaBase, setMeta}) {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dailiesCount, setDailiesCount] = useState(0);
@@ -56,6 +56,15 @@ export default function dailies({user}) {
   const {
     userOnboarding,
   } = useUser();
+
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: 'Dailies - ' + metaBase.titleBase
+    }
+    setMeta(meta)
+  }, []);
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -276,7 +285,7 @@ export default function dailies({user}) {
 
               <div className="text-center my-5">
                 <Link href="/dailies/edit">
-                  <button className="px-5 border-2 border-dailies-dark text-center text-dailies font-bold py-2 rounded hover:border-white hover:text-white">
+                  <button className="px-5 border-2 border-dailies-dark text-center text-dailies bg-dailies-light font-bold py-2 rounded hover:border-white hover:text-white">
                     Edit Dailies
                   </button>
                 </Link>

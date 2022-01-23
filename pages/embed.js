@@ -34,7 +34,7 @@ function Feature({ name, status }) {
   );
 }
 
-export default function embed() {
+export default function embed({metaBase, setMeta}) {
   const [loading, setLoading] = useState(true);
   const [dark, setDark] = useState(false);
   const [friends, setFriends] = useState(false);
@@ -47,6 +47,16 @@ export default function embed() {
   const [lvl, setLvl] = useState(true);
 
   const { component } = router.query;
+
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: 'Embed - ' + metaBase.titleBase,
+      description: 'Generate embeddable components to interact with your avatar in your Notion pages and website!'
+    }
+    setMeta(meta)
+  }, []);
 
   useEffect(() => {
     if (component == 'player-details') {

@@ -1,8 +1,19 @@
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import CardMap from '@/components/Cards/CardMap';
+import { useEffect } from 'react';
 
-export default function map() {
+export default function map({metaBase, setMeta}) {
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: 'World Map - ' + metaBase.titleBase,
+      description: 'Join intentional spaces for you to learn and grow together with like-minded adventurers!'
+    }
+    setMeta(meta)
+  }, []);
+
   return (
     <section className="justify-center">
       <div className="animate-fade-in-up max-w-6xl mx-auto py-8 md:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">

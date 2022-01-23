@@ -1,8 +1,17 @@
 import Button from '@/components/ui/Button';
 import CardLUpdate from '@/components/Cards/CardLUpdate';
 import CardRUpdate from '@/components/Cards/CardRUpdate';
+import { useEffect } from 'react';
 
-export default function updates() {
+export default function updates({metaBase, setMeta}) {
+  useEffect(() => {
+    const meta = {
+      title: 'Updates - ' + metaBase.titleBase,
+      description: 'We’re constantly making our app better. Here are some of the notable new features and improvements that we’ve made.'
+    }
+    setMeta(meta)
+  }, []);
+
   return (
     <section className="justify-center">
       <div className="animate-fade-in-up max-w-6xl mx-auto py-8 md:pt-24 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">

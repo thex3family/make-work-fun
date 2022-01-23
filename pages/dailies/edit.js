@@ -162,7 +162,7 @@ function EditableCell({
   return <td {...restProps}>{childNode}</td>;
 }
 
-export default function edit({user}) {
+export default function edit({user, metaBase, setMeta}) {
   const [habits, setHabits] = useState(null);
   const [groups, setGroups] = useState(null);
   const [types, setTypes] = useState(null);
@@ -304,6 +304,17 @@ export default function edit({user}) {
     //     ) : null
     // }
   ];
+
+  
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: 'Edit Dailies - ' + metaBase.titleBase
+    }
+    setMeta(meta)
+  }, []);
+
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
