@@ -362,7 +362,7 @@ export default function HomePage() {
           </div>
         </div>
         {loading ? (
-          <div className="animate-fade-in-up mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pt-10">
+          <div className="animate-fade-in-up mx-5 pb-5 lg:mx-auto flex lg:justify-center flex-col lg:flex-wrap flex-nowrap overflow-x-auto sm:flex-row max-w-screen-2xl gap-12 pt-10">
             <CardAvatarSkeleton />
             <CardAvatarSkeleton />
             <CardAvatarSkeleton />
