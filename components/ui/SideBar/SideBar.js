@@ -3,7 +3,7 @@ import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 
 
-const Sidebar = ({ setTimer, timer }) => {
+const Sidebar = ({ setTimer, timer, mobileDevice }) => {
   const { user } = useUser();
   const router = useRouter();
 
@@ -11,7 +11,7 @@ const Sidebar = ({ setTimer, timer }) => {
     return (
       <section
         id="bottom-navigation"
-        className="block fixed inset-y-0 my-auto left-0 h-24 w-auto z-50 bg-dark opacity-40 hover:opacity-100 shadow rounded"
+        className={`block fixed inset-y-0 my-auto left-0 h-24 w-auto z-50 bg-dark ${mobileDevice ? 'opacity-60' : 'opacity-40'}  hover:opacity-100 shadow rounded`}
       >
         <div id="tabs" className="flex flex-col items-center justify-between px-2 pt-1">
           {/* <NavLink href="/">

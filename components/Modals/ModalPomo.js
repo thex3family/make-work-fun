@@ -11,7 +11,7 @@ export default function ModalPomo({ visibility, setVisibility, mobileDevice }) {
           handle=".handle"
           defaultPosition={{ x: 50, y: 25 }}
           scale={1}>
-          <div className={`opacity-20 hover:opacity-100 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl sm:my-8 sm:align-middle ${size == 'large' ? 'w-1/2' : size == 'medium' ? 'w-1/3' : 'w-full md:w-1/4'}`}>
+          <div className={`${mobileDevice ? 'opacity-100' : 'opacity-20'} hover:opacity-100 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl sm:my-8 sm:align-middle ${size == 'large' ? 'w-1/2' : size == 'medium' ? 'w-1/3' : 'w-full md:w-1/4'}`}>
 
             <div className="handle bg-gray-50 px-4 py-3 sm:px-4 flex flex-row-reverse cursor-move">
               <button onClick={() => setVisibility(false)} type="button" className="w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
