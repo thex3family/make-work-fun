@@ -29,7 +29,7 @@ export default function updates({metaBase, setMeta}) {
             date="Jan 24, 2022"
             title="Be Intentional With Your Time"
             desc="We've created your very first tool - a pomodoro timer that you can start on your own or with the family that follows you around the app!"
-            img_url="updates/0.32.PNG"
+            img_url="updates/0.32.png"
             button_url="/signin"
             version="v.32"
             latest={true}
