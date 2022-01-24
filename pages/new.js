@@ -25,6 +25,15 @@ export default function updates({metaBase, setMeta}) {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Jan 24, 2022"
+            title="Be Intentional With Your Time"
+            desc="We've created your very first tool - a pomodoro timer that you can start on your own or with the family that follows you around the app!"
+            img_url="updates/0.32.PNG"
+            button_url="/signin"
+            version="v.32"
+            latest={true}
+          />
           <CardRUpdate
             date="Jan 20, 2022"
             title="Weekly Leaderboard and Navigation"
@@ -32,7 +41,6 @@ export default function updates({metaBase, setMeta}) {
             img_url="updates/0.31.png"
             button_url="/leaderboard?view=week"
             version="v.31"
-            latest={true}
           />
           <CardLUpdate
             date="Jan 13, 2022"
