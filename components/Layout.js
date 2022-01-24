@@ -15,6 +15,7 @@ export default function Layout({ children, meta }) {
   const router = useRouter();
   const { user, userProfile, userOnboarding } = useUser();
   const [timer, setTimer] = useState(false);
+  const [mobileDevice, setMobileDevice] = useState(false);
 
   function detectMob() {
     return window.innerWidth <= 1024;
@@ -23,6 +24,7 @@ export default function Layout({ children, meta }) {
   useEffect(() => {
     const mobileDevice = detectMob();
     setupIntercom(mobileDevice);
+    setMobileDevice(mobileDevice);
   }, [user]);
 
 
@@ -111,7 +113,7 @@ export default function Layout({ children, meta }) {
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       <main id="skip">
         <SideBar setTimer={setTimer} timer={timer} />
-        <ModalPomo visibility={timer} setVisibility={setTimer} />{children}</main>
+        <ModalPomo visibility={timer} setVisibility={setTimer} mobileDevice={mobileDevice} />{children}</main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
           !router.asPath.includes('embed/') ? (
