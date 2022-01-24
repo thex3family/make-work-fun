@@ -112,7 +112,7 @@ export default function Layout({ children, meta }) {
       </Head>
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       <main id="skip">
-        <SideBar setTimer={setTimer} timer={timer} />
+        <SideBar setTimer={setTimer} timer={timer} mobileDevice={mobileDevice} />
         <ModalPomo visibility={timer} setVisibility={setTimer} mobileDevice={mobileDevice} />{children}</main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
