@@ -1,0 +1,40 @@
+import NavLink from 'next/link';
+import { useUser } from '@/utils/useUser';
+import { useRouter } from 'next/router';
+
+
+const Sidebar = ({ setTimer, timer }) => {
+  const { user } = useUser();
+  const router = useRouter();
+
+  if (user) {
+    return (
+      <section
+        id="bottom-navigation"
+        className="block fixed inset-y-0 my-auto left-0 h-24 w-auto z-10 bg-dark opacity-40 hover:opacity-100 shadow rounded"
+      >
+        <div id="tabs" className="flex flex-col items-center justify-between px-2 pt-1">
+          {/* <NavLink href="/">
+            <a className={`w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform ${router.pathname == "/" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
+              <i className="fas fa-trophy text-3xl inline-block mb-1" />
+              <span className="tab tab-home block text-sm font-medium">
+                Leaderboard
+              </span>
+            </a>
+          </NavLink> */}
+          <p className='font-semibold text-white text-opacity-70'>Tools</p>
+
+          <a onClick={() => setTimer(!timer)} className={`cursor-pointer w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 transform hover:text-white ${router.pathname == "/dailies" ? "text-primary scale-105" : "text-white text-opacity-50"}`}>
+            <i className="fas fa-clock text-xl inline-block mb-1" />
+            <span className="tab tab-explore block text-sm font-medium">
+              Timer
+            </span>
+          </a>
+        </div>
+      </section>
+    );
+  }
+  return <div></div>;
+};
+
+export default Sidebar;

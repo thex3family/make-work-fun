@@ -4,14 +4,17 @@ import { useRouter } from 'next/router';
 import Navbar from '@/components/ui/Navbar';
 import Footer from '@/components/ui/Footer';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useUser } from '@/utils/useUser';
+import ModalPomo from './Modals/ModalPomo';
+import SideBar from '@/components/ui/SideBar/SideBar';
 
 
 export default function Layout({ children, meta }) {
   const router = useRouter();
   const { user, userProfile, userOnboarding } = useUser();
+  const [timer, setTimer] = useState(false);
 
   function detectMob() {
     return window.innerWidth <= 1024;
@@ -106,7 +109,9 @@ export default function Layout({ children, meta }) {
 
       </Head>
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
-      <main id="skip">{children}</main>
+      <main id="skip">
+        <SideBar setTimer={setTimer} timer={timer} />
+        <ModalPomo visibility={timer} setVisibility={setTimer} />{children}</main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
           !router.asPath.includes('embed/') ? (
