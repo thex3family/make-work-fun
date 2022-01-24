@@ -27,7 +27,7 @@ import PlayerCard from '@/components/Embeds/PlayerCard';
 import DailiesEntry from '@/components/Embeds/DailiesEntry';
 import CardParty from '@/components/Cards/CardParty';
 
-export default function HomePage() {
+export default function HomePage({metaBase, setMeta}) {
   // const [recoveryToken, setRecoveryToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -160,6 +160,16 @@ export default function HomePage() {
     //   review_party_rating: null
     // }
   ];
+
+  // sets the meta tags
+
+  useEffect(() => {
+    const meta = {
+      title: metaBase.title,
+      description: metaBase.description
+    }
+    setMeta(meta)
+  }, []);
 
   useEffect(() => {
     if (openTab == 1 && sNPlayers) setActivePlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']));
