@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase-client';
 import Link from 'next/link';
 import { shareWithGuilded } from '@/utils/sendGuildedWebhook';
+import useSound from 'use-sound';
 
 export default function WinModal({
   page,
@@ -54,8 +55,11 @@ export default function WinModal({
 
   const [boxClass, setBoxClass] = useState('');
 
+  const [boxOpenSFX] = useSound('/sounds/1-up.wav');
+
   function openBox() {
     boxClass != 'hide-box' ? setBoxClass('open-box') : '';
+    boxOpenSFX();
   }
 
   function closeModal() {

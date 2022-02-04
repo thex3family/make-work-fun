@@ -2,7 +2,6 @@ import Confetti from '@/components/Widgets/confetti';
 import Quotes from '@/utils/quotes.json';
 let quote = Quotes[(Quotes.length * Math.random()) << 0];
 import useSound from 'use-sound';
-import { useEffect } from 'react';
 
 
 const ModalLevelUp = ({ playerLevel, setLevelUp }) => {
