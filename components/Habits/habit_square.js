@@ -37,10 +37,11 @@ export default function HabitSquare({
     const habitCompletedToday =
     moment(streak_end).format('yyyy-MM-DD') == moment().startOf('day').format('yyyy-MM-DD');
     setHabitCompletedToday(habitCompletedToday);
-    setHabitCounter((v) => [...v, 'Complete']);
 
-    // hacky way of not showing the previous time's habit_detail. 
     if(habitCompletedToday){
+      // make sure the habit counter only adds if the habitcompleted today is tue
+      setHabitCounter((v) => [...v, 'Complete']);
+      // hacky way of not showing the previous time's habit_detail. 
       setDetails(habit_detail);
     }
   }
