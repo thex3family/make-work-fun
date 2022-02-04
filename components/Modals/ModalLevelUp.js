@@ -1,8 +1,21 @@
 import Confetti from '@/components/Widgets/confetti';
 import Quotes from '@/utils/quotes.json';
 let quote = Quotes[(Quotes.length * Math.random()) << 0];
+import useSound from 'use-sound';
+import { useEffect } from 'react';
+
 
 const ModalLevelUp = ({ playerLevel, setLevelUp }) => {
+  
+  const [lvlUpSFX] = useSound('/sounds/maplestory-lvl-up.mp3');
+
+  async function closeModal(){
+    setLevelUp(false)
+
+    // have to put this here because it can't be non-user triggered 
+    lvlUpSFX();
+  }
+
   return (
     <>
       <div className="h-screen absolute flex justify-center">
@@ -11,7 +24,7 @@ const ModalLevelUp = ({ playerLevel, setLevelUp }) => {
         </div>
         <div
           className="justify-center items-center flex flex-col overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-90"
-          onClick={() => setLevelUp(false)}
+          onClick={() => closeModal()}
         >
           <div className="animate-fade-in-up text-center">
             <h1 className="animate-soft-bounce shadow-md text-6xl font-black text-center sm:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
