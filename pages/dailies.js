@@ -285,7 +285,7 @@ export default function dailies({user, metaBase, setMeta}) {
 
               <div className="text-center my-5">
                 <Link href="/dailies/edit">
-                  <button className="px-5 border-2 border-dailies-dark text-center text-dailies bg-dailies-light font-bold py-2 rounded hover:border-white hover:text-white">
+                  <button className="px-5 border-2 border-dailies-dark text-center text-dailies bg-dailies-light font-bold py-2 rounded hover:bg-dailies-dark hover:border-white hover:text-white">
                     Edit Dailies
                   </button>
                 </Link>
