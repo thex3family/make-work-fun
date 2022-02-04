@@ -685,6 +685,7 @@ export async function fetchDailies(player, setHabits, setLevelUp, setDailiesCoun
 
     if (data) {
       setHabits(data);
+    console.log(data);
     }
 
     if (click === 'click') {
@@ -705,7 +706,6 @@ export async function fetchDailies(player, setHabits, setLevelUp, setDailiesCoun
     // alert(error.message)
   } finally {
     setDailiesCount(await fetchDailiesCompletedToday(player));
-    // console.log(habits);
   }
 }
 
