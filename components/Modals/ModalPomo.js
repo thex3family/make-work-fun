@@ -9,11 +9,16 @@ export default function ModalPomo({ visibility, setVisibility, mobileDevice, use
   async function changePomo(type) {
     setPomoType(type);
     if (type == 'solo') {
-      setPomoURL(`https://cuckoo.team/` + userID)
+      setPomoURL(`https://cuckoo.team/` + (userID ? userID : ''))
     } else {
       setPomoURL('https://cuckoo.team/thex3family')
     }
   }
+
+  
+  useEffect(() => {
+    changePomo(pomoType);
+  }, [userID]);
 
 
   return (
