@@ -36,7 +36,7 @@ const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music, setPlayer, pl
               Music
             </span>
           </a>
-          <a onClick={() => setPlayer(!player)} className={`cursor-pointer w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 transform ${music ? "bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500" : "hover:text-white"}`}>
+          <a onClick={() => setPlayer(!player)} className={`cursor-pointer w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 transform ${player ? "bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500" : "hover:text-white"}`}>
             <i className="fas fa-user-circle text-xl inline-block mb-1" />
             <span className="tab tab-explore block text-sm font-medium">
               Player
