@@ -3,15 +3,15 @@ import { useUser } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 
 
-const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music }) => {
+const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music, setPlayer, player }) => {
   const { user } = useUser();
   const router = useRouter();
 
-  if (user) {
+  if (user && !router.asPath.includes('embed/')) {
     return (
       <section
         id="bottom-navigation"
-        className={`transition ease-in-out duration-150 block fixed inset-y-0 my-auto left-0 h-40 w-auto z-50 bg-dark ${mobileDevice ? 'opacity-60' : 'opacity-40'}  hover:opacity-100 shadow rounded`}
+        className={`transition ease-in-out duration-150 block fixed inset-y-0 my-auto left-0 h-56 w-auto z-50 bg-dark ${mobileDevice ? 'opacity-60' : 'opacity-40'}  hover:opacity-100 shadow rounded`}
       >
         <div id="tabs" className="flex flex-col items-center justify-between px-2 pt-1">
           {/* <NavLink href="/">
@@ -34,6 +34,12 @@ const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music }) => {
             <i className="fas fa-music text-xl inline-block mb-1" />
             <span className="tab tab-explore block text-sm font-medium">
               Music
+            </span>
+          </a>
+          <a onClick={() => setPlayer(!player)} className={`cursor-pointer w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 transform ${music ? "bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500" : "hover:text-white"}`}>
+            <i className="fas fa-user-circle text-xl inline-block mb-1" />
+            <span className="tab tab-explore block text-sm font-medium">
+              Player
             </span>
           </a>
         </div>
