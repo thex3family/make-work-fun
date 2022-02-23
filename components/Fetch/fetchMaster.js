@@ -675,6 +675,30 @@ export async function fetchNotionCredentials() {
   }
 }
 
+export async function fetchAPIKeys() {
+  try {
+    const user = supabase.auth.user();
+
+    let { data, error, status } = await supabase
+      .from('api_keys')
+      .select(`*`)
+      .eq('player', user.id)
+      .order('created_at', { ascending: true });
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      return data;
+    }
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    // setLoading(false);
+  }
+}
+
 export async function fetchDailies(player, setHabits, setLevelUp, setDailiesCount, click) {
   try {
     const { data, error } = await supabase

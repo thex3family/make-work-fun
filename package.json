@@ -36,6 +36,7 @@
     "random-word-slugs": "^0.0.5",
     "react": "^17.0.2",
     "react-canvas-confetti": "^1.2.1",
+    "react-code-blocks": "^0.0.9-0",
     "react-countup": "^5.2.0",
     "react-data-table-component": "^6.11.7",
     "react-dom": "^17.0.2",
