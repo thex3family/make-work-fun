@@ -9,12 +9,14 @@ export default function ConnectNotion({
   getNotionCredentials,
   setShowSaveModal
 }) {
+  console.log(credentials)
   const [secretKey, setSecretKey] = useState(null);
   const [databaseID, setDatabaseID] = useState(null);
   const [collaborator, setCollaborator] = useState(null);
   const [saving, setSaving] = useState(false);
   const [showCollaborator, setShowCollaborator] = useState(false);
   const [APIMessage, setAPIMessage] = useState(null);
+  const [connectError, setConnectError] = useState(null);
   const [databaseMessage, setDatabaseMessage] = useState(null);
   const [userMessage, setUserMessage] = useState(null);
   const [nickname, setNickname] = useState(null);
@@ -33,6 +35,13 @@ export default function ConnectNotion({
     if (credentials.collaborator) setCollaborator(credentials.collaborator);
     if (credentials.collaborator) setShowCollaborator(true);
   }, []);
+
+  // if the secretkey changes, validate
+  useEffect(() => {
+    if(credentials.error){
+     setConnectError(true)
+    };
+  }, [credentials.error]);
 
   // if the secretkey changes, validate
   useEffect(() => {
@@ -157,7 +166,8 @@ export default function ConnectNotion({
           nickname: nickname,
           api_secret_key: api_secret_key,
           database_id: database_id,
-          collaborator: collaborator_id
+          collaborator: collaborator_id,
+          error: null
         })
         .eq('id', row_id);
 
@@ -189,6 +199,13 @@ export default function ConnectNotion({
             {APIMessage ? <div>- {APIMessage}</div> : null}
             {databaseMessage ? <div>- {databaseMessage}</div> : null}
             {userMessage ? <div>- {userMessage}</div> : null}
+          </div>
+        </div>
+      ) : null}
+      {connectError ? (
+        <div className="flex flex-col space-y-4">
+          <div className="mt-4 text-error border border-error p-3">
+            <b>We've detected an error with your credentials. Test your connection to see how to fix.</b>
           </div>
         </div>
       ) : null}
