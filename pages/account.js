@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 
 import LoadingDots from '@/components/ui/LoadingDots';
 import Button from '@/components/ui/Button';
@@ -15,8 +15,10 @@ import {
   minifyRecords
 } from '@/utils/airtable';
 import ConnectNotion from '@/components/API/ConnectNotion';
-import { fetchNotionCredentials } from '@/components/Fetch/fetchMaster';
+import { fetchAPIKeys, fetchNotionCredentials } from '@/components/Fetch/fetchMaster';
 import { truncateString } from '@/utils/truncateString';
+import { Menu, Transition } from '@headlessui/react';
+import ConnectPOST from '@/components/API/ConnectPOST';
 
 function Card({ title, description, footer, children }) {
   return (
@@ -44,14 +46,16 @@ export default function Account({
   const [full_name, setName] = useState(null);
 
   const [notionCredentials, setNotionCredentials] = useState(null);
+  const [APIKeys, setAPIKeys] = useState(null);
 
   const { user, userLoaded, session, userDetails } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
   const [activeTab, setActiveTab] = useState(1);
+  const [activeConnect, setActiveConnect] = useState(1);
 
-  
+
   const { tab } = router.query;
 
   useEffect(() => {
@@ -70,13 +74,14 @@ export default function Account({
     }
     if (tab_id == 2) {
       router.push(`account/?tab=profile`, undefined, { shallow: true })
-    } 
+    }
     setActiveTab(tab_id);
   }
 
   useEffect(() => {
     if (user && session) getProfile();
     if (user && session) getNotionCredentials();
+    if (user && session) getAPIKeys();
     if (subscriptionPurchaseRecord && session)
       getSubscriptionStatus(subscriptionPurchaseRecord[0]);
   }, [session]);
@@ -107,6 +112,10 @@ export default function Account({
 
   async function getNotionCredentials() {
     setNotionCredentials(await fetchNotionCredentials());
+  }
+
+  async function getAPIKeys() {
+    setAPIKeys(await fetchAPIKeys());
   }
 
   async function updateProfile({ full_name }) {
@@ -753,7 +762,7 @@ export default function Account({
                           full_name
                         })
                       }
-                      disabled={saveLoading}
+                      disabled={saveLoading || loading}
                     >
                       {saveLoading ? 'Saving ...' : 'Save'}
                     </Button>
@@ -761,26 +770,111 @@ export default function Account({
                 }
               >
                 {!loading ?
-                <Input
-                  htmlFor="full_name"
-                  className="text-xl mt-8 mb-4 font-semibold rounded"
-                  id="full_name"
-                  type="text"
-                  value={full_name || ''}
-                  onChange={setName}
-                /> : <div className='mt-8 mb-4'><LoadingDots/></div>}
+                  <Input
+                    htmlFor="full_name"
+                    className="text-xl mt-8 mb-4 font-semibold rounded"
+                    id="full_name"
+                    type="text"
+                    value={full_name || ''}
+                    onChange={setName}
+                  /> : <div className='mt-8 mb-4'><LoadingDots /></div>}
               </Card>
-              <Card
-                title="Connect To Notion"
-                description="Integrate any database to start earning rewards for your wins."
-                footer={
-                  <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                    <p className="pb-4 sm:pb-0 w-full">
-                      We take your data protection and privacy seriously. After
-                      saving, we will describe in detail how our application will
-                      use your data and calculate your wins.
-                    </p>
-                    {/* <Button
+              <div className="flex mx-auto items-center my-6 max-w-3xl">
+                <div
+                  className="border-t border-accents-2 flex-grow mr-3"
+                  aria-hidden="true"
+                ></div>
+                <Menu as="div" className="relative inline-block mx-auto text-center">
+                  <div className='text-2xl font-medium '>
+                    <span className=''>Connect Via... </span>
+                    <Menu.Button className={`ring-0 bg-gradient-to-r from-emerald-500 to-blue-500 font-medium px-2.5 py-1.5 rounded-md`}
+                    >
+                      {activeConnect == 1 ? 'Notion' : null}
+                      {activeConnect == 2 ? 'Other' : null}
+                      <i
+                        className="fas fa-chevron-down w-5 h-5 ml-2"
+                        aria-hidden="true"
+                      />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-700 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="px-1.5 py-1.5 flex-col flex gap-1.5">
+
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                                }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                              onClick={() => setActiveConnect(1)}>
+
+                              Notion
+                            </button>
+                          )}
+                        </Menu.Item>
+                        {/* <Menu.Item>
+                          {({ active }) => (
+                            <button
+                            className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                          }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                            >
+
+                              Airtable
+                            </button>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                            className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                          }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                            >
+
+                              Obsidian
+                            </button>
+                          )}
+                        </Menu.Item> */}
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                                }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                              onClick={() => setActiveConnect(2)}>
+
+                              Other
+                            </button>
+                          )}
+                        </Menu.Item>
+
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+                <div
+                  className="border-t border-accents-2 flex-grow ml-3"
+                  aria-hidden="true"
+                ></div>
+              </div>
+              {activeConnect == 1 ?
+                <Card
+                  title="Connect To Notion"
+                  description="Integrate any database to start earning rewards for your wins."
+                  footer={
+                    <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="pb-4 sm:pb-0 w-full">
+                        We take your data protection and privacy seriously. After
+                        saving, we will describe in detail how our application will
+                        use your data and calculate your wins.
+                      </p>
+                      {/* <Button
                 className="w-full sm:w-auto"
                 variant="incognito"
                 type="submit"
@@ -789,67 +883,68 @@ export default function Account({
               >
                 {saveLoading ? 'Loading ...' : 'Continue'}
               </Button> */}
-                  </div>
-                }
-              >
-                <div className="hidden sm:block text-md text-accents-5 mt-1">
-                  Works best with success plan from{' '}
-                  <a
-                    className="text-emerald-500 font-semibold"
-                    href="https://toolbox.co-x3.com/L-CTRL"
-                    target="_blank"
-                  >
-                    L-CTRL
-                  </a>{' '}
-                  or{' '}
-                  <a
-                    className="text-emerald-500 font-semibold"
-                    href="https://toolbox.co-x3.com/gamify-life"
-                    target="_blank"
-                  >
-                    Gamify Your Life!
-                  </a>
-                </div>
-                {notionCredentials ? (
-                  notionCredentials.map((credentials) => (
-                    <ConnectNotion
-                      credentials={credentials}
-                      getNotionCredentials={getNotionCredentials}
-                      setShowSaveModal={setShowSaveModal}
-                    />
-                  ))
-                ) : (
-                  <div className='mb-4 mt-4 '><LoadingDots/></div>
-                )}
-                {notionCredentials ? (
-                  notionCredentials.length < 5 ? (
-
-                    <div className="flex items-center my-6">
-                      <div
-                        className="border-t border-accents-2 flex-grow mr-3"
-                        aria-hidden="true"
-                      ></div>
-
-                      {!loading ?
-                        <button
-                          onClick={() => addCredentials()}
-                          className="text-emerald-500 mx-auto font-semibold"
-                        >
-                          {notionCredentials.length == 0
-                            ? 'Connect To A Database'
-                            : 'Connect Additional Databases'}
-                        </button>
-                        : <LoadingDots />}
-                      <div
-                        className="border-t border-accents-2 flex-grow ml-3"
-                        aria-hidden="true"
-                      ></div>
                     </div>
+                  }
+                >
+                  <div className="hidden sm:block text-md text-accents-5 mt-1">
+                    Works best with success plan from{' '}
+                    <a
+                      className="text-emerald-500 font-semibold"
+                      href="https://toolbox.co-x3.com/L-CTRL"
+                      target="_blank"
+                    >
+                      L-CTRL
+                    </a>{' '}
+                    or{' '}
+                    <a
+                      className="text-emerald-500 font-semibold"
+                      href="https://toolbox.co-x3.com/gamify-life"
+                      target="_blank"
+                    >
+                      Gamify Your Life!
+                    </a>
+                  </div>
+                  {notionCredentials ? (
+                    notionCredentials.map((credentials) => (
+                      <ConnectNotion
+                        credentials={credentials}
+                        getNotionCredentials={getNotionCredentials}
+                        setShowSaveModal={setShowSaveModal}
+                      />
+                    ))
+                  ) : (
+                    <div className='mb-4 mt-4 '><LoadingDots /></div>
+                  )}
+                  {notionCredentials ? (
+                    notionCredentials.length < 5 ? (
 
-                  ) : null
-                ) : null}
-              </Card>
-              <div className="flex mx-auto items-center my-6 max-w-3xl">
+                      <div className="flex items-center my-6">
+                        <div
+                          className="border-t border-accents-2 flex-grow mr-3"
+                          aria-hidden="true"
+                        ></div>
+
+                        {!loading ?
+                          <button
+                            onClick={() => addCredentials()}
+                            className="text-emerald-500 mx-auto font-semibold"
+                          >
+                            {notionCredentials.length == 0
+                              ? 'Connect To A Database'
+                              : 'Connect Additional Databases'}
+                          </button>
+                          : <LoadingDots />}
+                        <div
+                          className="border-t border-accents-2 flex-grow ml-3"
+                          aria-hidden="true"
+                        ></div>
+                      </div>
+
+                    ) : null
+                  ) : null}
+                </Card>
+                : null}
+              {/* <div className="flex mx-auto items-center my-6 max-w-3xl">
                 <div
                   className="border-t border-accents-2 flex-grow mr-3"
                   aria-hidden="true"
@@ -862,30 +957,55 @@ export default function Account({
                   className="border-t border-accents-2 flex-grow ml-3"
                   aria-hidden="true"
                 ></div>
-              </div>
-              <Card
-                title="Connect Other Productivity Tools"
-                description="Airtable, Clickup, Asana, and more."
-                footer={
-                  <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                    <p className="pb-4 sm:pb-0">
-                      Coming soon! Vote on which ones you want us to focus on{' '}
-                      <a
-                        className="text-emerald-500 font-semibold"
-                        href="https://toolbox.co-x3.com/family-connection"
-                        target="_blank"
-                      >
-                        here.
+              </div> */}
+              {activeConnect == 2 ?
+              <><Card
+              title="Submit Win Via API"
+              description="Connect any app to share your wins via your secret API key."
+              footer={
+                <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                  <p className="pb-4 sm:pb-0 w-full">
+                    If you are building an application that can integrate with the Make Work Fun app, please <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
+                        let us know.
                       </a>
-                    </p>
-                    {/* <Button className="w-full sm:w-auto"
-            variant="slim"
-          >
-            Learn More
-          </Button> */}
-                  </div>
-                }
-              ></Card>
+                  </p>
+                </div>
+              }
+            >
+              
+              
+                  <ConnectPOST
+                  APIKeys={APIKeys}
+                  getAPIKeys={getAPIKeys}
+                  />
+            </Card>
+                <Card
+                  title="Connect Other Productivity Tools"
+                  description="Airtable, Clickup, Asana, and more."
+                  footer={
+                    <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="pb-4 sm:pb-0">
+                        Coming soon! Vote on which ones you want us to focus on{' '}
+                        <a
+                          className="text-emerald-500 font-semibold"
+                          href="https://toolbox.co-x3.com/family-connection"
+                          target="_blank"
+                        >
+                          here.
+                        </a>
+                      </p>
+                      {/* <Button className="w-full sm:w-auto"
+          variant="slim"
+        >
+          Learn More
+        </Button> */}
+                    </div>
+                  }
+                ></Card>
+                </>
+                : null
+              }
+
               {/* <Card
           footer={
             <div className="text-center">
