@@ -167,6 +167,7 @@ export default function ConnectNotion({
           api_secret_key: api_secret_key,
           database_id: database_id,
           collaborator: collaborator_id,
+          modified_at: new Date(),
           error: null
         })
         .eq('id', row_id);
