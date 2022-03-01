@@ -3,6 +3,7 @@ import moment from 'moment';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase-client';
 import Input from '@/components/ui/Input';
+import ModalDQDetail from '../Modals/ModalDQDetail';
 
 export default function HabitSquare({
   habit_id,
@@ -28,6 +29,7 @@ export default function HabitSquare({
   const [timeDenominator, setTimeDenominator] = useState('MINS');
 
   const [demoCompleted, setDemoCompleted] = useState(false);
+  const [showDailyQuestDetail, setShowDailyQuestDetail] = useState(false);
 
   useEffect(() => {
     if (streak_end) wasHabitCompletedToday(streak_end);
@@ -166,16 +168,16 @@ export default function HabitSquare({
     }
   }
 
-  return (
+  return (<>
     <div
       key={habit_id}
-      onClick={
-        habit_type == 'Checkbox'
-          ? saving
-            ? null
-            : () => handleHabitCompletionStatusChange(habit_id)
-          : null
-      }
+      // onClick={
+      //   habit_type == 'Checkbox'
+      //     ? saving
+      //       ? null
+      //       : () => handleHabitCompletionStatusChange(habit_id)
+      //     : null
+      // }
       className={`animate-fade-in-down my-4 mb-0 sm:mb-8 p-4 sm:p-6 w-full sm:w-64 relative ${
         habitCompletedToday
           ? details == 'meh'
@@ -185,7 +187,7 @@ export default function HabitSquare({
             : `bg-emerald-500 border-emerald-700`
           : `bg-dailies-light border-dailies-dark`
       } rounded z-10 square shadow-lg border-4 ${
-        habit_type == 'Checkbox' ? `cursor-pointer` : null
+        habit_type == 'Checkbox' ? null : null
       }`}
     >
       {saving ? (
@@ -238,7 +240,7 @@ export default function HabitSquare({
         {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
         <div className="flex-col text-left sm:text-center w-2/3 sm:w-full">
           <h2 className="text-lg sm:text-xl font-bold mb-1 sm:mb-3 leading-snug text-black">
-            {habit_title}
+            {habit_title}<span className='z-50 ml-2 fas fa-info-circle cursor-pointer' onClick={()=>setShowDailyQuestDetail(true)}/>
           </h2>
           {habit_type == 'Checkbox' ? (
             <div>
@@ -246,7 +248,13 @@ export default function HabitSquare({
                 {habit_progress_statement(streak_duration)}
               </p>
               <div className="flex justify-start sm:justify-center">
-                <i className="fas fa-check text-2xl sm:text-3xl self-center font-semibold text-black" />
+                <button className="fas fa-check cursor-pointer text-2xl sm:text-3xl self-center font-semibold text-black" onClick={
+        habit_type == 'Checkbox'
+          ? saving
+            ? null
+            : () => handleHabitCompletionStatusChange(habit_id)
+          : null
+      }/>
               </div>
             </div>
           ) : null}
@@ -458,5 +466,22 @@ export default function HabitSquare({
         </div>
       </div>
     </div>
+    
+
+{showDailyQuestDetail ? (
+  <>
+    <ModalDQDetail
+    setShowDailyQuestDetail = {setShowDailyQuestDetail}
+    habit_id={habit_id}
+    habit_description={habit_description}
+    fetchDailies={fetchDailies}
+    player = {player}
+    setHabits = {setHabits} 
+    setLevelUp = {setLevelUp} 
+    setDailiesCount = {setDailiesCount}
+    />
+  </>
+) : null}
+</>
   );
 }

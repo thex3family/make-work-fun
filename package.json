@@ -24,6 +24,8 @@
     "@supabase/supabase-js": "^1.15.0",
     "@supabase/ui": "^0.27.2",
     "@tailwindcss/forms": "0.2.1",
+    "@tiptap/react": "^2.0.0-beta.108",
+    "@tiptap/starter-kit": "^2.0.0-beta.183",
     "airtable": "^0.11.1",
     "antd": "^4.16.8",
     "chart.js": "2.9.4",
@@ -55,6 +57,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "0.4.1",
     "autoprefixer": "10.2.5",
     "postcss": "8.2.8",
     "postcss-flexbugs-fixes": "5.0.2",
