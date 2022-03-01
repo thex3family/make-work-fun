@@ -119,7 +119,7 @@ export default function Layout({ children, meta }) {
         <SideBar mobileDevice={mobileDevice} setTimer={setTimer} timer={timer} setMusic={setMusic} music={music} setPlayer={setPlayer} player={player} />
         <ModalPomo visibility={timer} setVisibility={setTimer} mobileDevice={mobileDevice} userID={user?.id}/>
         <ModalMusic visibility={music} setVisibility={setMusic} mobileDevice={mobileDevice}/> 
-        <ModalPlayer visibility={player} setVisibility={setPlayer} mobileDevice={mobileDevice}/> {children}</main>
+        <ModalPlayer visibility={player} setVisibility={setPlayer} mobileDevice={mobileDevice} user={user}/> {children}</main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
           !router.asPath.includes('embed/') ? (
