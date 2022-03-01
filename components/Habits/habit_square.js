@@ -37,10 +37,10 @@ export default function HabitSquare({
 
   function wasHabitCompletedToday(streak_end) {
     const habitCompletedToday =
-    moment(streak_end).format('yyyy-MM-DD') == moment().startOf('day').format('yyyy-MM-DD');
+      moment(streak_end).format('yyyy-MM-DD') == moment().startOf('day').format('yyyy-MM-DD');
     setHabitCompletedToday(habitCompletedToday);
 
-    if(habitCompletedToday){
+    if (habitCompletedToday) {
       // make sure the habit counter only adds if the habitcompleted today is tue
       setHabitCounter((v) => [...v, 'Complete']);
       // hacky way of not showing the previous time's habit_detail. 
@@ -51,8 +51,8 @@ export default function HabitSquare({
   function habit_progress_statement(streak_duration) {
     return (streak_duration != 0) & (streak_duration != null)
       ? '' +
-          (streak_duration > 9 ? '9+ ' : streak_duration + ' day ') +
-          'streak! 🔥'
+      (streak_duration > 9 ? '9+ ' : streak_duration + ' day ') +
+      'streak! 🔥'
       : 'You got this! ✊';
   }
 
@@ -145,7 +145,7 @@ export default function HabitSquare({
 
       //console.log('handleHabitCompletionStatusChange');
       toggleHabitStatus(habit_id, type, inputDetails).then(() => {
-        fetchDailies(player, setHabits, setLevelUp, setDailiesCount,'click');
+        fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
       });
     }
   }
@@ -178,17 +178,15 @@ export default function HabitSquare({
       //       : () => handleHabitCompletionStatusChange(habit_id)
       //     : null
       // }
-      className={`animate-fade-in-down my-4 mb-0 sm:mb-8 p-4 sm:p-6 w-full sm:w-64 relative ${
-        habitCompletedToday
+      className={`animate-fade-in-down my-4 mb-0 sm:mb-8 p-4 sm:p-6 w-full sm:w-64 relative ${habitCompletedToday
           ? details == 'meh'
             ? `bg-yellow-500 border-yellow-700`
             : details == 'unhappy'
-            ? `bg-red-500 border-red-700`
-            : `bg-emerald-500 border-emerald-700`
+              ? `bg-red-500 border-red-700`
+              : `bg-emerald-500 border-emerald-700`
           : `bg-dailies-light border-dailies-dark`
-      } rounded z-10 square shadow-lg border-4 ${
-        habit_type == 'Checkbox' ? null : null
-      }`}
+        } rounded z-10 square shadow-lg border-4 ${habit_type == 'Checkbox' ? null : null
+        }`}
     >
       {saving ? (
         <div className="inline-flex absolute top-0 right-0 mt-2 mr-2 text-xs font-semibold py-2 px-3 uppercase rounded text-white bg-gradient-to-r from-emerald-500 to-blue-500 border-emerald-500 z-50">
@@ -240,7 +238,7 @@ export default function HabitSquare({
         {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
         <div className="flex-col text-left sm:text-center w-2/3 sm:w-full">
           <h2 className="text-lg sm:text-xl font-bold mb-1 sm:mb-3 leading-snug text-black">
-            {habit_title}<span className='z-50 ml-2 fas fa-info-circle cursor-pointer' onClick={()=>setShowDailyQuestDetail(true)}/>
+            {habit_title}<span className='z-50 ml-2 fas fa-info-circle cursor-pointer' onClick={() => setShowDailyQuestDetail(true)} />
           </h2>
           {habit_type == 'Checkbox' ? (
             <div>
@@ -248,13 +246,9 @@ export default function HabitSquare({
                 {habit_progress_statement(streak_duration)}
               </p>
               <div className="flex justify-start sm:justify-center">
-                <button className="fas fa-check cursor-pointer text-2xl sm:text-3xl self-center font-semibold text-black" onClick={
-        habit_type == 'Checkbox'
-          ? saving
-            ? null
-            : () => handleHabitCompletionStatusChange(habit_id)
-          : null
-      }/>
+                <button className="fas fa-check text-2xl sm:text-3xl self-center font-semibold text-black" 
+                disabled={saving}
+                onClick={() => handleHabitCompletionStatusChange(habit_id)} />
               </div>
             </div>
           ) : null}
@@ -265,13 +259,12 @@ export default function HabitSquare({
               </p>
               <div className="flex-row flex gap-2 justify-start sm:justify-center mb-4">
                 <button
-                  className={`cursor-pointer text-4xl text-black far fa-smile ${
-                    habitCompletedToday
+                  className={`text-4xl text-black far fa-smile ${habitCompletedToday
                       ? details == 'happy'
                         ? `opacity-100`
                         : `opacity-10 hover:opacity-100`
                       : `hover:text-emerald-500`
-                  }`}
+                    }`}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
                       habit_id,
@@ -282,13 +275,12 @@ export default function HabitSquare({
                   disabled={saving}
                 />
                 <button
-                  className={`cursor-pointer text-4xl text-black far fa-meh ${
-                    habitCompletedToday
+                  className={`text-4xl text-black far fa-meh ${habitCompletedToday
                       ? details == 'meh'
                         ? `opacity-100`
                         : `opacity-10 hover:opacity-100`
                       : `hover:text-yellow-500`
-                  }`}
+                    }`}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
                       habit_id,
@@ -299,13 +291,12 @@ export default function HabitSquare({
                   disabled={saving}
                 />
                 <button
-                  className={`cursor-pointer text-4xl text-black far fa-frown ${
-                    habitCompletedToday
+                  className={`text-4xl text-black far fa-frown ${habitCompletedToday
                       ? details == 'unhappy'
                         ? `opacity-100`
                         : `opacity-10 hover:opacity-100`
                       : `hover:text-red-500`
-                  }`}
+                    }`}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
                       habit_id,
@@ -348,9 +339,8 @@ export default function HabitSquare({
               </p>
               <div className="flex-row flex gap-2 justify-start sm:justify-center mb-4">
                 <button
-                  className={`text-4xl opacity-10 text-black far fa-minus-square ${
-                    details > 0 ? `hover:opacity-100` : ``
-                  }`}
+                  className={`text-4xl opacity-10 text-black far fa-minus-square ${details > 0 ? `hover:opacity-100` : ``
+                    }`}
                   disabled={details > 0 ? false : true}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
@@ -359,6 +349,7 @@ export default function HabitSquare({
                       Number(details) - 1
                     )
                   }
+                  disabled={saving}
                 />
                 <div className="text-3xl mb-0.5 px-2 self-center font-semibold text-black">
                   {details ? details : 0}
@@ -372,6 +363,7 @@ export default function HabitSquare({
                       Number(details) + 1
                     )
                   }
+                  disabled={saving}
                 />
               </div>
             </div>
@@ -398,6 +390,7 @@ export default function HabitSquare({
                     details
                   )
                 }
+                disabled={saving}
               >
                 {habitCompletedToday ? 'Update' : 'Save'}
               </button>
@@ -417,9 +410,8 @@ export default function HabitSquare({
                 />
                 <div className="flex flex-col">
                   <button
-                    className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${
-                      timeDenominator == 'HRS' ? `opacity-100` : `opacity-30`
-                    }`}
+                    className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${timeDenominator == 'HRS' ? `opacity-100` : `opacity-30`
+                      }`}
                     variant="slim"
                     disabled={timeDenominator == 'HRS'}
                     onClick={() => convertTime('HRS', details)}
@@ -427,9 +419,8 @@ export default function HabitSquare({
                     HRS
                   </button>
                   <button
-                    className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${
-                      timeDenominator == 'MINS' ? `opacity-100` : `opacity-30`
-                    }`}
+                    className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${timeDenominator == 'MINS' ? `opacity-100` : `opacity-30`
+                      }`}
                     variant="slim"
                     disabled={timeDenominator == 'MINS'}
                     onClick={() => convertTime('MINS', details)}
@@ -466,22 +457,22 @@ export default function HabitSquare({
         </div>
       </div>
     </div>
-    
 
-{showDailyQuestDetail ? (
-  <>
-    <ModalDQDetail
-    setShowDailyQuestDetail = {setShowDailyQuestDetail}
-    habit_id={habit_id}
-    habit_description={habit_description}
-    fetchDailies={fetchDailies}
-    player = {player}
-    setHabits = {setHabits} 
-    setLevelUp = {setLevelUp} 
-    setDailiesCount = {setDailiesCount}
-    />
+
+    {showDailyQuestDetail ? (
+      <>
+        <ModalDQDetail
+          setShowDailyQuestDetail={setShowDailyQuestDetail}
+          habit_id={habit_id}
+          habit_description={habit_description}
+          fetchDailies={fetchDailies}
+          player={player}
+          setHabits={setHabits}
+          setLevelUp={setLevelUp}
+          setDailiesCount={setDailiesCount}
+        />
+      </>
+    ) : null}
   </>
-) : null}
-</>
   );
 }
