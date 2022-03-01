@@ -11,7 +11,7 @@ const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music, setPlayer, pl
     return (
       <section
         id="bottom-navigation"
-        className={`transition ease-in-out duration-150 block fixed inset-y-0 my-auto left-0 h-56 w-auto z-50 bg-dark ${mobileDevice ? 'opacity-60' : 'opacity-40'}  hover:opacity-100 shadow rounded`}
+        className={`transition ease-in-out duration-150 block fixed inset-y-0 my-auto left-0 h-56 w-auto z-50 bg-dark ${mobileDevice ? 'opacity-60' : 'opacity-100'}  hover:opacity-100 shadow rounded`}
       >
         <div id="tabs" className="flex flex-col items-center justify-between px-2 pt-1">
           {/* <NavLink href="/">
