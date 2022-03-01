@@ -5,14 +5,14 @@ import Button from "../ui/Button";
 import { fetchAuthenticationLink } from "../Fetch/fetchMaster";
 
 
-export default function ModalPlayer({ visibility, setVisibility, mobileDevice }) {
+export default function ModalPlayer({ visibility, setVisibility, mobileDevice, user }) {
   const [size, setSize] = useState('small');
   const [playerURL, setPlayerURL] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchAuthenticationLink('player-details', setPlayerURL, setLoading);
-  }, []);
+  }, [user]);
 
   return (
     <div className={`w-screen ${visibility ? '' : 'hidden'}`}>
