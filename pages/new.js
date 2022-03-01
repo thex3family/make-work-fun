@@ -26,13 +26,45 @@ export default function updates({metaBase, setMeta}) {
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
           <CardLUpdate
+            date="Mar 01, 2022"
+            title="Create A Story For Your Daily Quests"
+            desc="Click on the (i) on any of your daily quests to jot down notes, reminders, and more - creating your own personalized questing experience!"
+            img_url="updates/0.36.PNG"
+            button_url="/dailies"
+            version="v.36"
+            latest={true}
+          />
+          <CardRUpdate
+            date="Feb 24, 2022"
+            title="Custom API For Developers"
+            desc="We made it easy for developers to directly send wins to their avatar via their API secret key for the Make Work Fun app."
+            img_url="updates/0.35.PNG"
+            button_url="/account?tab=profile"
+            version="v.35"
+          />
+          <CardLUpdate
+            date="Feb 18, 2022"
+            title="View Your Avatar Everywhere"
+            desc="We know that you want to see your amazing avatar all the time, so we've made your avatar follow you and give updates wherever you go."
+            img_url="updates/0.34.PNG"
+            button_url="/signin"
+            version="v.34"
+          />
+          <CardRUpdate
+            date="Jan 25, 2022"
+            title="Soundtracks To Get You Going"
+            desc="Music is one of the best cues to get you into the mindset for getting stuff done, so we've integrated with Spotify to bring you your favourite hits."
+            img_url="updates/0.33.PNG"
+            button_url="/signin"
+            version="v.33"
+          />
+          <CardLUpdate
             date="Jan 24, 2022"
             title="Be Intentional With Your Time"
             desc="We've created your very first tool - a pomodoro timer that you can start on your own or with the family that follows you around the app!"
             img_url="updates/0.32.png"
             button_url="/signin"
             version="v.32"
-            latest={true}
           />
           <CardRUpdate
             date="Jan 20, 2022"

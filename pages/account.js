@@ -790,7 +790,8 @@ export default function Account({
                     <Menu.Button className={`ring-0 bg-gradient-to-r from-emerald-500 to-blue-500 font-medium px-2.5 py-1.5 rounded-md`}
                     >
                       {activeConnect == 1 ? 'Notion' : null}
-                      {activeConnect == 2 ? 'Other' : null}
+                      {activeConnect == 2 ? 'API' : null}
+                      {activeConnect == 3 ? 'Other' : null}
                       <i
                         className="fas fa-chevron-down w-5 h-5 ml-2"
                         aria-hidden="true"
@@ -848,6 +849,17 @@ export default function Account({
                               className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
                                 }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
                               onClick={() => setActiveConnect(2)}>
+
+                              API
+                            </button>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                                }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                              onClick={() => setActiveConnect(3)}>
 
                               Other
                             </button>
@@ -979,6 +991,13 @@ export default function Account({
                   getAPIKeys={getAPIKeys}
                   />
             </Card>
+                
+                </>
+                : null
+              }
+
+{activeConnect == 3 ?
+              <>
                 <Card
                   title="Connect Other Productivity Tools"
                   description="Airtable, Clickup, Asana, and more."
