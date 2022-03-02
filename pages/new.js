@@ -29,7 +29,7 @@ export default function updates({metaBase, setMeta}) {
             date="Mar 01, 2022"
             title="Create A Story For Your Daily Quests"
             desc="Click on the (i) on any of your daily quests to jot down notes, reminders, and more - creating your own personalized questing experience!"
-            img_url="updates/0.36.PNG"
+            img_url="updates/0.36.png"
             button_url="/dailies"
             version="v.36"
             latest={true}
@@ -38,7 +38,7 @@ export default function updates({metaBase, setMeta}) {
             date="Feb 24, 2022"
             title="Custom API For Developers"
             desc="We made it easy for developers to directly send wins to their avatar via their API secret key for the Make Work Fun app."
-            img_url="updates/0.35.PNG"
+            img_url="updates/0.35.png"
             button_url="/account?tab=profile"
             version="v.35"
           />
@@ -46,7 +46,7 @@ export default function updates({metaBase, setMeta}) {
             date="Feb 18, 2022"
             title="View Your Avatar Everywhere"
             desc="We know that you want to see your amazing avatar all the time, so we've made your avatar follow you and give updates wherever you go."
-            img_url="updates/0.34.PNG"
+            img_url="updates/0.34.png"
             button_url="/signin"
             version="v.34"
           />
@@ -54,7 +54,7 @@ export default function updates({metaBase, setMeta}) {
             date="Jan 25, 2022"
             title="Soundtracks To Get You Going"
             desc="Music is one of the best cues to get you into the mindset for getting stuff done, so we've integrated with Spotify to bring you your favourite hits."
-            img_url="updates/0.33.PNG"
+            img_url="updates/0.33.png"
             button_url="/signin"
             version="v.33"
           />
