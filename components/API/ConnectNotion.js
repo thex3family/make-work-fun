@@ -168,7 +168,8 @@ export default function ConnectNotion({
           database_id: database_id,
           collaborator: collaborator_id,
           modified_at: new Date(),
-          error: null
+          error: null,
+          err_execution_id: null
         })
         .eq('id', row_id);
 
