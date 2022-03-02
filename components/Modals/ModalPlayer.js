@@ -21,7 +21,7 @@ export default function ModalPlayer({ visibility, setVisibility, mobileDevice, u
           handle=".handle"
           defaultPosition={{ x: 0, y: 25 }}
           scale={1}>
-          <div className={`${mobileDevice ? 'opacity-100' : 'opacity-100'} hover:opacity-100 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl sm:my-8 sm:align-middle ${size == 'large' ? 'w-1/2' : size == 'medium' ? 'w-1/3' : 'w-full md:w-1/4'}`}>
+          <div className={`${mobileDevice ? 'opacity-100' : 'opacity-20'} hover:opacity-100 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl sm:my-8 sm:align-middle ${size == 'large' ? 'w-1/2' : size == 'medium' ? 'w-1/3' : 'w-full md:w-1/4'}`}>
             <div className="handle bg-gradient-to-r from-emerald-500 to-blue-500 h-5 cursor-move" />
             <div className="bg-gray-50 px-4 py-3 flex justify-between items-center flex-row">
               <div>
