@@ -11,6 +11,11 @@ import ModalPomo from './Modals/ModalPomo';
 import SideBar from '@/components/ui/SideBar/SideBar';
 import ModalMusic from './Modals/ModalMusic';
 import ModalPlayer from './Modals/ModalPlayer';
+import { fetchLatestWin, fetchPlayerStats } from './Fetch/fetchMaster';
+import { triggerCardWin, triggerWinModal } from './Modals/ModalHandler';
+import ModalLevelUp from './Modals/ModalLevelUp';
+import WinModal from './Modals/ModalWin';
+import CardWin from './Cards/CardWin';
 
 
 export default function Layout({ children, meta }) {
@@ -78,6 +83,33 @@ export default function Layout({ children, meta }) {
     }
   }
 
+  // Handle Win Modal
+  
+  const [levelUp, setLevelUp] = useState(false);
+  const [showWinModal, setShowWinModal] = useState(false);
+  const [activeModalStats, setActiveModalStats] = useState(null);
+  const [activeWinStats, setActiveWinStats] = useState(null);
+  const [playerStats, setPlayerStats] = useState(null);
+  const [showCardWin, setShowCardWin] = useState(false);
+
+  useEffect(() => {
+      fetchLatestWin(
+        setActiveModalStats,
+        refreshStats,
+        setLevelUp,
+        triggerWinModal,
+        setShowWinModal,
+        null,
+        triggerCardWin,
+        setShowCardWin,
+        setActiveWinStats
+      );
+  }, []);
+
+  async function refreshStats() {
+    setPlayerStats(await fetchPlayerStats());
+  }
+
   return (
     <>
       <Head>
@@ -117,9 +149,38 @@ export default function Layout({ children, meta }) {
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       <main id="skip">
         <SideBar mobileDevice={mobileDevice} setTimer={setTimer} timer={timer} setMusic={setMusic} music={music} setPlayer={setPlayer} player={player} />
-        <ModalPomo visibility={timer} setVisibility={setTimer} mobileDevice={mobileDevice} userID={user?.id}/>
-        <ModalMusic visibility={music} setVisibility={setMusic} mobileDevice={mobileDevice}/> 
-        <ModalPlayer visibility={player} setVisibility={setPlayer} mobileDevice={mobileDevice} user={user}/> {children}</main>
+        <ModalPomo visibility={timer} setVisibility={setTimer} mobileDevice={mobileDevice} userID={user?.id} />
+        <ModalMusic visibility={music} setVisibility={setMusic} mobileDevice={mobileDevice} />
+        <ModalPlayer visibility={player} setVisibility={setPlayer} mobileDevice={mobileDevice} user={user} /> {children}
+
+        {/* Level Up Modal */}
+        {levelUp ? (
+          <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
+        ) : null}
+
+        {/* // Win Modal */}
+        {showWinModal ? (
+          <>
+            <WinModal
+              page={'leaderboard'}
+              activeModalStats={activeModalStats}
+              setShowWinModal={setShowWinModal}
+              playerStats={playerStats}
+              refreshStats={refreshStats}
+            />
+          </>
+        ) : null}
+
+        {/* Card Win */}
+        {showCardWin ? (
+          <CardWin
+            setShowCardWin={setShowCardWin}
+            win={activeWinStats}
+            player_name={showCardWin.full_name}
+            avatarUrl={showCardWin.avatar_url}
+          />
+        ) : null}
+      </main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
           !router.asPath.includes('embed/') ? (
