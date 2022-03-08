@@ -30,6 +30,7 @@ export default function Layout({ children, meta }) {
     return window.innerWidth <= 1024;
   }
 
+  // this runs way too many times on first load
   useEffect(() => {
     const mobileDevice = detectMob();
     setupIntercom(mobileDevice);
@@ -84,7 +85,7 @@ export default function Layout({ children, meta }) {
   }
 
   // Handle Win Modal
-  
+
   const [levelUp, setLevelUp] = useState(false);
   const [showWinModal, setShowWinModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
@@ -92,18 +93,19 @@ export default function Layout({ children, meta }) {
   const [playerStats, setPlayerStats] = useState(null);
   const [showCardWin, setShowCardWin] = useState(false);
 
+  // this also runs more times than it should
   useEffect(() => {
-      fetchLatestWin(
-        setActiveModalStats,
-        refreshStats,
-        setLevelUp,
-        triggerWinModal,
-        setShowWinModal,
-        null,
-        triggerCardWin,
-        setShowCardWin,
-        setActiveWinStats
-      );
+    fetchLatestWin(
+      setActiveModalStats,
+      refreshStats,
+      setLevelUp,
+      triggerWinModal,
+      setShowWinModal,
+      null,
+      triggerCardWin,
+      setShowCardWin,
+      setActiveWinStats
+    );
   }, []);
 
   async function refreshStats() {
@@ -148,28 +150,32 @@ export default function Layout({ children, meta }) {
       </Head>
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       <main id="skip">
-        <SideBar mobileDevice={mobileDevice} setTimer={setTimer} timer={timer} setMusic={setMusic} music={music} setPlayer={setPlayer} player={player} />
-        <ModalPomo visibility={timer} setVisibility={setTimer} mobileDevice={mobileDevice} userID={user?.id} />
-        <ModalMusic visibility={music} setVisibility={setMusic} mobileDevice={mobileDevice} />
-        <ModalPlayer visibility={player} setVisibility={setPlayer} mobileDevice={mobileDevice} user={user} /> {children}
+        {user && !router.asPath.includes('embed/') ? <>
+          <SideBar mobileDevice={mobileDevice} setTimer={setTimer} timer={timer} setMusic={setMusic} music={music} setPlayer={setPlayer} player={player} />
+          
+          {/* Eventually can refactor all this into sidebar */}
+          <ModalPomo visibility={timer} setVisibility={setTimer} mobileDevice={mobileDevice} userID={user?.id} />
+          <ModalMusic visibility={music} setVisibility={setMusic} mobileDevice={mobileDevice} />
+          <ModalPlayer visibility={player} setVisibility={setPlayer} mobileDevice={mobileDevice} user={user} />
 
-        {/* Level Up Modal */}
-        {levelUp ? (
-          <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
-        ) : null}
+          {/* Level Up Modal */}
+          {levelUp ? (
+            <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
+          ) : null}
 
-        {/* // Win Modal */}
-        {showWinModal ? (
-          <>
-            <WinModal
-              page={'leaderboard'}
-              activeModalStats={activeModalStats}
-              setShowWinModal={setShowWinModal}
-              playerStats={playerStats}
-              refreshStats={refreshStats}
-            />
-          </>
-        ) : null}
+          {/* // Win Modal */}
+          {showWinModal ? (
+            <>
+              <WinModal
+                page={'leaderboard'}
+                activeModalStats={activeModalStats}
+                setShowWinModal={setShowWinModal}
+                playerStats={playerStats}
+                refreshStats={refreshStats}
+              />
+            </>
+          ) : null}
+        </> : null}
 
         {/* Card Win */}
         {showCardWin ? (
@@ -180,6 +186,9 @@ export default function Layout({ children, meta }) {
             avatarUrl={showCardWin.avatar_url}
           />
         ) : null}
+
+        {children}
+        
       </main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
