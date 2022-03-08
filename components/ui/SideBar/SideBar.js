@@ -7,7 +7,6 @@ const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music, setPlayer, pl
   const { user } = useUser();
   const router = useRouter();
 
-  if (user && !router.asPath.includes('embed/')) {
     return (
       <section
         id="bottom-navigation"
@@ -46,7 +45,5 @@ const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music, setPlayer, pl
       </section>
     );
   }
-  return <div></div>;
-};
 
 export default Sidebar;
