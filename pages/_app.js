@@ -40,7 +40,7 @@ export default function MyApp({ Component, pageProps }) {
   };
   
   const [meta, setMeta] = useState(metaBase);
-
+  const [refreshChildStats, setRefreshChildStats] = useState(false);
 
   // useEffect(() => {
   //   const mobileDevice = detectMob();
@@ -56,8 +56,8 @@ export default function MyApp({ Component, pageProps }) {
     <>
       <div className="bg-primary">
         <UserContextProvider>
-          <Layout meta={meta}>
-            <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} />
+          <Layout meta={meta} setRefreshChildStats={setRefreshChildStats}>
+            <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} refreshChildStats={refreshChildStats} setRefreshChildStats={setRefreshChildStats} />
           </Layout>
         </UserContextProvider>
       </div>

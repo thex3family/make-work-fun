@@ -85,12 +85,14 @@ export const UserContextProvider = (props) => {
     // subscription,
     passwordReset: (options) =>
       supabase.auth.api.resetPasswordForEmail(options),
-    signIn: (options) => supabase.auth.signIn(options),
+    signIn: (options) => 
+      supabase.auth.signIn(options),
     signUp: (options) => supabase.auth.signUp(options),
     signOut: () => {
       setUserDetails(null);
       setUserOnboarding(null);
       setUserProfile(null);
+      supabase.removeAllSubscriptions();
       // setSubscription(null);
       return supabase.auth.signOut();
     }

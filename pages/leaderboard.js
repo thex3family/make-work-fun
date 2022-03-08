@@ -12,21 +12,12 @@ import { useRouter } from 'next/router';
 // functions
 
 import {
-  fetchPlayerStats,
-  fetchLatestWin,
   fetchLeaderboardStats
 } from '@/components/Fetch/fetchMaster';
-import {
-  triggerWinModal,
-  triggerCardWin
-} from '@/components/Modals/ModalHandler';
-import WinModal from '@/components/Modals/ModalWin';
-import ModalLevelUp from '@/components/Modals/ModalLevelUp';
-import CardWin from '@/components/Cards/CardWin';
 import Pagination from '@/components/Pagination';
 import { downloadImage } from '@/utils/downloadImage';
 
-export default function HomePage({metaBase, setMeta}) {
+export default function HomePage({metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [recoveryToken, setRecoveryToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -45,16 +36,6 @@ export default function HomePage({metaBase, setMeta}) {
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const [levelUp, setLevelUp] = useState(false);
-
-  const [showWinModal, setShowWinModal] = useState(false);
-  const [activeModalStats, setActiveModalStats] = useState(null);
-  const [activeWinStats, setActiveWinStats] = useState(null);
-  const [playerStats, setPlayerStats] = useState(null);
-  const [showCardWin, setShowCardWin] = useState(false);
-
-  const [avatarUrl, setAvatarUrl] = useState(null);
 
   const [openTab, setOpenTab] = useState(1);
 
@@ -80,7 +61,6 @@ export default function HomePage({metaBase, setMeta}) {
     }
     if (view == 'week') {
       setOpenTab(3);
-      console.log('week')
     }
   }, [view]);
 
@@ -135,21 +115,17 @@ export default function HomePage({metaBase, setMeta}) {
 
   useEffect(() => {
     refreshStats();
-    fetchLatestWin(
-      setActiveModalStats,
-      refreshStats,
-      setLevelUp,
-      triggerWinModal,
-      setShowWinModal,
-      null,
-      triggerCardWin,
-      setShowCardWin,
-      setActiveWinStats
-    );
   }, []);
 
+  useEffect(() => {
+    if(refreshChildStats){
+      refreshStats();
+      setRefreshChildStats(false);
+    }
+  }, [refreshChildStats]);
+
   async function refreshStats() {
-    setPlayerStats(await fetchPlayerStats());
+    console.log('Refreshing Stats');
     fetchLeaderboardStats(setsNPlayers, setLoading, '3S');
     fetchLeaderboardStats(setPlayers, setLoading);
   }
@@ -557,33 +533,6 @@ export default function HomePage({metaBase, setMeta}) {
           </div>
         )}
       </section>
-
-      {/* level up modal */}
-      {levelUp ? (
-        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
-      ) : null}
-
-      {/* // Modal Section */}
-      {showWinModal ? (
-        <>
-          <WinModal
-            page={'leaderboard'}
-            activeModalStats={activeModalStats}
-            setShowWinModal={setShowWinModal}
-            playerStats={playerStats}
-            refreshStats={refreshStats}
-          />
-        </>
-      ) : null}
-
-      {showCardWin ? (
-        <CardWin
-          setShowCardWin={setShowCardWin}
-          win={activeWinStats}
-          player_name={showCardWin.full_name}
-          avatarUrl={showCardWin.avatar_url}
-        />
-      ) : null}
     </>
   );
 }

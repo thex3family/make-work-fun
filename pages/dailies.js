@@ -11,7 +11,6 @@ import Countdown from '@/components/Widgets/DailiesCountdown/countdown';
 import HabitGroups from '@/components/Habits/habit_groups';
 
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
-import notifyMe from '@/components/Notify/win_notification';
 import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 
 // import Input from '@/components/ui/Input';
@@ -19,19 +18,16 @@ import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 // functions
 import {
   fetchPlayerStats,
-  fetchLatestWin,
   fetchDailies,
   fetchDailiesCompletedToday,
   dailyBonusButtons,
   claimDailyBonus
 } from '@/components/Fetch/fetchMaster';
-import { triggerWinModal } from '@/components/Modals/ModalHandler';
-import WinModal from '@/components/Modals/ModalWin';
 import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
 import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 
-export default function dailies({user, metaBase, setMeta}) {
+export default function dailies({user, metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dailiesCount, setDailiesCount] = useState(0);
@@ -92,17 +88,17 @@ export default function dailies({user, metaBase, setMeta}) {
     console.log('Loading Player');
     fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
     refreshStats();
-    fetchLatestWin(
-      setActiveModalStats,
-      refreshStats,
-      setLevelUp,
-      triggerWinModal,
-      setShowWinModal,
-      player
-    );
   }
+  
+  useEffect(() => {
+    if(refreshChildStats){
+      refreshStats();
+      setRefreshChildStats(false);
+    }
+  }, [refreshChildStats]);
 
   async function refreshStats() {
+    console.log('Refreshing Stats');
     setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
     dailyBonusButtons(player, setDailyBonus);
     setLoading(false);
@@ -303,19 +299,6 @@ export default function dailies({user, metaBase, setMeta}) {
       ) : (
         null
       )}
-
-      {/* // Modal Section */}
-      {showWinModal ? (
-        <>
-          <WinModal
-            page={'dailies'}
-            activeModalStats={activeModalStats}
-            setShowWinModal={setShowWinModal}
-            playerStats={playerStats}
-            refreshStats={refreshStats}
-          />
-        </>
-      ) : null}
     </>
   );
 }

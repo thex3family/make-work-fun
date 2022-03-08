@@ -18,7 +18,7 @@ import WinModal from './Modals/ModalWin';
 import CardWin from './Cards/CardWin';
 
 
-export default function Layout({ children, meta }) {
+export default function Layout({ children, meta, setRefreshChildStats }) {
   const router = useRouter();
   const { user, userProfile, userOnboarding } = useUser();
   const [timer, setTimer] = useState(false);
@@ -106,9 +106,10 @@ export default function Layout({ children, meta }) {
       setShowCardWin,
       setActiveWinStats
     );
-  }, []);
+  }, [user]);
 
   async function refreshStats() {
+    setRefreshChildStats(true);
     setPlayerStats(await fetchPlayerStats());
   }
 
