@@ -5,30 +5,17 @@ import LeaderboardStatistics from '@/components/Widgets/Statistics/LeaderboardSt
 import { useState, useEffect, useRef } from 'react';
 
 import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
-import RecoverPassword from '@/components/Auth/RecoverPassword';
 
 // functions
 
 import {
-  fetchPlayerStats,
-  fetchLatestWin,
   fetchLeaderboardStats
 } from '@/components/Fetch/fetchMaster';
-import {
-  triggerWinModal,
-  triggerCardWin
-} from '@/components/Modals/ModalHandler';
-import WinModal from '@/components/Modals/ModalWin';
-import ModalLevelUp from '@/components/Modals/ModalLevelUp';
-import CardWin from '@/components/Cards/CardWin';
-import Pagination from '@/components/Pagination';
-import { downloadImage } from '@/utils/downloadImage';
 import PlayerCard from '@/components/Embeds/PlayerCard';
 import DailiesEntry from '@/components/Embeds/DailiesEntry';
 import CardParty from '@/components/Cards/CardParty';
 
-export default function HomePage({metaBase, setMeta}) {
-  // const [recoveryToken, setRecoveryToken] = useState(null);
+export default function HomePage({metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [loading, setLoading] = useState(true);
 
   const [players, setPlayers] = useState([]);
@@ -45,14 +32,6 @@ export default function HomePage({metaBase, setMeta}) {
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const [levelUp, setLevelUp] = useState(false);
-
-  const [showWinModal, setShowWinModal] = useState(false);
-  const [activeModalStats, setActiveModalStats] = useState(null);
-  const [activeWinStats, setActiveWinStats] = useState(null);
-  const [playerStats, setPlayerStats] = useState(null);
-  const [showCardWin, setShowCardWin] = useState(false);
 
   const [avatarUrl, setAvatarUrl] = useState(null);
 
@@ -200,59 +179,20 @@ export default function HomePage({metaBase, setMeta}) {
 
   useEffect(() => {
     refreshStats();
-    fetchLatestWin(
-      setActiveModalStats,
-      refreshStats,
-      setLevelUp,
-      triggerWinModal,
-      setShowWinModal,
-      null,
-      triggerCardWin,
-      setShowCardWin,
-      setActiveWinStats
-    );
   }, []);
 
+  useEffect(() => {
+    if(refreshChildStats){
+      refreshStats();
+      setRefreshChildStats(false);
+    }
+  }, [refreshChildStats]);
+
   async function refreshStats() {
-    setPlayerStats(await fetchPlayerStats());
+    console.log('Refreshing Stats');
     fetchLeaderboardStats(setsNPlayers, setLoading, '3S');
     fetchLeaderboardStats(setPlayers, setLoading);
   }
-
-  // useEffect(() => {
-  //   if (sNPlayers) loadPlayerImages(sNPlayers, setsNPlayers);
-  // }, [sNPlayers]);
-
-  // useEffect(() => {
-  //   if (players) loadPlayerImages(players, setPlayers);
-  // }, [players]);
-
-  // async function loadPlayerImages(data, setData) {
-  //   var newData = data;
-
-  //   for (let i = 0; i < data.length; i++) {
-  //     let oldData = data[i];
-  //     newData[i] = {
-  //       ...oldData,
-  //       avatar_url: oldData.avatar_url
-  //         ? await downloadImage(oldData.avatar_url, 'avatar')
-  //         : null,
-  //       background_url: oldData.background_url
-  //         ? await downloadImage(oldData.background_url, 'background')
-  //         : null
-  //     };
-  //   }
-  //   setData(newData);
-  // }
-
-  // if (recoveryToken) {
-  //   return (
-  //     <RecoverPassword
-  //       token={recoveryToken}
-  //       setRecoveryToken={setRecoveryToken}
-  //     />
-  //   );
-  // }
 
   return (
     <>
@@ -695,33 +635,6 @@ export default function HomePage({metaBase, setMeta}) {
           </div>
         </div>
       </section>
-
-      {/* level up modal */}
-      {levelUp ? (
-        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
-      ) : null}
-
-      {/* // Modal Section */}
-      {showWinModal ? (
-        <>
-          <WinModal
-            page={'leaderboard'}
-            activeModalStats={activeModalStats}
-            setShowWinModal={setShowWinModal}
-            playerStats={playerStats}
-            refreshStats={refreshStats}
-          />
-        </>
-      ) : null}
-
-      {showCardWin ? (
-        <CardWin
-          setShowCardWin={setShowCardWin}
-          win={activeWinStats}
-          player_name={showCardWin.full_name}
-          avatarUrl={showCardWin.avatar_url}
-        />
-      ) : null}
     </>
   );
 }

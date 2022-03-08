@@ -16,6 +16,7 @@ export async function fetchLatestWin(
   friends
 ) {
   try {
+    console.log('checking for wins')
     // check if there is any win (only works when the app is open) - future will move it to a server
     if (!player_id) {
       const user = supabase.auth.user();
@@ -29,7 +30,6 @@ export async function fetchLatestWin(
             if (payload.new.player === user.id) {
               // Get the latest updated stats of the user
               const player = await fetchPlayerStats();
-              console.log('Player', player);
               // check if user leveled up
 
               if (player.current_level > player.previous_level) {
@@ -118,6 +118,8 @@ export async function fetchLatestWin(
   } catch (error) {
     alert(error.message);
   } finally {
+    const subscriptions = supabase.getSubscriptions();
+    console.log(subscriptions);
   }
 }
 

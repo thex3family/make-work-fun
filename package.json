@@ -21,7 +21,7 @@
     "@notionhq/client": "^0.1.9",
     "@popperjs/core": "^2.9.2",
     "@stripe/stripe-js": "1.11.0",
-    "@supabase/supabase-js": "^1.15.0",
+    "@supabase/supabase-js": "^1.31.1",
     "@supabase/ui": "^0.27.2",
     "@tailwindcss/forms": "0.2.1",
     "@tiptap/react": "^2.0.0-beta.108",

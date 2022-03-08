@@ -41,11 +41,6 @@ export default function partyDetail({metaBase, setMeta}) {
   const [specificPartyPlayer, setSpecificPartyPlayer] = useState(null);
   const { user, userOnboarding } = useUser();
 
-  const [levelUp, setLevelUp] = useState(false);
-  const [showWinModal, setShowWinModal] = useState(false);
-  const [activeModalStats, setActiveModalStats] = useState(null);
-  const [playerStats, setPlayerStats] = useState(null);
-
   const [showDetails, setShowDetails] = useState(true);
 
   const [dailyTarget, setDailyTarget] = useState(null);
@@ -125,18 +120,10 @@ export default function partyDetail({metaBase, setMeta}) {
   async function loadPlayer() {
     console.log('Loading Player');
     await refreshStats();
-    fetchLatestWin(
-      setActiveModalStats,
-      refreshStats,
-      setLevelUp,
-      triggerWinModal,
-      setShowWinModal
-    );
   }
 
   async function refreshStats() {
     console.log('statsRefreshing');
-    setPlayerStats(await fetchPlayerStats());
     setParty(await fetchParty(id));
     setLoading(false);
     setSaving(false);
@@ -1187,23 +1174,6 @@ export default function partyDetail({metaBase, setMeta}) {
             )}
           </div>
         </section>
-        {/* level up modal */}
-        {levelUp ? (
-          <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
-        ) : null}
-
-        {/* // Modal Section */}
-        {showWinModal ? (
-          <>
-            <WinModal
-              page={'parties'}
-              activeModalStats={activeModalStats}
-              setShowWinModal={setShowWinModal}
-              playerStats={playerStats}
-              refreshStats={refreshStats}
-            />
-          </>
-        ) : null}
 
         {editParty ? (
           <ModalParty setCreateParty={setEditParty} party={party} />

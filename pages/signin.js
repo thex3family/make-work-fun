@@ -77,6 +77,7 @@ const SignIn = ({ user, metaBase, setMeta }) => {
       });
       setSignLoading(false);
     }
+    supabase.removeAllSubscriptions();
   };
 
   const handlePasswordReset = async (e) => {

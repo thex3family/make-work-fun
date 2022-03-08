@@ -8,8 +8,6 @@ import { useUser } from '@/utils/useUser';
 import { supabase } from '../utils/supabase-client';
 
 import React from 'react';
-
-import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 
@@ -73,7 +71,7 @@ createTheme('game', {
   }
 });
 
-export default function Player({ metaBase, setMeta }) {
+export default function Player({ metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
@@ -254,18 +252,18 @@ export default function Player({ metaBase, setMeta }) {
   async function loadPlayer() {
     console.log('Loading Player');
     await refreshStats();
-    fetchLatestWin(
-      setActiveModalStats,
-      refreshStats,
-      setLevelUp,
-      triggerWinModal,
-      setShowWinModal
-    );
     if (win_id) loadSpecificWin(win_id);
   }
+  
+  useEffect(() => {
+    if(refreshChildStats){
+      refreshStats();
+      setRefreshChildStats(false);
+    }
+  }, [refreshChildStats]);
 
   async function refreshStats() {
-    console.log('statsRefreshing');
+    console.log('Refreshing Stats');
     setPlayerStats(await fetchPlayerStats(null, setNewToSeason));
     setWeekWins(await fetchWeekWins());
     setLoading(false);
@@ -299,15 +297,13 @@ export default function Player({ metaBase, setMeta }) {
   async function updateProfile({ image_url, type }) {
     try {
       setLoading(true);
-      if (userDetails) {
-        const user = supabase.auth.user();
         if (type === 'avatar') {
           let { error } = await supabase
             .from('users')
             .update({
               avatar_url: image_url
             })
-            .eq('id', user.id);
+            .eq('id', user);
           if (error) {
             throw error;
           }
@@ -317,13 +313,12 @@ export default function Player({ metaBase, setMeta }) {
             .update({
               background_url: image_url
             })
-            .eq('id', user.id);
+            .eq('id', usere);
 
           if (error) {
             throw error;
           }
         }
-      }
     } catch (error) {
       alert(error.message);
     } finally {
@@ -527,11 +522,6 @@ export default function Player({ metaBase, setMeta }) {
           </div>
         </div>
       </section>
-
-      {/* level up modal */}
-      {levelUp ? (
-        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
-      ) : null}
 
       {/* // Modal Section */}
       {showWinModal ? (

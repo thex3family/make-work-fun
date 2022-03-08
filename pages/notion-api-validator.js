@@ -11,11 +11,6 @@ import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 
-import {
-  fetchLatestWin,
-  fetchPlayerStats
-} from '@/components/Fetch/fetchMaster';
-
 export default function NotionWizard({ response, nickname }) {
   const router = useRouter();
   const [openTab, setOpenTab] = React.useState(1);
@@ -24,20 +19,10 @@ export default function NotionWizard({ response, nickname }) {
   const [showReadyModal, setShowReadyModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [levelUp, setLevelUp] = useState(false);
-  const [showWinModal, setShowWinModal] = useState(false);
-  const [activeModalStats, setActiveModalStats] = useState(null);
-  const [playerStats, setPlayerStats] = useState(null);
-
   useEffect(() => {
     if (userOnboarding) initializePlayer();
     if (userOnboarding) loadPlayer();
   }, [userOnboarding]);
-
-  useEffect(() => {
-    if (showWinModal) setShowRequiredModal(false);
-    if (showWinModal) setShowReadyModal(false);
-  }, [showWinModal]);
 
   function loadAndRefresh() {
     setLoading(true);
@@ -46,18 +31,8 @@ export default function NotionWizard({ response, nickname }) {
 
   async function loadPlayer() {
     console.log('Loading Player');
-    fetchLatestWin(
-      setActiveModalStats,
-      refreshStats,
-      setLevelUp,
-      triggerWinModal,
-      setShowWinModal
-    );
   }
 
-  async function refreshStats() {
-    setPlayerStats(await fetchPlayerStats());
-  }
 
   function initializePlayer() {
     try {
@@ -1403,23 +1378,6 @@ export default function NotionWizard({ response, nickname }) {
         </>
       ) : null}
 
-      {/* level up modal */}
-      {levelUp ? (
-        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
-      ) : null}
-
-      {/* // Modal Section */}
-      {showWinModal ? (
-        <>
-          <WinModal
-            page={'validator'}
-            activeModalStats={activeModalStats}
-            setShowWinModal={setShowWinModal}
-            playerStats={playerStats}
-            refreshStats={refreshStats}
-          />
-        </>
-      ) : null}
     </>
   );
 }
