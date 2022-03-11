@@ -60,6 +60,7 @@ export default function Account({
   console.log(userDetails)
 
   const { tab } = router.query;
+  const { via } = router.query;
 
   useEffect(() => {
     if (tab == 'toolbox') {
@@ -67,6 +68,18 @@ export default function Account({
     }
     if (tab == 'profile') {
       setActiveTab(2);
+    }
+    if (tab == 'connect') {
+      setActiveTab(3);
+    }
+    if (via == 'notion') {
+      setActiveConnect(1);
+    }
+    if (via == 'api') {
+      setActiveConnect(2);
+    }
+    if (via == 'other') {
+      setActiveConnect(3);
     }
   }, []);
 
@@ -78,7 +91,23 @@ export default function Account({
     if (tab_id == 2) {
       router.push(`account/?tab=profile`, undefined, { shallow: true })
     }
+    if (tab_id == 3) {
+      router.push(`account/?tab=connect`, undefined, { shallow: true })
+    }
     setActiveTab(tab_id);
+  }
+
+  async function changeActiveConnect(connect_id) {
+    if (connect_id == 1) {
+      router.push(`account/?tab=connect&via=notion`, undefined, { shallow: true })
+    }
+    if (connect_id == 2) {
+      router.push(`account/?tab=connect&via=api`, undefined, { shallow: true })
+    }
+    if (connect_id == 3) {
+      router.push(`account/?tab=connect&via=other`, undefined, { shallow: true })
+    }
+    setActiveConnect(connect_id);
   }
 
   useEffect(() => {
@@ -210,7 +239,7 @@ export default function Account({
 
   const [message, setMessage] = useState({ type: '', content: '' });
 
-  async function handlePasswordReset(email){
+  async function handlePasswordReset(email) {
 
     setLoading(true);
     setMessage({});
@@ -225,7 +254,7 @@ export default function Account({
           'You will receive an email with reset instructions at ' + user.email
       });
     }
-  
+
     setLoading(false);
   };
 
@@ -242,8 +271,8 @@ export default function Account({
             </p>
           </div>
         </div>
-        <div className="text-center bg-dark bg-opacity-40 px-4 sm:px-10 rounded-0 sm:rounded-b relative mt-7 pt-7">
-          <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 rounded-0 sm:rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
+        <div className="pb-24 sm:pb-0 text-center bg-dark bg-opacity-40 px-4 sm:px-10 rounded-0 sm:rounded-b relative mt-7 pt-7">
+          <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 rounded-xl max-w-lg py-2 sm:py-0 sm:h-14 align-middle shadow-xl grid sm:grid-cols-3 place-items-center text-lg fontmedium px-2 gap-2 grid-cols-1">
             <div
               className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 1
                 ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
@@ -261,6 +290,15 @@ export default function Account({
               onClick={() => changeTab(2)}
             >
               Profile
+            </div>
+            <div
+              className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 3
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                : 'text-blueGray-500'
+                }`}
+              onClick={() => changeTab(3)}
+            >
+              Connect
             </div>
           </div>
         </div>
@@ -759,7 +797,7 @@ export default function Account({
                 )}
               </div>
             </Card>
-            : <div className="form-widget">
+            : activeTab == 2 ? <div className="form-widget">
               {/* <div className="mx-auto max-w-3xl pt-5">
               <h1 className="text-3xl text-center sm:text-left sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                 Let's adventure together.
@@ -817,70 +855,98 @@ export default function Account({
                 }
               >
                 {!loading ?
-                <><div className="flex flex-col mt-4">{message.content && (
-                  <div
-                    className={`${message.type === 'error' ? 'text-error' : 'text-green'
-                      } border ${message.type === 'error' ? 'border-error' : 'border-green'
-                      } p-3`}
-                  >
-                    {message.content}
-                  </div>
-                )}</div>
-                  <Button
-                  className="w-full mt-4 mb-4"
-                  variant="incognito"
-                  type="submit"
-                  onClick={() =>
-                    handlePasswordReset(user.email)
-                  }
-                  disabled={loading}
-                >
-                  Reset Password
-                </Button></> : <div className='mt-8 mb-4'><LoadingDots /></div>}
-              </Card>
-              <div className="flex mx-auto items-center my-6 max-w-3xl">
-                <div
-                  className="border-t border-accents-2 flex-grow mr-3"
-                  aria-hidden="true"
-                ></div>
-                <Menu as="div" className="relative inline-block mx-auto text-center">
-                  <div className='text-2xl font-medium '>
-                    <span className=''>Connect Via... </span>
-                    <Menu.Button className={`ring-0 bg-gradient-to-r from-emerald-500 to-blue-500 font-medium px-2.5 py-1.5 rounded-md`}
+                  <><div className="flex flex-col mt-4">{message.content && (
+                    <div
+                      className={`${message.type === 'error' ? 'text-error' : 'text-green'
+                        } border ${message.type === 'error' ? 'border-error' : 'border-green'
+                        } p-3`}
                     >
-                      {activeConnect == 1 ? 'Notion' : null}
-                      {activeConnect == 2 ? 'API' : null}
-                      {activeConnect == 3 ? 'Other' : null}
-                      <i
-                        className="fas fa-chevron-down w-5 h-5 ml-2"
-                        aria-hidden="true"
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                      {message.content}
+                    </div>
+                  )}</div>
+                    <Button
+                      className="w-full mt-4 mb-4"
+                      variant="incognito"
+                      type="submit"
+                      onClick={() =>
+                        handlePasswordReset(user.email)
+                      }
+                      disabled={loading}
+                    >
+                      Reset Password
+                    </Button></> : <div className='mt-8 mb-4'><LoadingDots /></div>}
+              </Card>
+
+
+              {/* <Card
+          footer={
+            <div className="text-center">
+              <p className="pb-4 sm:pb-0">
+                By continuing, you are agreeing to our privacy policy and
+                terms of use.
+              </p>
+            </div>
+          }
+        >
+          <Button
+            className="w-full"
+            variant="prominent"
+            type="submit"
+            onClick={() =>
+              updateProfile({
+                full_name,
+                notion_api_secret,
+                notion_success_plan
+              })
+            }
+            disabled={saveLoading}
+          >
+            {saveLoading ? 'Loading ...' : 'Save & Test Connection'}
+          </Button>
+        </Card> */}
+            </div> : <><div className="flex mx-auto items-center my-6 max-w-3xl">
+              <div
+                className="border-t border-accents-2 flex-grow mr-3"
+                aria-hidden="true"
+              ></div>
+              <Menu as="div" className="relative inline-block mx-auto text-center">
+                <div className='text-2xl font-medium '>
+                  <span className=''>Connect Via... </span>
+                  <Menu.Button className={`ring-0 bg-gradient-to-r from-emerald-500 to-blue-500 font-medium px-2.5 py-1.5 rounded-md`}
                   >
-                    <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-700 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="px-1.5 py-1.5 flex-col flex gap-1.5">
+                    {activeConnect == 1 ? 'Notion' : null}
+                    {activeConnect == 2 ? 'API' : null}
+                    {activeConnect == 3 ? 'Other' : null}
+                    <i
+                      className="fas fa-chevron-down w-5 h-5 ml-2"
+                      aria-hidden="true"
+                    />
+                  </Menu.Button>
+                </div>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-700 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="px-1.5 py-1.5 flex-col flex gap-1.5">
 
-                        <Menu.Item>
-                          {({ active }) => (
-                            <button
-                              className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
-                                }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
-                              onClick={() => setActiveConnect(1)}>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                              }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                            onClick={() => changeActiveConnect(1)}>
 
-                              Notion
-                            </button>
-                          )}
-                        </Menu.Item>
-                        {/* <Menu.Item>
+                            Notion
+                          </button>
+                        )}
+                      </Menu.Item>
+                      {/* <Menu.Item>
                           {({ active }) => (
                             <button
                             className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
@@ -902,38 +968,38 @@ export default function Account({
                             </button>
                           )}
                         </Menu.Item> */}
-                        <Menu.Item>
-                          {({ active }) => (
-                            <button
-                              className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
-                                }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
-                              onClick={() => setActiveConnect(2)}>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                              }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                            onClick={() => changeActiveConnect(2)}>
 
-                              API
-                            </button>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <button
-                              className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
-                                }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
-                              onClick={() => setActiveConnect(3)}>
+                            API
+                          </button>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            className={`${active ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white' : 'text-gray-200'
+                              }group flex rounded-md items-center w-full px-3 py-2 font-medium`}
+                            onClick={() => changeActiveConnect(3)}>
 
-                              Other
-                            </button>
-                          )}
-                        </Menu.Item>
+                            Other
+                          </button>
+                        )}
+                      </Menu.Item>
 
-                      </div>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
-                <div
-                  className="border-t border-accents-2 flex-grow ml-3"
-                  aria-hidden="true"
-                ></div>
-              </div>
+                    </div>
+                  </Menu.Items>
+                </Transition>
+              </Menu>
+              <div
+                className="border-t border-accents-2 flex-grow ml-3"
+                aria-hidden="true"
+              ></div>
+            </div>
               {activeConnect == 1 ?
                 <Card
                   title="Connect To Notion"
@@ -1030,87 +1096,60 @@ export default function Account({
                 ></div>
               </div> */}
               {activeConnect == 2 ?
-              <><Card
-              title="Submit Win Via API"
-              description="Connect any app to share your wins via your secret API key."
-              footer={
-                <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                  <p className="pb-4 sm:pb-0 w-full">
-                    If you are building an application that can integrate with the Make Work Fun app, please <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
-                        let us know.
-                      </a>
-                  </p>
-                </div>
-              }
-            >
-              
-              
-                  <ConnectPOST
-                  APIKeys={APIKeys}
-                  getAPIKeys={getAPIKeys}
-                  />
-            </Card>
-                
+                <><Card
+                  title="Submit Win Via API"
+                  description="Connect any app to share your wins via your secret API key."
+                  footer={
+                    <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="pb-4 sm:pb-0 w-full">
+                        If you are building an application that can integrate with the Make Work Fun app, please <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
+                          let us know.
+                        </a>
+                      </p>
+                    </div>
+                  }
+                >
+
+                  {!loading ?
+                    <ConnectPOST
+                      APIKeys={APIKeys}
+                      getAPIKeys={getAPIKeys}
+                    />
+                    : <div className='mb-4 mt-4 '><LoadingDots /></div>}
+                </Card>
+
                 </>
                 : null
               }
 
-{activeConnect == 3 ?
-              <>
-                <Card
-                  title="Connect Other Productivity Tools"
-                  description="Airtable, Clickup, Asana, and more."
-                  footer={
-                    <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                      <p className="pb-4 sm:pb-0">
-                        Coming soon! Vote on which ones you want us to focus on{' '}
-                        <a
-                          className="text-emerald-500 font-semibold"
-                          href="https://toolbox.co-x3.com/family-connection"
-                          target="_blank"
-                        >
-                          here.
-                        </a>
-                      </p>
-                      {/* <Button className="w-full sm:w-auto"
+              {activeConnect == 3 ?
+                <>
+                  <Card
+                    title="Connect Other Productivity Tools"
+                    description="Airtable, Clickup, Asana, and more."
+                    footer={
+                      <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                        <p className="pb-4 sm:pb-0">
+                          Coming soon! Vote on which ones you want us to focus on{' '}
+                          <a
+                            className="text-emerald-500 font-semibold"
+                            href="https://toolbox.co-x3.com/family-connection"
+                            target="_blank"
+                          >
+                            here.
+                          </a>
+                        </p>
+                        {/* <Button className="w-full sm:w-auto"
           variant="slim"
         >
           Learn More
         </Button> */}
-                    </div>
-                  }
-                ></Card>
+                      </div>
+                    }
+                  ></Card>
                 </>
                 : null
-              }
-
-              {/* <Card
-          footer={
-            <div className="text-center">
-              <p className="pb-4 sm:pb-0">
-                By continuing, you are agreeing to our privacy policy and
-                terms of use.
-              </p>
-            </div>
-          }
-        >
-          <Button
-            className="w-full"
-            variant="prominent"
-            type="submit"
-            onClick={() =>
-              updateProfile({
-                full_name,
-                notion_api_secret,
-                notion_success_plan
-              })
-            }
-            disabled={saveLoading}
-          >
-            {saveLoading ? 'Loading ...' : 'Save & Test Connection'}
-          </Button>
-        </Card> */}
-            </div>
+              }</>
           }
         </div>
       </section>
