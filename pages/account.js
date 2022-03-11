@@ -48,13 +48,16 @@ export default function Account({
   const [notionCredentials, setNotionCredentials] = useState(null);
   const [APIKeys, setAPIKeys] = useState(null);
 
-  const { user, userLoaded, session, userDetails } = useUser();
+  const { user, userLoaded, session, userDetails, passwordReset } = useUser();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
   const [activeTab, setActiveTab] = useState(1);
   const [activeConnect, setActiveConnect] = useState(1);
 
+  console.log(user)
+
+  console.log(userDetails)
 
   const { tab } = router.query;
 
@@ -204,6 +207,27 @@ export default function Account({
       setLoading(false);
     }
   }
+
+  const [message, setMessage] = useState({ type: '', content: '' });
+
+  async function handlePasswordReset(email){
+
+    setLoading(true);
+    setMessage({});
+
+    const { error } = await passwordReset(email);
+    if (error) {
+      setMessage({ type: 'error', content: error.message });
+    } else {
+      setMessage({
+        type: 'note',
+        content:
+          'You will receive an email with reset instructions at ' + user.email
+      });
+    }
+  
+    setLoading(false);
+  };
 
   return (
     <>
@@ -778,6 +802,41 @@ export default function Account({
                     value={full_name || ''}
                     onChange={setName}
                   /> : <div className='mt-8 mb-4'><LoadingDots /></div>}
+              </Card>
+              <Card
+                title="Account Management"
+                description="Set a password, restart your avatar, and more."
+                footer={
+                  <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                    <p className="pb-4 sm:pb-0 w-full">
+                      More options will be made available soon. If you have questions about your account, <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">
+                        let us know.
+                      </a>
+                    </p>
+                  </div>
+                }
+              >
+                {!loading ?
+                <><div className="flex flex-col mt-4">{message.content && (
+                  <div
+                    className={`${message.type === 'error' ? 'text-error' : 'text-green'
+                      } border ${message.type === 'error' ? 'border-error' : 'border-green'
+                      } p-3`}
+                  >
+                    {message.content}
+                  </div>
+                )}</div>
+                  <Button
+                  className="w-full mt-4 mb-4"
+                  variant="incognito"
+                  type="submit"
+                  onClick={() =>
+                    handlePasswordReset(user.email)
+                  }
+                  disabled={loading}
+                >
+                  Reset Password
+                </Button></> : <div className='mt-8 mb-4'><LoadingDots /></div>}
               </Card>
               <div className="flex mx-auto items-center my-6 max-w-3xl">
                 <div
