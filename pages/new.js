@@ -25,6 +25,15 @@ export default function updates({metaBase, setMeta}) {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Mar 11, 2022"
+            title="Revamped Account Page"
+            desc="We care about your control over the app, so we've created management tools for you and improved navigation within the account page."
+            img_url="updates/0.37.png"
+            button_url="/account?tab=profile"
+            version="v.37"
+            latest={true}
+          />
           <CardLUpdate
             date="Mar 01, 2022"
             title="Create A Story For Your Daily Quests"
@@ -32,7 +41,6 @@ export default function updates({metaBase, setMeta}) {
             img_url="updates/0.36.png"
             button_url="/dailies"
             version="v.36"
-            latest={true}
           />
           <CardRUpdate
             date="Feb 24, 2022"
