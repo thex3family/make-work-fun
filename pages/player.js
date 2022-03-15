@@ -16,6 +16,8 @@ import TitleModal from '@/components/Modals/ModalTitle';
 import PlayerSkeleton from '@/components/Skeletons/PlayerSkeleton';
 import RecentWinsSkeleton from '@/components/Skeletons/RecentWinsSkeleton';
 
+import moment from 'moment';
+
 // functions
 
 import {
@@ -35,6 +37,7 @@ import { pushTitle } from '@/components/Push/pushMaster';
 import HeaderStats from 'components/Headers/HeaderStats.js';
 import DataTable, { createTheme } from 'react-data-table-component';
 import ModalOnboarding from '@/components/Modals/ModalOnboarding';
+import Button from '@/components/ui/Button';
 
 createTheme('game', {
   text: {
@@ -92,6 +95,9 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
   const [newToSeason, setNewToSeason] = useState(null);
 
   const currentHour = new Date().getHours();
+  
+  const [today_wins, setToday_wins] = useState(null);
+
   const greetingMessage =
     currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
       ? 'Morning'
@@ -105,7 +111,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
     currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
       ? 'Are you ready for your next adventure?'
       : currentHour >= 12 && currentHour <= 17 // after 12:00PM and before 6:00pm
-        ? 'Keep it up - you can do it!'
+        ? (today_wins ? "You've completed " + today_wins + (today_wins > 1 ? " wins" : " win") + " today! " : '') + 'Keep it up - you can do it! 🥳'
         : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
           ? 'Remember to take a breather to relax.' // if for some reason the calculation didn't work
           : 'Are you ready for your next adventure?';
@@ -271,6 +277,14 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
     setAreaStats(await fetchAreaStats());
     setWins(await fetchWins());
   }
+
+  useEffect(() => {
+    if(wins){
+      const today = moment().local().format('YYYY-MM-DD');
+      const win_count = wins.reduce((acc, cur) => cur.closing_date === today ? ++acc : acc, 0);
+      setToday_wins(win_count);
+    }
+  }, [wins]);
 
   async function fetchPlayerBackground(path) {
     if (path) {
@@ -476,7 +490,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
                   </span>
                 </h1>
                 <p className="mt-5 text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-                  {greetingBlurb}
+                {greetingBlurb}
                 </p>
               </div>
               <div className="max-w-6xl px-0 sm:px-4 md:px-10 mx-auto w-full -m-24">
