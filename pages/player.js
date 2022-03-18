@@ -111,7 +111,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
     currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
       ? 'Are you ready for your next adventure?'
       : currentHour >= 12 && currentHour <= 17 // after 12:00PM and before 6:00pm
-        ? (today_wins ? "You've completed " + today_wins + (today_wins > 1 ? " wins" : " win") + " today! " : '') + 'Keep it up - you can do it! 🥳'
+        ? 'Keep it up - you can do it! 🥳'
         : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
           ? 'Remember to take a breather to relax.' // if for some reason the calculation didn't work
           : 'Are you ready for your next adventure?';
@@ -489,8 +489,8 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
                     !
                   </span>
                 </h1>
-                <p className="mt-5 text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
-                {greetingBlurb}
+                <p className="mt-5 px-2 text-xl text-accents-6 text-center sm:text-2xl max-w-xl md:max-w-3xl m-auto">
+                {(today_wins ? "You've completed " + today_wins + (today_wins > 1 ? " wins" : " win") + " today! " : '') +  greetingBlurb}
                 </p>
               </div>
               <div className="max-w-6xl px-0 sm:px-4 md:px-10 mx-auto w-full -m-24">
