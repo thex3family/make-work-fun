@@ -350,8 +350,6 @@ export default function edit({user, metaBase, setMeta}) {
 
   async function fetchHabits() {
     try {
-      const user = supabase.auth.user();
-
       const { data, error } = await supabase
         .from('habits')
         .select('*')
@@ -434,8 +432,6 @@ export default function edit({user, metaBase, setMeta}) {
     // need to update the database
 
     try {
-      const user = supabase.auth.user();
-
       const { data, error } = await supabase.from('habits').upsert(newData);
 
       if (error && status !== 406) {
@@ -466,8 +462,6 @@ export default function edit({user, metaBase, setMeta}) {
     };
 
     try {
-      const user = supabase.auth.user();
-
       const { data, error } = await supabase.from('habits').insert(newRow);
 
       if (error && status !== 406) {
@@ -491,8 +485,6 @@ export default function edit({user, metaBase, setMeta}) {
     // need to update the database
 
     try {
-      const user = supabase.auth.user();
-
       const { data, error } = await supabase.from('habits').upsert(newData);
 
       if (error && status !== 406) {
