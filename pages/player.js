@@ -317,7 +317,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
             .update({
               avatar_url: image_url
             })
-            .eq('id', user);
+            .eq('id', user.id);
           if (error) {
             throw error;
           }
@@ -327,7 +327,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
             .update({
               background_url: image_url
             })
-            .eq('id', usere);
+            .eq('id', user.id);
 
           if (error) {
             throw error;
