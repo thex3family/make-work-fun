@@ -230,6 +230,13 @@ export default function edit({user, metaBase, setMeta}) {
       }
     },
     {
+      title: 'Area',
+      dataIndex: 'area',
+      responsive: ['lg'],
+      width: '35%',
+      editable: true
+    },
+    {
       title: 'Sort',
       dataIndex: 'sort',
       width: '5%',
@@ -454,7 +461,8 @@ export default function edit({user, metaBase, setMeta}) {
       name: 'New Habit',
       player: user.id,
       sort: 1,
-      type: 1
+      type: 1,
+      area: 'Daily Quest'
     };
 
     try {
