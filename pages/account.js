@@ -56,10 +56,6 @@ export default function Account({
   const [activeTab, setActiveTab] = useState(1);
   const [activeConnect, setActiveConnect] = useState(1);
 
-  console.log(user)
-
-  console.log(userDetails)
-
   const { tab } = router.query;
   const { via } = router.query;
 
