@@ -81,7 +81,7 @@ export default function Avatar({ avatarUrl, size, onAvatarUpload, onBackgroundUp
     <div>
       {avatarUrl ? (
         <img
-          className="avatar image h-36 sm:h-60 md:h-auto m-auto cursor-pointer"
+          className="avatar image h-40 sm:h-72 md:h-auto m-auto cursor-pointer"
           src={avatarUrl}
           alt="Avatar"
           onClick={() => {
@@ -90,7 +90,7 @@ export default function Avatar({ avatarUrl, size, onAvatarUpload, onBackgroundUp
         />
       ) : (
         <img
-          className="avatar image h-36 sm:h-auto m-auto cursor-pointer"
+          className="avatar image h-40 sm:h-72 md:h-auto m-auto cursor-pointer"
           src="/img/default_avatar.png"
           alt="Avatar"
           onClick={() => {
