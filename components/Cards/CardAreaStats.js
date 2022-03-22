@@ -117,7 +117,7 @@ export default function CardAreaStats({ areaStats }) {
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words rounded shadow-lg bg-primary-2 cursor-pointer">
-        <div className="flex-auto p-4">
+        <div className="flex-auto p-4 w-full">
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
               <h5 className="text-left text-emerald-400 uppercase font-bold text-xs">
