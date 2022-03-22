@@ -2,7 +2,7 @@ import Link from 'next/link';
 //import Button from '@/components/ui/Button';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { supabase } from '../../utils/supabase-client';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import { Table, Input, Button, Popconfirm, Form, Select, Switch } from 'antd';
 import 'antd/dist/antd.css';
@@ -173,10 +173,9 @@ export default function edit({user, metaBase, setMeta}) {
 
   const {
     userLoaded,
-    session,
     userDetails,
     userOnboarding
-  } = useUser();
+  } = userContent();
 
   const columns = [
     {

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { updateUserName } from '@/utils/supabase-client';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { supabase } from '@/utils/supabase-client';
 
 const SignUp = () => {
@@ -15,7 +15,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
   // const router = useRouter();
-  const { signUp } = useUser();
+  const { signUp } = userContent();
 
   const handleSignup = async (e) => {
     e.preventDefault();

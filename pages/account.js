@@ -4,7 +4,7 @@ import { useState, useEffect, Fragment } from 'react';
 
 import LoadingDots from '@/components/ui/LoadingDots';
 import Button from '@/components/ui/Button';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { postData } from '@/utils/helpers';
 import Input from '@/components/ui/Input';
 
@@ -38,7 +38,8 @@ function Card({ title, description, footer, children }) {
 export default function Account({
   initialPurchaseRecord,
   subscriptionPurchaseRecord,
-  inactiveSubscriptionRecord
+  inactiveSubscriptionRecord,
+  user
 }) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -48,7 +49,7 @@ export default function Account({
   const [notionCredentials, setNotionCredentials] = useState(null);
   const [APIKeys, setAPIKeys] = useState(null);
 
-  const { user, userLoaded, session, userDetails, passwordReset } = useUser();
+  const { userLoaded, userDetails, passwordReset } = userContent();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
@@ -111,12 +112,12 @@ export default function Account({
   }
 
   useEffect(() => {
-    if (user && session) getProfile();
-    if (user && session) getNotionCredentials();
-    if (user && session) getAPIKeys();
-    if (subscriptionPurchaseRecord && session)
+    if (user) getProfile();
+    if (user) getNotionCredentials();
+    if (user) getAPIKeys();
+    if (subscriptionPurchaseRecord)
       getSubscriptionStatus(subscriptionPurchaseRecord[0]);
-  }, [session]);
+  }, [user]);
 
   async function getProfile() {
     try {
@@ -185,16 +186,18 @@ export default function Account({
     }
   }
 
-  const redirectToCustomerPortal = async () => {
-    setLoading(true);
-    const { url, error } = await postData({
-      url: '/api/create-portal-link',
-      token: session.access_token
-    });
-    if (error) return alert(error.message);
-    window.location.assign(url);
-    setLoading(false);
-  };
+  // Redirect to stripe portal to manage subscription
+
+  // const redirectToCustomerPortal = async () => {
+  //   setLoading(true);
+  //   const { url, error } = await postData({
+  //     url: '/api/create-portal-link',
+  //     token: session.access_token
+  //   });
+  //   if (error) return alert(error.message);
+  //   window.location.assign(url);
+  //   setLoading(false);
+  // };
 
   // const subscriptionName = subscription && subscription.prices.products.name;
   // const subscriptionPrice =

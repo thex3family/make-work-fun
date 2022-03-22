@@ -5,13 +5,13 @@ import { useState } from 'react';
 import Button from '@/components/ui/Button';
 import { postData } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe-client';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 
 export default function Pricing({ products }) {
   const router = useRouter();
   const [billingInterval, setBillingInterval] = useState('month');
   const [priceIdLoading, setPriceIdLoading] = useState();
-  const { session, userLoaded, subscription } = useUser();
+  const { session, userLoaded, subscription } = userContent();
 
   const handleCheckout = async (price) => {
     setPriceIdLoading(price.id);

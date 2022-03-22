@@ -1,7 +1,7 @@
 import { Client } from '@notionhq/client';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { supabase } from '../utils/supabase-client';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -14,7 +14,7 @@ import WinModal from '@/components/Modals/ModalWin';
 export default function NotionWizard({ response, nickname }) {
   const router = useRouter();
   const [openTab, setOpenTab] = React.useState(1);
-  const { userOnboarding } = useUser();
+  const { userOnboarding } = userContent();
   const [showRequiredModal, setShowRequiredModal] = useState(false);
   const [showReadyModal, setShowReadyModal] = useState(false);
   const [loading, setLoading] = useState(false);
