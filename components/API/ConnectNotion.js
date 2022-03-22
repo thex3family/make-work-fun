@@ -9,7 +9,6 @@ export default function ConnectNotion({
   getNotionCredentials,
   setShowSaveModal
 }) {
-  console.log(credentials)
   const [secretKey, setSecretKey] = useState(null);
   const [databaseID, setDatabaseID] = useState(null);
   const [collaborator, setCollaborator] = useState(null);

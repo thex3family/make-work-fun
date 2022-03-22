@@ -1,7 +1,6 @@
 import { Client } from '@notionhq/client';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useUser } from '@/utils/useUser';
 import { supabase } from '../utils/supabase-client';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';

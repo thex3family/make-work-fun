@@ -196,6 +196,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
 
   return (
     <>
+    
       <section className="justify-center">
         <div className="bg-player-pattern bg-fixed h-4/5">
           <div className="bg-black bg-opacity-90 h-4/5">

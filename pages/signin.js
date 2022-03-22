@@ -9,7 +9,7 @@ import Button from '@/components/ui/Button';
 import GitHub from '@/components/icons/GitHub';
 import Input from '@/components/ui/Input';
 import LoadingDots from '@/components/ui/LoadingDots';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 
 import Avatar from '@/components/Cards/CardAvatar';
@@ -18,13 +18,13 @@ import CardAreaStats from '@/components/Cards/CardAreaStats';
 import CardStats from '@/components/Cards/CardStats';
 import CardLineChart from '@/components/Cards/CardLineChart';
 
-const postData = (url, data = {}) =>
-  fetch(url, {
-    method: 'POST',
-    headers: new Headers({ 'Content-Type': 'application/json' }),
-    credentials: 'same-origin',
-    body: JSON.stringify(data)
-  }).then((res) => res.json());
+// const postData = (url, data = {}) =>
+//   fetch(url, {
+//     method: 'POST',
+//     headers: new Headers({ 'Content-Type': 'application/json' }),
+//     credentials: 'same-origin',
+//     body: JSON.stringify(data)
+//   }).then((res) => res.json());
 
 
 const SignIn = ({ user, metaBase, setMeta }) => {
@@ -35,7 +35,7 @@ const SignIn = ({ user, metaBase, setMeta }) => {
   const [signLoading, setSignLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
   const router = useRouter();
-  const { signIn, passwordReset, userOnboarding, session, signUp } = useUser();
+  const { signIn, passwordReset, userOnboarding, signUp } = userContent();
 
   useEffect(() => {
     const meta = {
@@ -44,20 +44,20 @@ const SignIn = ({ user, metaBase, setMeta }) => {
     setMeta(meta)
   }, []);
 
-  // This is a dirty way to make sure the cookie stays active if the session is...
-  useEffect
-  if (!user && session) {
-    refreshCookie();
-  }
+  // // This is a dirty way to make sure the cookie stays active if the session is...
+  // useEffect
+  // if (!user && session) {
+  //   refreshCookie();
+  // }
 
-  async function refreshCookie() {
-    const event = 'SIGNED_IN';
-    // This is what forwards the session to our auth API route which sets/deletes the cookie:
-    await postData('/api/auth', {
-      event,
-      session: session
-    });
-  }
+  // async function refreshCookie() {
+  //   const event = 'SIGNED_IN';
+  //   // This is what forwards the session to our auth API route which sets/deletes the cookie:
+  //   await postData('/api/auth', {
+  //     event,
+  //     session: session
+  //   });
+  // }
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -100,14 +100,14 @@ const SignIn = ({ user, metaBase, setMeta }) => {
     setSignLoading(false);
   };
 
-  const handleOAuthSignIn = async (provider) => {
-    setSignLoading(true);
-    const { error } = await signIn({ provider });
-    if (error) {
-      setMessage({ type: 'error', content: error.message });
-    }
-    setSignLoading(false);
-  };
+  // const handleOAuthSignIn = async (provider) => {
+  //   setSignLoading(true);
+  //   const { error } = await signIn({ provider });
+  //   if (error) {
+  //     setMessage({ type: 'error', content: error.message });
+  //   }
+  //   setSignLoading(false);
+  // };
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
 import LoadingDots from '@/components/ui/LoadingDots';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 
 import { supabase } from '../utils/supabase-client';
 
@@ -77,7 +77,7 @@ createTheme('game', {
 export default function Player({ metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
+  const { user, userLoaded, userOnboarding } = userContent();
   const [wins, setWins] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);

@@ -10,6 +10,9 @@ import { UserContextProvider } from '@/utils/useUser';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
+import { UserProvider } from '@supabase/supabase-auth-helpers/react';
+import { supabase } from 'utils/supabase-client.js';
+
 import Head from 'next/head';
 
 // function setupIntercom(mobileDevice) {
@@ -38,7 +41,7 @@ export default function MyApp({ Component, pageProps }) {
       'The ultimate companion app for Notion to gamify your productivity and make work fun.',
     cardImage: '/og.png',
   };
-  
+
   const [meta, setMeta] = useState(metaBase);
   const [refreshChildStats, setRefreshChildStats] = useState(false);
 
@@ -55,11 +58,14 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <>
       <div className="bg-primary">
-        <UserContextProvider>
-          <Layout meta={meta} setRefreshChildStats={setRefreshChildStats}>
-            <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} refreshChildStats={refreshChildStats} setRefreshChildStats={setRefreshChildStats} />
-          </Layout>
-        </UserContextProvider>
+
+      <UserProvider supabaseClient={supabase}>
+          <UserContextProvider>
+            <Layout meta={meta} setRefreshChildStats={setRefreshChildStats}>
+              <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} refreshChildStats={refreshChildStats} setRefreshChildStats={setRefreshChildStats} />
+            </Layout>
+          </UserContextProvider>
+        </UserProvider>
       </div>
     </>
   );

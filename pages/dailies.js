@@ -3,7 +3,7 @@ import Button from '@/components/ui/Button';
 import React from 'react';
 import { supabase } from '../utils/supabase-client';
 import { useState, useEffect } from 'react';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import Countdown from '@/components/Widgets/DailiesCountdown/countdown';
@@ -51,7 +51,7 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
   const router = useRouter();
   const {
     userOnboarding,
-  } = useUser();
+  } = userContent();
 
   // sets the meta tags
 

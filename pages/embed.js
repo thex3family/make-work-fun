@@ -6,7 +6,7 @@ import React from 'react';
 import { supabase } from '@/utils/supabase-client';
 import { createPopper } from '@popperjs/core';
 
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 
 import DataTable, { createTheme } from 'react-data-table-component';
@@ -41,7 +41,7 @@ export default function embed({metaBase, setMeta}) {
   const [embed_link, setEmbedLink] = useState(null);
   const [copyText, setCopyText] = useState('Copy');
   const [embedComponent, setEmbedComponent] = useState(1);
-  const { user } = useUser();
+  const { user } = userContent();
   const router = useRouter();
   const [win, setWin] = useState(true);
   const [lvl, setLvl] = useState(true);

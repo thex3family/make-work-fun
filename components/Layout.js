@@ -6,7 +6,7 @@ import Footer from '@/components/ui/Footer';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 import { useEffect, useState } from 'react';
 
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import ModalPomo from './Modals/ModalPomo';
 import SideBar from '@/components/ui/SideBar/SideBar';
 import ModalMusic from './Modals/ModalMusic';
@@ -17,10 +17,9 @@ import ModalLevelUp from './Modals/ModalLevelUp';
 import WinModal from './Modals/ModalWin';
 import CardWin from './Cards/CardWin';
 
-
 export default function Layout({ children, meta, setRefreshChildStats }) {
   const router = useRouter();
-  const { user, userProfile, userOnboarding } = useUser();
+  const { user, userProfile, userOnboarding } = userContent();
   const [timer, setTimer] = useState(false);
   const [music, setMusic] = useState(false);
   const [player, setPlayer] = useState(false);

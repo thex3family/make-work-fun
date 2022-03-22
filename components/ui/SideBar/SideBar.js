@@ -1,10 +1,10 @@
 import NavLink from 'next/link';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 
 
 const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music, setPlayer, player }) => {
-  const { user } = useUser();
+  const { user } = userContent();
   const router = useRouter();
 
     return (

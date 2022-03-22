@@ -18,7 +18,7 @@ import CardPartyPlayer from '@/components/Cards/CardPartyPlayer';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import Input from '@/components/ui/Input';
 import { createPopper } from '@popperjs/core';
 import { supabase } from '@/utils/supabase-client';
@@ -39,7 +39,7 @@ export default function partyDetail({metaBase, setMeta}) {
   const [party, setParty] = useState(null);
   const [partyPlayers, setPartyPlayers] = useState(null);
   const [specificPartyPlayer, setSpecificPartyPlayer] = useState(null);
-  const { user, userOnboarding } = useUser();
+  const { user, userOnboarding } = userContent();
 
   const [showDetails, setShowDetails] = useState(true);
 

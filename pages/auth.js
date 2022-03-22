@@ -1,5 +1,5 @@
 import LoadingDots from '@/components/ui/LoadingDots';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
@@ -7,7 +7,7 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 
 export default function Auth() {
-  const { user } = useUser();
+  const { user } = userContent();
   const router = useRouter();
   const { error_code } = router.query;
 

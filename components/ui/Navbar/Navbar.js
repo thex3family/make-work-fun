@@ -21,7 +21,7 @@ const play_menu = [
 import Link from 'next/link';
 import s from './Navbar.module.css';
 
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 
 function MyLink(props) {
   let { href, children, ...rest } = props
@@ -33,7 +33,7 @@ function MyLink(props) {
 }
 
 const Navbar = () => {
-  const { user, signOut } = useUser();
+  const { user, signOut } = userContent();
   const router = useRouter();
 
   return (

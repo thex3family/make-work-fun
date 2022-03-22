@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import BottomNavbar from '@/components/ui/BottomNavbar/BottomNavbar';
 import { supabase } from '../utils/supabase-client';
-import { useUser } from '@/utils/useUser';
+import { userContent } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import CardParty from '@/components/Cards/CardParty';
 import Kanban from '@/components/Parties/Kanban';
@@ -75,7 +75,7 @@ export default function parties({metaBase, setMeta}) {
 
   const [backgroundUrl, setBackgroundUrl] = useState('/');
 
-  const { user, userLoaded, session, userDetails, userOnboarding } = useUser();
+  const { user, userLoaded, userDetails, userOnboarding } = userContent();
   const [createParty, setCreateParty] = useState(null);
 
   const [activeTab, setActiveTab] = useState(1);

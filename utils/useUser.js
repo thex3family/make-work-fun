@@ -1,49 +1,53 @@
 import { useEffect, useState, createContext, useContext } from 'react';
 import { supabase } from './supabase-client';
 
-const postData = (url, data = {}) =>
-  fetch(url, {
-    method: 'POST',
-    headers: new Headers({ 'Content-Type': 'application/json' }),
-    credentials: 'same-origin',
-    body: JSON.stringify(data)
-  }).then((res) => res.json());
+import { useUser, Auth } from '@supabase/supabase-auth-helpers/react'
+
+// const postData = (url, data = {}) =>
+//   fetch(url, {
+//     method: 'POST',
+//     headers: new Headers({ 'Content-Type': 'application/json' }),
+//     credentials: 'same-origin',
+//     body: JSON.stringify(data)
+//   }).then((res) => res.json());
 
 export const UserContext = createContext();
 
 export const UserContextProvider = (props) => {
+  const { user, error } = useUser()
+
   const [userLoaded, setUserLoaded] = useState(false);
-  const [session, setSession] = useState(null);
-  const [user, setUser] = useState(null);
+  // const [session, setSession] = useState(null);
+  // const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [userOnboarding, setUserOnboarding] = useState(null);
   // const [subscription, setSubscription] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
 
-  useEffect(() => {
-    const session = supabase.auth.session();
-    setSession(session);
-    setUser(session?.user ?? null);
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        // setSession(session);
-        // setUser(session?.user ?? null);
-        console.log(`Supabase auth event: ${event}`);
+  // useEffect(() => {
+  //   const session = supabase.auth.session();
+  //   setSession(session);
+  //   setUser(session?.user ?? null);
+  //   const { data: authListener } = supabase.auth.onAuthStateChange(
+  //     async (event, session) => {
+  //       // setSession(session);
+  //       // setUser(session?.user ?? null);
+  //       console.log(`Supabase auth event: ${event}`);
 
-        // This is what forwards the session to our auth API route which sets/deletes the cookie:
-        await postData('/api/auth', {
-          event,
-          session: session
-        });
-        setSession(session);
-        setUser(session?.user ?? null);
-      }
-    );
+  //       // This is what forwards the session to our auth API route which sets/deletes the cookie:
+  //       await postData('/api/auth', {
+  //         event,
+  //         session: session
+  //       });
+  //       setSession(session);
+  //       setUser(session?.user ?? null);
+  //     }
+  //   );
 
-    return () => {
-      authListener.unsubscribe();
-    };
-  }, []);
+  //   return () => {
+  //     authListener.unsubscribe();
+  //   };
+  // }, []);
 
   const getUserDetails = () =>
     supabase.from('leaderboard').select('*').eq('player', user.id).single();
@@ -76,7 +80,7 @@ export const UserContextProvider = (props) => {
   }, [user]);
 
   const value = {
-    session,
+    // session,
     user,
     userDetails,
     userOnboarding,
@@ -100,10 +104,10 @@ export const UserContextProvider = (props) => {
   return <UserContext.Provider value={value} {...props} />;
 };
 
-export const useUser = () => {
+export const userContent = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error(`useUser must be used within a UserContextProvider.`);
+    throw new Error(`userDetails must be used within a UserContextProvider.`);
   }
   return context;
 };
