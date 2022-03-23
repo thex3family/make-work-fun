@@ -109,6 +109,7 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
   }, [playerStats]);
 
   async function loadBackgroundURL() {
+    console.log('Loading Background')
     if (playerStats.background_url) {
       setBackgroundUrl(await downloadImage(playerStats.background_url, 'background'));
     } else {

@@ -17,12 +17,17 @@ export const UserContextProvider = (props) => {
   const { user, error } = useUser()
 
   const [userLoaded, setUserLoaded] = useState(false);
-  // const [session, setSession] = useState(null);
-  // const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [userOnboarding, setUserOnboarding] = useState(null);
-  // const [subscription, setSubscription] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
+
+
+  // Legacy Management Auth Management
+
+  // const [subscription, setSubscription] = useState(null);
+
+  // const [session, setSession] = useState(null);
+  // const [user, setUser] = useState(null);
 
   // useEffect(() => {
   //   const session = supabase.auth.session();
