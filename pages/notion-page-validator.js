@@ -1,19 +1,8 @@
 import { Client } from '@notionhq/client';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { supabase } from '../utils/supabase-client';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
 import Button from '@/components/ui/Button';
-
-import ModalLevelUp from '@/components/Modals/ModalLevelUp';
-import { triggerWinModal } from '@/components/Modals/ModalHandler';
-import WinModal from '@/components/Modals/ModalWin';
-
-import {
-  fetchLatestWin,
-  fetchPlayerStats
-} from '@/components/Fetch/fetchMaster';
 
 export default function NotionPageWizard({ response, notion_page_name, slug }) {
   const notion_page_id = response.id;

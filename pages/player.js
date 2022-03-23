@@ -24,7 +24,6 @@ import {
   fetchPlayerStats,
   fetchWins,
   fetchWeekWins,
-  fetchLatestWin,
   fetchAreaStats,
   fetchTitles,
   fetchSpecificWin
