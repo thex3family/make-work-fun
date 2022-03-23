@@ -802,7 +802,8 @@ export async function claimDailyBonus(player, setDailyBonus) {
         punctuality: 0,
         exp_reward: 100,
         gold_reward: 50,
-        name: 'Daily Quest Bonus Reward'
+        name: 'Daily Quest Bonus Reward',
+        area: 'Daily Quest'
       }
     ]);
     if (error && status !== 406) {
