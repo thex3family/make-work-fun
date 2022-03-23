@@ -16,7 +16,7 @@ export async function fetchLatestWin(
   friends
 ) {
   try {
-    console.log('checking for wins')
+    console.log('Checking for wins')
     // check if there is any win (only works when the app is open) - future will move it to a server
     if (!player_id) {
       const user = supabase.auth.user();
