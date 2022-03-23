@@ -1,7 +1,7 @@
 import { useEffect, useState, createContext, useContext } from 'react';
 import { supabase } from './supabase-client';
 
-import { useUser, Auth } from '@supabase/supabase-auth-helpers/react'
+import { useUser } from '@supabase/supabase-auth-helpers/react'
 
 // const postData = (url, data = {}) =>
 //   fetch(url, {
