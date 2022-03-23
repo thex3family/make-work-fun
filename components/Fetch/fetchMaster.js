@@ -118,8 +118,6 @@ export async function fetchLatestWin(
   } catch (error) {
     alert(error.message);
   } finally {
-    const subscriptions = supabase.getSubscriptions();
-    console.log(subscriptions);
   }
 }
 
@@ -311,7 +309,6 @@ export async function fetchWeekWins(player) {
         .single();
 
       if (data) {
-        console.log(data)
         return data;
       }
     }
@@ -440,7 +437,6 @@ export async function fetchAllParties() {
       .order('due_date', { ascending: false })
 
     if (data) {
-      console.log(data)
       return data;
     }
 
@@ -598,8 +594,6 @@ export async function fetchParty(party_slug) {
       .eq('slug', party_slug)
       .single();
 
-    console.log(data);
-
     if (data) {
       return data;
     }
@@ -742,7 +736,6 @@ export async function fetchDailiesCompletedToday(player) {
       .eq('player', player)
       .gte('closing_date', moment().startOf('day').utc().format());
 
-    // console.log(data.length);
     if(data){
       return data.length;
     }
@@ -789,7 +782,6 @@ export async function claimDailyBonus(player, setDailyBonus) {
   try {
 
     let testDateStr = new Date();
-    // console.log('testDateStr: ' + testDateStr);
 
     const { data, error } = await supabase.from('success_plan').insert([
       {

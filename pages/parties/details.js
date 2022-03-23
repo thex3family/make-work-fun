@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import LoadingDots from '@/components/ui/LoadingDots';
 import {
   fetchParty,
-  fetchLatestWin,
   fetchPlayerStats,
   fetchWins,
   fetchPartyPlayers,

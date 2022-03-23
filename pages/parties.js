@@ -11,7 +11,6 @@ import RecruitingBoard from '@/components/Parties/RecruitingBoard';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import {
   fetchAllParties,
-  fetchLatestWin,
   fetchPlayerStats
 } from '@/components/Fetch/fetchMaster';
 import { downloadImage } from '@/utils/downloadImage';
@@ -119,13 +118,6 @@ export default function parties({metaBase, setMeta}) {
     fetchActiveParties();
     fetchRecruitingParties();
     refreshStats();
-    fetchLatestWin(
-      setActiveModalStats,
-      refreshStats,
-      setLevelUp,
-      triggerWinModal,
-      setShowWinModal
-    );
   }
 
   async function refreshStats() {
@@ -199,7 +191,6 @@ export default function parties({metaBase, setMeta}) {
       // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
 
       setActiveParties(parties_you_are_in);
-      console.log(parties_you_are_in);
 
       if (error && status !== 406) {
         throw error;
