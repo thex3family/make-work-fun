@@ -10,7 +10,7 @@ const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music, setPlayer, pl
     return (
       <section
         id="bottom-navigation"
-        className={`transition ease-in-out duration-150 block fixed inset-y-0 my-auto left-0 h-56 w-auto z-50 bg-dark ${mobileDevice ? 'opacity-60' : 'opacity-40'}  hover:opacity-100 shadow rounded`}
+        className={`transition ease-in-out duration-150 block fixed inset-y-0 my-auto left-0 ${!router.asPath.includes('embed/') ? 'h-56' : 'h-40'} w-auto z-50 bg-dark ${mobileDevice ? 'opacity-60' : 'opacity-40'}  hover:opacity-100 shadow rounded`}
       >
         <div id="tabs" className="flex flex-col items-center justify-between px-2 pt-1">
           {/* <NavLink href="/">
@@ -35,12 +35,14 @@ const Sidebar = ({ mobileDevice, setTimer, timer, setMusic, music, setPlayer, pl
               Music
             </span>
           </a>
+          { !router.asPath.includes('embed/') ?
           <a onClick={() => setPlayer(!player)} className={`cursor-pointer w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 transform ${player ? "bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500" : "hover:text-white"}`}>
             <i className="fas fa-user-circle text-xl inline-block mb-1" />
             <span className="tab tab-explore block text-sm font-medium">
               Player
             </span>
           </a>
+          : null }
         </div>
       </section>
     );

@@ -150,7 +150,7 @@ export default function Layout({ children, meta, setRefreshChildStats }) {
       </Head>
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       <main id="skip">
-        {user && !router.asPath.includes('embed/') ? <>
+        {user || router.asPath.includes('embed/') ? <>
           <SideBar mobileDevice={mobileDevice} setTimer={setTimer} timer={timer} setMusic={setMusic} music={music} setPlayer={setPlayer} player={player} />
           
           {/* Eventually can refactor all this into sidebar */}
