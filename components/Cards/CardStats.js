@@ -94,7 +94,7 @@ export default function CardStats({
               </Tooltip>
               <p className="font-semibold text-xl text-white-700 cursor-pointer">
                 <Tooltip
-                  placement="end"
+                  placement="start"
                   label="Click me to change your name!"
                   withArrow
                   arrowSize={3}
