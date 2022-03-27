@@ -192,6 +192,10 @@ export default function ConnectNotion({
   }
 
   return (
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      saveCredential(credentials.id, secretKey, databaseID, collaborator)
+    }}>
     <div className="mb-4 mt-4 border border-gray-600 px-4 rounded">
       {APIMessage || databaseMessage || userMessage ? (
         <div className="flex flex-col space-y-4">
@@ -234,6 +238,7 @@ export default function ConnectNotion({
         className="text-xl mb-2 font-semibold rounded"
         type="varchar"
         placeholder="secret_•••"
+        maxlength="50"
         value={secretKey || ''}
         onChange={setSecretKey}
       />
@@ -260,6 +265,7 @@ export default function ConnectNotion({
           aria-hidden="true"
         ></div>
         <button
+        type="button"
           onClick={() => setShowCollaborator(!showCollaborator)}
           className="text-yellow-500 font-semibold truncate"
           disabled={saving}
@@ -298,6 +304,7 @@ export default function ConnectNotion({
           <span className='text-white font-semibold ease-linear transition-all duration-150'>
             Are You Sure?{' '}
             <button
+            type="button"
               onClick={() => removeCredentials(credentials.id)}
               className="text-red-500 mr-1 font-semibold"
               disabled={saving}
@@ -306,6 +313,7 @@ export default function ConnectNotion({
             </button>
             /
             <button
+            type="button"
               onClick={() => setDeleteOption(false)}
               className="text-red-500 ml-1 font-semibold"
             >
@@ -314,6 +322,7 @@ export default function ConnectNotion({
           </span>
         </> :
           <button
+          type="button"
             onClick={() => setDeleteOption(true)}
             className="text-red-500 mr-5 font-semibold"
             disabled={saving}
@@ -323,9 +332,7 @@ export default function ConnectNotion({
         <Button
           className="w-full sm:w-auto"
           variant="incognito"
-          onClick={() =>
-            saveCredential(credentials.id, secretKey, databaseID, collaborator)
-          }
+          type="submit"
           disabled={
             saving ||
             APIMessage != null ||
@@ -337,5 +344,6 @@ export default function ConnectNotion({
         </Button>
       </div>
     </div>
+    </form>
   );
 }
