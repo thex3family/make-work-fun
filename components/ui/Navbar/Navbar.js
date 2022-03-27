@@ -167,7 +167,7 @@ const Navbar = () => {
                       <Link href={item.href}>
                         <a
                           key={item.name}
-                          className={`${s.link} relative ${router.pathname == item.href ? s.activeLink : null
+                          className={`hideLinkBorder ${s.link} relative ${router.pathname == item.href ? s.activeLink : null
                             }`}
                         >
                           {item.name}

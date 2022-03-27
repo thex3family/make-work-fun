@@ -23,7 +23,7 @@ const BottomNavbar = () => {
             </a>
           </NavLink> */}
           <NavLink href="/parties">
-            <a className={`w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform hover:text-white ${router.pathname == "/parties" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
+            <a className={`hideLinkBorder w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform hover:text-white ${router.pathname == "/parties" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
               <i className="fas fa-dragon text-3xl inline-block mb-1" />
               <span className="tab tab-home block text-sm font-medium">
                 Parties
@@ -31,7 +31,7 @@ const BottomNavbar = () => {
             </a>
           </NavLink>
           <NavLink href="/player">
-            <a className={`w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform hover:text-white ${router.pathname == "/player" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
+            <a className={`hideLinkBorder w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform hover:text-white ${router.pathname == "/player" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
               <i className="fas fa-user-circle text-3xl inline-block mb-1" />
               <span className="tab tab-kategori block text-sm font-medium">
                 Player
@@ -39,7 +39,7 @@ const BottomNavbar = () => {
             </a>
           </NavLink>
           <NavLink href="/dailies">
-            <a className={`w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform hover:text-white ${router.pathname == "/dailies" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
+            <a className={`hideLinkBorder w-full transition duration-500 ease-in-out justify-center inline-block text-center pb-4 pt-4 sm:pb-3 sm:pt-4 transform hover:text-white ${router.pathname == "/dailies" ? "text-primary scale-105" : "text-white text-opacity-30"}`}>
               <i className="fas fa-star text-3xl inline-block mb-1" />
               <span className="tab tab-explore block text-sm font-medium">
                 Dailies
