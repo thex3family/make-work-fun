@@ -48,8 +48,8 @@
   box-shadow: none;
 }
 
-.slider:active,
-.slider:focus {
+.hideLinkBorder:active,
+.hideLinkBorder:focus {
   outline: none !important;
   border: none;
   -moz-outline-style: none;

@@ -17,7 +17,8 @@ export default function HeaderStats({
   updateProfile,
   weekWins,
   areaStats,
-  setShowTitleModal
+  setShowTitleModal,
+  user_id
 }) {
   const exp_percent = Math.floor(
     (playerStats.exp_progress / playerStats.level_exp) * 100
@@ -78,6 +79,8 @@ export default function HeaderStats({
                   statIconColor="bg-transparent-500"
                   setShowTitleModal={setShowTitleModal}
                   statPlayer={playerStats.player}
+                  statEnergy={playerStats.energy_level}
+                  user_id={user_id}
                 />
                 {/* <Link href="/">
               <Button className="w-full"

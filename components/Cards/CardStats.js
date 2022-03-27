@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { createPopper } from '@popperjs/core';
 import { useEffect, useState, createRef } from 'react';
 import { Tooltip, Slider } from '@mantine/core';
+import { supabase } from '@/utils/supabase-client';
 
 export default function CardStats({
   statTitle,
@@ -24,7 +25,9 @@ export default function CardStats({
   statIconColor,
   setShowTitleModal,
   statPlayer,
-  displayMode
+  displayMode,
+  statEnergy,
+  user_id
 }) {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
@@ -41,8 +44,30 @@ export default function CardStats({
   };
 
   // Slider
-  const [energyValue, setEnergyValue] = useState(50);
-  const [energyEndValue, setEnergyEndValue] = useState(50);
+  const [energyValue, setEnergyValue] = useState(statEnergy);
+  const [initialEnergyValue, setInitialEnergyValue] = useState(statEnergy);
+  const [saveEnergy, setSaveEnergy] = useState(null);
+
+  // handle energy update
+  async function updateEnergy(energy) {
+    setSaveEnergy(true);
+    try {
+      const { data, error } = await supabase.from('energy').insert([
+        {
+          player: user_id,
+          energy_level: energy
+        }
+      ]);
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setInitialEnergyValue(energy)
+      setSaveEnergy(false);
+    }
+  }
 
 
   return (
@@ -51,15 +76,36 @@ export default function CardStats({
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-              <button
-                className="text-emerald-400 uppercase font-bold text-xs"
-                onClick={() => {
-                  setShowTitleModal ? setShowTitleModal(true) : null;
-                }}
+
+              <Tooltip
+                placement="start"
+                label="Click me to update your title!"
+                withArrow
+                arrowSize={3}
               >
-                {statTitle ? statTitle : 'Newbie'}
-              </button>
-              <p className="font-semibold text-xl text-white-700">{statName}</p>
+                <button
+                  className="text-emerald-400 uppercase font-bold text-xs hideLinkBorder"
+                  onClick={() => {
+                    setShowTitleModal ? setShowTitleModal(true) : null;
+                  }}
+                >
+                  {statTitle ? statTitle : 'Newbie'}
+                </button>
+              </Tooltip>
+              <p className="font-semibold text-xl text-white-700 cursor-pointer">
+                <Tooltip
+                  placement="end"
+                  label="Click me to change your name!"
+                  withArrow
+                  arrowSize={3}
+                >
+                  <Link href="/account?tab=profile" >
+                    <a className='hideLinkBorder'>
+                      {statName ? statName : 'Anonymous Adventurer'}
+                    </a>
+                  </Link>
+                </Tooltip>
+              </p>
               <span className="font-semibold text-l text-white-700">
                 Level {statLevel}
               </span>
@@ -105,6 +151,14 @@ export default function CardStats({
                       className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                     >
                       Edit Profile
+                    </a>
+                  </Link>
+                  <Link href="/account?tab=connect" target="_blank">
+                    <a
+                      target="_blank"
+                      className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                    >
+                      Connect Apps
                     </a>
                   </Link>
                 </div>
@@ -175,8 +229,8 @@ export default function CardStats({
             </Button> */}
           </div>
           <Slider
-            value={energyValue} onChange={setEnergyValue} onChangeEnd={setEnergyEndValue}
-            className='slider my-5'
+            value={energyValue} onChange={setEnergyValue}
+            className='hideLinkBorder my-5'
             color="yellow"
             size="md"
             radius="md"
@@ -191,6 +245,15 @@ export default function CardStats({
               { value: 100, label: '💛' },
             ]}
           />
+          {initialEnergyValue !== energyValue ?
+
+            <div className='flex justify-end mt-8'>
+              {!saveEnergy ?
+                <button className='hideLinkBorder text-yellow-500 background-transparent font-bold uppercase text-xs ease-linear transition-all duration-150'
+                onClick={()=>updateEnergy(energyValue)}>Update Energy</button>
+                : <div className='hideLinkBorder text-yellow-500 background-transparent font-bold uppercase text-xs ease-linear transition-all duration-150'>Saving...</div>}
+            </div>
+            : null}
         </div>
       </div>
     </>
