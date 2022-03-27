@@ -37,19 +37,20 @@
 
 *:focus {
   outline: 0 !important;
+  outline: none !important;
 }
 
 .link:active,
 .link:focus {
-  outline: none;
+  outline: none !important;
   border: none;
   -moz-outline-style: none;
   box-shadow: none;
 }
 
-a:active,
-a:focus {
-  outline: none;
+.slider5:active,
+.slider5:focus {
+  outline: none !important;
   border: none;
   -moz-outline-style: none;
   box-shadow: none;

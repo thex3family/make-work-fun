@@ -4,6 +4,7 @@ import Button from '@/components/ui/Button';
 import Link from 'next/link';
 import { createPopper } from '@popperjs/core';
 import { useEffect, useState, createRef } from 'react';
+import { Tooltip, Slider } from '@mantine/core';
 
 export default function CardStats({
   statTitle,
@@ -52,6 +53,7 @@ export default function CardStats({
     setPopoverShow(false);
   };
 
+
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words rounded mb-6 shadow-lg bg-primary-2">
@@ -75,47 +77,47 @@ export default function CardStats({
               </span>
             </div>
             {displayMode !== 'demo' ?
-            <div className="relative w-auto pl-4 flex-initial">
-              <button
-                ref={btnDropdownRef}
-                onClick={() => {
-                  dropdownPopoverShow
-                    ? closeDropdownPopover()
-                    : openDropdownPopover();
-                }}
-                className={
-                  'cursor-pointer text-white p-3 text-center inline-flex items-center justify-center w-10 h-10 border shadow-lg rounded-full ' +
-                  statIconColor
-                }
-              >
-                <i className={statIconName}></i>
-              </button>
+              <div className="relative w-auto pl-4 flex-initial">
+                <button
+                  ref={btnDropdownRef}
+                  onClick={() => {
+                    dropdownPopoverShow
+                      ? closeDropdownPopover()
+                      : openDropdownPopover();
+                  }}
+                  className={
+                    'cursor-pointer text-white p-3 text-center inline-flex items-center justify-center w-10 h-10 border shadow-lg rounded-full ' +
+                    statIconColor
+                  }
+                >
+                  <i className={statIconName}></i>
+                </button>
 
-              <div
-                ref={popoverDropdownRef}
-                className={
-                  (dropdownPopoverShow ? 'block ' : 'hidden ') +
-                  'bg-blueGray-900 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 w-36 '
-                }
-              >
-                <Link href="/embed" target="_blank">
-                  <a
-                    target="_blank"
-                    className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                  >
-                    Copy Embed Link
-                  </a>
-                </Link>
-                <Link href="/account" target="_blank">
-                  <a
-                    target="_blank"
-                    className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
-                  >
-                    Go To Account
-                  </a>
-                </Link>
-              </div>
-            </div> : null }
+                <div
+                  ref={popoverDropdownRef}
+                  className={
+                    (dropdownPopoverShow ? 'block ' : 'hidden ') +
+                    'bg-blueGray-900 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 w-36 '
+                  }
+                >
+                  <Link href="/embed" target="_blank">
+                    <a
+                      target="_blank"
+                      className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                    >
+                      Copy Embed Link
+                    </a>
+                  </Link>
+                  <Link href="/account" target="_blank">
+                    <a
+                      target="_blank"
+                      className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
+                    >
+                      Go To Account
+                    </a>
+                  </Link>
+                </div>
+              </div> : null}
           </div>
           <div className="font-semibold text-sm text-right -mt-3">
             {statEXP} / {statLevelEXP - statEXPProgress + statEXP} XP
@@ -135,31 +137,36 @@ export default function CardStats({
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
-          <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-0 sm:gap-4">
-            <div
-              variant="slim"
+          <div className="flex flex-row flex-nowrap items-center gap-4">
+
+            <Tooltip
               className="mt-4 w-full text-center font-semibold border py-2 rounded"
-              onMouseEnter={openTooltip}
-              onMouseLeave={closeTooltip}
-              ref={btnRef}
+              label="Item Shop Coming Soon!"
+              withArrow
+              arrowSize={3}
             >
-              {statGold} 💰
-            </div>
-            <div
-            className={
-              (popoverShow ? "" : "hidden ") +
-              "bg-blueGray-900 border-0 mr-3 block z-50 font-normal leading-normal text-sm max-w-xs text-left no-underline break-words rounded-lg"
-            }
-            ref={popoverRef}
-          >
-            <div>
-              <div className="text-white p-3">
-                Item shop coming soon!
+              <div
+                variant="slim"
+                className=""
+              >
+                {statGold} 💰
               </div>
-            </div>
-          </div>
+            </Tooltip>
+            <Tooltip
+              className="mt-4 w-full text-center font-semibold border py-2 rounded"
+              label="Life Points Coming Soon!"
+              withArrow
+              arrowSize={3}
+            >
+              <div
+                variant="slim"
+              >
+                0 💖
+              </div>
+            </Tooltip>
             {/* <Button disabled={true} variant="slim" className="mt-4 w-full sm:w-3/5">
               <span className={statPercentColor + " mr-2"}>
                 <i
@@ -176,6 +183,21 @@ export default function CardStats({
               <span className="whitespace-nowrap">{statDescription}</span>
             </Button> */}
           </div>
+          <Slider
+            className='slider5 my-5'
+            color="yellow"
+            size="md"
+            radius="md"
+            showLabelOnHover={true}
+            label={(value) => `Energy: ${value}`}
+            marks={[
+              { value: 0, label: '☠️' },
+              { value: 25, label: '25%' },
+              { value: 50, label: '50%' },
+              { value: 75, label: '75%' },
+              { value: 100, label: '💛' },
+            ]}
+          />
         </div>
       </div>
     </>
