@@ -96,15 +96,15 @@ export default function CardStats({
                       target="_blank"
                       className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                     >
-                      Copy Embed Link
+                      Get Embed
                     </a>
                   </Link>
-                  <Link href="/account" target="_blank">
+                  <Link href="/account?tab=profile" target="_blank">
                     <a
                       target="_blank"
                       className="cursor-pointer text-sm py-2 px-4 font-semibold block w-full whitespace-no-wrap bg-transparent text-white hover:bg-blueGray-600"
                     >
-                      Go To Account
+                      Edit Profile
                     </a>
                   </Link>
                 </div>
