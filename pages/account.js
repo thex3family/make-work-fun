@@ -806,7 +806,12 @@ export default function Account({
                 it into our app.
               </p>
             </div> */}
-            <form onSubmit={()=>updateProfile({full_name})}>
+            <form 
+            
+            onSubmit={(e) => {
+              e.preventDefault();
+              updateProfile({full_name});
+            }}>
               <Card
                 title="Your Name"
                 description="Please enter your first name, or a display name you are comfortable with."
@@ -829,6 +834,7 @@ export default function Account({
               >
                 {!loading ?
                   <Input
+                    maxlength="64"
                     htmlFor="full_name"
                     className="text-xl mt-8 mb-4 font-semibold rounded"
                     id="full_name"
