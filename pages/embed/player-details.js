@@ -10,15 +10,19 @@ import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 import {
   fetchPlayerStats,
   fetchAreaStats,
+  fetchTitles,
   fetchWeekWins,
   fetchLatestWin,
   lookupPlayerFromAuth
 } from '@/components/Fetch/fetchMaster';
 
+import { pushTitle } from '@/components/Push/pushMaster';
+
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import Button from '@/components/ui/Button';
+import TitleModal from '@/components/Modals/ModalTitle';
 
 export default function playerDetails() {
   const router = useRouter();
@@ -27,12 +31,15 @@ export default function playerDetails() {
   const [loading, setLoading] = useState(true);
   const [showHide, setShowHide] = useState(true);
   const [areaStats, setAreaStats] = useState(null);
+  const [titles, setTitles] = useState([]);
   const [weekWins, setWeekWins] = useState(null);
   const [background_url, setBackgroundUrl] = useState('/');
 
   const [newToSeason, setNewToSeason] = useState(null);
 
   const [avatar_url, setAvatarUrl] = useState(null);
+
+  const [showTitleModal, setShowTitleModal] = useState(false);
 
   const demoPlayerStats = {
     player_rank: 17,
@@ -209,6 +216,7 @@ export default function playerDetails() {
     console.log('statsRefreshing');
     setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
     setAreaStats(await fetchAreaStats(player));
+    setTitles(await fetchTitles());
     setWeekWins(await fetchWeekWins(player));
     setLoading(false);
   }
@@ -386,7 +394,7 @@ export default function playerDetails() {
                             displayMode={display}
                             statEnergy={playerStats.energy_level}
                             user_id={player}
-
+                            setShowTitleModal={setShowTitleModal}
                           />
                         </div>
                         <div className="2xl:w-1/2 w-full 2xl:pt-0">
@@ -403,6 +411,17 @@ export default function playerDetails() {
           </div>
         </div>
       </section>
+
+      {showTitleModal ? (
+        <TitleModal
+          setShowTitleModal={setShowTitleModal}
+          titles={titles}
+          playerStats={playerStats}
+          pushTitle={pushTitle}
+          user_id={player}
+          refreshStats={refreshStats}
+        />
+      ) : null}
 
       {/* // Modal Section */}
       {showWinModal && (win || display == 'demo') ? (

@@ -500,7 +500,6 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
                   weekWins={weekWins}
                   areaStats={areaStats}
                   setShowTitleModal={setShowTitleModal}
-                  titles={titles}
                   user_id={user.id}
                 />
                 {wins ? (
@@ -554,7 +553,9 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
           titles={titles}
           playerStats={playerStats}
           pushTitle={pushTitle}
+          user_id={user.id}
           refreshStats={refreshStats}
+
         />
       ) : null}
       {onboardingState ? (

@@ -5,7 +5,8 @@ export default function TitleModal({
   titles,
   playerStats,
   pushTitle,
-  refreshStats
+  refreshStats,
+  user_id
 }) {
   return (
     <div className="animate-fade-in h-screen flex justify-center">
@@ -14,7 +15,7 @@ export default function TitleModal({
           className="opacity-50 fixed inset-0 z-30 bg-black"
           onClick={() => setShowTitleModal(false)}
         ></div>
-        <div className="relative w-auto my-6 mx-auto max-w-xl max-h-screen z-40">
+        <div className="relative w-auto my-6 px-4 mx-auto max-w-xl max-h-screen z-40">
           {/*content*/}
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
@@ -49,6 +50,7 @@ export default function TitleModal({
                       }`}
                       disabled={false}
                       title_name={title.name}
+                      user_id={user_id}
                     />
                   ) : null
                 )}
@@ -67,6 +69,7 @@ export default function TitleModal({
                       variant="slim"
                       disabled={true}
                       title_name={title.name}
+                      user_id={user_id}
                     />
                   </div>
                 ) : null

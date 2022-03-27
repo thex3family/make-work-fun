@@ -11,7 +11,8 @@ export default function TitleButton({
   variant,
   disabled,
   title_name,
-  description
+  description,
+  user_id
 }) {
   const [saving, setSaving] = useState(false);
 
@@ -33,7 +34,7 @@ export default function TitleButton({
       <div className="w-full text-center">
         <div>
           <Button
-            onClick={() => pushTitle(title_id, refreshStats, setSaving)}
+            onClick={() => pushTitle(title_id, refreshStats, setSaving, user_id)}
             variant={variant}
             disabled={disabled}
             className="py-2 px-4 w-full text-white font-bold border rounded"
