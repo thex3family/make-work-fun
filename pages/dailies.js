@@ -30,6 +30,7 @@ import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 export default function dailies({user, metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [bonusLoading, setBonusLoading] = useState(false);
   const [dailiesCount, setDailiesCount] = useState(0);
   const [dailyBonus, setDailyBonus] = useState(null);
 
@@ -158,12 +159,14 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
                       <i className="text-yellow-400 fas fa-star" />
                       <i className="text-yellow-400 fas fa-star" />
                     </div>
-                    {dailyBonus ? (
+                    {dailyBonus ? 
+                     (
                       <div>
                         <Button
                           variant="prominent"
                           className="animate-fade-in-up mt-5 text-center font-bold"
-                          onClick={() => claimDailyBonus(player, setDailyBonus)}
+                          disabled={bonusLoading}
+                          onClick={() => claimDailyBonus(player, setDailyBonus, setBonusLoading)}
                         >
                           Claim Rewards
                         </Button>
