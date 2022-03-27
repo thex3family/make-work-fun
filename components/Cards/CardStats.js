@@ -40,18 +40,9 @@ export default function CardStats({
     setDropdownPopoverShow(false);
   };
 
-  const [popoverShow, setPopoverShow] = React.useState(false);
-  const btnRef = React.createRef();
-  const popoverRef = React.createRef();
-  const openTooltip = () => {
-    createPopper(btnRef.current, popoverRef.current, {
-      placement: 'bottom'
-    });
-    setPopoverShow(true);
-  };
-  const closeTooltip = () => {
-    setPopoverShow(false);
-  };
+  // Slider
+  const [energyValue, setEnergyValue] = useState(50);
+  const [energyEndValue, setEnergyEndValue] = useState(50);
 
 
   return (
@@ -184,11 +175,13 @@ export default function CardStats({
             </Button> */}
           </div>
           <Slider
-            className='slider5 my-5'
+            value={energyValue} onChange={setEnergyValue} onChangeEnd={setEnergyEndValue}
+            className='slider my-5'
             color="yellow"
             size="md"
             radius="md"
             showLabelOnHover={true}
+            step={25}
             label={(value) => `Energy: ${value}`}
             marks={[
               { value: 0, label: '☠️' },

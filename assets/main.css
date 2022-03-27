@@ -48,8 +48,8 @@
   box-shadow: none;
 }
 
-.slider5:active,
-.slider5:focus {
+.slider:active,
+.slider:focus {
   outline: none !important;
   border: none;
   -moz-outline-style: none;
