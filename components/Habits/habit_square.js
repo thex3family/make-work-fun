@@ -311,25 +311,30 @@ export default function HabitSquare({
           ) : null}
           {habit_type == 'Note' ? (
             <div className="flex flex-col">
-              <Input
-                className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
-                variant="dailies"
-                id="Note"
-                type="varchar"
-                placeholder="Add your note here!"
-                value={details || ''}
-                onChange={(v) => setDetails(v)}
-              />
-              <button
-                className="font-semibold text-sm text-black self-start sm:self-center"
-                variant="slim"
-                disabled={saving}
-                onClick={() =>
-                  handleHabitCompletionStatusChange(habit_id, 'Note', details)
-                }
-              >
-                {habitCompletedToday ? 'Update' : 'Save'}
-              </button>
+              <form
+               onSubmit={(e) => {
+                e.preventDefault()
+                handleHabitCompletionStatusChange(habit_id, 'Note', details)
+              }}>
+                <Input
+                  className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
+                  variant="dailies"
+                  id="Note"
+                  type="varchar"
+                  placeholder="Add your note here!"
+                  value={details || ''}
+                  onChange={(v) => setDetails(v)}
+                />
+                <button
+                  className="font-semibold text-sm text-black self-start sm:self-center"
+                  variant="slim"
+                  disabled={saving}
+                  type="submit"
+                
+                >
+                  {habitCompletedToday ? 'Update' : 'Save'}
+                </button>
+              </form>
             </div>
           ) : null}
           {habit_type == 'Counter' ? (
@@ -398,7 +403,17 @@ export default function HabitSquare({
           ) : null}
           {habit_type == 'Duration' ? (
             <div className="flex flex-col">
-              <div className="flex flex-row align-middle">
+              <form className="flex flex-row align-middle"
+                 onSubmit={(e) => {
+                  e.preventDefault()
+                  handleHabitCompletionStatusChange(
+                    habit_id,
+                    'Duration',
+                    timeDenominator === 'HRS'
+                      ? getTimeInMinutes(details)
+                      : details
+                  )
+                }}>
                 <Input
                   className="text-xs sm:text-sm mt-0.5 sm:mt-1 mb-2 sm:mb-4 font-semibold rounded"
                   variant="dailies"
@@ -413,6 +428,7 @@ export default function HabitSquare({
                     className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${timeDenominator == 'HRS' ? `opacity-100` : `opacity-30`
                       }`}
                     variant="slim"
+                    type="button"
                     disabled={timeDenominator == 'HRS'}
                     onClick={() => convertTime('HRS', details)}
                   >
@@ -422,26 +438,19 @@ export default function HabitSquare({
                     className={`font-semibold text-xs sm:text-sm text-black ml-2 text-left ${timeDenominator == 'MINS' ? `opacity-100` : `opacity-30`
                       }`}
                     variant="slim"
+                    type="button"
                     disabled={timeDenominator == 'MINS'}
                     onClick={() => convertTime('MINS', details)}
                   >
                     MINS
                   </button>
                 </div>
-              </div>
+                </form>
               <button
                 className="font-semibold text-sm text-black self-start sm:self-center"
                 variant="slim"
+                type="submit"
                 disabled={saving}
-                onClick={() =>
-                  handleHabitCompletionStatusChange(
-                    habit_id,
-                    'Duration',
-                    timeDenominator === 'HRS'
-                      ? getTimeInMinutes(details)
-                      : details
-                  )
-                }
               >
                 {habitCompletedToday ? 'Update' : 'Save'}
               </button>
