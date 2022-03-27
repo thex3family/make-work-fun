@@ -384,6 +384,9 @@ export default function playerDetails() {
                             statIconColor="bg-transparent-500"
                             statPlayer={player}
                             displayMode={display}
+                            statEnergy={playerStats.energy_level}
+                            user_id={player}
+
                           />
                         </div>
                         <div className="2xl:w-1/2 w-full 2xl:pt-0">

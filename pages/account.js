@@ -839,6 +839,7 @@ export default function Account({
                     className="text-xl mt-8 mb-4 font-semibold rounded"
                     id="full_name"
                     type="text"
+                    placeholder="Anonymous Adventurer"
                     value={full_name || ''}
                     
                     onChange={setName}

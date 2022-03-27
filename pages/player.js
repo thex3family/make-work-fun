@@ -479,10 +479,8 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
               <div className="pt-0 sm:pt-10 pb-5">
                 <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
                   {greetingMessage},{' '}
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                    {playerStats.full_name ? (
-                      `${playerStats.full_name ?? 'Adventurer'}`
-                    ) : (
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+                    {playerStats ? playerStats.full_name ? playerStats.full_name : 'Adventurer'  : (
                       <LoadingDots />
                     )}
                     !
@@ -503,6 +501,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
                   areaStats={areaStats}
                   setShowTitleModal={setShowTitleModal}
                   titles={titles}
+                  user_id={user.id}
                 />
                 {wins ? (
                   <div className="flex flex-wrap mt-4">
