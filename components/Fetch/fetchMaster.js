@@ -776,7 +776,8 @@ export async function dailyBonusButtons(player, setDailyBonus) {
   }
 }
 
-export async function claimDailyBonus(player, setDailyBonus) {
+export async function claimDailyBonus(player, setDailyBonus, setBonusLoading) {
+  setBonusLoading(true);
   try {
 
     let testDateStr = new Date();
@@ -802,6 +803,7 @@ export async function claimDailyBonus(player, setDailyBonus) {
   } catch (error) {
     alert(error.message);
   } finally {
+    setBonusLoading(false);
     setDailyBonus(false);
   }
 }
