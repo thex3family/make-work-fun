@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Button from '../ui/Button';
 import Router from 'next/router';
 import { supabase } from '@/utils/supabase-client';
+import LoadingDots from '../ui/LoadingDots';
 
 export default function ModalOnboarding({ onboardingState, player }) {
   const [header, setHeader] = useState(null);
@@ -11,7 +12,7 @@ export default function ModalOnboarding({ onboardingState, player }) {
   const [mediaType, setMediaType] = useState(null);
   const [steps, setSteps] = useState(null);
   const [customLink, setCustomLink] = useState(null);
-  const [customLinkLoading, setCustomLinkLoading] = useState(null);
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     if (onboardingState) initializeDetails();
@@ -63,7 +64,7 @@ export default function ModalOnboarding({ onboardingState, player }) {
 
   async function startSeason() {
     try {
-      setCustomLinkLoading(true);
+      setLoading(true);
 
       // only for signed in users
       const user = supabase.auth.user();
@@ -180,12 +181,14 @@ export default function ModalOnboarding({ onboardingState, player }) {
               {/* <img src="img/default_avatar.png" height="auto" className="w-3/4 mx-auto pb-2" /> */}
               {/*footer*/}
               <div className="flex items-center p-6 border-t border-solid border-blueGray-200 rounded-b">
-                <div className="text-center mx-auto">
-                  {customLink == 'new-season' ? <Button
+                <div className="text-center mx-auto flex flex-col gap-2">
+                  
+                  {loading ? <LoadingDots/> : (customLink == 'new-season' ? 
+                  <Button
                     variant="prominent"
                     className="text-md font-semibold text-emerald-600"
                     onClick={() => startSeason()}
-                    disabled={customLinkLoading}
+                    disabled={loading}
                   >
                     Join The Adventure
                   </Button> : customLink == 'new-season-embed' ?
@@ -200,14 +203,25 @@ export default function ModalOnboarding({ onboardingState, player }) {
                     >
                       Generate New Secret Embed Link
                     </Button></a> :
-                      <Link href="/account">
-                        <Button
+                      <>
+                        <Link href="/account?tab=connect">
+                          <Button
+                            variant="prominent"
+                            className="text-md font-semibold text-emerald-600"
+                          >
+                            Connect With A Productivity Tool
+                          </Button>
+                        </Link>
+                        <button
                           variant="prominent"
-                          className="text-md font-semibold text-emerald-600"
+                          className="text-md font-semibold text-emerald-600 hideLinkBorder"
+                          onClick={() => startSeason()}
+                          disabled={loading}
                         >
-                          Go To Account
-                        </Button>
-                      </Link>}
+                          Skip For Now
+                        </button>
+                      </>)}
+
 
                 </div>
               </div>
