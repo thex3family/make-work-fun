@@ -37,12 +37,11 @@
 
 *:focus {
   outline: 0 !important;
-  outline: none !important;
 }
 
 .link:active,
 .link:focus {
-  outline: none !important;
+  outline: none;
   border: none;
   -moz-outline-style: none;
   box-shadow: none;
@@ -50,7 +49,7 @@
 
 .hideLinkBorder:active,
 .hideLinkBorder:focus {
-  outline: none !important;
+  outline: none;
   border: none;
   -moz-outline-style: none;
   box-shadow: none;
