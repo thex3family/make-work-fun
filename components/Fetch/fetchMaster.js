@@ -566,8 +566,6 @@ export async function fetchAreaStats(player) {
 
 export async function fetchTitles() {
   try {
-    const user = supabase.auth.user();
-
     const { data, error } = await supabase
       .from('titles')
       .select('*')
