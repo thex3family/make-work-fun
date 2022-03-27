@@ -25,6 +25,15 @@ export default function updates({metaBase, setMeta}) {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="Mar 27, 2022"
+            title="Let's Get Energized⚡"
+            desc="We've made it simple for you to keep track your energy levels during the day to help you be in touch with your body and avoid burnout."
+            img_url="updates/0.39.png"
+            button_url="/player"
+            version="v.39"
+            latest={true}
+          />
           <CardLUpdate
             date="Mar 21, 2022"
             title="Have Clarity On Where You're Leveling Up"
@@ -32,7 +41,6 @@ export default function updates({metaBase, setMeta}) {
             img_url="updates/0.38.png"
             button_url="/dailies/edit"
             version="v.38"
-            latest={true}
           />
           <CardRUpdate
             date="Mar 11, 2022"
