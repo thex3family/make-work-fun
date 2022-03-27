@@ -806,6 +806,7 @@ export default function Account({
                 it into our app.
               </p>
             </div> */}
+            <form onSubmit={()=>updateProfile({full_name})}>
               <Card
                 title="Your Name"
                 description="Please enter your first name, or a display name you are comfortable with."
@@ -818,11 +819,7 @@ export default function Account({
                       className="w-full sm:w-auto"
                       variant="incognito"
                       type="submit"
-                      onClick={() =>
-                        updateProfile({
-                          full_name
-                        })
-                      }
+                      
                       disabled={saveLoading || loading}
                     >
                       {saveLoading ? 'Saving ...' : 'Save'}
@@ -837,9 +834,11 @@ export default function Account({
                     id="full_name"
                     type="text"
                     value={full_name || ''}
+                    
                     onChange={setName}
                   /> : <div className='mt-8 mb-4'><LoadingDots /></div>}
               </Card>
+              </form>
               <Card
                 title="Account Management"
                 description="Set a password, restart your avatar, and more."
