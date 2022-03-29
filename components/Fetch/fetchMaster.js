@@ -569,7 +569,8 @@ export async function fetchTitles() {
     const { data, error } = await supabase
       .from('titles')
       .select('*')
-      .eq('active', true);
+      .eq('active', true)
+      .order('level_requirement', { ascending: true })
 
     if (data) {
       return data;

@@ -7,7 +7,10 @@ export default function TitleModal({
   pushTitle,
   refreshStats,
   user_id
-}) {
+}) 
+
+
+{
   return (
     <div className="animate-fade-in h-screen flex justify-center">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-40 outline-none focus:outline-none">
@@ -21,7 +24,7 @@ export default function TitleModal({
             {/*header*/}
             <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
               <h3 className="text-xl sm:text-2xl font-semibold text-white">
-                🏅 Pick Your Favourite Title!
+                🏅 Pick Your Title!
               </h3>
               <button
                 className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -39,8 +42,8 @@ export default function TitleModal({
                   Currently Unlocked
                 </div>
                 {titles.map((title) =>
-                  playerStats.current_level - title.level_requirement > 0 &&
-                  playerStats.current_level - title.level_requirement <= 5 && !title.special ? (
+                  playerStats.current_level - title.level_requirement >= 0 &&
+                  playerStats.current_level - title.level_requirement <= 4 && !title.special ? (
                     <TitleButton
                       pushTitle={pushTitle}
                       title_id={title.id}
@@ -108,6 +111,7 @@ export default function TitleModal({
                           : true
                       }
                       title_name={title.name}
+                      user_id={user_id}
                       description={title.description}
                     />
                   </div>
