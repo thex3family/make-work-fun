@@ -641,17 +641,16 @@ export default function Account({
                           100%
                         </span>
                         <p className="text-accents-5 text-sm">
-                          Unlock all the resources you need at the right prices.
+                          Unlock the systems you need at exclusive discounts.
                         </p>
                       </p>
                       {subscriptionStatus ? (
-                        <a href="https://toolbox.co-x3.com/" target="_blank">
+                        <a href="https://toolbox.co-x3.com/products?utm_source=makeworkfun" target="_blank">
                           <Button
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
-                            disabled={true}
                           >
-                            Coming Soon
+                            <i className='fa fa-shopping-cart mr-2'/>{subscriptionStatus == 1 ? "PATRON-GROW-5" : subscriptionStatus == 2 ? "PATRON-VIP-X3" : subscriptionStatus == 3 ? "OUR-100-RULES" : null}
                           </Button>
                         </a>
                       ) : (
