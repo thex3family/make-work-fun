@@ -616,7 +616,7 @@ export default function Account({
                     </div>
                     <div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
-                        Store Discount{' '}
+                        System Discount @ {' '}
                         <span
                           className={
                             subscriptionStatus == 1 ? 'text-emerald-500' : null
@@ -651,6 +651,44 @@ export default function Account({
                             variant="incognito"
                           >
                             <i className='fa fa-shopping-cart mr-2'/>{subscriptionStatus == 1 ? "PATRON-GROW-5" : subscriptionStatus == 2 ? "PATRON-VIP-X3" : subscriptionStatus == 3 ? "OUR-100-RULES" : null}
+                          </Button>
+                        </a>
+                      ) : (
+                        <a
+                          href="https://toolbox.co-x3.com/support-us?utm_source=makeworkfun"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            🔓 Unlock
+                          </Button>
+                        </a>
+                      )}
+                    </div><div className="pb-5 flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="sm:pb-0 pb-3">
+                        Merch Discount @ {' '}
+                        <span
+                          className={'text-emerald-500'
+                          }
+                        >
+                          15%
+                        </span>
+                        <p className="text-accents-5 text-sm">
+                          Get the gear you need to stay focused on what matters most.
+                        </p>
+                      </p>
+                      {subscriptionStatus ? (
+                        <a
+                          href="https://toolbox.co-x3.com/product#merch"
+                          target="_blank"
+                        >
+                          <Button
+                            className="w-full sm:w-auto text-sm"
+                            variant="incognito"
+                          >
+                            <i className='fa fa-shopping-cart mr-2'/> 15-VIP-MERCH
                           </Button>
                         </a>
                       ) : (
