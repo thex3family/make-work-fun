@@ -6,6 +6,8 @@ import { useState, useEffect, useRef } from 'react';
 
 import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 
+import { useInView } from 'react-intersection-observer';
+
 // functions
 
 import {
@@ -15,12 +17,13 @@ import PlayerCard from '@/components/Embeds/PlayerCard';
 import DailiesEntry from '@/components/Embeds/DailiesEntry';
 import CardParty from '@/components/Cards/CardParty';
 
-export default function HomePage({metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
+export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [loading, setLoading] = useState(true);
 
   const [players, setPlayers] = useState([]);
   const [sNPlayers, setsNPlayers] = useState([]);
   const [activePlayers, setActivePlayers] = useState([]);
+  const [count, setCount] = useState(2);
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,6 +32,8 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPlayers = activePlayers.slice(indexOfFirstPost, indexOfLastPost);
+
+  const [scrollingPlayers, setScrollingPlayers] = useState([]);
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -151,7 +156,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
   }, []);
 
   useEffect(() => {
-    if (openTab == 1 && sNPlayers) setActivePlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']));
+    if (openTab == 1 && sNPlayers) {
+      setActivePlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']));
+      setScrollingPlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']).slice(0, 2));
+    }
     // if (openTab == 2 && players) setActivePlayers(players);
     setCurrentPage(1);
   }, [openTab, sNPlayers]);
@@ -182,7 +190,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
   }, []);
 
   useEffect(() => {
-    if(refreshChildStats){
+    if (refreshChildStats) {
       refreshStats();
       setRefreshChildStats(false);
     }
@@ -194,9 +202,50 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
     fetchLeaderboardStats(setPlayers, setLoading);
   }
 
+
+  // handle scrolling feed
+
+  // check if it is in view
+  const { ref, inView, entry } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      let interval = setInterval(() => {
+        let scrollingPlayer = activePlayers[count];
+        setScrollingPlayers([...scrollingPlayers, scrollingPlayer])
+        scrollToBottom()
+        if (count < activePlayers.length - 1) {
+          setCount(count + 1);
+        } else {
+          setScrollingPlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']).slice(0, 2));
+          setCount(2);
+        }
+      }, 3000);
+    }
+
+    // remember to clear timers
+    return function cleanup() {
+      clearInterval(interval);
+    };
+  });
+
+
+  const bottomRef = useRef();
+
+  const scrollToBottom = () => {
+    bottomRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "end",
+    });
+  };
+
   return (
     <>
-    
+
       <section className="justify-center">
         <div className="bg-player-pattern bg-fixed h-4/5">
           <div className="bg-black bg-opacity-90 h-4/5">
@@ -204,10 +253,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
                   <h1 className="md:-mt-20 mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                    Make Work Fun
+                    Celebrate Your Wins
                   </h1>
                   <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
-                    Unlock multiplayer for personal development!
+                    Gamify your productivity tools and unlock multiplayer for personal development!
                   </p>
                   <div className="w-full pt-8 px-0 my-auto ">
                     {/* <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
@@ -261,66 +310,69 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
                     <Link href="leaderboard">
                       <div className="cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      <h1 className="text-2xl font-bold sm:text-3xl ">
-                        Top Players This Week
-                      </h1>
+                        <h1 className="text-2xl font-bold sm:text-3xl ">
+                          Top Players This Week
+                        </h1>
                       </div>
                     </Link>
-
-                    <div
-                      className="mx-5 flex flex-no-wrap flex-row max-w-screen-2xl gap-12 pt-10 overflow-x-scroll pb-10"
-                      id="container"
-                    >
-                      {loading ? (
-                        <>
-                          <CardAvatarSkeleton displayMode={'short'} />
-                          <CardAvatarSkeleton displayMode={'short'} />
-                          <CardAvatarSkeleton displayMode={'short'} />
-                        </>
-                      ) : (
-                        <>
-                          {currentPlayers.map((player, i) => (
-                            <Avatar
-                              key={i}
-                              displayMode={'short'}
-                              statRank={player.player_rank}
-                              statName={player.full_name}
-                              statLevel={player.current_level}
-                              statEXP={player.total_exp}
-                              statEXPProgress={player.exp_progress}
-                              statLevelEXP={player.level_exp}
-                              statGold={player.total_gold}
-                              statWinName={player.name}
-                              statWinType={player.type}
-                              statWinGold={player.gold_reward}
-                              statWinEXP={player.exp_reward}
-                              avatar_url={player.avatar_url}
-                              background_url={player.background_url}
-                              statTitle={player.title}
-                              statEXPEarned={player.exp_earned_week}
-                              statGoldEarned={player.exp_earned_week}
-                              statEarnedDuration={'week'}
-                            />
-                          ))}
-                          <div href="leaderboard" className="relative">
-                            <>
-                              <Link href="/leaderboard">
-                                <Button
-                                  className="w-auto flex-shrink-0 my-auto absolute top-0 bottom-0 left-0 right-0 mx-10 z-50"
-                                  variant="prominent"
-                                >
-                                  🏆 See Leaderboard
-                                </Button>
-                              </Link>
-
-                              <CardAvatarSkeleton
+                    <div className='autoscroll-container'
+                      ref={ref}>
+                      <div
+                        className="mx-5 flex flex-no-wrap flex-row max-w-screen-2xl gap-12 pt-10 overflow-x-auto pb-10 scroll-list no-scrollbar"
+                        id="container"
+                      >
+                        {loading ? (
+                          <>
+                            <CardAvatarSkeleton displayMode={'short'} />
+                            <CardAvatarSkeleton displayMode={'short'} />
+                            <CardAvatarSkeleton displayMode={'short'} />
+                          </>
+                        ) : (
+                          <>
+                            {scrollingPlayers.map((player, i) => (
+                              <Avatar
+                                key={i}
                                 displayMode={'short'}
-                                className="absolute"
+                                statRank={player.player_rank}
+                                statName={player.full_name}
+                                statLevel={player.current_level}
+                                statEXP={player.total_exp}
+                                statEXPProgress={player.exp_progress}
+                                statLevelEXP={player.level_exp}
+                                statGold={player.total_gold}
+                                statWinName={player.name}
+                                statWinType={player.type}
+                                statWinGold={player.gold_reward}
+                                statWinEXP={player.exp_reward}
+                                avatar_url={player.avatar_url}
+                                background_url={player.background_url}
+                                statTitle={player.title}
+                                statEXPEarned={player.exp_earned_week}
+                                statGoldEarned={player.exp_earned_week}
+                                statEarnedDuration={'week'}
                               />
-                            </>
-                          </div>
-                        </>
-                      )}
+                            ))}
+                            {/* <div href="leaderboard" className="relative">
+                              <>
+                                <Link href="/leaderboard">
+                                  <Button
+                                    className="w-auto flex-shrink-0 my-auto absolute top-0 bottom-0 left-0 right-0 mx-10 z-50"
+                                    variant="prominent"
+                                  >
+                                    🏆 See Leaderboard
+                                  </Button>
+                                </Link>
+
+                                <CardAvatarSkeleton
+                                  displayMode={'short'}
+                                  className="absolute"
+                                />
+                              </>
+                            </div> */}
+                          </>
+                        )}
+                        <div ref={bottomRef} className="list-bottom"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -422,11 +474,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
             </a> */}
             <a
               onClick={() => setBenefitTab(1)}
-              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
-                benefitTab == 1
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
-                  : null
-              }`}
+              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${benefitTab == 1
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
+                : null
+                }`}
             >
               <span
                 className={benefitTab == 1 ? 'text-white' : 'text-blueGray-500'}
@@ -437,11 +488,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
             </a>
             <a
               onClick={() => setBenefitTab(2)}
-              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
-                benefitTab == 2
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
-                  : null
-              }`}
+              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${benefitTab == 2
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
+                : null
+                }`}
             >
               <span
                 className={benefitTab == 2 ? 'text-white' : 'text-blueGray-500'}
@@ -452,11 +502,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
             </a>
             <a
               onClick={() => setBenefitTab(3)}
-              className={`rounded-lg sm:px-6 py-3 w-full sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${
-                benefitTab == 3
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
-                  : null
-              }`}
+              className={`rounded-lg sm:px-6 py-3 w-full sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${benefitTab == 3
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
+                : null
+                }`}
             >
               <span
                 className={benefitTab == 3 ? 'text-white' : 'text-blueGray-500'}
@@ -475,9 +524,8 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
           </button> */}
 
           <div
-            className={`w-full lg:w-3/4 mx-auto ${
-              benefitTab == 1 ? '' : 'hidden'
-            }`}
+            className={`w-full lg:w-3/4 mx-auto ${benefitTab == 1 ? '' : 'hidden'
+              }`}
           >
             <div className="animate-fade-in-up flex items-center mb-6">
               <div
@@ -575,11 +623,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
               <div className="flex-grow w-full">
                 <div
                   onClick={() => setEmbedTab(0)}
-                  className={`cursor-pointer text-left mb-6 ${
-                    embedTab == 0
-                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
-                      : ''
-                  }`}
+                  className={`cursor-pointer text-left mb-6 ${embedTab == 0
+                    ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
+                    : ''
+                    }`}
                 >
                   <h2 className="text-white text-lg title-font font-medium mb-3">
                     1 . Customize Your Component
@@ -591,11 +638,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
 
                 <div
                   onClick={() => setEmbedTab(1)}
-                  className={`cursor-pointer text-left mb-6 ${
-                    embedTab == 1
-                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
-                      : ''
-                  }`}
+                  className={`cursor-pointer text-left mb-6 ${embedTab == 1
+                    ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
+                    : ''
+                    }`}
                 >
                   <h2 className="text-white text-lg title-font font-medium mb-3">
                     2 . Paste Anywhere You Want
@@ -607,11 +653,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                 </div>
                 <div
                   onClick={() => setEmbedTab(2)}
-                  className={`cursor-pointer text-left mb-6 ${
-                    embedTab == 2
-                      ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
-                      : ''
-                  }`}
+                  className={`cursor-pointer text-left mb-6 ${embedTab == 2
+                    ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
+                    : ''
+                    }`}
                 >
                   <h2 className="text-white text-lg title-font font-medium mb-3">
                     3 . Celebrate Your Wins Anywhere, Anytime.
