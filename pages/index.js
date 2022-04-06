@@ -208,7 +208,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
   // check if it is in view
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: 0,
+    threshold: 1,
   });
 
   useEffect(() => {
@@ -238,8 +238,8 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
   const scrollToBottom = () => {
     bottomRef.current.scrollIntoView({
       behavior: "smooth",
-      block: "end",
-      inline: "end",
+      block: "center",
+      inline: "center",
     });
   };
 
@@ -252,18 +252,18 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
             <div className="animate-fade-in-up pt-8 md:pt-24 lg:pt-8 pb-10 max-w-8xl mx-auto">
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-                  <h1 className="md:-mt-20 mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                    Celebrate Your Wins
+                  <h1 className="md:-mt-20 mx-auto md:mx-0 text-4xl font-bold sm:text-6xl  pb-5">
+                    Turn Tasks Into <span className='bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500'>Wins</span>
                   </h1>
-                  <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
-                    Gamify your productivity tools and unlock multiplayer for personal development!
+                  <p className="mx-auto md:mx-0 text-xl text-accents-4 sm:leading-relaxed sm:text-2xl max-w-2xl">
+                    Gamify your productivity tools and unlock multiplayer for personal development.
                   </p>
                   <div className="w-full pt-8 px-0 my-auto ">
                     {/* <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       Lifetime Statistics
                     </h1> */}
                     <p className="text-sm text-accents-3 font-semibold">
-                      Lifetime Statistics Since June 2021
+                      Leveling Up Together Since June 2021
                     </p>
                     <h1 className="rounded-lg w-full md:w-11/12 md:-ml-3 lg:w-full mx-auto text-sm font-semibold text-center md:text-left lg:text-sm">
                       <LeaderboardStatistics
@@ -308,17 +308,17 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
 
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg mt-4">
-                    <Link href="leaderboard">
+                    {/* <Link href="leaderboard">
                       <div className="cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                         <h1 className="text-2xl font-bold sm:text-3xl ">
                           Top Players This Week
                         </h1>
                       </div>
-                    </Link>
+                    </Link> */}
                     <div className='autoscroll-container'
                       ref={ref}>
                       <div
-                        className="mx-5 flex flex-no-wrap flex-row max-w-screen-2xl gap-12 pt-10 overflow-x-auto pb-10 scroll-list no-scrollbar"
+                        className="mx-5 flex flex-no-wrap flex-row max-w-screen-2xl gap-12 pt-8 overflow-x-auto pb-8 scroll-list no-scrollbar"
                         id="container"
                       >
                         {loading ? (
@@ -417,9 +417,47 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
         </svg>
       </div> */}
       </section>
+      <section className="bg-dark">
+        <div className="max-w-4xl animate-fade-in-up container w-full sm:w-3/4 mx-auto py-8 grid grid-cols-1 sm:grid-cols-2 gap-y-3 justify-start sm:divide-x-2 divide-rounded divide-gray-400">
+          <div className='justify-self-end px-0 sm:px-8 w-full'>
+            <div className="flex flex-col px-5 text-center ">
+              <h1 className="text-xl font-medium mb-4 text-accents-6">
+                Works With Tools You Love.
+              </h1>
+            </div>
+            <div className="grid grid-cols-4 justify-items-center content-center place-content-center place-items-center max-w-xs mx-auto gap-2">
+              <img
+                src="/img/notion_logo.png"
+              />
+              <img
+                className='p-3'
+                src="/img/airtable_logo.png"
+              />
+              <img
+                className='p-1'
+                src="/img/obsidian_logo.png"
+              />
+              <img
+                className='p-1'
+                src="/img/clickup_logo.png"
+              />
+            </div>
+          </div>
+          <div className='flex flex-col justify-center justify-self-start px-0 sm:px-8 w-full'>
+            <a href={PHLink} target="_blank" className="mx-auto">
+              <img
+                src={PHImg}
+                alt="Make Work Fun - Gamify Notion Workspaces - Celebrate your wins + unlock multiplayer for personal growth | Product Hunt"
+                width="250"
+                height="54"
+              />
+            </a>
+          </div>
+        </div>
+      </section>
       <section className="text-gray-600 body-font bg-black">
         <div className="container px-5 py-24 mx-auto flex flex-wrap flex-col">
-          <div className="animate-fade-in-up container w-full sm:w-3/4 mx-auto flex flex-row flex-wrap pt-10 mb-32">
+          {/* <div className="animate-fade-in-up container w-full sm:w-3/4 mx-auto flex flex-row flex-wrap pt-10 mb-32">
             <div className="w-full -mb-14 md:-mb-24 lg:-mb-40 rounded-lg overflow-hidden self-center">
               <div className="flex flex-col mb-10 px-5 text-center">
                 <h1 className="text-3xl sm:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
@@ -449,32 +487,35 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                 height="54"
               />
             </a>
-          </div>
+          </div> */}
 
           <div className="w-full mb-4 flex flex-col items-center">
-            <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
-              Core Features
+            <h1 className="title-font sm:text-4xl text-3xl mb-4 font-semibold text-center text-white">
+              Try it Out For Yourself
             </h1>
           </div>
-          <div className="flex mx-auto flex-wrap mb-14 cursor-pointer bg-gray-700 rounded-xl align-middle shadow-xl text-lg font-medium px-2 py-1">
-            {/* <a
-              onClick={() => setBenefitTab(0)}
-              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider ' ${
-                benefitTab == 0
-                  ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
-                  : null
-              }`}
-            >
-              <span
-                className={benefitTab == 0 ? 'text-white' : 'text-blueGray-500'}
-              >
-                <i className="fas fa-link mr-2" />
-                Connect
-              </span>
-            </a> */}
+          <div className='grid grid-cols-1 sm:grid-cols-3 max-w-6xl mx-auto mb-10'>
+            <div onClick={() => setBenefitTab(1)} className={`p-6 rounded-xl cursor-pointer ${benefitTab == 1 ? 'text-white bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl' : ''}`}>
+              <i className="text-3xl fas fa-user-circle mb-3" />
+              <h2 className='text-xl font-bold mb-1'>Track Your Wins</h2>
+              <p className='text-lg leading-tight font-medium'>Celebrate your wins and track how you're leveling up in real time.</p>
+            </div>
+            <div onClick={() => setBenefitTab(3)} className={`p-6 rounded-xl cursor-pointer ${benefitTab == 3 ? 'text-white bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl' : ''}`}>
+              <i className="text-3xl fas fa-star mb-3" />
+              <h2 className='text-xl font-bold mb-1'>Do Your Dailies</h2>
+              <p className='text-lg leading-tight font-medium'>Transform your daily chores into exciting daily quests and keep up your streak!</p>
+            </div>
+            <div onClick={() => setBenefitTab(2)} className={`p-6 rounded-xl cursor-pointer ${benefitTab == 2 ? 'text-white bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl' : ''}`}>
+              <i className="text-3xl fas fa-dragon mb-3" />
+              <h2 className='text-xl font-bold mb-1'>Unlock Multiplayer</h2>
+              <p className='text-lg leading-tight font-medium'>Participate in party quests to get motivated to slay your dragons.</p>
+            </div>
+          </div>
+
+          {/* <div className="flex mx-auto flex-wrap mb-14 cursor-pointer bg-gray-700 rounded-xl align-middle shadow-xl text-lg font-medium px-2 py-1">
             <a
               onClick={() => setBenefitTab(1)}
-              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${benefitTab == 1
+              className={`rounded-lg sm:px-6 py-3 w-full sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${benefitTab == 1
                 ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
                 : null
                 }`}
@@ -484,20 +525,6 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
               >
                 <i className="fas fa-user-circle mr-2" />
                 Player
-              </span>
-            </a>
-            <a
-              onClick={() => setBenefitTab(2)}
-              className={`rounded-lg sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${benefitTab == 2
-                ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
-                : null
-                }`}
-            >
-              <span
-                className={benefitTab == 2 ? 'text-white' : 'text-blueGray-500'}
-              >
-                <i className="fas fa-dragon mr-2" />
-                Party
               </span>
             </a>
             <a
@@ -514,7 +541,21 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                 Dailies
               </span>
             </a>
-          </div>
+            <a
+              onClick={() => setBenefitTab(2)}
+              className={`rounded-lg sm:px-6 py-3 w-full sm:w-auto justify-center sm:justify-start title-font font-medium inline-flex items-center leading-none tracking-wider '  ${benefitTab == 2
+                ? 'bg-gradient-to-r from-emerald-500 to-blue-500 shadow-xl'
+                : null
+                }`}
+            >
+              <span
+                className={benefitTab == 2 ? 'text-white' : 'text-blueGray-500'}
+              >
+                <i className="fas fa-dragon mr-2" />
+                Party
+              </span>
+            </a>
+          </div> */}
           {/* <button
             onClick={() => setDark(dark ? false : true)}
             className={`text-lg font-semibold w-auto mx-auto items-center justify-center px-2 py-2 leading-none rounded text-emerald-700 bg-emerald-100 border-2 border-emerald-500 mb-10`}
@@ -527,7 +568,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
             className={`w-full lg:w-3/4 mx-auto ${benefitTab == 1 ? '' : 'hidden'
               }`}
           >
-            <div className="animate-fade-in-up flex items-center mb-6">
+            {/* <div className="animate-fade-in-up flex items-center mb-6">
               <div
                 className="border-t border-accents-2 flex-grow mr-3"
                 aria-hidden="true"
@@ -539,7 +580,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                 className="border-t border-accents-2 flex-grow ml-3"
                 aria-hidden="true"
               ></div>
-            </div>
+            </div> */}
             <iframe
               id="player-details"
               className={`w-full rounded-lg`}
@@ -550,7 +591,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
 
           {benefitTab == 2 ? (
             <div className="animate-fade-in-up w-full lg:w-3/4 mx-auto">
-              <div className="flex items-center mb-6">
+              {/* <div className="flex items-center mb-6">
                 <div
                   className="border-t border-accents-2 flex-grow mr-3"
                   aria-hidden="true"
@@ -562,7 +603,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                   className="border-t border-accents-2 flex-grow ml-3"
                   aria-hidden="true"
                 ></div>
-              </div>
+              </div> */}
               {demoParties?.map((party) => (
                 <CardParty key={party.id} party={party} displayMode="demo" />
               ))}
@@ -570,7 +611,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
           ) : null}
           {benefitTab == 3 ? (
             <div className="animate-fade-in-up w-full lg:w-3/4 mx-auto">
-              <div className="flex items-center mb-6">
+              {/* <div className="flex items-center mb-6">
                 <div
                   className="border-t border-accents-2 flex-grow mr-3"
                   aria-hidden="true"
@@ -582,7 +623,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                   className="border-t border-accents-2 flex-grow ml-3"
                   aria-hidden="true"
                 ></div>
-              </div>
+              </div> */}
               <DailiesEntry />
             </div>
           ) : null}
@@ -598,7 +639,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
           </div> */}
         </div>
       </section>
-      <section className="text-gray-600 body-font bg-black">
+      <section className="text-gray-600 body-font bg-dark">
         <div className="container px-5 py-0 sm:py-24 mx-auto flex flex-wrap-reverse">
           <div className="lg:w-1/3 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
             <div
@@ -616,15 +657,15 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
           <div className="flex flex-col flex-wrap w-full lg:py-6 lg:w-2/3 lg:pl-12 lg:text-left text-center">
             <div className="flex flex-col mb-10 lg:items-start items-center px-5">
               <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
-                Bring Your Character Anywhere.
+                Bring Your Character  <span className='bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 font-bold'>Anywhere.</span>
               </h1>
             </div>
-            <div className="flex flex-col mb-10 lg:items-start items-center px-5">
+            <div className="grid grid-cols-1 mb-10 lg:items-start items-center px-5">
               <div className="flex-grow w-full">
                 <div
                   onClick={() => setEmbedTab(0)}
-                  className={`cursor-pointer text-left mb-6 ${embedTab == 0
-                    ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
+                  className={`cursor-pointer text-left mb-6 p-4 ${embedTab == 0
+                    ? 'bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg '
                     : ''
                     }`}
                 >
@@ -638,8 +679,8 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
 
                 <div
                   onClick={() => setEmbedTab(1)}
-                  className={`cursor-pointer text-left mb-6 ${embedTab == 1
-                    ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
+                  className={`cursor-pointer text-left mb-6 p-4 ${embedTab == 1
+                    ? 'bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg'
                     : ''
                     }`}
                 >
@@ -653,8 +694,8 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                 </div>
                 <div
                   onClick={() => setEmbedTab(2)}
-                  className={`cursor-pointer text-left mb-6 ${embedTab == 2
-                    ? 'bg-white bg-opacity-20 rounded-lg px-6 py-4 -mx-3 sm:-ml-3'
+                  className={`cursor-pointer text-left mb-6 p-4 ${embedTab == 2
+                    ? 'bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg'
                     : ''
                     }`}
                 >
