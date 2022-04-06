@@ -169,11 +169,11 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
             <div className="animate-fade-in-up  pt-8 md:pt-24 pb-10 max-w-7xl mx-auto">
               <div className="px-8 lg:container lg:px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-                  <h1 className="mx-auto md:mx-0 text-4xl font-extrabold sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                    Join Our Family
+                  <h1 className="mx-auto md:mx-0 text-4xl font-bold sm:text-6xl  pb-5">
+                    Join Our <span className='bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500'>Family</span>
                   </h1>
-                  <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:text-2xl max-w-2xl">
-                    Unlock multiplayer for personal development!
+                  <p className="mx-auto md:mx-0 text-xl text-accents-4 sm:leading-relaxed sm:text-2xl max-w-2xl mb-4">
+                    You don't have to adventure alone.
                   </p>
                   <div className="inline-block mx-auto md:mx-0">
                     {/* <a href="https://makeworkfun.club" target="_blank">
@@ -189,7 +189,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                         className="w-auto mx-auto my-4 md:mx-0"
                         variant="prominent"
                       >
-                        Get Started 🚀
+                        Play Now 🚀
                       </Button>
                     </Link>
                   </div>

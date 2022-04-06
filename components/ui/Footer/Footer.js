@@ -11,7 +11,7 @@ export default function Footer() {
               className="inline-block h-6 ml-4 text-primary"
             />
           </a>
-          <p className="mt-4 text-sm text-primary align-middle font-semi-bold">Created with ♥ by the <a href="https://co-x3.com/?utm_source=makeworkfun" target="_blank" className="text-emerald-600 font-semibold">Co-x3 Family</a></p>
+          <p className="mt-4 text-sm text-primary align-middle font-semi-bold">Created with ♥ by the <a href="https://co-x3.com/?utm_source=makeworkfun" target="_blank" className="">Co-x3 Family</a></p>
           <p className="mt-1 text-sm text-primary align-middle font-semi-bold">© All Rights Reserved</p>
         </div>
       </div>
