@@ -190,7 +190,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
 
   async function refreshStats() {
     console.log('Refreshing Stats');
-    fetchLeaderboardStats(setsNPlayers, setLoading, '3S');
+    fetchLeaderboardStats(setsNPlayers, setLoading, true);
     fetchLeaderboardStats(setPlayers, setLoading);
   }
 

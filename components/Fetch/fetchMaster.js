@@ -329,7 +329,7 @@ export async function fetchLeaderboardStats(setPlayers, setLoading, season) {
         .from('leaderboard_season')
         .select('*')
         .order('total_exp', { ascending: false })
-        .eq('season', season);
+        .eq('latest', true);
 
       if (data) {
         // var newData = data;

@@ -126,7 +126,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
 
   async function refreshStats() {
     console.log('Refreshing Stats');
-    fetchLeaderboardStats(setsNPlayers, setLoading, '3S');
+    fetchLeaderboardStats(setsNPlayers, setLoading, true);
     fetchLeaderboardStats(setPlayers, setLoading);
   }
 
@@ -211,10 +211,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg">
                     <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                      Season 3 Statistics
+                      Season 4 Statistics
                     </h1>
                     <p className="text-sm text-accents-3 font-semibold">
-                      January 1 - March 31
+                      April 1 - June 30
                     </p>
                     <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <LeaderboardStatistics
@@ -307,7 +307,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
               href="#link1"
               role="tablist"
             >
-              Season 3
+              Season 4
               <span
                 className={
                   'text-xs text-white py-1.5 px-2 ml-2 top-0 text-center border-2 shadow-lg rounded-full font-bold ' +
