@@ -287,7 +287,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                         className="w-auto mx-auto my-4 md:mx-0"
                         variant="prominent"
                       >
-                        Get Started 🚀
+                        Play Now 🚀
                       </Button>
                     </Link>
                   </div>
@@ -713,7 +713,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                       className="w-auto mx-auto my-4 md:mx-0"
                       variant="prominent"
                     >
-                      Get Started 🚀
+                      Play Now 🚀
                     </Button>
                   </Link>
                 </div>
