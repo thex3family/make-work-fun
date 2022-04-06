@@ -74,7 +74,7 @@ export default function PlayerCard({ embedTab }) {
       <div className="my-6">
         {embedTab == 0 ? (
           <div>
-            <div className="flex flex-row mb-7 text-xl font-semibold gap-3 overflow-x-scroll pb-4 animate-fade-in">
+            <div className="flex flex-row mb-7 text-xl font-semibold gap-3 pb-4 animate-fade-in">
               <button
                 onClick={() => setDark(dark ? false : true)}
                 className={`flex-shrink-0 font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${
@@ -105,11 +105,11 @@ export default function PlayerCard({ embedTab }) {
                 />
                 Show Friends
               </button>
-              <Feature name="Player Card" status={true} />
+              {/* <Feature name="Player Card" status={true} />
               <Feature name="Today's Earnings" status={true} />
               <Feature name="Latest Win" status={true} />
               <Feature name="Recent Win Announcement" status={true} />
-              <Feature name="Show Guild Members" status={false} />
+              <Feature name="Show Guild Members" status={false} /> */}
             </div>
             
           </div>
