@@ -224,7 +224,7 @@ export default function playerDetails() {
           ) : null}
         </div>
         {specificPlayers ? (
-          <div className="mx-5 sm:mx-auto flex justify-center flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pb-10">
+          <div className="mx-5 px-0 sm:px-12 sm:mx-auto flex justify-left flex-col flex-wrap sm:flex-row max-w-screen-2xl gap-12 pb-10">
             {specificPlayers.map((player, i) => (
               <Avatar
                 key={i}
