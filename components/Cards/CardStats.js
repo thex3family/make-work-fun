@@ -245,7 +245,7 @@ export default function CardStats({
               { value: 100, label: '💛' },
             ]}
           />
-          {initialEnergyValue !== energyValue ?
+          {(initialEnergyValue !== energyValue) && displayMode != 'demo' ?
 
             <div className='flex justify-end mt-8'>
               {!saveEnergy ?
