@@ -172,7 +172,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                   <h1 className="mx-auto md:mx-0 text-4xl font-bold sm:text-6xl  pb-5">
                     Join Our <span className='bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500'>Family</span>
                   </h1>
-                  <p className="mx-auto md:mx-0 text-xl text-accents-4 sm:leading-relaxed sm:text-2xl max-w-2xl mb-4">
+                  <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:leading-relaxed sm:text-2xl max-w-2xl mb-4">
                     You don't have to adventure alone.
                   </p>
                   <div className="inline-block mx-auto md:mx-0">
@@ -210,11 +210,11 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
 
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg">
-                    <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                    <h1 className="text-2xl font-semibold sm:text-3xl">
                       Season 4 Statistics
                     </h1>
-                    <p className="text-sm text-accents-3 font-semibold">
-                      April 1 - June 30
+                    <p className="text-sm text-accents-4 font-semibold">
+                      <i className='fas fa-calendar mr-2'/>April 1 - June 30
                     </p>
                     <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                       <LeaderboardStatistics

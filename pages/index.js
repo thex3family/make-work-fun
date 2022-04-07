@@ -255,7 +255,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                   <h1 className="md:-mt-20 mx-auto md:mx-0 text-4xl font-bold sm:text-6xl  pb-5">
                     Turn Tasks Into <span className='bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500'>Wins</span>
                   </h1>
-                  <p className="mx-auto md:mx-0 text-xl text-accents-4 sm:leading-relaxed sm:text-2xl max-w-2xl">
+                  <p className="mx-auto md:mx-0 text-xl text-accents-6 sm:leading-relaxed sm:text-2xl max-w-2xl">
                     Gamify your productivity tools and unlock multiplayer for personal development.
                   </p>
                   <div className="w-full pt-8 px-0 my-auto ">
