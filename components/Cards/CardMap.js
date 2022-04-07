@@ -10,7 +10,7 @@ export default function CardMap({
 }) {
   return (
     <>
-      <div className="shadow-md flex flex-col md:flex-row bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg overflow-hidden transition duration-500 ease-out transform hover:-translate-y-1 ">
+      <div className="shadow-md flex flex-col md:flex-row opacity-80 hover:opacity-100 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg overflow-hidden transition duration-500 ease-out transform hover:-translate-y-1 ">
         <div className="md:flex-shrink-0">
           <img
             src={img_url}
