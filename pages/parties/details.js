@@ -1296,3 +1296,22 @@ export default function partyDetail({metaBase, setMeta}) {
     </section>
   );
 }
+
+export async function getServerSideProps({ req }) {
+  // Get the user's session based on the request
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/signin?redirect=parties',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: { user }
+  };
+}
+
