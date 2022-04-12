@@ -336,18 +336,32 @@ export default function parties({metaBase, setMeta}) {
     </div>
   );
   const StatusCustom = (row) => (
-    <div data-tag="allowRowEvents">
-      <Link href={`/parties/details/?id=`+row.slug}>
-        <Button
-          variant="prominent"
-          data-tag="allowRowEvents"
-          className="font-semibold text-sm"
-        >
-          {row.status == 1 ? 'Recruiting' : row.status == 2? 'In Progress' : row.status == 3 ? 'In Review' : 'Complete'}
-        </Button>
-        </Link>
+    <div data-tag="allowRowEvents" className="text-left">
+    <div>
+      {row.status == 1 ? (
+        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200">
+          Recruiting
+        </span>
+      ) : row.status == 2 ? (
+        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200">
+          In Progress
+        </span>
+      ) : row.status == 3 ? (
+        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-purple-600 bg-purple-200">
+          In Review
+        </span>
+      ) : (
+        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+          Complete
+        </span>
+      )}
     </div>
+  </div>
   );
+
+  async function goToDetails(row){
+    router.push("/parties/details/?id="+row.slug);
+  }
 
   const columns = [
     {
@@ -583,9 +597,10 @@ export default function parties({metaBase, setMeta}) {
                             noHeader
                             columns={columns}
                             data={allParties}
-                            // highlightOnHover={true}
-                            // pointerOnHover={true}
+                            highlightOnHover={true}
+                            pointerOnHover={true}
                             fixedHeader={true}
+                            onRowClicked={goToDetails}
                             customStyles={customStyles}
                             pagination={true}
                             theme="game"
