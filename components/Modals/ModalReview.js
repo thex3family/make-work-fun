@@ -21,7 +21,7 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
   const [reviewWell, setReviewWell] = useState(null);
   const [reviewBetter, setReviewBetter] = useState(null);
   const [reviewHelpful, setReviewHelpful] = useState(null);
-  const [reviewRating, setReviewRating] = useState(4);
+  const [reviewRating, setReviewRating] = useState(5);
   const [reviewLoaded, setReviewLoaded] = useState(null);
   const [saving, setSaving] = useState(null);
   const classes = useStyles();
@@ -167,7 +167,7 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
                       <div className={`${classes.root} items-center`}>
                         <Rating
                           name="size-large"
-                          defaultValue={reviewRating ? reviewRating : 4}
+                          defaultValue={reviewRating ? reviewRating : 5}
                           size="large"
                           disabled={saving}
                           onChange={(event, e) => {

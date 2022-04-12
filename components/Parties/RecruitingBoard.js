@@ -12,13 +12,14 @@ export default function RecruitingBoard({
   const style = {
     bg: `bg-dailies-default`,
     main: `w-full mt-4`,
-    tab: `border-4 
-          border-white 
-          border-opacity-20 
+    tab: `border-0 
+          bg-white 
+          bg-opacity-20 
           text-gray-100
           font-bold 
           rounded-lg 
-          p-1 m-1 px-2`,
+          p-1 m-1 px-3
+          py-2`,
     tabSelected: `
           shadow-lg 
           border-gray-100 
@@ -27,7 +28,8 @@ export default function RecruitingBoard({
           font-bold
           text-gray-100 
           rounded-lg 
-          p-1 m-1 px-3`,
+          p-1 m-1 px-3
+          py-2`,
     tabs: `w-full text-left p-1 overflow-x-auto flex-row flex justify-center`,
     board: `w-full rounded-lg shadow-lg bg-cover bg-center object-cover`,
     rowTitle: `text-left font-bold ml-4 pt-2`,
@@ -193,7 +195,7 @@ export default function RecruitingBoard({
             ))}<a href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/8dd9fd6d-cd47-47e0-8a2c-3e7d87034d69/chat" target="_blank">
 
               <Button
-                className="px-5 font-bold py-2 rounded mb-4"
+                className="px-5 font-bold py-2 rounded mb-6"
                 variant="dailies"
               >
                 Request A Party!
