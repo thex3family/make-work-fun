@@ -667,9 +667,9 @@ export default function partyDetail({metaBase, setMeta}) {
                                     <div className="col-span-2 sm:col-span-1">
                                       <div className="mb-2 font-semibold">
                                         🎯 Daily Target{' '}
-                                        <span className="text-accents-4 text-xs">
+                                        {/* <span className="text-accents-4 text-xs">
                                           Editable By Leader
-                                        </span>
+                                        </span> */}
                                       </div>
                                       <div className="grid grid-cols-3 items-center gap-3">
                                         <div className="col-span-2">
@@ -714,9 +714,9 @@ export default function partyDetail({metaBase, setMeta}) {
                                     <div className="col-span-2 sm:col-span-1">
                                       <div className="mb-2 font-semibold">
                                         📅 Deadline{' '}
-                                        <span className="text-accents-4 text-xs">
+                                        {/* <span className="text-accents-4 text-xs">
                                           Editable By Leader
-                                        </span>
+                                        </span> */}
                                       </div>
                                       <div className="grid grid-cols-3 items-center gap-3">
                                         <div className="col-span-2">
@@ -756,9 +756,9 @@ export default function partyDetail({metaBase, setMeta}) {
                                     <div className="col-span-2 sm:col-span-1 text-center border rounded p-4 shadow-md">
                                       <div className="mb-2 font-semibold mt-2">
                                         🎯 Daily Target{' '}
-                                        <span className="text-accents-4 text-xs">
+                                        {/* <span className="text-accents-4 text-xs">
                                           Editable By Leader
-                                        </span>
+                                        </span> */}
                                       </div>
                                       <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                                         {party.daily_target}{' '}
@@ -773,9 +773,9 @@ export default function partyDetail({metaBase, setMeta}) {
                                     <div className="col-span-2 sm:col-span-1 text-center border rounded p-4 shadow-md">
                                       <div className="mb-2 font-semibold mt-2">
                                         📅 Deadline{' '}
-                                        <span className="text-accents-4 text-xs">
+                                        {/* <span className="text-accents-4 text-xs">
                                           Editable By Leader
-                                        </span>
+                                        </span> */}
                                       </div>
                                       <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                                         {moment(due_date)
@@ -798,9 +798,9 @@ export default function partyDetail({metaBase, setMeta}) {
                                   <div className="col-span-2 sm:col-span-1 text-center border rounded p-4 shadow-md">
                                     <div className="mb-2 font-semibold mt-2">
                                       🎯 Daily Target{' '}
-                                      <span className="text-accents-4 text-xs">
+                                      {/* <span className="text-accents-4 text-xs">
                                         Editable By Leader
-                                      </span>
+                                      </span> */}
                                     </div>
                                     <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                                       {party.daily_target}{' '}
@@ -815,9 +815,9 @@ export default function partyDetail({metaBase, setMeta}) {
                                   <div className="col-span-2 sm:col-span-1 text-center border rounded p-4 shadow-md">
                                     <div className="mb-2 font-semibold mt-2">
                                       📅 Deadline{' '}
-                                      <span className="text-accents-4 text-xs">
+                                      {/* <span className="text-accents-4 text-xs">
                                         Editable By Leader
-                                      </span>
+                                      </span> */}
                                     </div>
                                     <div className="text-3xl sm:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                                       {moment(due_date)

@@ -25,6 +25,15 @@ export default function updates({metaBase, setMeta}) {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardLUpdate
+            date="Apr 12, 2022"
+            title="Faster Parties"
+            desc="We've drastically improved the speed it takes to access your party details, so you can swiftly embark on your adventure."
+            
+            button_url="/parties"
+            version="v.40"
+            latest={true}
+          />
           <CardRUpdate
             date="Mar 27, 2022"
             title="Let's Get Energized⚡"
@@ -32,7 +41,6 @@ export default function updates({metaBase, setMeta}) {
             img_url="updates/0.39.png"
             button_url="/player"
             version="v.39"
-            latest={true}
           />
           <CardLUpdate
             date="Mar 21, 2022"
