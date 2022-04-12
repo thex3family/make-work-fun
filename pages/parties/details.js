@@ -966,7 +966,7 @@ export default function partyDetail({metaBase, setMeta}) {
                         </>
                       ) : party.status > 1 ? (
                         <>
-                          <h1 className=" rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-pink-500">
+                          <h1 className=" rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl">
                             <PartyStatistics
                               players={partyPlayers ? partyPlayers.length : 0}
                               wins={cumulativeWins.reduce((a, b) => a + b, 0)}
