@@ -58,7 +58,7 @@ createTheme('game', {
   }
 });
 
-export default function parties({metaBase, setMeta}) {
+export default function parties({ metaBase, setMeta }) {
   const [activeParties, setActiveParties] = useState(null);
   const [recruitingParties, setRecruitingParties] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -80,7 +80,7 @@ export default function parties({metaBase, setMeta}) {
   const [activeTab, setActiveTab] = useState(1);
 
   const [allParties, setAllParties] = useState(null);
-  
+
   const [newToSeason, setNewToSeason] = useState(null);
 
   const { tab } = router.query;
@@ -94,7 +94,7 @@ export default function parties({metaBase, setMeta}) {
     }
   }, []);
 
-  
+
   async function changeTab(tab_id) {
     if (tab_id == 1) {
       router.push(`parties/?tab=active`, undefined, { shallow: true })
@@ -114,7 +114,7 @@ export default function parties({metaBase, setMeta}) {
     }
     setMeta(meta)
   }, []);
-  
+
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -297,10 +297,10 @@ export default function parties({metaBase, setMeta}) {
 
   const NameCustom = (row) => (
     <div data-tag="allowRowEvents" className="text-left">
-      <p className="font-semibold text-sm mb-1 truncate w-32 sm:w-96">
+      <p className="font-semibold text-sm mb-1 truncate w-full">
         {row.name}
       </p>
-      <div>
+      <div data-tag="allowRowEvents">
         {row.challenge == 1 ? (
           <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-pink-600 bg-pink-200 last:mr-0 mr-1 mb-1">
             ⏱ Time Challenge
@@ -320,11 +320,16 @@ export default function parties({metaBase, setMeta}) {
       data-tag="allowRowEvents"
       className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200"
     >
-      A
+      {
+        row.status >= 3 ?
+        "A"
+        : "-"
+      }
+      
     </div>
   );
   const DateCustom = (row) => (
-    <div className="text-left">
+    <div data-tag="allowRowEvents" className="text-left">
       <div data-tag="allowRowEvents">
         {row.start_date
           ? moment(row.start_date).local().format('YYYY-MM-DD hh:mm a')
@@ -337,30 +342,30 @@ export default function parties({metaBase, setMeta}) {
   );
   const StatusCustom = (row) => (
     <div data-tag="allowRowEvents" className="text-left">
-    <div>
-      {row.status == 1 ? (
-        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200">
-          Recruiting
-        </span>
-      ) : row.status == 2 ? (
-        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200">
-          In Progress
-        </span>
-      ) : row.status == 3 ? (
-        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-purple-600 bg-purple-200">
-          In Review
-        </span>
-      ) : (
-        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-          Complete
-        </span>
-      )}
+      <div>
+        {row.status == 1 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200">
+            Recruiting
+          </span>
+        ) : row.status == 2 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200">
+            In Progress
+          </span>
+        ) : row.status == 3 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-purple-600 bg-purple-200">
+            In Review
+          </span>
+        ) : (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+            Complete
+          </span>
+        )}
+      </div>
     </div>
-  </div>
   );
 
-  async function goToDetails(row){
-    router.push("/parties/details/?id="+row.slug);
+  async function goToDetails(row) {
+    router.push("/parties/details/?id=" + row.slug);
   }
 
   const columns = [
@@ -389,7 +394,7 @@ export default function parties({metaBase, setMeta}) {
       cell: (row) => <StatusCustom {...row} />,
       center: true
     }
-    
+
   ];
 
   const customStyles = {
@@ -424,12 +429,12 @@ export default function parties({metaBase, setMeta}) {
     return (
       <>
         <PartiesSkeleton />
-          
-      {
-        newToSeason ?
-          <ModalOnboarding onboardingState={5} />
-          : null
-      }
+
+        {
+          newToSeason ?
+            <ModalOnboarding onboardingState={5} />
+            : null
+        }
       </>
     );
   }
@@ -459,21 +464,19 @@ export default function parties({metaBase, setMeta}) {
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative mt-7 pt-14">
               <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 rounded-0 sm:rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
                 <div
-                  className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
-                    activeTab == 1
-                      ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                      : 'text-blueGray-500'
-                  }`}
+                  className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 1
+                    ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                    : 'text-blueGray-500'
+                    }`}
                   onClick={() => changeTab(1)}
                 >
                   My Parties
                 </div>
                 <div
-                  className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${
-                    activeTab == 2
-                      ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                      : 'text-blueGray-500'
-                  }`}
+                  className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 2
+                    ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                    : 'text-blueGray-500'
+                    }`}
                   onClick={() => changeTab(2)}
                 >
                   Leaderboard
@@ -503,58 +506,58 @@ export default function parties({metaBase, setMeta}) {
               {activeTab == 1 ? (
                 <>
                   <div className="animate-fade-in">
-                    <div className="text-center mb-5">
-                      <Button
-                        onClick={() => setCreateParty(true)}
-                        className="px-5 font-bold py-2 rounded"
-                        variant="dailies"
-                        disabled={
-                          !partyLimit
-                            ? playerStats
-                              ? playerStats.role
-                                ? !playerStats.role.includes('Party Leader')
-                                : true
-                              : true
-                            : true
-                        }
-                      >
-                        <i className="text-yellow-500 fas fa-crown mr-2" />
-                        Create Party
-                      </Button>
-                      <div className="mt-1 text-xs text-accents-4">
-                        For Party Leaders Only!
-                      </div>
-                    </div>
-                    <section className="mb-8">
-                      <div className="flex items-center">
-                        <div
-                          className="border-t-2 border-white flex-grow mb-6 sm:mb-3 mr-3"
-                          aria-hidden="true"
-                        ></div>
-                        <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-primary mb-5">
-                          Your Active Parties{' '}
-                          <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">
-                            {activeParties ? activeParties.length : 0}/
-                            {partyLimitNo}
-                          </span>
-                        </h2>
-                        <div
-                          className="border-t-2 border-white flex-grow mb-6 sm:mb-3 ml-3"
-                          aria-hidden="true"
-                        ></div>
-                      </div>
-                      <div className="flex flex-col gap-4">
-                        {activeParties?.length != 0 ? (
-                          activeParties?.map((party) => (
+                    {activeParties?.length != 0 ?
+                      <section className="mb-8">
+                        <div className="flex items-center">
+                          <div
+                            className="border-t-2 border-white flex-grow mb-6 sm:mb-3 mr-3"
+                            aria-hidden="true"
+                          ></div>
+                          <h2 className="mx-auto text-3xl align-middle justify-center inline-flex font-bold text-primary mb-5">
+                            Your Active Parties{' '}
+                            <span className="align-middle my-auto ml-2 px-3 py-1 border-2 shadow-md border-emerald-700 bg-emerald-300 text-emerald-700 rounded-full text-lg">
+                              {activeParties ? activeParties.length : 0}/
+                              {partyLimitNo}
+                            </span>
+                          </h2>
+                          <div
+                            className="border-t-2 border-white flex-grow mb-6 sm:mb-3 ml-3"
+                            aria-hidden="true"
+                          ></div>
+                        </div>
+                        <div className="flex flex-col gap-4">
+
+                          {activeParties?.map((party) => (
                             <CardParty key={party.id} party={party} />
-                          ))
-                        ) : (
-                          <div className="border border-accents-4 mx-auto p-4 font-semibold text-dailies">
-                            You aren't a part of any parties.
-                          </div>
-                        )}
-                      </div>
-                    </section>
+                           ))}
+
+                        </div>
+                        <div className="text-center my-5">
+                          {playerStats?.role?.includes('Party Leader') ?
+                            <Button
+                              onClick={() => setCreateParty(true)}
+                              className="px-5 font-bold py-2 rounded"
+                              variant="dailies"
+                              disabled={
+                                !partyLimit
+                                  ? playerStats
+                                    ? playerStats.role
+                                      ? !playerStats.role.includes('Party Leader')
+                                      : true
+                                    : true
+                                  : true
+                              }
+                            >
+                              <i className="text-yellow-500 fas fa-crown mr-2" />
+                              Create Party
+                            </Button>
+                            :
+                            null
+                          }
+
+                        </div>
+                      </section>
+                      : null}
                     <section>
                       <div className="flex items-center mt-4">
                         <div
@@ -562,7 +565,7 @@ export default function parties({metaBase, setMeta}) {
                           aria-hidden="true"
                         ></div>
                         <h2 className="text-3xl align-middle justify-center inline-flex font-bold text-primary">
-                          Parties Recruiting
+                          Join A Party
                         </h2>
                         <div
                           className="border-t-2 border-white flex-grow mt-2 ml-3"
@@ -597,7 +600,7 @@ export default function parties({metaBase, setMeta}) {
                             noHeader
                             columns={columns}
                             data={allParties}
-                            highlightOnHover={true}
+                            // highlightOnHover={true}
                             pointerOnHover={true}
                             fixedHeader={true}
                             onRowClicked={goToDetails}
