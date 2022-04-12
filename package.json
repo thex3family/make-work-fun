@@ -1,6 +1,6 @@
 {
   "name": "make-work-fun",
-  "version": "0.39",
+  "version": "0.40",
   "license": "(Creative Commons or Apache 2.0)",
   "scripts": {
     "dev": "next",
