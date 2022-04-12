@@ -48,6 +48,7 @@ export default function partyDetail({metaBase, setMeta}) {
   const [dragon_name, setDragonName] = useState(null);
   const [dragon_id, setDragonID] = useState(null);
   const [playerStatus, setPlayerStatus] = useState(null);
+  const [changingStatus, setChangingStatus] = useState(false);
 
   const [saving, setSaving] = useState(null);
 
@@ -286,6 +287,7 @@ export default function partyDetail({metaBase, setMeta}) {
   }, [cumulativeWins, cumulativeEXP]);
 
   async function changePlayerStatus(status) {
+    setChangingStatus(true);
     setPlayerStatus(status);
     closeDropdownPopover();
     try {
@@ -302,7 +304,7 @@ export default function partyDetail({metaBase, setMeta}) {
     } catch (error) {
       alert(error.message);
     } finally {
-      await refreshStats();
+      refreshStats();
     }
   }
 
@@ -926,7 +928,7 @@ export default function partyDetail({metaBase, setMeta}) {
                                         changePlayerStatus('Ready')
                                       }
                                       disabled={
-                                        specificPartyPlayer.status == 'Ready'
+                                        specificPartyPlayer.status == 'Ready' || changingStatus
                                       }
                                     >
                                       <i className="fas fa-check mr-2" />
