@@ -5,6 +5,7 @@ import { fetchPartyMembers } from '../Fetch/fetchMaster';
 import { supabase } from '@/utils/supabase-client';
 import { useRouter } from 'next/router';
 import AvatarMember from '../Avatars/AvatarMember';
+import LoadingDots from '../ui/LoadingDots';
 
 export default function CardPartyRecruit({party, partyLimit}) {
   
@@ -32,7 +33,8 @@ export default function CardPartyRecruit({party, partyLimit}) {
   const playersExample = Array(4).fill(`http://localhost:3000/logo.svg`);
   return (
     <>
-      <div className={style.card}>
+      <div className={style.card + ' cursor-pointer'}
+      onClick={()=>router.push('/parties/details?id='+party.slug)}>
         <div className={style.name}>{party.name}</div>
         <div className={style.description}>
         {party.description}
@@ -53,16 +55,10 @@ export default function CardPartyRecruit({party, partyLimit}) {
                   ? partyMembers.map((member) => (
                       <AvatarMember member = {member}/>
                     ))
-                  : null}
+                  : <div className='my-1'>
+                    <LoadingDots/>
+                    </div>}
               </div>
-            <Button
-              variant="prominent"
-              className="w-24 animate-fade-in-up text-center font-bold mx-auto"
-              // onClick={()=>joinParty()}
-              onClick={()=>router.push('/parties/details?id='+party.slug)}
-            >
-              View
-            </Button>
             </div>
       </div>
     </>
