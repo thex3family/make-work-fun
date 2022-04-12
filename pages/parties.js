@@ -296,7 +296,7 @@ export default function parties({ metaBase, setMeta }) {
   // }
 
   const NameCustom = (row) => (
-    <div data-tag="allowRowEvents" className="text-left">
+    <div data-tag="allowRowEvents" className="text-left w-96">
       <p className="font-semibold text-sm mb-1 truncate w-full">
         {row.name}
       </p>
@@ -329,7 +329,7 @@ export default function parties({ metaBase, setMeta }) {
     </div>
   );
   const DateCustom = (row) => (
-    <div data-tag="allowRowEvents" className="text-left">
+    <div data-tag="allowRowEvents" className="text-left w-48">
       <div data-tag="allowRowEvents">
         {row.start_date
           ? moment(row.start_date).local().format('YYYY-MM-DD hh:mm a')
@@ -392,7 +392,8 @@ export default function parties({ metaBase, setMeta }) {
     {
       name: 'STATUS',
       cell: (row) => <StatusCustom {...row} />,
-      center: true
+      center: true,
+      grow: 2
     }
 
   ];
@@ -462,7 +463,7 @@ export default function parties({ metaBase, setMeta }) {
             </div>
 
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative mt-7 pt-14">
-              <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 rounded-0 sm:rounded-xl max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
+              <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 w-full rounded-0 sm:rounded-xl sm:max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
                 <div
                   className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 1
                     ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
