@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import CardPartyRecruit from '@/components/Cards/CardPartyRecruit';
+import Link from 'next/link';
+import Button from '../ui/Button';
 
 export default function RecruitingBoard({
   partyLimit,
@@ -88,9 +90,14 @@ export default function RecruitingBoard({
       ));
     } else {
       return (
-        <p className="mx-auto text-center pb-3">
-          There are no other parties recruiting! Check again later.
-        </p>
+        <>
+          <p className="mx-auto text-center pb-2">
+            Looks like everyone is already on an adventure. Request a party or join a party in progress!
+
+          </p>
+
+
+        </>
       );
     }
   };
@@ -118,8 +125,8 @@ export default function RecruitingBoard({
                 {i == 0
                   ? recruitingParties_1.length
                   : i == 1
-                  ? recruitingParties_2.length
-                  : null}
+                    ? recruitingParties_2.length
+                    : null}
               </div>
             </button>
           ))}
@@ -127,37 +134,36 @@ export default function RecruitingBoard({
         <div
           className={style.board}
           style={{
-            backgroundImage: `url(${
-              selectedTab == 0 ? '/challenge/rush.jpg' : '/challenge/skyrim.jpg'
-            })`
+            backgroundImage: `url(${selectedTab == 0 ? '/challenge/rush.jpg' : '/challenge/skyrim.jpg'
+              })`
           }}
         >
           <div className="bg-dark bg-opacity-70 rounded-lg">
-          {sections.map((section, i) => (
-            <>
-              <section className={style.rowTitle}>
-                {/* {tabs[selectedTab] + ' ' + section} */}
-              </section>
-              <div className={style.row}>
-                {(i == 0
-                  ? recruitingParties_1.length
-                  : i == 1
-                  ? recruitingParties_2.length
-                  : null
-                ).length > 3 ? (
-                  <button
-                    onClick={() => scroll(`left`, i)}
-                    className={style.scroll}
-                  >
-                    <i className="far fa-caret-square-left" />
-                  </button>
-                ) : null}
-                <div className={style.partyList}>
-                  {/* {recruitingParties.map((e) => (
+            {sections.map((section, i) => (
+              <>
+                <section className={style.rowTitle}>
+                  {/* {tabs[selectedTab] + ' ' + section} */}
+                </section>
+                <div className={style.row}>
+                  {(i == 0
+                    ? recruitingParties_1.length
+                    : i == 1
+                      ? recruitingParties_2.length
+                      : null
+                  ).length > 3 ? (
+                    <button
+                      onClick={() => scroll(`left`, i)}
+                      className={style.scroll}
+                    >
+                      <i className="far fa-caret-square-left" />
+                    </button>
+                  ) : null}
+                  <div className={style.partyList}>
+                    {/* {recruitingParties.map((e) => (
                       <CardPartyRecruit className={style.card} {...e} />
                     ))} */}
 
-                  {/* {recruitingParties.map((party, i) =>
+                    {/* {recruitingParties.map((party, i) =>
                       party.challenge == selectedTab + 1 &&
                       !activePartiesID.includes(party.id) ? (
                         <CardPartyRecruit
@@ -167,24 +173,32 @@ export default function RecruitingBoard({
                         />
                       ) : null
                     )} */}
-                  {showParties()}
+                    {showParties()}
+                  </div>
+                  {(i == 0
+                    ? recruitingParties_1.length
+                    : i == 1
+                      ? recruitingParties_2.length
+                      : null
+                  ).length > 3 ? (
+                    <button
+                      onClick={() => scroll(`right`, i)}
+                      className={style.scroll}
+                    >
+                      <i className="far fa-caret-square-right" />
+                    </button>
+                  ) : null}
                 </div>
-                {(i == 0
-                  ? recruitingParties_1.length
-                  : i == 1
-                  ? recruitingParties_2.length
-                  : null
-                ).length > 3 ? (
-                  <button
-                    onClick={() => scroll(`right`, i)}
-                    className={style.scroll}
-                  >
-                    <i className="far fa-caret-square-right" />
-                  </button>
-                ) : null}
-              </div>
-            </>
-          ))}
+              </>
+            ))}<a href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/8dd9fd6d-cd47-47e0-8a2c-3e7d87034d69/chat" target="_blank">
+
+              <Button
+                className="px-5 font-bold py-2 rounded mb-4"
+                variant="dailies"
+              >
+                Request A Party!
+              </Button>
+            </a>
           </div>
           {/* <div className={style.rowTitle}>Row Title</div>
                 <div className={style.row}>
@@ -207,6 +221,7 @@ export default function RecruitingBoard({
                     <button className={style.scroll}>{`>`}</button>
                 </div> */}
         </div>
+
       </div>
     </>
   );
