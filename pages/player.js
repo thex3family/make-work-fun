@@ -513,7 +513,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
                         columns={columns}
                         data={wins}
                         onRowClicked={modalHandler}
-                        // highlightOnHover={true}
+                        highlightOnHover={true}
                         pointerOnHover={true}
                         fixedHeader={true}
                         customStyles={customStyles}
