@@ -26,11 +26,18 @@ export default function CardPartyPlayer({
   const health = player.health * 10;
 
   useEffect(() => {
-    loadAvatarURL();
-    if (party.status != 1) loadWins();
-    if (player.background_url) setBackgroundUrl(player.background_url);
+    if (player.avatar_url) {
+      setImage(player.avatar_url, 'avatar');
+    } else {
+      setAvatarURL('Missing');
+    }
+    if (player.background_url) {
+      setImage(player.background_url, 'background');
+    } else {
+      setBackgroundUrl('/background/cityscape.jpg');      
+    }
     if (player.dragon_bg_url) {
-      setDragonBGUrl(player.dragon_bg_url);
+      setImage(player.dragon_bg_url, 'dragonBG');
     } else {
       if (party.challenge == 1) {
         setDragonBGUrl('/challenge/rush.jpg');
@@ -38,13 +45,20 @@ export default function CardPartyPlayer({
         setDragonBGUrl('/challenge/skyrim.jpg');
       }
     }
+    if (party.status != 1) loadWins();
   }, [party]);
 
-  async function loadAvatarURL() {
-    if (player.avatar_url) {
-      setAvatarURL(player.avatar_url);
-    } else {
-      setAvatarURL('Missing');
+  
+  async function setImage(url, type) {
+    if (type == 'avatar') {
+      setAvatarURL(await downloadImage(url, type));
+    }
+    if (type == 'background') {
+        setBackgroundUrl(await downloadImage(url, type));
+    }
+    // this doesn't work, there is no dragon bucket
+    if (type == 'dragon') {
+      setDragonBGUrl(await downloadImage(url, type));
     }
   }
 

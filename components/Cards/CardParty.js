@@ -44,11 +44,10 @@ export default function CardParty({ party, displayMode }) {
       <div
         className="w-full bg-white shadow-xl rounded-lg overflow-hidden mx-auto mt-2 text-left cursor-pointer bg-cover bg-center object-cover transition duration-500 ease-out transform hover:-translate-y-1 hover:scale-105"
         style={{
-          backgroundImage: `url(${
-            party.party_challenge == 1
+          backgroundImage: `url(${party.party_challenge == 1
               ? '/challenge/rush.jpg'
               : '/challenge/skyrim.jpg'
-          })`
+            })`
         }}
       >
         <div className="bg-dark bg-opacity-70">
@@ -90,33 +89,30 @@ export default function CardParty({ party, displayMode }) {
                 <div className="relative w-full max-w-full flex-grow flex-1">
                   <div className="flex items-center">
                     <i
-                      className={`mr-2 fas fa-heart ${
-                        health >= 75
+                      className={`mr-2 fas fa-heart ${health >= 75
                           ? 'text-emerald-500'
                           : health >= 50
-                          ? 'text-yellow-500'
-                          : 'text-red-500'
-                      }`}
+                            ? 'text-yellow-500'
+                            : 'text-red-500'
+                        }`}
                     />
                     <div className="relative w-full">
                       <div
-                        className={`overflow-hidden h-2 text-xs flex rounded ${
-                          health >= 75
+                        className={`overflow-hidden h-2 text-xs flex rounded ${health >= 75
                             ? 'bg-emerald-200'
                             : health >= 50
-                            ? 'bg-yellow-200'
-                            : 'bg-red-200'
-                        }`}
+                              ? 'bg-yellow-200'
+                              : 'bg-red-200'
+                          }`}
                       >
                         <div
                           style={{ width: `${health}%` }}
-                          className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
-                            health >= 75
+                          className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${health >= 75
                               ? 'bg-emerald-500'
                               : health >= 50
-                              ? 'bg-yellow-500'
-                              : 'bg-red-500'
-                          }`}
+                                ? 'bg-yellow-500'
+                                : 'bg-red-500'
+                            }`}
                         ></div>
                       </div>
                     </div>
@@ -133,13 +129,17 @@ export default function CardParty({ party, displayMode }) {
                     {partyMembers.slice(0, 3).map((member) => (
                       <AvatarMember member={member} />
                     ))}{' '}
-                    <div
-                      className={`bg-cover bg-center object-cover rounded-full shadow-xl block w-8 h-8 overflow-hidden`}
-                    >
-                      <div className="w-8 h-8 p-0.5 flex justify-center items-center text-sm text-accents-4">
-                        <span>+{partyMembers.length - 3}</span>
-                      </div>
-                    </div>
+                    {(partyMembers.length - 3) > 1 ?
+                      <div
+                        className={`bg-cover bg-center object-cover rounded-full shadow-xl block w-8 h-8 overflow-hidden`}
+                      >
+
+                        <div className="w-8 h-8 p-0.5 flex justify-center items-center text-sm text-accents-4">
+                          <span>+{partyMembers.length - 3}</span>
+                        </div>
+
+                      </div> : null
+                    }
                   </>
                 ) : displayMode !== 'demo' ? (
                   <div className="h-8">
