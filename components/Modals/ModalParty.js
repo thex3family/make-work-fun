@@ -185,10 +185,11 @@ export default function ModalParty({ setCreateParty, party }) {
                 >
                   Close
                 </button>
-                <button
-                  className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                <Button
+                  variant={'prominent'}
+                  className="rounded"
                   type="button"
-                  disabled={saving}
+                  disabled={saving || !partyName || !partyDescription}
                   onClick={() =>
                     saveParty(
                       partyID,
@@ -199,7 +200,7 @@ export default function ModalParty({ setCreateParty, party }) {
                   }
                 >
                   {saving ? 'Saving...' : newParty ? 'Create' : 'Update'}
-                </button>
+                </Button>
               </div>
             </div>
           </div>
