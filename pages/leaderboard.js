@@ -216,7 +216,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                     <p className="text-sm text-accents-4 font-semibold">
                       <i className='fas fa-calendar mr-2'/>April 1 - June 30
                     </p>
-                    <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+                    <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl">
                       <LeaderboardStatistics
                         players={sNPlayers.length}
                         levels_earned={

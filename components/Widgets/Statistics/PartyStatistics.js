@@ -22,7 +22,7 @@ export default function PartyStatistics({
             <CountUp start={0} end={players} duration={1} separator="," />{' '}
             <i className="fas fa-running" />
           </strong>
-          <span className={s.Countdowncolformat}>
+          <span className={s.Countdowncolformat + ' bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-pink-500'}>
             {players === 1 ? 'Player' : 'Players'}
           </span>
         </span>
@@ -33,7 +33,7 @@ export default function PartyStatistics({
           <strong>
             <CountUp start={0} end={wins} duration={1} separator="," /> ⚔
           </strong>
-          <span className={s.Countdowncolformat}>
+          <span className={s.Countdowncolformat + ' bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-pink-500'}>
             {wins === 1 ? 'Win Complete' : 'Wins Complete'}
           </span>
         </span>
@@ -44,7 +44,8 @@ export default function PartyStatistics({
           <strong>
             <CountUp start={0} end={exp_earned} duration={1} separator="," /> XP
           </strong>
-          <span className={s.Countdowncolformat}>EXP Earned</span>
+          <span className={s.Countdowncolformat + ' bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-pink-500'}>
+            EXP Earned</span>
         </span>
       </span>
 
