@@ -83,6 +83,28 @@ export default function parties({metaBase, setMeta}) {
   
   const [newToSeason, setNewToSeason] = useState(null);
 
+  const { tab } = router.query;
+
+  useEffect(() => {
+    if (tab == 'active') {
+      setActiveTab(1);
+    }
+    if (tab == 'leaderboard') {
+      setActiveTab(2);
+    }
+  }, []);
+
+  
+  async function changeTab(tab_id) {
+    if (tab_id == 1) {
+      router.push(`parties/?tab=active`, undefined, { shallow: true })
+    }
+    if (tab_id == 2) {
+      router.push(`parties/?tab=leaderboard`, undefined, { shallow: true })
+    }
+    setActiveTab(tab_id);
+  }
+
   // sets the meta tags
 
   useEffect(() => {
@@ -92,6 +114,7 @@ export default function parties({metaBase, setMeta}) {
     }
     setMeta(meta)
   }, []);
+  
 
   useEffect(() => {
     if (userOnboarding) initializePlayer();
@@ -427,7 +450,7 @@ export default function parties({metaBase, setMeta}) {
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                       : 'text-blueGray-500'
                   }`}
-                  onClick={() => setActiveTab(1)}
+                  onClick={() => changeTab(1)}
                 >
                   My Parties
                 </div>
@@ -437,7 +460,7 @@ export default function parties({metaBase, setMeta}) {
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                       : 'text-blueGray-500'
                   }`}
-                  onClick={() => setActiveTab(2)}
+                  onClick={() => changeTab(2)}
                 >
                   Leaderboard
                 </div>
