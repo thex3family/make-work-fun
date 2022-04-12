@@ -11,7 +11,8 @@ import {
   fetchPartyPlayers,
   fetchWinsPastDate,
   fetchSpecificWins,
-  fetchPartyMembers
+  fetchPartyMembers,
+  fetchAllPartyDetails
 } from '@/components/Fetch/fetchMaster';
 import CardPartyPlayer from '@/components/Cards/CardPartyPlayer';
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
@@ -35,6 +36,9 @@ export default function partyDetail({metaBase, setMeta}) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = router.query;
+
+  const [allPartyDetails, setAllPartyDetails] = useState(null);
+
   const [party, setParty] = useState(null);
   const [partyPlayers, setPartyPlayers] = useState(null);
   const [specificPartyPlayer, setSpecificPartyPlayer] = useState(null);
@@ -125,6 +129,7 @@ export default function partyDetail({metaBase, setMeta}) {
   async function refreshStats() {
     console.log('statsRefreshing');
     setParty(await fetchParty(id));
+    // setAllPartyDetails(await fetchAllPartyDetails(id))
     setLoading(false);
     setSaving(false);
   }

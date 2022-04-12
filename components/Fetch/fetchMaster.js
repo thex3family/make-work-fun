@@ -585,6 +585,27 @@ export async function fetchTitles() {
   }
 }
 
+export async function fetchAllPartyDetails(party_slug) {
+  try {
+    const { data, error } = await supabase
+      .from('party_win_member_details')
+      .select('*')
+      .eq('party_slug', party_slug)
+
+    if (data) {
+      console.log('AllPartyDetails', data);
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
 export async function fetchParty(party_slug) {
   try {
     const { data, error } = await supabase
@@ -594,6 +615,7 @@ export async function fetchParty(party_slug) {
       .single();
 
     if (data) {
+      console.log('PartyDetails', data);
       return data;
     }
 
@@ -616,6 +638,9 @@ export async function fetchPartyMembers(party_id) {
       .eq('party_id', party_id);
 
     if (data) {
+      return data;
+
+      // this takes too long to load.
       var newData = data;
 
       for (let i = 0; i < data.length; i++) {
@@ -633,6 +658,7 @@ export async function fetchPartyMembers(party_id) {
             : null
         };
       }
+      console.log(newData)
       return newData;
     }
 
