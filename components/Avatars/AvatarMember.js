@@ -8,6 +8,7 @@ export default function AvatarMember({ member }) {
   const [popoverShow, setPopoverShow] = React.useState(false);
   const btnRef = React.createRef();
   const popoverRef = React.createRef();
+
   const openTooltip = () => {
     createPopper(btnRef.current, popoverRef.current, {
       placement: 'bottom'
@@ -34,7 +35,7 @@ export default function AvatarMember({ member }) {
       setImage(member.background_url, 'background');
     } else {
     }
-  }, []);
+  }, [member]);
 
 
   async function setImage(url, type) {

@@ -14,13 +14,11 @@ export default function CardPartyRecruit({party, partyLimit}) {
 
   useEffect(() => {
     getPartyMembers();
-  }, []);
+  }, [party]);
 
   async function getPartyMembers(){
     setPartyMembers(await fetchPartyMembers(party.id));
   }
-
-  console.log(party)
 
   const style = {
     card: `animate-fade-in-up shadow-lg w-full sm:w-72 m-2 p-4 text-black rounded-lg flex flex-col gap-1 justify-center mb-3 bg-dailies-light border-dailies-dark border-4`,
