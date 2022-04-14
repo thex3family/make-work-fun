@@ -269,7 +269,7 @@ export default function parties({ metaBase, setMeta }) {
       const { data, error } = await supabase
         .from('party')
         .select('*')
-        .eq('status', 1);
+        .or('status.eq.1,status.eq.2')
 
       var recruitingParties = data;
 
