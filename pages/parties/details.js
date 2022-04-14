@@ -376,6 +376,7 @@ export default function partyDetail({metaBase, setMeta}) {
     } catch (error) {
       alert(error.message);
     } finally {
+      router.reload(window.location.pathname)
       await refreshStats();
     }
   }
@@ -1040,6 +1041,84 @@ export default function partyDetail({metaBase, setMeta}) {
                                                 'Daily Target',
                                                 '1',
                                                 '50'
+                                              )
+                                            }
+                                          >
+                                            Claim
+                                          </Button>
+                                        )
+                                      ) : (
+                                        <p className="text-sm text-center text-emerald-600">
+                                          In Progress
+                                        </p>
+                                      )
+                                    ) : (
+                                      <p className="text-sm text-center text-emerald-600">
+                                        In Progress
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="mb-5 max-w-xl mx-auto font-semibold shadow-lg rounded border-2 bg-emerald-100 text-emerald-700 border-emerald-500">
+                                <div className="flex flex-row ml-3 gap-3">
+                                  <p className="text-2xl py-2 mb-1">🎯</p>
+                                  <p className="text-sm sm:text-lg w-full py-2 mb-1">
+                                    Bonus: Complete {party.daily_target * 2}{' '}
+                                    {party.daily_target > 1 ? 'Tasks' : 'Task'}{' '}
+                                    <i className="fas fa-retweet" />
+                                    <div className="flex flex-row mt-1">
+                                      <span className="text-xs sm:text-sm font-semibold py-1 px-2 uppercase rounded-full text-emerald-700 bg-emerald-200 border border-emerald-500">
+                                        {dailyTarget_Achieved
+                                          ? dailyTarget_Achieved.length
+                                          : 0}{' '}
+                                        / {party.daily_target * 2}
+                                      </span>
+                                    </div>
+                                  </p>
+                                  <div className="hidden sm:flex justify-center items-center gap-2 py-2">
+                                    <div
+                                      className={`px-5 rounded flex justify-center items-center bg-red-200 border border-red-500 h-16`}
+                                    >
+                                      <div className="my-auto">
+                                        <div className="text-red-600 fas fa-heart text-xl" />
+                                        <p className="text-red-700 text-xs text-center">
+                                          +2
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={`px-5 rounded bg-emerald-200 border border-emerald-500 flex justify-center items-center h-16`}
+                                    >
+                                      <div className="my-auto">
+                                        <div className="text-emerald-700 text-xl">
+                                          XP
+                                        </div>
+                                        <p className="text-emerald-700 text-xs text-center">
+                                          +100
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="w-1/3 bg-dailies-light border-l-2 border-emerald-500 flex justify-center items-center px-2">
+                                    {dailyTarget_Achieved ? (
+                                      dailyTarget_Achieved.length >=
+                                      party.daily_target * 2 ? (
+                                        dailyTargetRewardClaimed ? (
+                                          <Button
+                                            variant="prominent"
+                                            disabled={true}
+                                          >
+                                            Claimed
+                                          </Button>
+                                        ) : (
+                                          <Button
+                                            variant="prominent"
+                                            onClick={() =>
+                                              claimMissionReward(
+                                                'Bonus Daily Target',
+                                                '2',
+                                                '100'
                                               )
                                             }
                                           >
