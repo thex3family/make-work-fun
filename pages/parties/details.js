@@ -209,6 +209,7 @@ export default function partyDetail({metaBase, setMeta}) {
         setSpecificPartyPlayer(SPP);
       } else {
         setAnonymousAdventurer(true);
+        setShowDetails(true);
       }
       if (partyPlayers.filter((d) => d.status === 'Not Ready').length == 0) {
         setAllMembersReady(true);
@@ -376,8 +377,7 @@ export default function partyDetail({metaBase, setMeta}) {
     } catch (error) {
       alert(error.message);
     } finally {
-      router.reload(window.location.pathname)
-      await refreshStats();
+      router.reload(window.location.pathname);
     }
   }
 
@@ -450,7 +450,7 @@ export default function partyDetail({metaBase, setMeta}) {
     }
   }
 
-  async function joinParty() {
+  async function joinParty(ready) {
     // this should insert a row into the party members table
     setSaving(true);
     try {
@@ -460,14 +460,14 @@ export default function partyDetail({metaBase, setMeta}) {
         {
           party_id: party.id,
           player: user.id,
-          role: 'Adventurer'
+          role: 'Adventurer',
+          status: ready ? 'Ready' : 'Not Ready'
         }
       ]);
-      router.push('/parties/details?id=' + party.slug);
     } catch (error) {
       alert(error.message);
     } finally {
-      refreshStats();
+      router.reload(window.location.pathname);
     }
   }
 
@@ -837,10 +837,10 @@ export default function partyDetail({metaBase, setMeta}) {
                                 <Button
                                   variant="prominent"
                                   className="w-full animate-fade-in-up text-center font-bold mx-auto"
-                                  onClick={() => joinParty()}
+                                  onClick={() => joinParty(party.status == 1 ? null : true)}
                                   disabled={saving || party.status >= 3}
                                 >
-                                  {saving ? 'Joining...' : 'Join Party'}
+                                  {saving ? 'Joining...' : party.status == 1 ? 'Join Party' : 'Join Party In Progress'}
                                 </Button>
                               </>
                             ) : (
