@@ -20,6 +20,8 @@ export default function CardPartyRecruit({party, partyLimit}) {
     setPartyMembers(await fetchPartyMembers(party.id));
   }
 
+  console.log(party)
+
   const style = {
     card: `bg-yellow-50 shadow-lg w-full sm:w-72 m-2 p-4 text-dailies rounded-lg flex flex-col gap-1 justify-center mb-3`,
     name: `w-50 font-bold text-xl`,
@@ -39,6 +41,25 @@ export default function CardPartyRecruit({party, partyLimit}) {
         <div className={style.description}>
         {party.description}
         </div>
+        <div className='mb-2'>
+        {party.status == 1 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200">
+            Recruiting
+          </span>
+        ) : party.status == 2 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200">
+            In Progress
+          </span>
+        ) : party.status == 3 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-purple-600 bg-purple-200">
+            In Review
+          </span>
+        ) : (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+            Complete
+          </span>
+        )}
+        </div>
         <div className="mt-auto">
           {/* <div className="flex justify-center mb-2">
             {members.map((member, i) => (
@@ -50,14 +71,29 @@ export default function CardPartyRecruit({party, partyLimit}) {
               ></img>
             ))}
           </div> */}
-          <div className="row-start-2 justify-center hidden sm:flex mb-3">
-                {partyMembers
-                  ? partyMembers.map((member) => (
-                      <AvatarMember member = {member}/>
-                    ))
-                  : <div className='my-1'>
-                    <LoadingDots/>
-                    </div>}
+          <div className="row-start-2 justify-center flex mb-3 ml-3">
+          {partyMembers ? (
+                  <>
+                    {partyMembers.slice(0, 3).map((member) => (
+                      <AvatarMember member={member} />
+                    ))}{' '}
+                    {(partyMembers.length - 3) > 1 ?
+                      <div
+                        className={`bg-cover bg-center object-cover rounded-full shadow-xl block w-8 h-8 overflow-hidden`}
+                      >
+
+                        <div className="w-8 h-8 p-0.5 justify-center items-center text-sm text-accents-4">
+                          <span>+{partyMembers.length - 3}</span>
+                        </div>
+
+                      </div> : null
+                    }
+                  </>
+                ) : displayMode !== 'demo' ? (
+                  <div className="h-8">
+                    <LoadingDots />
+                  </div>
+                ) : null}
               </div>
             </div>
       </div>
