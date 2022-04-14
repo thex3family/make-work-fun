@@ -68,22 +68,22 @@ export default function CardParty({ party, displayMode }) {
                   </span>
                 )}
                 {party.party_status == 1 ? (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1 mb-1">
-                    Recruiting
-                  </span>
-                ) : party.party_status == 2 ? (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1 mb-1">
-                    In Progress
-                  </span>
-                ) : party.party_status == 3 ? (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1 mb-1">
-                    In Review
-                  </span>
-                ) : (
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200 last:mr-0 mr-1 mb-1">
-                    Complete
-                  </span>
-                )}
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200">
+            Recruiting
+          </span>
+        ) : party.party_status == 2 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200">
+            In Progress
+          </span>
+        ) : party.party_status == 3 ? (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-purple-600 bg-purple-200">
+            In Review
+          </span>
+        ) : (
+          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+            Complete
+          </span>
+        )}
               </div>
               <div className="row-start-1 flex flex-wrap pt-2 col-span-1">
                 <div className="relative w-full max-w-full flex-grow flex-1">
@@ -123,7 +123,7 @@ export default function CardParty({ party, displayMode }) {
               <h2 className="row-start-2 col-span-4 sm:col-span-3 text-primary font-semibold text-2xl tracking-wide truncate">
                 {party.party_name}
               </h2>
-              <div className="row-start-2 justify-self-end hidden sm:flex mt-1">
+              <div className="row-start-2 justify-self-end hidden sm:flex mt-1 -mr-2">
                 {partyMembers ? (
                   <>
                     {partyMembers.slice(0, 3).map((member) => (

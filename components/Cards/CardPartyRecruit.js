@@ -89,11 +89,11 @@ export default function CardPartyRecruit({party, partyLimit}) {
                       </div> : null
                     }
                   </>
-                ) : displayMode !== 'demo' ? (
+                ) :
                   <div className="h-8">
                     <LoadingDots />
                   </div>
-                ) : null}
+               }
               </div>
             </div>
       </div>
