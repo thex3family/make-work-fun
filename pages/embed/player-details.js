@@ -191,7 +191,7 @@ export default function playerDetails() {
 
   useEffect(() => {
     if (player) refreshStats();
-    if (player)
+    if (player && win) {
       fetchLatestWin(
         setActiveModalStats,
         refreshStats,
@@ -200,6 +200,7 @@ export default function playerDetails() {
         setShowWinModal,
         player
       );
+    }
   }, [player]);
 
   useEffect(() => {

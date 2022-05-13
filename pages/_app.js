@@ -3,7 +3,7 @@ import '@/assets/main.css';
 import '@/assets/chrome-bug.css';
 
 import { useState } from 'react';
-
+import { useRouter } from 'next/router';
 
 import Layout from '@/components/Layout';
 import { UserContextProvider } from '@/utils/useUser';
@@ -14,6 +14,9 @@ import { UserProvider } from '@supabase/supabase-auth-helpers/react';
 import { supabase } from 'utils/supabase-client.js';
 
 import Head from 'next/head';
+
+
+import WinManage from '@/components/WinManage/winManage';
 
 // function setupIntercom(mobileDevice) {
 //   if (process.env.NODE_ENV === 'production') {
@@ -42,8 +45,11 @@ export default function MyApp({ Component, pageProps }) {
     cardImage: '/og.png',
   };
 
+  
   const [meta, setMeta] = useState(metaBase);
   const [refreshChildStats, setRefreshChildStats] = useState(false);
+  
+  const router = useRouter();
 
   // useEffect(() => {
   //   const mobileDevice = detectMob();
@@ -59,8 +65,11 @@ export default function MyApp({ Component, pageProps }) {
     <>
       <div className="bg-primary">
 
-      <UserProvider supabaseClient={supabase}>
+        <UserProvider supabaseClient={supabase}>
           <UserContextProvider>
+          { router.asPath.includes('embed/') ? null : 
+            <WinManage setRefreshChildStats={setRefreshChildStats} />
+          }
             <Layout meta={meta} setRefreshChildStats={setRefreshChildStats}>
               <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} refreshChildStats={refreshChildStats} setRefreshChildStats={setRefreshChildStats} />
             </Layout>
