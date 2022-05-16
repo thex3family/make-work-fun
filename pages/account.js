@@ -20,6 +20,9 @@ import { truncateString } from '@/utils/truncateString';
 import { Menu, Transition } from '@headlessui/react';
 import ConnectPOST from '@/components/API/ConnectPOST';
 
+import { Client } from '@notionhq/client';
+import NewNotionDatabases from '@/components/API/NewNotionDatabases';
+
 function Card({ title, description, footer, children }) {
   return (
     <div className="border border-accents-1	max-w-3xl w-full p rounded-md m-auto my-8 bg-black animate-fade-in">
@@ -39,7 +42,8 @@ export default function Account({
   initialPurchaseRecord,
   subscriptionPurchaseRecord,
   inactiveSubscriptionRecord,
-  user
+  user,
+  notion_databases
 }) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -142,6 +146,17 @@ export default function Account({
   async function getNotionCredentials() {
     setNotionCredentials(await fetchNotionCredentials());
   }
+
+  
+  const [newNotionDatabases, setNewNotionDatabases] = useState(null);
+
+  useEffect(() => {
+    if(notion_databases && notionCredentials){
+      let difference = notion_databases.filter(({ id: id1 }) => !notionCredentials.some(({ database_id: id2 }) => id2 === id1));
+      setNewNotionDatabases(difference);
+    }
+    console.log(notion_databases);
+  }, [notion_databases, notionCredentials]);
 
   async function getAPIKeys() {
     setAPIKeys(await fetchAPIKeys());
@@ -650,7 +665,7 @@ export default function Account({
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
                           >
-                            <i className='fa fa-shopping-cart mr-2'/>{subscriptionStatus == 1 ? "PATRON-GROW-5" : subscriptionStatus == 2 ? "PATRON-VIP-X3" : subscriptionStatus == 3 ? "OUR-100-RULES" : null}
+                            <i className='fa fa-shopping-cart mr-2' />{subscriptionStatus == 1 ? "PATRON-GROW-5" : subscriptionStatus == 2 ? "PATRON-VIP-X3" : subscriptionStatus == 3 ? "OUR-100-RULES" : null}
                           </Button>
                         </a>
                       ) : (
@@ -688,7 +703,7 @@ export default function Account({
                             className="w-full sm:w-auto text-sm"
                             variant="incognito"
                           >
-                            <i className='fa fa-shopping-cart mr-2'/> 15-VIP-MERCH
+                            <i className='fa fa-shopping-cart mr-2' /> 15-VIP-MERCH
                           </Button>
                         </a>
                       ) : (
@@ -843,45 +858,45 @@ export default function Account({
                 it into our app.
               </p>
             </div> */}
-            <form 
-            
-            onSubmit={(e) => {
-              e.preventDefault();
-              updateProfile({full_name});
-            }}>
-              <Card
-                title="Your Name"
-                description="Please enter your first name, or a display name you are comfortable with."
-                footer={
-                  <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
-                    <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
-                      Please use 64 characters at maximum.
-                    </p>
-                    <Button
-                      className="w-full sm:w-auto"
-                      variant="incognito"
-                      type="submit"
-                      
-                      disabled={saveLoading || loading}
-                    >
-                      {saveLoading ? 'Saving ...' : 'Save'}
-                    </Button>
-                  </div>
-                }
-              >
-                {!loading ?
-                  <Input
-                    maxlength="64"
-                    htmlFor="full_name"
-                    className="text-xl mt-8 mb-4 font-semibold rounded"
-                    id="full_name"
-                    type="text"
-                    placeholder="Anonymous Adventurer"
-                    value={full_name || ''}
-                    
-                    onChange={setName}
-                  /> : <div className='mt-8 mb-4'><LoadingDots /></div>}
-              </Card>
+              <form
+
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  updateProfile({ full_name });
+                }}>
+                <Card
+                  title="Your Name"
+                  description="Please enter your first name, or a display name you are comfortable with."
+                  footer={
+                    <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                      <p className="pb-4 sm:pb-0 w-full sm:w-3/4">
+                        Please use 64 characters at maximum.
+                      </p>
+                      <Button
+                        className="w-full sm:w-auto"
+                        variant="incognito"
+                        type="submit"
+
+                        disabled={saveLoading || loading}
+                      >
+                        {saveLoading ? 'Saving ...' : 'Save'}
+                      </Button>
+                    </div>
+                  }
+                >
+                  {!loading ?
+                    <Input
+                      maxlength="64"
+                      htmlFor="full_name"
+                      className="text-xl mt-8 mb-4 font-semibold rounded"
+                      id="full_name"
+                      type="text"
+                      placeholder="Anonymous Adventurer"
+                      value={full_name || ''}
+
+                      onChange={setName}
+                    /> : <div className='mt-8 mb-4'><LoadingDots /></div>}
+                </Card>
               </form>
               <Card
                 title="Account Management"
@@ -1083,6 +1098,33 @@ export default function Account({
                       Gamify Your Life!
                     </a>
                   </div>
+                  {newNotionDatabases ?
+                    <>
+                    <div className="my-3">
+                      <Button variant="incognito" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                        'Popup', 'location,status,width=600, height=750')}>Reconnect Notion
+                      </Button>
+                    </div>
+                      { newNotionDatabases.length ?
+                      <div className="mb-4 mt-4 border border-emerald-600 bg-emerald-600 text-emerald-400 bg-opacity-30 p-4 rounded">
+                        <p className='text-lg font-semibold mb-4'>We Found New Databases To Connect! ✨</p>
+                        <div className='flex flex-col gap-4'>
+                          {newNotionDatabases.map((database) => (
+                            <NewNotionDatabases
+                              database={database}
+                              getNotionCredentials={getNotionCredentials}
+                              setShowSaveModal={setShowSaveModal}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      : null}
+                    </>
+                    : <div className="my-3">
+                      <Button variant="prominent" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                        'Popup', 'location,status,width=600, height=750')}>Connect With Notion
+                      </Button>
+                    </div>}
                   {notionCredentials ? (
                     notionCredentials.map((credentials) => (
                       <ConnectNotion
@@ -1109,8 +1151,8 @@ export default function Account({
                             className="text-emerald-500 mx-auto font-semibold"
                           >
                             {notionCredentials.length == 0
-                              ? 'Connect To A Database'
-                              : 'Connect Additional Databases'}
+                              ? 'Connect Manually'
+                              : 'Connect Manually'}
                           </button>
                           : <LoadingDots />}
                         <div
@@ -1227,14 +1269,15 @@ export default function Account({
                     </div>
                   </div>
                   {/*footer*/}
-                  <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                  <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">
+                    <a href="/notion-api-validator">
                     <Button
                       className="w-full"
                       variant="prominent"
-                      onClick={() => router.push('/notion-api-validator')}
                     >
                       Test Connection
                     </Button>
+                    </a>
                   </div>
                   <div className="text-center mb-6">
                     <button
@@ -1294,12 +1337,45 @@ export async function getServerSideProps({ req }) {
       })
       .firstPage();
 
+
+    // Get Notion Secret Key
+
+    const { data } = await supabase
+      .from('users')
+      .select('notion_auth_key')
+      .eq('id', user.id)
+      .single();
+
+    let notion_databases = null;
+
+    if (data) {
+      const notion_auth_key = data.notion_auth_key
+      try {
+        const notion = new Client({ auth: notion_auth_key });
+
+        if (notion){
+          const databases = await notion.search({
+            filter: {
+              value: 'database',
+              property: 'object',
+            }
+          });
+          
+          notion_databases = databases.results;
+        }
+
+      } catch {
+      }
+    }
+
+
     return {
       props: {
         initialPurchaseRecord: minifyRecords(purchaseRecord),
         subscriptionPurchaseRecord: minifyRecords(subscriptionRecord),
         inactiveSubscriptionRecord: minifyRecords(inactiveSubscriptionRecord),
-        user
+        user,
+        notion_databases
       }
     };
   } catch (error) {

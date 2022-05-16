@@ -59,7 +59,7 @@ export const UserContextProvider = (props) => {
   const getUserOnboarding = () =>
     supabase.from('onboarding').select('*').eq('id', user.id).single().limit(1);
   const getUserProfile = () =>
-    supabase.from('users').select('full_name').eq('id', user.id).single();
+    supabase.from('users').select('*').eq('id', user.id).single();
   // const getSubscription = () =>
   //   supabase
   //     .from('subscriptions')

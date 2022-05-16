@@ -67,7 +67,7 @@ export default function MyApp({ Component, pageProps }) {
 
         <UserProvider supabaseClient={supabase}>
           <UserContextProvider>
-          { router.asPath.includes('embed/') ? null : 
+          { router.asPath.includes('embed/')  && router.asPath.includes('auth') ? null : 
             <WinManage setRefreshChildStats={setRefreshChildStats} />
           }
             <Layout meta={meta} setRefreshChildStats={setRefreshChildStats}>
