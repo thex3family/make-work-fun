@@ -44,16 +44,8 @@ export default function notionCallback({ response, user }) {
             alert(error.message);
         } finally {
             updateNotionCredentials();
-            window.opener.location.reload();
         }
     }
-
-    // if (process.browser) {
-    //     window.onbeforeunload = () => {
-    //       // your callback
-    //       window.opener.location.reload();
-    //     }
-    //   }
 
     return (
         <>
