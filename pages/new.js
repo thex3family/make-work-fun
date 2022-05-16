@@ -25,6 +25,14 @@ export default function updates({metaBase, setMeta}) {
         </div>
         <div className="timeline z-10 grid grid-cols-3">
           {/* start  */}
+          <CardRUpdate
+            date="May 17, 2022"
+            title="Connect Notion With One-Click"
+            desc="With the Notion API officially out of beta, we've leveled up our integration to help you easily connect your wins from Notion."
+            img_url="updates/0.41.png"
+            button_url="/account?tab=connect&via=notion"
+            version="v.41"
+          />
           <CardLUpdate
             date="Apr 12, 2022"
             title="Faster Parties"

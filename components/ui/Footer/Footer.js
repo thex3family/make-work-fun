@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="mx-auto max-w-8xl px-6 py-10 pb-32 bg-primary-1">
       <div className="py-4 space-y-4 bg-primary-1">
         <div className="text-center">
-          <span className="text-primary align-middle font-semibold">Version 0.40</span>
+          <span className="text-primary align-middle font-semibold">Version 0.41</span>
           <a href="https://co-x3.com/?utm_source=makeworkfun" target="_blank" aria-label="Co-x3 Family">
             <img
               src="/img/co-x3logo_white_full.png"
