@@ -123,14 +123,19 @@ export default function Account({
     checkForUserUpdates()
   }, []);
 
-  async function checkForUserUpdates(){
-    const {data, error} = await supabase
-    .from(`users:id=eq.${user.id}`)
-    .on('UPDATE', async payload => {
-      console.log('Update noticed!', payload)
-      router.reload(window.location.pathname)
-    })
-    .subscribe()
+  async function checkForUserUpdates() {
+    const { data, error } = await supabase
+      .from(`users:id=eq.${user.id}`)
+      .on('UPDATE', async payload => {
+        console.log('Update noticed!', payload)
+        refreshPage();
+      })
+      .subscribe()
+  }
+
+  async function refreshPage() {
+    console.log('Refreshing')
+    router.reload(window.location.pathname)
   }
 
   async function getProfile() {
@@ -151,7 +156,7 @@ export default function Account({
         setName(data.full_name);
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
     } finally {
       setLoading(false);
     }
@@ -191,7 +196,7 @@ export default function Account({
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
     } finally {
       setSaveLoading(false);
     }
@@ -257,7 +262,7 @@ export default function Account({
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      alert('Credentials: ', error.message);
     } finally {
       getNotionCredentials();
       setLoading(false);
