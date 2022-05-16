@@ -690,7 +690,7 @@ export async function fetchNotionCredentials() {
       return data;
     }
   } catch (error) {
-    alert(error.message);
+    // alert(error.message);
   } finally {
     // setLoading(false);
   }
