@@ -119,6 +119,20 @@ export default function Account({
       getSubscriptionStatus(subscriptionPurchaseRecord[0]);
   }, [user]);
 
+  useEffect(() => {
+    checkForUserUpdates()
+  }, []);
+
+  async function checkForUserUpdates(){
+    const {data, error} = await supabase
+    .from(`users:id=eq.${user.id}`)
+    .on('UPDATE', async payload => {
+      console.log('Update noticed!', payload)
+      router.reload(window.location.pathname)
+    })
+    .subscribe()
+  }
+
   async function getProfile() {
     try {
       setLoading(true);
@@ -147,11 +161,11 @@ export default function Account({
     setNotionCredentials(await fetchNotionCredentials());
   }
 
-  
+
   const [newNotionDatabases, setNewNotionDatabases] = useState(null);
 
   useEffect(() => {
-    if(notion_databases && notionCredentials){
+    if (notion_databases && notionCredentials) {
       let difference = notion_databases.filter(({ id: id1 }) => !notionCredentials.some(({ database_id: id2 }) => id2 === id1));
       setNewNotionDatabases(difference);
     }
@@ -1099,25 +1113,25 @@ export default function Account({
                   </div>
                   {newNotionDatabases ?
                     <>
-                    <div className="my-3">
-                      <Button variant="incognito" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
-                        'Popup', 'location,status,width=600, height=750')}>Reconnect Notion
-                      </Button>
-                    </div>
-                      { newNotionDatabases.length ?
-                      <div className="mb-4 mt-4 border border-emerald-600 bg-emerald-600 text-emerald-400 bg-opacity-30 p-4 rounded">
-                        <p className='text-lg font-semibold mb-4'>We Found New Databases To Connect! ✨</p>
-                        <div className='flex flex-col gap-4'>
-                          {newNotionDatabases.map((database) => (
-                            <NewNotionDatabases
-                              database={database}
-                              getNotionCredentials={getNotionCredentials}
-                              setShowSaveModal={setShowSaveModal}
-                            />
-                          ))}
-                        </div>
+                      <div className="my-3">
+                        <Button variant="incognito" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                          'Popup', 'location,status,width=600, height=750')}>Reconnect Notion
+                        </Button>
                       </div>
-                      : null}
+                      {newNotionDatabases.length ?
+                        <div className="mb-4 mt-4 border border-emerald-600 bg-emerald-600 text-emerald-400 bg-opacity-30 p-4 rounded">
+                          <p className='text-lg font-semibold mb-4'>We Found New Databases To Connect! ✨</p>
+                          <div className='flex flex-col gap-4'>
+                            {newNotionDatabases.map((database) => (
+                              <NewNotionDatabases
+                                database={database}
+                                getNotionCredentials={getNotionCredentials}
+                                setShowSaveModal={setShowSaveModal}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        : null}
                     </>
                     : <div className="my-3">
                       <Button variant="prominent" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
@@ -1270,12 +1284,12 @@ export default function Account({
                   {/*footer*/}
                   <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">
                     <a href="/notion-api-validator">
-                    <Button
-                      className="w-full"
-                      variant="prominent"
-                    >
-                      Test Connection
-                    </Button>
+                      <Button
+                        className="w-full"
+                        variant="prominent"
+                      >
+                        Test Connection
+                      </Button>
                     </a>
                   </div>
                   <div className="text-center mb-6">
@@ -1352,14 +1366,14 @@ export async function getServerSideProps({ req }) {
       try {
         const notion = new Client({ auth: notion_auth_key });
 
-        if (notion){
+        if (notion) {
           const databases = await notion.search({
             filter: {
               value: 'database',
               property: 'object',
             }
           });
-          
+
           notion_databases = databases.results;
         }
 
