@@ -37,8 +37,8 @@ export default function ConnectNotion({
 
   // if the secretkey changes, validate
   useEffect(() => {
-    if(credentials.error){
-     setConnectError(true)
+    if (credentials.error) {
+      setConnectError(true)
     };
   }, [credentials.error]);
 
@@ -196,154 +196,165 @@ export default function ConnectNotion({
       e.preventDefault();
       saveCredential(credentials.id, secretKey, databaseID, collaborator)
     }}>
-    <div className="mb-4 mt-4 border border-gray-600 px-4 rounded">
-      {APIMessage || databaseMessage || userMessage ? (
-        <div className="flex flex-col space-y-4">
-          <div className="mt-4 text-error border border-error p-3">
-            <b>Please fix the following problems before saving:</b>
-            {APIMessage ? <div>- {APIMessage}</div> : null}
-            {databaseMessage ? <div>- {databaseMessage}</div> : null}
-            {userMessage ? <div>- {userMessage}</div> : null}
+      <div className="mb-4 mt-4 border border-gray-600 px-4 rounded">
+        {APIMessage || databaseMessage || userMessage ? (
+          <div className="flex flex-col space-y-4">
+            <div className="mt-4 text-error border border-error p-3">
+              <b>Please fix the following problems before saving:</b>
+              {APIMessage ? <div>- {APIMessage}</div> : null}
+              {databaseMessage ? <div>- {databaseMessage}</div> : null}
+              {userMessage ? <div>- {userMessage}</div> : null}
+            </div>
           </div>
-        </div>
-      ) : null}
-      {connectError ? (
-        <div className="flex flex-col space-y-4">
-          <div className="mt-4 text-error border border-error p-3">
-            <b>We've detected an error with your credentials. Test your connection to see how to fix.</b>
+        ) : null}
+        {connectError ? (
+          <div className="flex flex-col space-y-4">
+            <div className="mt-4 text-error border border-error p-3">
+              <b>We've detected an error with your credentials. Test your connection to see how to fix.</b>
+            </div>
           </div>
-        </div>
-      ) : null}
-      <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-        <p className="font-semibold w-full sm:w-auto">Database Name (Optional)</p>
-      </div>
-      <Input
-        className="text-xl mb-2 font-semibold rounded"
-        type="varchar"
-        placeholder="Success Plan"
-        value={nickname || ''}
-        onChange={setNickname}
-      />
-      <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-        <p className="font-semibold w-full sm:w-auto">Notion API Secret</p>
-        <a
-          className="text-right font-semibold text-emerald-500"
-          href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_a887bad862"
-          target="_blank"
-        >
-          Where do I find this?
-        </a>
-      </div>
-      <Input
-        className="text-xl mb-2 font-semibold rounded"
-        type="varchar"
-        placeholder="secret_•••"
-        maxlength="50"
-        value={secretKey || ''}
-        onChange={setSecretKey}
-      />
-      <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-        <p className="font-semibold w-full sm:w-auto">Database ID</p>
-        <a
-          className="text-right font-semibold text-emerald-500"
-          href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246"
-          target="_blank"
-        >
-          Where do I find this?
-        </a>
-      </div>
-      <Input
-        className="text-xl font-semibold rounded"
-        type="varchar"
-        placeholder="https://www.notion.so/•••"
-        value={databaseID || ''}
-        onChange={setDatabaseID}
-      />
-      <div className="flex items-center my-6">
-        <div
-          className="border-t border-yellow-500 flex-grow mr-3"
-          aria-hidden="true"
-        ></div>
-        <button
-        type="button"
-          onClick={() => setShowCollaborator(!showCollaborator)}
-          className="text-yellow-500 font-semibold truncate"
-          disabled={saving}
-        >
-          I'm sharing this database with other users!
-        </button>
-        <div
-          className="border-t border-yellow-500 flex-grow ml-3"
-          aria-hidden="true"
-        ></div>
-      </div>
-
-      <div className={`${showCollaborator ? 'block' : 'hidden'}`}>
-        <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-          <p className="font-semibold w-full sm:w-auto">
-            Count the win ONLY if Collaborator includes the user ID...
-          </p>
-          <a
-            className="text-right font-semibold text-yellow-500"
-            href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
-            target="_blank"
-          >
-            Where do I find this?
-          </a>
+        ) : null}
+        <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+          <p className="font-semibold w-full sm:w-auto">Database Name</p>
         </div>
         <Input
-          className="text-xl font-semibold rounded"
+          className="text-xl mb-2 font-semibold rounded"
           type="varchar"
-          placeholder="Leave blank to attribute all wins to yourself!"
-          value={collaborator || ''}
-          onChange={setCollaborator}
+          placeholder="Success Plan"
+          value={nickname || ''}
+          onChange={setNickname}
         />
-      </div>
-      <div className="flex justify-between my-4 items-center">
-        {deleteOption ? <>
-          <span className='text-white font-semibold ease-linear transition-all duration-150'>
-            Are You Sure?{' '}
-            <button
-            type="button"
-              onClick={() => removeCredentials(credentials.id)}
-              className="text-red-500 mr-1 font-semibold"
-              disabled={saving}
-            >
-              {saving ? <LoadingDots /> : 'Yes'}
-            </button>
-            /
-            <button
-            type="button"
-              onClick={() => setDeleteOption(false)}
-              className="text-red-500 ml-1 font-semibold"
-            >
-              {saving ? <LoadingDots /> : 'No'}
-            </button>
-          </span>
-        </> :
+        {!credentials.integration ?
+          <>
+            <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+              <p className="font-semibold w-full sm:w-auto">Notion API Secret</p>
+              <a
+                className="text-right font-semibold text-emerald-500"
+                href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_a887bad862"
+                target="_blank"
+              >
+                Where do I find this?
+              </a>
+            </div>
+            <Input
+              className="text-xl mb-2 font-semibold rounded"
+              type="varchar"
+              placeholder="secret_•••"
+              maxlength="50"
+              value={secretKey || ''}
+              onChange={setSecretKey}
+            />
+            <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+              <p className="font-semibold w-full sm:w-auto">Database ID</p>
+              <a
+                className="text-right font-semibold text-emerald-500"
+                href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246"
+                target="_blank"
+              >
+                Where do I find this?
+              </a>
+            </div>
+            <Input
+              className="text-xl font-semibold rounded"
+              type="varchar"
+              placeholder="https://www.notion.so/•••"
+              value={databaseID || ''}
+              onChange={setDatabaseID}
+            />
+          </>
+          : <><div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+            <p className="font-semibold w-full sm:w-auto">Database ID</p>
+          </div>
+            <p
+              className="text-xl font-semibold rounded"
+            >{databaseID}</p></>}
+
+
+        <div className="flex items-center my-6">
+          <div
+            className="border-t border-yellow-500 flex-grow mr-3"
+            aria-hidden="true"
+          ></div>
           <button
-          type="button"
-            onClick={() => setDeleteOption(true)}
-            className="text-red-500 mr-5 font-semibold"
+            type="button"
+            onClick={() => setShowCollaborator(!showCollaborator)}
+            className="text-yellow-500 font-semibold truncate"
             disabled={saving}
           >
-            {saving ? <LoadingDots /> : 'Remove'}
-          </button>}
-        <Button
-          className="w-full sm:w-auto"
-          variant="incognito"
-          type="submit"
-          disabled={
-            saving ||
-            APIMessage != null ||
-            databaseMessage != null ||
-            userMessage != null || databaseID == null || secretKey == null
-          }
-        >
-          {saving ? <LoadingDots /> : 'Save And Test'}
-        </Button>
+            I'm sharing this database with other users!
+          </button>
+          <div
+            className="border-t border-yellow-500 flex-grow ml-3"
+            aria-hidden="true"
+          ></div>
+        </div>
+
+        <div className={`${showCollaborator ? 'block' : 'hidden'}`}>
+          <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+            <p className="font-semibold w-full sm:w-auto">
+              Count the win ONLY if Collaborator includes the user ID...
+            </p>
+            <a
+              className="text-right font-semibold text-yellow-500"
+              href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
+              target="_blank"
+            >
+              Where do I find this?
+            </a>
+          </div>
+          <Input
+            className="text-xl font-semibold rounded"
+            type="varchar"
+            placeholder="Leave blank to attribute all wins to yourself!"
+            value={collaborator || ''}
+            onChange={setCollaborator}
+          />
+        </div>
+        <div className="flex justify-between my-4 items-center">
+          {deleteOption ? <>
+            <span className='text-white font-semibold ease-linear transition-all duration-150'>
+              Are You Sure?{' '}
+              <button
+                type="button"
+                onClick={() => removeCredentials(credentials.id)}
+                className="text-red-500 mr-1 font-semibold"
+                disabled={saving}
+              >
+                {saving ? <LoadingDots /> : 'Yes'}
+              </button>
+              /
+              <button
+                type="button"
+                onClick={() => setDeleteOption(false)}
+                className="text-red-500 ml-1 font-semibold"
+              >
+                {saving ? <LoadingDots /> : 'No'}
+              </button>
+            </span>
+          </> :
+            <button
+              type="button"
+              onClick={() => setDeleteOption(true)}
+              className="text-red-500 mr-5 font-semibold"
+              disabled={saving}
+            >
+              {saving ? <LoadingDots /> : 'Remove'}
+            </button>}
+          <Button
+            className="w-full sm:w-auto"
+            variant="incognito"
+            type="submit"
+            disabled={
+              saving ||
+              APIMessage != null ||
+              databaseMessage != null ||
+              userMessage != null || databaseID == null || secretKey == null
+            }
+          >
+            {saving ? <LoadingDots /> : 'Save And Test'}
+          </Button>
+        </div>
       </div>
-    </div>
     </form>
   );
 }

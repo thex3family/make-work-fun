@@ -75,7 +75,7 @@ export default function NotionWizard({ response, nickname }) {
               Be data conscious. Get back to this page any time by testing your
               connection from{' '}
               <span className="text-emerald-500 font-semibold">
-                <Link href="/account">account.</Link>
+                <a href="/account?tab=connect&via=notion">account.</a>
               </span>
             </p>
           </div>

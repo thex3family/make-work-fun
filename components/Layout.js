@@ -114,7 +114,7 @@ export default function Layout({ children, meta }) {
       </Head>
       {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       <main id="skip">
-        {user || router.asPath.includes('embed/') ? <>
+        {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
           <SideBar router={router} mobileDevice={mobileDevice} /> 
         </> : null}
 
@@ -123,11 +123,11 @@ export default function Layout({ children, meta }) {
       </main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
-          !router.asPath.includes('embed/') ? (
+          !router.asPath.includes('embed/') && !router.asPath.includes('auth') ? (
           <BottomNavbar />
         ) : null
       ) : null}
-      {!router.asPath.includes('embed/') ? <Footer /> : null}
+      {!router.asPath.includes('embed/') && !router.asPath.includes('auth') ? <Footer /> : null}
     </>
   );
 }
