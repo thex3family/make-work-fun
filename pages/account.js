@@ -155,7 +155,6 @@ export default function Account({
       let difference = notion_databases.filter(({ id: id1 }) => !notionCredentials.some(({ database_id: id2 }) => id2 === id1));
       setNewNotionDatabases(difference);
     }
-    console.log(notion_databases);
   }, [notion_databases, notionCredentials]);
 
   async function getAPIKeys() {
