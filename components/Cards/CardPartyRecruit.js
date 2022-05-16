@@ -30,7 +30,7 @@ export default function CardPartyRecruit({party, partyLimit}) {
     team: `flex justify-between`,
     joinUp: `bg-indigo-500 text-white p-1 shadow-sm`
   };
-  const playersExample = Array(4).fill(`http://localhost:3000/logo.svg`);
+  const playersExample = Array(4).fill(`/logo.svg`);
   return (
     <>
       <div className={style.card + ' cursor-pointer'}
