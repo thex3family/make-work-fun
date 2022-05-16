@@ -12,13 +12,11 @@ export default function NewNotionDatabases({
 }) {
 
   const { user, userProfile } = userContent();
-  console.log(database)
 
   const [saving, setSaving] = useState(false);
   async function createCredential() {
     setSaving(true);
     try {
-      console.log(user)
 
       const { data, error } = await supabase
         .from('notion_credentials')

@@ -19,8 +19,6 @@ export default function ConnectPOST({ APIKeys, getAPIKeys
         setGenerating(false);
     }, [APIKeys]);
 
-
-    console.log(APIKeys)
     // generate secret link
 
     async function generateAPIKey() {

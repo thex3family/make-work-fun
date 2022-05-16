@@ -1410,8 +1410,6 @@ export async function getServerSideProps({ req }) {
       database_id: credentials.database_id
     });
 
-    console.log(response);
-
     return { props: { response, nickname } };
   } catch (error) {
     console.log(error);
