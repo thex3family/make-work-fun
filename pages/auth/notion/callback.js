@@ -87,7 +87,7 @@ export async function getServerSideProps(context) {
         const res = await fetch('https://api.notion.com/v1/oauth/token', {
             method: 'post',
             headers: new Headers({
-                'Authorization': 'Basic ' + btoa(process.env.NOTION_CLIENT_ID + ":" + process.env.NOTION_CLIENT_SECRET),
+                'Authorization': 'Basic ' + Buffer.from(process.env.NOTION_CLIENT_ID + ":" + process.env.NOTION_CLIENT_SECRET).toString('base64'),
                 'Content-Type': 'application/json'
             }),
             body: JSON.stringify({
