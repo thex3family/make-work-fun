@@ -20,7 +20,6 @@ export default function notionCallback({ response, user }) {
                 .update({ notion_auth_key: response.access_token })
                 .eq('id', user.id);
             
-            console.log(data);
             if (error) {
                 throw error;
             }
@@ -39,7 +38,6 @@ export default function notionCallback({ response, user }) {
                 .eq('player', user.id)
                 .eq('integration', true);
             
-            console.log(data);
             if (error) {
                 throw error;
             }

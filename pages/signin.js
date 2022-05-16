@@ -672,7 +672,6 @@ export default SignIn;
 export async function getServerSideProps({ req }) {
   // Get the user's session based on the request
   const { user } = await supabase.auth.api.getUserByCookie(req);
-  console.log(user);
 
   return {
     props: { user }

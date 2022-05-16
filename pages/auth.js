@@ -33,8 +33,6 @@ export default function Auth() {
       result[item[0]] = decodeURIComponent(item[1]);
     });
 
-    console.log(result)
-
     if (result.type === 'recovery') {
       setRecoveryToken(result.access_token);
       setAuthState('recovery');
