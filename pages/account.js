@@ -1100,7 +1100,7 @@ export default function Account({
                   {newNotionDatabases ?
                     <>
                     <div className="my-3">
-                      <Button variant="incognito" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=http%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                      <Button variant="incognito" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
                         'Popup', 'location,status,width=600, height=750')}>Reconnect Notion
                       </Button>
                     </div>
@@ -1120,7 +1120,7 @@ export default function Account({
                       : null}
                     </>
                     : <div className="my-3">
-                      <Button variant="prominent" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=http%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                      <Button variant="prominent" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
                         'Popup', 'location,status,width=600, height=750')}>Connect With Notion
                       </Button>
                     </div>}
