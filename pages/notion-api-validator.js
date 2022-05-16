@@ -87,17 +87,19 @@ export default function NotionWizard({ response, nickname }) {
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-gradient-to-r from-emerald-500 to-blue-500">
                 <div className="text-2xl font-semibold">
-                  {response.title[0].plain_text}{' '}
-                  {nickname ? `(${nickname})` : null}
+                <a href={response.url} target="_blank">
+                  <p>{nickname ? `${nickname}` : null}</p>
+                  <p className='text-lg font-normal'>{response.title[0].plain_text}{' '}<i className='ml-1 fas fa-external-link-alt font-normal' /></p>
+                  </a>
                 </div>
                 <button
-                  className="p-1 ml-auto bg-transparent border-0 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                  className="p-1 ml-auto bg-transparent border-0 float-right text-xl my-auto leading-none font-semibold outline-none focus:outline-none"
                   onClick={() => loadAndRefresh()}
                   disabled={loading}
                   loading={loading}
                 >
                   <span className="hidden md:inline-block">
-                    {loading ? 'Loading' : 'Click here to refresh'}
+                    {loading ? 'Loading' : 'Refresh'}
                   </span>
                   <i className="ml-3 fas fa-sync-alt"></i>
                 </button>
@@ -114,7 +116,7 @@ export default function NotionWizard({ response, nickname }) {
             <div className="flex flex-col md:flex-row my-6 mx-6 gap-3">
               <div className="md:w-1/3 scroll-tab-header">
                 <ul
-                  className="flex mb-0 list-none pb-5 px-2 md:pb-0 md:px-0 flex-nowrap overflow-scroll md:overflow-visible flex-row md:flex-col gap-3"
+                  className="flex mb-0 list-none pb-5 px-2 md:pb-0 md:px-0 flex-nowrap overflow-scroll no-scrollbar md:overflow-visible flex-row md:flex-col gap-3"
                   role="tablist"
                 >
                   <li className="mr-2 flex-auto text-left min-w-max">
@@ -1407,6 +1409,8 @@ export async function getServerSideProps({ req }) {
     const response = await notion.databases.retrieve({
       database_id: credentials.database_id
     });
+
+    console.log(response);
 
     return { props: { response, nickname } };
   } catch (error) {
