@@ -120,8 +120,8 @@ export default function Account({
   }, [user]);
 
   useEffect(() => {
-    checkForUserUpdates()
-  }, []);
+    if (activeTab === 3) checkForUserUpdates()
+  }, [activeTab]);
 
   async function checkForUserUpdates() {
     const { data, error } = await supabase
