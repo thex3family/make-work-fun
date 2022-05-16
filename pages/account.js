@@ -1119,9 +1119,15 @@ export default function Account({
                   {newNotionDatabases ?
                     <>
                       <div className="my-3">
-                        <Button variant="incognito" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
-                          'Popup', 'location,status,width=600, height=750')}>Reconnect Notion
-                        </Button>
+                        <div className='block sm:hidden'>
+                          <a href="https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code" target="_blank"><Button variant="incognito">Reconnect Notion
+                          </Button></a>
+                        </div>
+                        <div className='hidden sm:inline'>
+                          <Button variant="incognito" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                            'Popup', 'location,status,width=600, height=750')}>Reconnect Notion
+                          </Button>
+                        </div>
                       </div>
                       {newNotionDatabases.length ?
                         <div className="mb-4 mt-4 border border-emerald-600 bg-emerald-600 text-emerald-400 bg-opacity-30 p-4 rounded">
@@ -1138,10 +1144,16 @@ export default function Account({
                         </div>
                         : null}
                     </>
-                    : <div className="my-3">
-                      <Button variant="prominent" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
-                        'Popup', 'location,status,width=600, height=750')}>Connect With Notion
-                      </Button>
+                    : <div className="my-3 ">
+                      <div className='block sm:hidden'>
+                        <a href="https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code" target="_blank"><Button variant="prominent">Connect With Notion
+                        </Button></a>
+                      </div>
+                      <div className='hidden sm:inline'>
+                        <Button variant="prominent" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                          'Popup', 'location,status,width=600, height=750')}>Connect With Notion
+                        </Button>
+                      </div>
                     </div>}
                   {notionCredentials ? (
                     notionCredentials.map((credentials) => (
