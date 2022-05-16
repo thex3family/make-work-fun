@@ -10,7 +10,6 @@ export default function notionCallback({ response, user }) {
         if (response.access_token) {
             updateDatabase()
         }
-        window.opener.location.reload();
     }, [response])
 
     async function updateDatabase() {
@@ -45,6 +44,7 @@ export default function notionCallback({ response, user }) {
             alert(error.message);
         } finally {
             updateNotionCredentials();
+            window.opener.location.reload();
         }
     }
 
