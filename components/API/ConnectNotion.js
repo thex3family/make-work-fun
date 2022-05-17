@@ -267,9 +267,9 @@ export default function ConnectNotion({
           : <><div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
             <p className="font-semibold w-full sm:w-auto">Database ID</p>
           </div>
-            <p
+            <a href={`https://notion.so/`+databaseID?.replaceAll('-', '')} target="_blank"><p
               className="text-xl font-semibold rounded"
-            >{databaseID}</p></>}
+            >{databaseID}<i className='ml-2 fas fa-external-link-alt' /></p></a></>}
 
 
         <div className="flex items-center my-6">
