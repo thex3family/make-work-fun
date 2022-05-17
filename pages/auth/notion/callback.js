@@ -9,6 +9,7 @@ export default function notionCallback({ response, user }) {
 
     useEffect(() => {
         if (response.access_token) {
+            console.log(response);
             updateDatabase()
         } else {
             setLoading(false);
@@ -19,7 +20,12 @@ export default function notionCallback({ response, user }) {
         try {
             const { data, error } = await supabase
                 .from('users')
-                .update({ notion_auth_key: response.access_token })
+                .update({ 
+                    notion_auth_key: response.access_token,
+                    notion_user_id: response.owner.user.id,
+                    notion_user_name: response.owner.user.name,
+                    notion_user_email: response.owner.user.person.email,
+                 })
                 .eq('id', user.id);
 
             if (error) {
@@ -111,7 +117,7 @@ export async function getServerSideProps(context) {
             body: JSON.stringify({
                 grant_type: `authorization_code`,
                 code: code,
-                redirect_uri: `https://makework.fun/auth/notion/callback`
+                redirect_uri: `${process.env.NEXT_PUBLIC_HOST_URL}/auth/notion/callback`
             }),
         });
 
