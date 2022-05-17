@@ -3,16 +3,18 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '../ui/LoadingDots';
-import { Popover } from '@mantine/core';
+import { Popover, Switch } from '@mantine/core';
 
 export default function ConnectNotion({
   credentials,
   getNotionCredentials,
-  setShowSaveModal
+  setShowSaveModal,
+  userProfile
 }) {
   const [secretKey, setSecretKey] = useState(null);
   const [databaseID, setDatabaseID] = useState(null);
   const [collaborator, setCollaborator] = useState(null);
+  const [finalCollaboratorID, setFinalCollaboratorID] = useState(null);
   const [saving, setSaving] = useState(false);
   const [showCollaborator, setShowCollaborator] = useState(false);
   const [APIMessage, setAPIMessage] = useState(null);
@@ -21,8 +23,14 @@ export default function ConnectNotion({
   const [userMessage, setUserMessage] = useState(null);
   const [nickname, setNickname] = useState(null);
 
+
+  const [customCollaborator, setCustomCollaborator] = useState(true);
+
   const [deleteOption, setDeleteOption] = useState(false);
   const [editState, setEditState] = useState(true);
+
+  const notionOAuthURL = `https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_HOST_URL)}%2Fauth%2Fnotion%2Fcallback&response_type=code`;
+
 
   var api = /^secret_\w{43}$/;
   var id = /^\(?([0-9a-zA-Z]{8})\)?[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{12})$/;
@@ -34,9 +42,10 @@ export default function ConnectNotion({
     setDatabaseID(credentials.database_id);
     if (credentials.collaborator) setCollaborator(credentials.collaborator);
     if (credentials.collaborator) setShowCollaborator(true);
+    if (credentials.collaborator === userProfile?.notion_user_id) setCustomCollaborator(false);
     setSaving(false);
     setDeleteOption(false);
-  }, [credentials]);
+  }, [credentials, userProfile]);
 
   // if the secretkey changes, validate
   useEffect(() => {
@@ -58,7 +67,7 @@ export default function ConnectNotion({
   // if the userID changes, validate
   useEffect(() => {
     validateCollaborator();
-  }, [collaborator]);
+  }, [collaborator, customCollaborator, showCollaborator]);
 
   async function removeCredentials(row_id) {
     setSaving(true);
@@ -123,16 +132,28 @@ export default function ConnectNotion({
   // validate collaborator user ID
 
   function validateCollaborator() {
-    if (collaborator) {
-      if (collaborator.match(id)) {
-        setUserMessage(null);
+    if (showCollaborator) {
+      if (collaborator && customCollaborator) {
+        if (collaborator.match(id)) {
+          setUserMessage(null);
+          setFinalCollaboratorID(collaborator);
+        } else {
+          setUserMessage(
+            'Please enter a valid user ID. Format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
+          );
+        }
       } else {
-        setUserMessage(
-          'Please enter a valid user ID. Format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
-        );
+        setUserMessage(null);
       }
-    } else {
-      setUserMessage(null);
+      if (!collaborator && customCollaborator) {
+        setFinalCollaboratorID(null);
+      }
+      if (userProfile?.notion_user_id && !customCollaborator) {
+        setFinalCollaboratorID(userProfile.notion_user_id);
+      }
+    }
+    if (!showCollaborator) {
+      setFinalCollaboratorID(null);
     }
   }
 
@@ -140,9 +161,14 @@ export default function ConnectNotion({
     row_id,
     api_secret_key,
     database_id,
-    collaborator_id
+    collaborator_id,
+    showCollaborator
   ) {
     setSaving(true);
+    setCollaborator(collaborator_id);
+    if (!collaborator_id) {
+      setShowCollaborator(false);
+    }
     try {
       const user = supabase.auth.user();
 
@@ -201,7 +227,7 @@ export default function ConnectNotion({
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
-      saveCredential(credentials.id, secretKey, databaseID, collaborator)
+      saveCredential(credentials.id, secretKey, databaseID, finalCollaboratorID, showCollaborator)
     }}>
       <div className="mb-4 mt-4 border border-gray-600 px-4 rounded">
         {APIMessage || databaseMessage || userMessage ? (
@@ -221,35 +247,39 @@ export default function ConnectNotion({
             </div>
           </div>
         ) : null}
-        <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-          <p className="font-semibold w-full sm:w-auto">Database Name</p>
-        </div>
-        <Input
-          className="text-xl mb-2 font-semibold rounded"
-          type="varchar"
-          placeholder="Success Plan"
-          value={nickname || ''}
-          onChange={setNickname}
-        />
-        {!credentials.integration ?
+
+        {credentials.integration ?
           <>
             <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-              <p className="font-semibold w-full sm:w-auto">Notion API Secret</p>
-              <a
-                className="text-right font-semibold text-emerald-500"
-                href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_a887bad862"
-                target="_blank"
-              >
-                Where do I find this?
-              </a>
+              <p className="font-semibold w-full sm:w-auto">Database Name</p>
             </div>
             <Input
               className="text-xl mb-2 font-semibold rounded"
               type="varchar"
-              placeholder="secret_•••"
-              maxlength="50"
-              value={secretKey || ''}
-              onChange={setSecretKey}
+              placeholder="Success Plan"
+              value={nickname || ''}
+              onChange={setNickname}
+              disabled={saving}
+            />
+            <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+              <p className="font-semibold w-full sm:w-auto">Database ID</p>
+            </div>
+            <a href={`https://notion.so/` + databaseID?.replaceAll('-', '')} target="_blank"><p
+              className="text-xl font-semibold rounded"
+            >{databaseID}<i className='ml-2 fas fa-external-link-alt' /></p></a></>
+          : null
+        }
+        {!credentials.integration ?
+          <><div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+            <p className="font-semibold w-full sm:w-auto">Database Name</p>
+          </div>
+            <Input
+              className="text-xl mb-2 font-semibold rounded"
+              type="varchar"
+              placeholder="Success Plan"
+              value={nickname || ''}
+              onChange={setNickname}
+              disabled={saving}
             />
             <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
               <p className="font-semibold w-full sm:w-auto">Database ID</p>
@@ -267,17 +297,44 @@ export default function ConnectNotion({
               placeholder="https://www.notion.so/•••"
               value={databaseID || ''}
               onChange={setDatabaseID}
+              disabled={saving}
             />
+            <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
+              <p className="font-semibold w-full sm:w-auto">Notion API Secret</p>
+              <a
+                className="text-right font-semibold text-emerald-500"
+                href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_a887bad862"
+                target="_blank"
+              >
+                Where do I find this?
+              </a>
+            </div>
+            <Input
+              className="text-xl mb-2 font-semibold rounded"
+              type="varchar"
+              placeholder="secret_•••"
+              maxlength="50"
+              value={secretKey || ''}
+              onChange={setSecretKey}
+              disabled={saving}
+            />
+
           </>
-          : <><div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-            <p className="font-semibold w-full sm:w-auto">Database ID</p>
-          </div>
-            <a href={`https://notion.so/` + databaseID?.replaceAll('-', '')} target="_blank"><p
-              className="text-xl font-semibold rounded"
-            >{databaseID}<i className='ml-2 fas fa-external-link-alt' /></p></a></>}
+          : null}
 
 
-        <div className="flex items-center my-6">
+        <Switch
+          checked={!showCollaborator} onChange={(event) => !saving ? setShowCollaborator(!event.currentTarget.checked) : null}
+          label="This is a private database"
+          color="teal"
+          classNames={{
+            size: 'xl',
+            root: 'mt-5',
+            input: 'bg-gray-600',
+            label: 'text-white font-semibold text-lg',
+          }}
+        />
+        {/* <div className="flex items-center my-6">
           <div
             className="border-t border-yellow-500 flex-grow mr-3"
             aria-hidden="true"
@@ -294,41 +351,72 @@ export default function ConnectNotion({
             className="border-t border-yellow-500 flex-grow ml-3"
             aria-hidden="true"
           ></div>
-        </div>
+        </div> */}
 
         <div className={`${showCollaborator ? 'block' : 'hidden'}`}>
-          <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
-            <p className="font-semibold w-full sm:w-auto">
-              Count the win ONLY if Collaborator includes the user ID...
+          <div className="mt-4 mb-2">
+            <p className="w-full sm:w-auto">
+              If you have multiple users sharing this database in Notion, you can specify which wins to sync to your Make Work Fun account by specifying your Notion User ID below. <a
+                className="text-right font-semibold text-emerald-500"
+                href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
+                target="_blank"
+              >
+                Learn more.
+              </a>
             </p>
-            <a
-              className="text-right font-semibold text-yellow-500"
-              href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
-              target="_blank"
-            >
-              Where do I find this?
-            </a>
           </div>
-          <Input
-            className="text-xl font-semibold rounded"
-            type="varchar"
-            placeholder="Leave blank to attribute all wins to yourself!"
-            value={collaborator || ''}
-            onChange={setCollaborator}
-          />
+          <p className="font-semibold">
+            ⚠️ If you do not have a collaborators property in your database this feature will not work.
+          </p>
+          <div className='mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap gap-4'>
+
+            {
+              userProfile?.notion_user_name && userProfile?.notion_user_email && userProfile?.notion_user_id ?
+                <div className={`p-4 border-2  rounded w-full cursor-pointer bg-opacity-20 border-opacity-80 ${customCollaborator ? 'bg-gray-500 border-gray-500' : 'bg-emerald-500 border-emerald-500'}`}
+                  onClick={() => !saving ? setCustomCollaborator(false) : null}>
+                  <div className="mb-2">
+                    <p className="font-semibold w-full sm:w-auto">Connected Notion User {customCollaborator ? null : <span className='ml-1 text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}</p>
+                  </div>
+                  <p
+                    className="text-lg font-semibold rounded"
+                  >{userProfile?.notion_user_name} ({userProfile?.notion_user_email})
+                    <p className='text-sm'>{userProfile?.notion_user_id}</p>
+                  </p>
+                </div>
+                : <div className={`p-4 border-2  rounded w-full bg-opacity-20 border-opacity-80 bg-gray-500 border-gray-500`}
+                >
+                  <div className="mb-2">
+                    <p className="font-semibold w-full sm:w-auto">Notion Not Connected {customCollaborator ? null : <span className='ml-1 text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}</p>
+                  </div>
+                  <div>
+                    <a href={notionOAuthURL}><Button type="button" variant="prominent">Connect With Notion
+                    </Button></a>
+                  </div>
+                </div>
+            }
+
+            <div className={`p-4 border-2  rounded w-full cursor-pointer bg-opacity-20 border-opacity-80 ${!customCollaborator ? 'bg-gray-500 border-gray-500' : 'bg-emerald-500 border-emerald-500'}`}
+              onClick={() => !saving ? setCustomCollaborator(true) : null}>
+              <div className="mb-3">
+                <p className="font-semibold w-full sm:w-auto">Custom Notion User ID {!customCollaborator ? null : <span className='ml-1 text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}</p>
+              </div>
+              <Input
+                className="text-xl font-semibold rounded"
+                type="varchar"
+                placeholder="••••••••-••••-••••-••••-••••••••••••••••"
+                value={collaborator || ''}
+                onChange={setCollaborator}
+                disabled={saving}
+              />
+            </div>
+          </div>
         </div>
         <div className="flex justify-center sm:justify-between flex-wrap-reverse gap-3 flex-row my-4 items-center">
           <Popover
-          classNames={{
-            popover: 'bg-dark',
-            arrow: 'bg-dark',
-            body: 'your-body-class',
-            inner: 'your-inner-class',
-            header: 'your-header-class',
-            title: 'your-title-class',
-            close: 'your-close-class',
-            target: 'your-target-class',
-          }}
+            classNames={{
+              popover: 'bg-dark',
+              arrow: 'bg-dark',
+            }}
             opened={deleteOption}
             onClose={() => setDeleteOption(false)}
             target={
@@ -345,7 +433,7 @@ export default function ConnectNotion({
             withArrow
           >
             <div className=''>
-              <p className='font-semibold mb-4'>The app will stop syncing wins with this database.</p>
+              <p className='font-semibold mb-4'>The app will stop syncing wins with {nickname}.</p>
               <div className='flex justify-between text-lg'>
                 <button
                   type="button"
