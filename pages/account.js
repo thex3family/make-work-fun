@@ -53,7 +53,7 @@ export default function Account({
   const [notionCredentials, setNotionCredentials] = useState(null);
   const [APIKeys, setAPIKeys] = useState(null);
 
-  const { userLoaded, userDetails, passwordReset } = userContent();
+  const { userLoaded, userProfile, userDetails, passwordReset } = userContent();
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
@@ -1135,7 +1135,7 @@ export default function Account({
                         </div> */}
                       </div>
                       {newNotionDatabases.length ?
-                        <div className="mb-4 mt-4 border border-emerald-600 bg-emerald-600 text-emerald-400 bg-opacity-30 p-4 rounded">
+                        <div className="mb-4 mt-4 bg-emerald-500 bg-opacity-20 border-2 border-emerald-500 border-opacity-80 rounded p-4 rounded">
                           <p className='text-lg font-semibold mb-4'>We Found New Databases! ✨</p>
                           <div className='flex flex-col gap-4'>
                             {newNotionDatabases.map((database) => (
@@ -1164,6 +1164,7 @@ export default function Account({
                     notionCredentials.map((credentials) => (
                       <ConnectNotion
                         credentials={credentials}
+                        userProfile={userProfile}
                         getNotionCredentials={getNotionCredentials}
                         setShowSaveModal={setShowSaveModal}
                       />
