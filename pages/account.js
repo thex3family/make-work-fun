@@ -43,7 +43,8 @@ export default function Account({
   subscriptionPurchaseRecord,
   inactiveSubscriptionRecord,
   user,
-  notion_databases
+  notion_databases,
+  host
 }) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -61,6 +62,8 @@ export default function Account({
   const [activeConnect, setActiveConnect] = useState(1);
 
   const notionOAuthURL = 'https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code';
+  
+  console.log(host);
 
   const { tab } = router.query;
   const { via } = router.query;
@@ -1403,6 +1406,7 @@ export async function getServerSideProps({ req }) {
       }
     }
 
+    const host = process.env.VERCEL_URL;
 
     return {
       props: {
@@ -1410,7 +1414,8 @@ export async function getServerSideProps({ req }) {
         subscriptionPurchaseRecord: minifyRecords(subscriptionRecord),
         inactiveSubscriptionRecord: minifyRecords(inactiveSubscriptionRecord),
         user,
-        notion_databases
+        notion_databases,
+        host
       }
     };
   } catch (error) {
