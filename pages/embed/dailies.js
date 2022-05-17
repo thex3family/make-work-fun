@@ -96,7 +96,8 @@ export default function dailies() {
         throw error;
       }
     } catch (error) {
-      alert(error.message)
+      // alert(error.message);
+      console.log(error.message);
     } finally {
     }
   }
@@ -116,7 +117,8 @@ export default function dailies() {
         router.replace('/player');
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       console.log('InitializedPlayer');
     }

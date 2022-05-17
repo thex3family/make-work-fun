@@ -75,7 +75,8 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
         })
         .eq('party_member', party_member_id);
     } catch (error) {
-      alert(error.message);
+     // alert(error.message);
+     console.log(error.message);
     } finally {
       setSaving(false);
       changePlayerStatus('Reviewing')

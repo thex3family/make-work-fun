@@ -42,7 +42,8 @@ export default function Avatar({ avatarUrl, size, onAvatarUpload, onBackgroundUp
 
       onAvatarUpload(filePath);
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setUploading(false);
     }
@@ -71,7 +72,8 @@ export default function Avatar({ avatarUrl, size, onAvatarUpload, onBackgroundUp
 
       onBackgroundUpload(filePath);
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setUploading(false);
     }

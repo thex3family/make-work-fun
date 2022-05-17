@@ -32,7 +32,8 @@ export default function Pricing({ products }) {
       const stripe = await getStripe();
       stripe.redirectToCheckout({ sessionId });
     } catch (error) {
-      return alert(error.message);
+      return // alert(error.message);
+      console.log(error.message);
     } finally {
       setPriceIdLoading(false);
     }

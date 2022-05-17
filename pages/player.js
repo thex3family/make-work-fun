@@ -246,7 +246,8 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
         console.log('Setting onboarding state...', parseInt(userOnboarding.onboarding_state, 10))
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       console.log('InitializedPlayer');
     }
@@ -333,7 +334,8 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
           }
         }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setLoading(false);
     }

@@ -79,7 +79,8 @@ export default function WinModal({
           throw error;
         }
       } catch (error) {
-        alert(error.message);
+        // alert(error.message);
+      console.log(error.message);
       } finally {
         // refresh the win table if in the player page, and the dailies page too... basically refresh anything that is loading leaderboard?
         refreshStats();

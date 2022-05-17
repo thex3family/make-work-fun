@@ -334,7 +334,8 @@ export default function edit({user, metaBase, setMeta}) {
         router.replace('/account');
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       console.log('InitializedPlayer');
     }
@@ -437,7 +438,8 @@ export default function edit({user, metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setLoading(false);
       setSaving(false);
@@ -467,7 +469,8 @@ export default function edit({user, metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setLoading(false);
       fetchHabits();
@@ -490,7 +493,8 @@ export default function edit({user, metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setLoading(false);
       setSaving(false);

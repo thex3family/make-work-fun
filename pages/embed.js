@@ -337,7 +337,8 @@ export default function embed({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       fetchPlayers(setPlayers);
       fetchFriendships(setFriendships);
@@ -358,7 +359,8 @@ export default function embed({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       fetchPlayers(setPlayers);
       fetchFriendships(setFriendships);
@@ -379,7 +381,8 @@ export default function embed({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       fetchFriendshipLink(setFriendshipLink);
     }
@@ -398,7 +401,8 @@ export default function embed({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       reloadIframe('player-card');
     }
@@ -417,7 +421,8 @@ export default function embed({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setFriendshipLink(null);
       reloadIframe('player-card');
@@ -440,7 +445,8 @@ export default function embed({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       fetchAuthenticationLink(utility, utility == 'dailies' ? setDailiesAuthLink : utility == 'player-details' ? setDetailsAuthLink : utility == 'player-card' ? setCardAuthLink : null, setLoading);
     }
@@ -459,7 +465,8 @@ export default function embed({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       if (utility == 'dailies') {
         setDailiesAuthLink(null)
