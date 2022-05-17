@@ -374,8 +374,8 @@ export default function ConnectNotion({
               userProfile?.notion_user_name && userProfile?.notion_user_email && userProfile?.notion_user_id ?
                 <div className={`p-4 border-2  rounded w-full cursor-pointer bg-opacity-20 border-opacity-80 ${customCollaborator ? 'bg-gray-500 border-gray-500' : 'bg-emerald-500 border-emerald-500'}`}
                   onClick={() => !saving ? setCustomCollaborator(false) : null}>
-                  <div className="mb-2">
-                    <p className="font-semibold w-full sm:w-auto">Connected Notion User {customCollaborator ? null : <span className='ml-1 text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}</p>
+                  <div className="mb-2 flex justify-between flex-wrap gap-1.5">
+                    <span className="font-semibold w-full sm:w-auto mr-1">Connected Notion Account </span>{customCollaborator ? null : <span className='text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}
                   </div>
                   <p
                     className="text-lg font-semibold rounded"
@@ -385,8 +385,8 @@ export default function ConnectNotion({
                 </div>
                 : <div className={`p-4 border-2  rounded w-full bg-opacity-20 border-opacity-80 bg-gray-500 border-gray-500`}
                 >
-                  <div className="mb-2">
-                    <p className="font-semibold w-full sm:w-auto">Notion Not Connected {customCollaborator ? null : <span className='ml-1 text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}</p>
+                  <div className="mb-2 flex justify-between flex-wrap gap-1.5">
+                    <span className="font-semibold w-full sm:w-auto mr-1">Notion Not Connected </span>{customCollaborator ? null : <span className='text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}
                   </div>
                   <div>
                     <a href={notionOAuthURL}><Button type="button" variant="prominent">Connect With Notion
@@ -397,8 +397,8 @@ export default function ConnectNotion({
 
             <div className={`p-4 border-2  rounded w-full cursor-pointer bg-opacity-20 border-opacity-80 ${!customCollaborator ? 'bg-gray-500 border-gray-500' : 'bg-emerald-500 border-emerald-500'}`}
               onClick={() => !saving ? setCustomCollaborator(true) : null}>
-              <div className="mb-3">
-                <p className="font-semibold w-full sm:w-auto">Custom Notion User ID {!customCollaborator ? null : <span className='ml-1 text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}</p>
+              <div className="mb-3 flex justify-between flex-wrap gap-1.5">
+                <span className="font-semibold w-full sm:w-auto">Custom Notion User ID </span>{!customCollaborator ? null : <span className='text-xs font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200'>Selected</span>}
               </div>
               <Input
                 className="text-xl font-semibold rounded"
