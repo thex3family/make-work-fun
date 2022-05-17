@@ -60,6 +60,8 @@ export default function Account({
   const [activeTab, setActiveTab] = useState(1);
   const [activeConnect, setActiveConnect] = useState(1);
 
+  const notionOAuthURL = 'https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code';
+
   const { tab } = router.query;
   const { via } = router.query;
 
@@ -119,24 +121,24 @@ export default function Account({
       getSubscriptionStatus(subscriptionPurchaseRecord[0]);
   }, [user]);
 
-  useEffect(() => {
-    if (activeTab === 3) checkForUserUpdates()
-  }, [activeTab]);
+  // useEffect(() => {
+  //   if (activeTab === 3) checkForUserUpdates()
+  // }, [activeTab]);
 
-  async function checkForUserUpdates() {
-    const { data, error } = await supabase
-      .from(`users:id=eq.${user.id}`)
-      .on('UPDATE', async payload => {
-        console.log('Update noticed!', payload)
-        refreshPage();
-      })
-      .subscribe()
-  }
+  // async function checkForUserUpdates() {
+  //   const { data, error } = await supabase
+  //     .from(`users:id=eq.${user.id}`)
+  //     .on('UPDATE', async payload => {
+  //       console.log('Update noticed!', payload)
+  //       refreshPage();
+  //     })
+  //     .subscribe()
+  // }
 
-  async function refreshPage() {
-    console.log('Refreshing')
-    router.reload(window.location.pathname)
-  }
+  // async function refreshPage() {
+  //   console.log('Refreshing')
+  //   router.reload(window.location.pathname)
+  // }
 
   async function getProfile() {
     try {
@@ -1119,15 +1121,15 @@ export default function Account({
                   {newNotionDatabases ?
                     <>
                       <div className="my-3">
-                        <div className='block sm:hidden'>
-                          <a href="https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code" target="_blank"><Button variant="incognito">Reconnect Notion
+                        <div>
+                          <a href={notionOAuthURL}><Button variant="incognito">Reconnect Notion
                           </Button></a>
                         </div>
-                        <div className='hidden sm:inline'>
-                          <Button variant="incognito" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                        {/* <div className='hidden sm:inline'>
+                          <Button variant="incognito" onClick={() => window.open({notionOAuthURL},
                             'Popup', 'location,status,width=600, height=750')}>Reconnect Notion
                           </Button>
-                        </div>
+                        </div> */}
                       </div>
                       {newNotionDatabases.length ?
                         <div className="mb-4 mt-4 border border-emerald-600 bg-emerald-600 text-emerald-400 bg-opacity-30 p-4 rounded">
@@ -1145,15 +1147,15 @@ export default function Account({
                         : null}
                     </>
                     : <div className="my-3 ">
-                      <div className='block sm:hidden'>
-                        <a href="https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code" target="_blank"><Button variant="prominent">Connect With Notion
+                      <div>
+                        <a href={notionOAuthURL}><Button variant="prominent">Connect With Notion
                         </Button></a>
                       </div>
-                      <div className='hidden sm:inline'>
-                        <Button variant="prominent" onClick={() => window.open(`https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=https%3A%2F%2Fmakework.fun%2Fauth%2Fnotion%2Fcallback&response_type=code`,
+                      {/* <div className='hidden sm:inline'>
+                        <Button variant="prominent" onClick={() => window.open({notionOAuthURL},
                           'Popup', 'location,status,width=600, height=750')}>Connect With Notion
                         </Button>
-                      </div>
+                      </div> */}
                     </div>}
                   {notionCredentials ? (
                     notionCredentials.map((credentials) => (

@@ -18,7 +18,7 @@ export default function notionCallback({ response, user }) {
                 .from('users')
                 .update({ notion_auth_key: response.access_token })
                 .eq('id', user.id);
-            
+
             if (error) {
                 throw error;
             }
@@ -36,7 +36,7 @@ export default function notionCallback({ response, user }) {
                 .update({ api_secret_key: response.access_token })
                 .eq('player', user.id)
                 .eq('integration', true);
-            
+
             if (error) {
                 throw error;
             }
@@ -56,12 +56,18 @@ export default function notionCallback({ response, user }) {
                             Connect With Notion
                         </h1>
                         <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto mt-4">
-                            {response.error ? <><span className='text-red-600 font-semibold bg-red-200 rounded px-2 py-0.5 w-auto'>Error <i className='fas fa-times align-middle' /></span> <p className='mt-2 text-accents-4'>Message: {response.error}</p><p className='mt-4'>Close this window and try again. If you experience this error repeatedly, please <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">contact us.</a></p></> :
-                                <><span className='text-emerald-600 font-semibold bg-emerald-200 rounded px-2 py-0.5 w-auto'>Connected <i className='fas fa-check align-middle' /></span> <p className='mt-2 text-accents-4'>Workspace: {response.workspace_name}</p><p className='mt-4'>Close this window to continue.</p></>}
+                            {response.error ? <><span className='text-red-600 font-semibold bg-red-200 rounded px-2 py-0.5 w-auto'>Error <i className='fas fa-times align-middle' /></span> <p className='mt-2 text-accents-4'>Message: {response.error}</p><p className='mt-4'>Please try to connect again. If you experience this error repeatedly, please <a className="launch_intercom cursor-pointer font-semibold text-emerald-500">contact us.</a></p></> :
+                                <><span className='text-emerald-600 font-semibold bg-emerald-200 rounded px-2 py-0.5 w-auto'>Connected <i className='fas fa-check align-middle' /></span> <p className='mt-2 text-accents-4'>Workspace: {response.workspace_name}</p><p className='mt-4'>To set up your databases, go back to the account page.</p></>}
                         </p>
                     </div>
                     <div className="text-center mx-auto">
-
+                        <a href="/account?tab=connect&via=notion">
+                            <Button className="w-auto mx-auto mt-3"
+                                variant="prominent"
+                            >
+                                {response.error ? 'Try Again' : 'Continue'}
+                            </Button>
+                        </a>
                     </div>
                 </div>
             </section>
