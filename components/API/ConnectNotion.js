@@ -433,7 +433,7 @@ export default function ConnectNotion({
             withArrow
           >
             <div className=''>
-              <p className='font-semibold mb-4'>The app will stop syncing wins with {nickname}.</p>
+              <p className='font-semibold mb-4'>The app will stop syncing wins with {nickname ? nickname : 'this database'}.</p>
               <div className='flex justify-between text-lg'>
                 <button
                   type="button"
