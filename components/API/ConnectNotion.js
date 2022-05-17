@@ -3,6 +3,7 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '../ui/LoadingDots';
+import { Popover } from '@mantine/core';
 
 export default function ConnectNotion({
   credentials,
@@ -20,7 +21,7 @@ export default function ConnectNotion({
   const [userMessage, setUserMessage] = useState(null);
   const [nickname, setNickname] = useState(null);
 
-  const [deleteOption, setDeleteOption] = useState(null);
+  const [deleteOption, setDeleteOption] = useState(false);
   const [editState, setEditState] = useState(true);
 
   var api = /^secret_\w{43}$/;
@@ -33,7 +34,9 @@ export default function ConnectNotion({
     setDatabaseID(credentials.database_id);
     if (credentials.collaborator) setCollaborator(credentials.collaborator);
     if (credentials.collaborator) setShowCollaborator(true);
-  }, []);
+    setSaving(false);
+    setDeleteOption(false);
+  }, [credentials]);
 
   // if the secretkey changes, validate
   useEffect(() => {
@@ -80,6 +83,8 @@ export default function ConnectNotion({
       console.log(error.message);
     } finally {
       getNotionCredentials();
+      // setDeleteOption(false);
+      // setSaving(false);
     }
   }
 
@@ -267,7 +272,7 @@ export default function ConnectNotion({
           : <><div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
             <p className="font-semibold w-full sm:w-auto">Database ID</p>
           </div>
-            <a href={`https://notion.so/`+databaseID?.replaceAll('-', '')} target="_blank"><p
+            <a href={`https://notion.so/` + databaseID?.replaceAll('-', '')} target="_blank"><p
               className="text-xl font-semibold rounded"
             >{databaseID}<i className='ml-2 fas fa-external-link-alt' /></p></a></>}
 
@@ -312,8 +317,55 @@ export default function ConnectNotion({
             onChange={setCollaborator}
           />
         </div>
-        <div className="flex justify-between flex-col gap-3 sm:flex-row my-4 items-center">
-          {deleteOption ? <>
+        <div className="flex justify-center sm:justify-between flex-wrap-reverse gap-3 flex-row my-4 items-center">
+          <Popover
+          classNames={{
+            popover: 'bg-dark',
+            arrow: 'bg-dark',
+            body: 'your-body-class',
+            inner: 'your-inner-class',
+            header: 'your-header-class',
+            title: 'your-title-class',
+            close: 'your-close-class',
+            target: 'your-target-class',
+          }}
+            opened={deleteOption}
+            onClose={() => setDeleteOption(false)}
+            target={
+              <button
+                type="button"
+                onClick={() => setDeleteOption(!deleteOption)}
+                className="text-red-500 font-semibold"
+                disabled={saving}
+              >
+                {saving ? <LoadingDots /> : 'Remove'}
+              </button>}
+            width={260}
+            position="bottom"
+            withArrow
+          >
+            <div className=''>
+              <p className='font-semibold mb-4'>The app will stop syncing wins with this database.</p>
+              <div className='flex justify-between text-lg'>
+                <button
+                  type="button"
+                  onClick={() => removeCredentials(credentials.id)}
+                  className="text-red-600 font-semibold bg-red-200 px-6 rounded"
+                  disabled={saving}
+                >
+                  {saving ? <LoadingDots /> : 'Yes'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeleteOption(false)}
+                  className="text-gray-600 font-semibold bg-gray-200 px-6 rounded"
+                >
+                  {saving ? <LoadingDots /> : 'No'}
+                </button>
+              </div>
+            </div>
+          </Popover>
+          {/* {deleteOption ? <>
             <span className='text-white font-semibold ease-linear transition-all duration-150'>
               Are You Sure?{' '}
               <button
@@ -337,11 +389,11 @@ export default function ConnectNotion({
             <button
               type="button"
               onClick={() => setDeleteOption(true)}
-              className="text-red-500 mr-5 font-semibold"
+              className="text-red-500 font-semibold"
               disabled={saving}
             >
               {saving ? <LoadingDots /> : 'Remove'}
-            </button>}
+            </button>} */}
           <Button
             className="w-full sm:w-auto"
             variant="incognito"
