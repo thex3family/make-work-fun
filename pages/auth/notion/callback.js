@@ -32,11 +32,17 @@ export default function notionCallback({ response, user }) {
         }
     }
 
+    // update integration generated credentials
+    
     async function updateNotionCredentials() {
         try {
             const { data, error } = await supabase
                 .from('notion_credentials')
-                .update({ api_secret_key: response.access_token })
+                .update({
+                    api_secret_key: response.access_token,
+                    error: null,
+                    err_execution_id: null
+                })
                 .eq('player', user.id)
                 .eq('integration', true);
 
@@ -80,13 +86,13 @@ export default function notionCallback({ response, user }) {
         );
     }
 
-    
-    return(
+
+    return (
         <section className="justify-center h-screen flex">
-        <LoadingDots />
-      </section>
+            <LoadingDots />
+        </section>
     );
-    
+
 }
 
 export async function getServerSideProps(context) {
