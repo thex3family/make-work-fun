@@ -9,7 +9,7 @@ export default function notionCallback({ response, user }) {
 
     useEffect(() => {
         if (response.access_token) {
-            console.log(response);
+            // console.log(response);
             updateDatabase()
         } else {
             setLoading(false);
