@@ -116,7 +116,8 @@ export async function fetchLatestWin(
         .subscribe();
     }
   } catch (error) {
-    alert(error.message);
+    // alert(error.message);
+    console.log(error.message);
   } finally {
   }
 }
@@ -198,7 +199,8 @@ export async function fetchWins() {
       throw error;
     }
   } catch (error) {
-    alert(error.message);
+    // alert(error.message);
+    console.log(error.message);
   } finally {
   }
 }
@@ -666,7 +668,8 @@ export async function fetchPartyMembers(party_id) {
       throw error;
     }
   } catch (error) {
-    alert(error.message);
+    // alert(error.message);
+    console.log(error.message);
   } finally {
   }
 }
@@ -799,7 +802,8 @@ export async function dailyBonusButtons(player, setDailyBonus) {
       setDailyBonus(false);
     }
   } catch (error) {
-    alert(error.message);
+    // alert(error.message);
+    console.log(error.message);
   } finally {
     // How do I show the null state?
   }
@@ -830,7 +834,8 @@ export async function claimDailyBonus(player, setDailyBonus, setBonusLoading) {
       throw error;
     }
   } catch (error) {
-    alert(error.message);
+   // alert(error.message);
+   console.log(error.message);
   } finally {
     setBonusLoading(false);
     setDailyBonus(false);

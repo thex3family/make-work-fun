@@ -128,7 +128,8 @@ export default function parties({ metaBase, setMeta }) {
         router.replace('/account');
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       console.log('InitializedPlayer');
     }
@@ -219,7 +220,8 @@ export default function parties({ metaBase, setMeta }) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setLoading(false);
     }

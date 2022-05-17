@@ -113,7 +113,8 @@ export default function partyDetail({metaBase, setMeta}) {
         router.push('/account');
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       console.log('InitializedPlayer');
     }
@@ -196,7 +197,8 @@ export default function partyDetail({metaBase, setMeta}) {
         }
       }
     } catch (error) {
-      alert(error.message);
+     // alert(error.message);
+     console.log(error.message);
     } finally {
       refreshStats();
     }
@@ -308,7 +310,8 @@ export default function partyDetail({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       refreshStats();
     }
@@ -353,7 +356,8 @@ export default function partyDetail({metaBase, setMeta}) {
         }
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       setSaving(false);
       refreshStats();
@@ -375,7 +379,8 @@ export default function partyDetail({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       router.reload(window.location.pathname);
     }
@@ -410,7 +415,8 @@ export default function partyDetail({metaBase, setMeta}) {
         setDailyTargetRewardClaimed(true);
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       // How do I show the null state?
     }
@@ -443,7 +449,8 @@ export default function partyDetail({metaBase, setMeta}) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       if (mission_name == 'Daily Target') setDailyTargetRewardClaimed(true);
       refreshStats();
@@ -465,7 +472,8 @@ export default function partyDetail({metaBase, setMeta}) {
         }
       ]);
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       router.reload(window.location.pathname);
     }

@@ -65,7 +65,8 @@ export default function ModalParty({ setCreateParty, party }) {
         ]);
         router.push('/parties/details?id=' + slug);
       } catch (error) {
-        alert(error.message);
+        // alert(error.message);
+      console.log(error.message);
       } finally {
         // setSaving(false);
       }
@@ -83,7 +84,8 @@ export default function ModalParty({ setCreateParty, party }) {
 
         router.reload(window.location.pathname);
       } catch (error) {
-        alert(error.message);
+       // alert(error.message);
+      console.log(error.message);
       } finally {
         setSaving(false);
       }

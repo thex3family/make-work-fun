@@ -57,7 +57,8 @@ export default function NotionWizard({ response, nickname }) {
       } else {
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       console.log('InitializedPlayer');
     }

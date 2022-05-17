@@ -76,7 +76,8 @@ export default function ConnectNotion({
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       getNotionCredentials();
     }
@@ -183,7 +184,8 @@ export default function ConnectNotion({
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       getNotionCredentials();
       setShowSaveModal(true);

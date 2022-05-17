@@ -34,7 +34,8 @@ export default function ConnectPOST({ APIKeys, getAPIKeys
                 throw error;
             }
         } catch (error) {
-            alert(error.message);
+            // alert(error.message);
+      console.log(error.message);
         } finally {
             getAPIKeys();
         }
@@ -54,7 +55,8 @@ export default function ConnectPOST({ APIKeys, getAPIKeys
                 throw error;
             }
         } catch (error) {
-            alert(error.message);
+            // alert(error.message);
+      console.log(error.message);
         } finally {
             getAPIKeys();
         }

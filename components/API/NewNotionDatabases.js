@@ -39,7 +39,8 @@ export default function NewNotionDatabases({
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       getNotionCredentials();
       setShowSaveModal(true);

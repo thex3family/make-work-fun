@@ -89,7 +89,8 @@ export default function ModalOnboarding({ onboardingState, player }) {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       Router.reload(window.location.pathname)
     }

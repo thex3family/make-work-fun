@@ -75,7 +75,8 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
         router.replace('/player');
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       console.log('InitializedPlayer');
     }

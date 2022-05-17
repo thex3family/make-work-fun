@@ -130,7 +130,8 @@ const SignIn = ({ user, metaBase, setMeta }) => {
         console.log('Redirecting to player page');
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       console.log('InitializedPlayer');
     }
