@@ -159,6 +159,7 @@ export default function Account({
       }
     } catch (error) {
       // alert(error.message);
+      console.log(error.message);
     } finally {
       setLoading(false);
     }
@@ -199,6 +200,7 @@ export default function Account({
       }
     } catch (error) {
       // alert(error.message);
+      console.log(error.message);
     } finally {
       setSaveLoading(false);
     }
@@ -264,7 +266,8 @@ export default function Account({
         throw error;
       }
     } catch (error) {
-      alert('Credentials: ', error.message);
+      // alert(error.message);
+      console.log(error.message);
     } finally {
       getNotionCredentials();
       setLoading(false);
