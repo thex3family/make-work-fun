@@ -312,7 +312,7 @@ export default function ConnectNotion({
             onChange={setCollaborator}
           />
         </div>
-        <div className="flex justify-between my-4 items-center">
+        <div className="flex justify-between flex-col gap-3 sm:flex-row my-4 items-center">
           {deleteOption ? <>
             <span className='text-white font-semibold ease-linear transition-all duration-150'>
               Are You Sure?{' '}
