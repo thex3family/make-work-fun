@@ -1136,7 +1136,7 @@ export default function Account({
                       </div>
                       {newNotionDatabases.length ?
                         <div className="mb-4 mt-4 border border-emerald-600 bg-emerald-600 text-emerald-400 bg-opacity-30 p-4 rounded">
-                          <p className='text-lg font-semibold mb-4'>We Found New Databases To Connect! ✨</p>
+                          <p className='text-lg font-semibold mb-4'>We Found New Databases! ✨</p>
                           <div className='flex flex-col gap-4'>
                             {newNotionDatabases.map((database) => (
                               <NewNotionDatabases

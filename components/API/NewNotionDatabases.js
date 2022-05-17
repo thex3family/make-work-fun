@@ -49,7 +49,7 @@ export default function NewNotionDatabases({
   }
 
   return (
-    <div className='flex justify-between'>
+    <div className='flex flex-wrap justify-between gap-3'>
       <a href={database.url} target="_blank">
         <p className='font-semibold text-md'>{database.title[0].plain_text} <i className='ml-1 fas fa-external-link-alt' /></p>
         <p>{database.id}</p>
