@@ -50,7 +50,7 @@ export default function notionCallback({ response, user }) {
                 throw error;
             }
         } catch (error) {
-            alert(error.message);
+            // alert(error.message);
         } finally {
             updateNotionCredentials();
             setLoading(false)

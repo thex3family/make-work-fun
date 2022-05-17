@@ -691,6 +691,7 @@ export async function fetchNotionCredentials() {
     }
   } catch (error) {
     // alert(error.message);
+    console.log(error.message);
   } finally {
     // setLoading(false);
   }
@@ -714,7 +715,8 @@ export async function fetchAPIKeys() {
       return data;
     }
   } catch (error) {
-    alert(error.message);
+    // alert(error.message);
+    console.log(error.message);
   } finally {
     // setLoading(false);
   }
