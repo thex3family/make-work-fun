@@ -41,7 +41,7 @@ export default function MyApp({ Component, pageProps }) {
     title: 'Make Work Fun, Get Stuff Done',
     titleBase: 'Make Work Fun',
     description:
-      'The ultimate companion app for Notion to gamify your productivity and make work fun.',
+      'Gamify your productivity tools and unlock multiplayer for personal development.',
     cardImage: '/og.png',
   };
 
