@@ -8,13 +8,14 @@ import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 import RecoverPassword from '@/components/Auth/RecoverPassword';
 
 import { useRouter } from 'next/router';
+import { Pagination } from '@mantine/core';
 
 // functions
 
 import {
   fetchLeaderboardStats
 } from '@/components/Fetch/fetchMaster';
-import Pagination from '@/components/Pagination';
+// import Pagination from '@/components/Pagination';
 import { downloadImage } from '@/utils/downloadImage';
 
 export default function HomePage({metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
@@ -521,13 +522,24 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                     />
                   ))}
                 </div>
-
+                <div className='flex flex-row gap-2 mt-10 justify-center text-center'>
                 <Pagination
-                  postsPerPage={postsPerPage}
-                  totalPosts={activePlayers.length}
-                  paginate={paginate}
-                  currentPage={currentPage}
+                  total={Math.ceil(activePlayers.length / postsPerPage)}
+                  color="dark" radius="xl" withEdges noWrap="true"
+                  page={currentPage}
+                  onChange={setCurrentPage}
+                  classNames={{
+                    item: 'your-item-class',
+                    dots: 'opacity-30 bg-dark text-white',
+                    active: 'bg-gradient-to-r from-emerald-500 outline-none to-blue-500 border-2',
+                  }}
+                  className='overflow-auto pb-4'
+                  // paginate={paginate}
+                  // currentPage={currentPage}
+                  // postsPerPage={postsPerPage}
+                  // totalPosts={activePlayers.length}
                 />
+                </div>
               </div>
             </div>
           </div>
