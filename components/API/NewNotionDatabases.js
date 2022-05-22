@@ -11,8 +11,6 @@ export default function NewNotionDatabases({
   setShowSaveModal
 }) {
 
-  console.log(database)
-
   const { user, userProfile } = userContent();
 
   const [saving, setSaving] = useState(false);
