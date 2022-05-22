@@ -11,6 +11,8 @@ export default function NewNotionDatabases({
   setShowSaveModal
 }) {
 
+  console.log(database)
+
   const { user, userProfile } = userContent();
 
   const [saving, setSaving] = useState(false);
@@ -21,7 +23,7 @@ export default function NewNotionDatabases({
       const { data, error } = await supabase
         .from('notion_credentials')
         .insert([{
-          nickname: database.title[0].plain_text,
+          nickname: database?.title[0]?.plain_text,
           api_secret_key: userProfile.notion_auth_key,
           database_id: database.id,
           player: userProfile.id,
@@ -51,7 +53,7 @@ export default function NewNotionDatabases({
   return (
     <div className='flex flex-wrap justify-between gap-3'>
       <a href={database.url} target="_blank">
-        <p className='font-semibold text-md'>{database.title[0].plain_text} <i className='ml-1 fas fa-external-link-alt' /></p>
+        <p className='font-semibold text-md'>{database?.title[0]?.plain_text} <i className='ml-1 fas fa-external-link-alt' /></p>
         <p>{database.id}</p>
       </a>
       <Button
