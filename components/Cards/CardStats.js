@@ -596,7 +596,7 @@ export default function CardStats({
               value={activeItemType}
               onChange={setActiveItemType || ''}
               disabled={saveItem}
-              data={[{ value: 'consumable', label: 'Consumable' }, { value: 'time', label: 'Time' }]}
+              data={[{ value: 'consumable', label: 'Consumable' }, { value: 'time', label: 'Timer' }]}
               required
               label="Type"
               classNames={{
