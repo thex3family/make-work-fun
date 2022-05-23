@@ -317,7 +317,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
             .update({
               avatar_url: image_url
             })
-            .eq('id', user.id);
+            .eq('id', user?.id);
           if (error) {
             throw error;
           }
@@ -327,7 +327,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
             .update({
               background_url: image_url
             })
-            .eq('id', user.id);
+            .eq('id', user?.id);
 
           if (error) {
             throw error;
@@ -502,7 +502,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
                   weekWins={weekWins}
                   areaStats={areaStats}
                   setShowTitleModal={setShowTitleModal}
-                  user_id={user.id}
+                  user_id={user?.id}
                 />
                 {wins ? (
                   <div className="flex flex-wrap mt-4">
@@ -555,7 +555,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
           titles={titles}
           playerStats={playerStats}
           pushTitle={pushTitle}
-          user_id={user.id}
+          user_id={user?.id}
           refreshStats={refreshStats}
 
         />
