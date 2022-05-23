@@ -892,3 +892,27 @@ export async function lookupPlayerFromAuth(auth, setPlayer, setInvalidCredential
     }
   
 }
+
+export async function fetchItemShop(player) {
+  try {
+
+    // See if bonus has already been claimed
+    const { data, error } = await supabase
+      .from('item_shop')
+      .select('*')
+      .eq('player', player)
+      .order('id', { ascending: true })
+  
+
+    if (error && status !== 406) {
+      throw error;
+    }
+    console.log(data);
+    return data;
+
+  } catch (error) {
+    // alert(error.message);
+    console.log(error.message);
+  } finally {
+  }
+}
