@@ -396,6 +396,7 @@ export default function playerDetails() {
                             statEnergy={playerStats.energy_level}
                             user_id={player}
                             setShowTitleModal={setShowTitleModal}
+                            refreshStats={refreshStats}
                           />
                         </div>
                         <div className="2xl:w-1/2 w-full 2xl:pt-0">
