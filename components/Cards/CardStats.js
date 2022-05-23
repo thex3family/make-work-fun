@@ -463,8 +463,8 @@ export default function CardStats({
                 </div>
               </div>
               {items ? items.map((item, i) =>
-                <div className={`hover:bg-gray-600 p-2 rounded ${activeItem == item ? 'bg-gray-600' : null}`}>
-                  <div className='cursor-pointer bg-transparent flex flex-row sm:flex-col gap-4 sm:gap-0'
+                <div>
+                  <div className={`cursor-pointer bg-transparent flex flex-row sm:flex-col gap-4 sm:gap-0 hover:bg-gray-600 p-2 rounded ${activeItem == item ? 'bg-gray-600' : null}`}
                     onClick={() => setActiveItem(item)}
                   >
                     <Card.Section className='w-1/3 sm:w-full relative'>
