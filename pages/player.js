@@ -503,6 +503,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
                   areaStats={areaStats}
                   setShowTitleModal={setShowTitleModal}
                   user_id={user?.id}
+                  refreshStats={refreshStats}
                 />
                 {wins ? (
                   <div className="flex flex-wrap mt-4">

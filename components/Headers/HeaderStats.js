@@ -18,7 +18,8 @@ export default function HeaderStats({
   weekWins,
   areaStats,
   setShowTitleModal,
-  user_id
+  user_id,
+  refreshStats
 }) {
   const exp_percent = Math.floor(
     (playerStats.exp_progress / playerStats.level_exp) * 100
@@ -81,6 +82,7 @@ export default function HeaderStats({
                   statPlayer={playerStats.player}
                   statEnergy={playerStats.energy_level}
                   user_id={user_id}
+                  refreshStats={refreshStats}
                 />
                 {/* <Link href="/">
               <Button className="w-full"

@@ -9,6 +9,7 @@ import { supabase } from '@/utils/supabase-client';
 import { fetchItemShop, fetchShopkeeper } from '../Fetch/fetchMaster';
 import { map } from 'next-pwa/cache';
 import Input from '@/components/ui/Input';
+import Confetti from '@/components/Widgets/confetti';
 
 export default function CardStats({
   statTitle,
@@ -30,7 +31,8 @@ export default function CardStats({
   statPlayer,
   displayMode,
   statEnergy,
-  user_id
+  user_id,
+  refreshStats
 }) {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
@@ -70,6 +72,9 @@ export default function CardStats({
   const [shopEdit, setShopEdit] = useState(false);
   const [ShopkeeperIntro, setShopKeeperIntro] = useState(null);
   const [ShopkeeperTagline, setShopKeeperTagline] = useState(null);
+
+  const [buyItemConfirmation, setBuyItemConfirmation] = useState(false);
+  const [buySuccess, setBuySuccess] = useState(false);
 
 
   useEffect(() => {
@@ -185,6 +190,33 @@ export default function CardStats({
       console.log(error.message);
     } finally {
       setShopEdit(false);
+      setSaveItem(false);
+    }
+  }
+
+  async function buyItem(gold_spent) {
+    setSaveItem(true);
+    try {
+      const { data, error } = await supabase.from('item_purchases').insert(
+        [{
+          item_id: activeItem.id,
+          gold_spent: gold_spent,
+          player: user_id
+        }]
+      );
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message);
+      console.log(error.message);
+    } finally {
+      refreshStats();
+      setBuyItemConfirmation(false);
+      setItemShopOpen(false);
+      setBuySuccess(true);
+      setItemEdit(false);
+      setActiveItem(null);
       setSaveItem(false);
     }
   }
@@ -309,7 +341,7 @@ export default function CardStats({
           <div className="flex flex-row flex-nowrap items-center gap-4">
 
             <Tooltip
-              className="mt-4 w-full text-center font-semibold border py-2 rounded hover:bg-yellow-400"
+              className="mt-4 w-full text-center font-semibold border py-2 rounded hover:bg-yellow-400 hover:text-yellow-800"
               label="Spend Your Gold!"
               withArrow
               arrowSize={3}
@@ -479,7 +511,7 @@ export default function CardStats({
                         <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
                           {activeItem.gold_cost * purchaseAmount} <i className='ml-2 fas fa-coins' />
                         </div>
-                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0}>Buy</Button>
+                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0 || activeItem.gold_cost * purchaseAmount > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost * purchaseAmount)}>Buy</Button>
                       </>
                       : null}
                     {activeItem.type == 'time' ?
@@ -501,7 +533,7 @@ export default function CardStats({
                         <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
                           {activeItem.gold_cost / 5 * purchaseTime} <i className='ml-2 fas fa-coins' />
                         </div>
-                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseTime == 0}>Buy</Button>
+                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseTime == 0 || activeItem.gold_cost / 5 * purchaseTime > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost / 5 * purchaseTime)}>Buy</Button>
                       </>
                       : null}
                   </div>
@@ -555,6 +587,44 @@ export default function CardStats({
         </div>
         <Modal
           centered
+          opened={buyItemConfirmation}
+          onClose={() => setBuyItemConfirmation(false)}
+          classNames={{
+            modal: 'text-white bg-dark hideLinkBorder',
+            title: 'hidden',
+            close: 'hidden',
+          }}
+        >
+          <div class="relative rounded-lg text-left ">
+            <div class="">
+              <div class="sm:flex sm:items-start">
+                {/* <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+
+                  <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div> */}
+                <div class="text-center m-2 sm:text-left">
+                  <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">{activeItemName} x {purchaseAmount}</h3>
+                  <div class="mt-2">
+                    <p class="text-sm text-white-500">Are you sure you want to buy this item? Your gold balance will immediately be deducted. This action cannot be undone.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="mt-4 mb-5 sm:flex sm:flex-row-reverse">
+            <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm" 
+            onClick={() => buyItem(buyItemConfirmation)}
+            disabled={saveItem}
+            >Buy Item</button>
+            <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-dark text-base font-medium text-gray-700 hover:bg-black focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={() => setBuyItemConfirmation(false)}>Cancel</button>
+          </div>
+
+        </Modal>
+        <Modal
+          centered
           opened={itemEdit}
           onClose={() => setItemEdit(false)}
           title={activeItem ? "Edit Item" : "Add Item"}
@@ -596,7 +666,9 @@ export default function CardStats({
               value={activeItemType}
               onChange={setActiveItemType || ''}
               disabled={saveItem}
-              data={[{ value: 'consumable', label: 'Consumable' }, { value: 'time', label: 'Timer' }]}
+              data={[{ value: 'consumable', label: 'Consumable' }
+                // , { value: 'time', label: 'Timer' }
+              ]}
               required
               label="Type"
               classNames={{
@@ -629,6 +701,13 @@ export default function CardStats({
         </Modal>
         {/* Drawer content */}
       </Drawer>
+      {
+        buySuccess ? 
+        <div className="confetti">
+          <Confetti />
+        </div>
+        : null
+      }
     </>
   );
 }
