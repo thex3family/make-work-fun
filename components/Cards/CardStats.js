@@ -4,9 +4,9 @@ import Button from '@/components/ui/Button';
 import Link from 'next/link';
 import { createPopper } from '@popperjs/core';
 import { useEffect, useState, createRef } from 'react';
-import { Tooltip, Slider, Drawer, Card, Text, Group, useMantineTheme, NumberInput, Modal, Select, TextInput } from '@mantine/core';
+import { Tooltip, Slider, Drawer, Card, Text, Group, useMantineTheme, NumberInput, Modal, Select, TextInput, Textarea } from '@mantine/core';
 import { supabase } from '@/utils/supabase-client';
-import { fetchItemShop } from '../Fetch/fetchMaster';
+import { fetchItemShop, fetchShopkeeper } from '../Fetch/fetchMaster';
 import { map } from 'next-pwa/cache';
 import Input from '@/components/ui/Input';
 
@@ -67,6 +67,10 @@ export default function CardStats({
 
   const [saveItem, setSaveItem] = useState(null);
 
+  const [shopEdit, setShopEdit] = useState(false);
+  const [ShopkeeperIntro, setShopKeeperIntro] = useState(null);
+  const [ShopkeeperTagline, setShopKeeperTagline] = useState(null);
+
 
   useEffect(() => {
     if (itemShopOpen) fetchItems();
@@ -88,6 +92,7 @@ export default function CardStats({
 
   async function fetchItems() {
     setItems(await fetchItemShop(user_id));
+    fetchShopkeeper(user_id, setShopKeeperIntro, setShopKeeperTagline);
     console.log(user_id)
   }
 
@@ -160,6 +165,27 @@ export default function CardStats({
         setActiveItem(null);
         setSaveItem(false);
       }
+    }
+  }
+
+  async function saveShopInfo() {
+    setSaveItem(true);
+    try {
+      const { data, error } = await supabase.from('users').update(
+        {
+          shopkeeper_intro: ShopkeeperIntro,
+          shopkeeper_tagline: ShopkeeperTagline
+        }
+      ).match({ id: user_id });
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      // alert(error.message);
+      console.log(error.message);
+    } finally {
+      setShopEdit(false);
+      setSaveItem(false);
     }
   }
 
@@ -365,7 +391,7 @@ export default function CardStats({
         styles={{ drawer: { backgroundImage: `url(/background/item-shop.jpg)` } }}
         opened={itemShopOpen}
         onClose={() => setItemShopOpen(false)}
-        padding="xl"
+        padding="sm:xl"
         size="96"
         position="bottom"
       >
@@ -389,58 +415,55 @@ export default function CardStats({
             </Tooltip>
           </div>
           <div className='grid grid-cols-1 sm:grid-cols-3 text-white grid-col-gap h-auto'>
-            <div className='grid col-span-2 grid-cols-1 h-96 overflow-auto sm:grid-cols-3 gap-8 pr-6'>
-              <div className='cursor-pointer'
+            <div className='grid col-span-2 grid-cols-1 h-48 sm:h-96 overflow-auto sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 pr-6 order-last sm:order-1'>
+              <div className='cursor-pointer flex flex-row gap-4 sm:flex-col p-2'
                 onClick={() => { setItemEdit(true), setActiveItem(null) }}
               >
-                <div style={{ height: 160 }} className="w-full h-full bg-gray-600 rounded flex algin-middle p-4">
-                  <div className="w-full m-auto text-xl font-semibold text-center">
-                    Add Item +
-                  </div>
+                <div className="w-1/3 sm:w-full h-24 sm:h-40 bg-gray-600 rounded flex align-middle">
+                  <p className="w-full m-auto text-sm sm:text-xl font-semibold text-center">
+                    Add Item <br />+
+                  </p>
                 </div>
-                <div className="grid grid-cols-4 gap-1 mt-4">
-                  <div className="row-start-1 col-span-2 h-4 rounded-sm bg-gray-600 mb-2"></div>
-                  <div className="row-start-2 col-span-3 h-4 rounded-sm bg-gray-600"></div>
+                <div className="grid grid-cols-4 w-full gap-1">
+                  <div className="row-start-1 col-span-3 h-6 sm:h-4 rounded-sm bg-gray-600"></div>
+                  <div className="row-start-2 col-span-4 h-8 sm:h-4 rounded-sm bg-gray-600"></div>
+                  <div className="row-start-3 col-span-2 h-8 sm:h-0 rounded-sm bg-gray-600"></div>
                 </div>
               </div>
               {items ? items.map((item, i) =>
                 <div className={`hover:bg-gray-600 p-2 rounded ${activeItem == item ? 'bg-gray-600' : null}`}>
-                  <Card className='cursor-pointer bg-transparent'
+                  <div className='cursor-pointer bg-transparent flex flex-row sm:flex-col gap-4 sm:gap-0'
                     onClick={() => setActiveItem(item)}
                   >
-                    <Card.Section>
-                      <div className='relative'>
-                        <i className={`absolute top-2 right-2 text-white ${item.type == 'time' ? 'fas fa-stopwatch' : null} ${item.type == 'consumable' ? 'fas fa-pills' : null}`} />
-                        <div className='px-2 py-1 text-center text-md font-semibold bg-yellow-400 text-white rounded absolute bottom-2 right-2'>
-                          {item.gold_cost} <i className='ml-2 fas fa-coins' />
-                        </div>
-                        <img src="https://media.karousell.com/media/photos/products/2018/05/05/mystery_gift_2__30_1525512267_c0a1e40b.jpg" style={{ height: 160 }} alt="Twitter" className='w-full object-cover'></img>
+                    <Card.Section className='w-1/3 sm:w-full relative'>
+                      <i className={`absolute top-2 right-2 text-white ${item.type == 'time' ? 'fas fa-stopwatch' : null} ${item.type == 'consumable' ? 'fas fa-pills' : null}`} />
+                      <div className='px-2 py-1 text-center text-md font-semibold bg-yellow-400 text-white rounded absolute bottom-2 right-2 hidden sm:inline-block'>
+                        {item.gold_cost} <i className='ml-2 fas fa-coins' />
                       </div>
+                      <img src="https://media.karousell.com/media/photos/products/2018/05/05/mystery_gift_2__30_1525512267_c0a1e40b.jpg" className='w-full object-cover h-24 sm:h-40 rounded'></img>
+
                     </Card.Section>
-
-                    <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+                    <div className='w-full p-0 sm:p-2'>
                       <Text className="text-white truncate" weight={500}>{item.name}</Text>
-                    </Group>
-
-                    <Text size="sm" className="text-accents-5 truncate" style={{ lineHeight: 1.5 }}>
-                      {item.description}
-                    </Text>
-                    {/* 
-                  <Button variant="prominent" fullWidth style={{ marginTop: 14 }} className="w-full">
-                    Buy Now
-                  </Button> */}
-                  </Card>
+                      <Text size="sm" className="text-accents-5 truncate" style={{ lineHeight: 1.5 }}>
+                        {item.description}
+                      </Text>
+                      <div className='px-2 py-1 mt-2 text-center text-md font-semibold bg-yellow-400 text-white rounded w-auto sm:hidden inline-block'>
+                        {item.gold_cost} <i className='ml-2 fas fa-coins' />
+                      </div>
+                    </div>
+                  </div>
                 </div>) : null
               }
 
 
             </div>
-            <div className='flex justify-center align-middle relative'>
+            <div className='flex justify-center align-middle relative order-1 sm:order-last'>
               {activeItem ?
                 <div className='absolute bottom-0 w-full px-6'>
                   <div className='bg-opacity-90 rounded p-4 relative speech-bubble'>
                     <i className='fas fa-pen top-4 right-4 absolute cursor-pointer hover:text-emerald-500' onClick={() => setItemEdit(true)} />
-                    <div className='font-semibold'>{activeItem.name}</div>
+                    <div className='font-semibold w-11/12'>{activeItem.name}</div>
                     {activeItem.type == 'consumable' ?
                       <>
                         <NumberInput
@@ -486,9 +509,40 @@ export default function CardStats({
                 :
                 <div className='absolute bottom-0 w-full px-6'>
                   <div className='bg-opacity-90 rounded p-4 relative speech-bubble'>
-                    <i className='fas fa-pen top-4 right-4 absolute hover:text-emerald-500 cursor-pointer' />
-                    <div className='font-semibold'>What do you want?</div>
-                    <div className='mt-2 text-md'>Buy anything you want from the shop. Add your own if you'd like!</div>
+                    {
+                      shopEdit ?
+                        <>
+                          <TextInput
+                            placeholder={'What are you looking for?'}
+                            value={ShopkeeperIntro || ''}
+                            onChange={(event) => setShopKeeperIntro(event.currentTarget.value)}
+                            disabled={saveItem}
+                            required
+                            classNames={{
+                              input: 'p-2 bg-transparent text-white font-semibold rounded text-xl'
+                            }}
+                          />
+                          <Textarea
+                            placeholder={`Buy anything you want. Add your own items if you'd like!`}
+                            value={ShopkeeperTagline || ''}
+                            onChange={(event) => setShopKeeperTagline(event.currentTarget.value)}
+                            disabled={saveItem}
+                            required
+                            classNames={{
+                              input: 'mt-2 p-2 bg-transparent text-white font-semibold rounded text-sm'
+                            }}
+                          />
+                          <Button variant="prominent" className='text-base mt-3' onClick={() => saveShopInfo()}
+                            disabled={saveItem} >Save</Button>
+                        </>
+                        :
+                        <>
+                          <i className='fas fa-pen top-4 right-4 absolute hover:text-emerald-500 cursor-pointer' onClick={() => setShopEdit(true)} />
+                          <div className='font-semibold w-11/12 text-xl'>{ShopkeeperIntro ? ShopkeeperIntro : 'What are you looking for?'}</div>
+                          <div className='mt-2 text-sm'>{ShopkeeperTagline ? ShopkeeperTagline : `Buy anything you want. Add your own items if you'd like!`}</div>
+                        </>
+                    }
+
                   </div>
                 </div>}
               <img
@@ -510,7 +564,7 @@ export default function CardStats({
             close: 'text-white hover:bg-gray-800',
           }}
         >
-          <form onSubmit={(e) => {e.preventDefault(), upsertItem()}}>
+          <form onSubmit={(e) => { e.preventDefault(), upsertItem() }}>
             <TextInput
               className="text-xl mb-2 font-semibold rounded"
               placeholder="Your item name here..."
@@ -570,7 +624,7 @@ export default function CardStats({
               onChange={setActiveItemGold}
             />
             <Button variant="prominent" className="w-full mt-4"
-              disabled={saveItem || !activeItemName || !activeItemDesc || !activeItemGold || !activeItemType }>{activeItem ? "Save" : "Add"}</Button>
+              disabled={saveItem || !activeItemName || !activeItemDesc || !activeItemGold || !activeItemType}>{activeItem ? "Save" : "Add"}</Button>
           </form>
         </Modal>
         {/* Drawer content */}

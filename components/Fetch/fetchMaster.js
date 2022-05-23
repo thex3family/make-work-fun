@@ -907,9 +907,36 @@ export async function fetchItemShop(player) {
     if (error && status !== 406) {
       throw error;
     }
-    console.log(data);
     return data;
 
+  } catch (error) {
+    // alert(error.message);
+    console.log(error.message);
+  } finally {
+  }
+}
+
+export async function fetchShopkeeper(player, setShopKeeperIntro, setShopKeeperTagline) {
+  try {
+
+    // See if bonus has already been claimed
+    const { data, error } = await supabase
+      .from('users')
+      .select('shopkeeper_intro, shopkeeper_tagline')
+      .eq('id', player)
+      .single();
+  
+
+    if (error && status !== 406) {
+      throw error;
+    }
+    if (data?.shopkeeper_intro){
+      setShopKeeperIntro(data.shopkeeper_intro);
+    }
+    if (data?.shopkeeper_tagline){
+      setShopKeeperTagline(data.shopkeeper_tagline);
+    }
+    
   } catch (error) {
     // alert(error.message);
     console.log(error.message);
