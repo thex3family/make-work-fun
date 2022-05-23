@@ -362,7 +362,8 @@
 }
 
 .speech-bubble {
-  background: #A7F3D0;
+  background: #191919;
+  opacity: .9;
   -webkit-border-radius: 4px;
           border-radius: 4px;
   font-size: 1.2rem;
@@ -382,7 +383,8 @@
 
 .speech-bubble::after {
   border-right: 20px solid transparent;
-  border-bottom: 20px solid #A7F3D0;
+  border-bottom: 20px solid #191919;
+  opacity: .9;
   top: -20px;
   content: "";
   position: absolute;
