@@ -951,7 +951,7 @@ export async function fetchActiveTimer(player, setActiveTimer) {
       .select('*, item:item_id (name)')
       .eq('player', player)
       .gte('expiry_time', new Date().toISOString())
-      .order('expiry_time', {ascending: false})
+      .order('expiry_time', {ascending: true})
 
 
     if (error && status !== 406) {

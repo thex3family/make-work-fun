@@ -9,7 +9,7 @@ const calculateTimeLeft = (expiry_time) => {
     if (difference > 0) {
         timeLeft = {
             days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-            hour: Math.floor((difference / (1000 * 60 * 60)) % 24),
+            hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
             minutes: Math.floor((difference / 1000 / 60) % 60),
             seconds: Math.floor((difference / 1000) % 60)
         };
@@ -18,7 +18,7 @@ const calculateTimeLeft = (expiry_time) => {
     return timeLeft;
 }
 
-const ItemBanner = ({ activeTimeItem }) => {
+const ItemBanner = ({ index, activeTimeItem, setOverrideMetaTitle }) => {
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(activeTimeItem.expiry_time));
     const [show, setShow] = useState(true);
@@ -27,6 +27,8 @@ const ItemBanner = ({ activeTimeItem }) => {
         const timer = setTimeout(() => {
             setTimeLeft(calculateTimeLeft(activeTimeItem.expiry_time));
         }, 1000);
+
+        updateMetaTitle();
 
         return () => clearTimeout(timer);
     });
@@ -43,8 +45,16 @@ const ItemBanner = ({ activeTimeItem }) => {
                 {timeLeft[interval]} {interval}{" "}
             </span>
         );
+
     });
 
+    async function updateMetaTitle(){
+        if (timerComponents.length && index == 0) {
+            setOverrideMetaTitle((timeLeft.hours ? timeLeft.hours.toString() + ':' : '') + (timeLeft.minutes ? timeLeft.minutes.toString().padStart(2, '0') : '00') + ':' + (timeLeft.seconds.toString().padStart(2, '0')) + ' - ' + activeTimeItem.item.name)
+        } else {
+            // setOverrideMetaTitle(null)
+        }
+    }
 
     if (show) return (
         <div class={`${timerComponents.length ? 'bg-yellow-300 text-yellow-800' : 'bg-red-600 text-white'} border-b-2 border-dark`}>
@@ -57,12 +67,12 @@ const ItemBanner = ({ activeTimeItem }) => {
                             You've Purchased An Item! Finish <div className="flex flex-col sm:flex-row gap-1 items-center"><div className="bg-dark bg-opacity-80 px-2 py-1 text-white rounded">{activeTimeItem.item.name}</div> In <div className="bg-dark bg-opacity-80 px-2 py-1 text-white rounded">{timerComponents.length ? timerComponents : <span>0 seconds</span>}</div></div>
                         </div>
                     </div>
-                    <i className='ml-4 border-2 p-2 rounded text-sm fas fa-check hover:bg-emerald-600 cursor-pointer' onClick={()=>setShow(false)}/>
+                    <i className='ml-4 p-2 rounded text-sm fas fa-check text-white bg-emerald-600 hover:bg-dark cursor-pointer' onClick={() => setShow(false)} />
                 </div>
             </div>
         </div>
     );
-    
+
     return null;
 }
 
