@@ -24,7 +24,7 @@ import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import Button from '@/components/ui/Button';
 import TitleModal from '@/components/Modals/ModalTitle';
 
-export default function playerDetails() {
+export default function playerDetails({setManualPlayerID, setManualPlayerStats}) {
   const router = useRouter();
   const [playerStats, setPlayerStats] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
@@ -201,6 +201,7 @@ export default function playerDetails() {
         player
       );
     }
+    if (player) setManualPlayerID(player);
   }, [player]);
 
   useEffect(() => {
@@ -234,6 +235,7 @@ export default function playerDetails() {
         }
       }
       fetchPlayerBackground(playerStats.background_url);
+      setManualPlayerStats(playerStats);
     }
   }, [playerStats]);
 
@@ -391,7 +393,6 @@ export default function playerDetails() {
                             statDescription="since last week"
                             statIconName="fas fa-cogs"
                             statIconColor="bg-transparent-500"
-                            statPlayer={player}
                             displayMode={display}
                             statEnergy={playerStats.energy_level}
                             user_id={player}

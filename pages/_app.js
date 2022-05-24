@@ -48,6 +48,8 @@ export default function MyApp({ Component, pageProps }) {
   
   const [meta, setMeta] = useState(metaBase);
   const [refreshChildStats, setRefreshChildStats] = useState(false);
+  const [manualPlayerID, setManualPlayerID] = useState(null);
+  const [manualPlayerStats, setManualPlayerStats] = useState(null);
   
   const router = useRouter();
 
@@ -70,8 +72,8 @@ export default function MyApp({ Component, pageProps }) {
           { router.asPath.includes('embed/')  && router.asPath.includes('auth') ? null : 
             <WinManage setRefreshChildStats={setRefreshChildStats} />
           }
-            <Layout meta={meta}>
-              <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} refreshChildStats={refreshChildStats} setRefreshChildStats={setRefreshChildStats} />
+            <Layout meta={meta} manualPlayerID={manualPlayerID} manualPlayerStats={manualPlayerStats}>
+              <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} refreshChildStats={refreshChildStats} setRefreshChildStats={setRefreshChildStats} setManualPlayerID={setManualPlayerID} setManualPlayerStats={setManualPlayerStats} />
             </Layout>
           </UserContextProvider>
         </UserProvider>

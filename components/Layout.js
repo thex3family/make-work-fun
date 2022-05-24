@@ -16,7 +16,7 @@ import { fetchActiveTimer } from './Fetch/fetchMaster';
 import { supabase } from '@/utils/supabase-client';
 
 
-export default function Layout({ children, meta }) {
+export default function Layout({ children, meta, manualPlayerID, manualPlayerStats }) {
   const router = useRouter();
   const { user, userProfile, userOnboarding } = userContent();
   const [mobileDevice, setMobileDevice] = useState(false);
@@ -38,6 +38,13 @@ export default function Layout({ children, meta }) {
       fetchActiveTimer(user.id, setActiveTimer);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (manualPlayerID) {
+      checkForNewItems(manualPlayerID);
+      fetchActiveTimer(manualPlayerID, setActiveTimer);
+    }
+  }, [manualPlayerID]);
 
 
   async function checkForNewItems(player) {
