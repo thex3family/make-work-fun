@@ -11,6 +11,9 @@ import ModalPomo from './Modals/ModalPomo';
 import SideBar from '@/components/ui/SideBar/SideBar';
 import ModalMusic from './Modals/ModalMusic';
 import ModalPlayer from './Modals/ModalPlayer';
+import ItemBanner from './ui/ItemBanner';
+import { fetchActiveTimer } from './Fetch/fetchMaster';
+import { supabase } from '@/utils/supabase-client';
 
 
 export default function Layout({ children, meta }) {
@@ -22,13 +25,28 @@ export default function Layout({ children, meta }) {
     return window.innerWidth <= 1024;
   }
 
-  // this runs way too many times on first load
+  const [activeTimer, setActiveTimer] = useState(null);
+
   useEffect(() => {
     const mobileDevice = detectMob();
     setupIntercom(mobileDevice);
     setMobileDevice(mobileDevice);
+    if (user) {
+      checkForNewItems(user.id);
+      fetchActiveTimer(user.id, setActiveTimer);
+    } 
   }, [user]);
 
+  
+async function checkForNewItems(player) {
+  const { data, error } = await supabase
+    .from(`item_purchases:player=eq.${player}`)
+    .on('INSERT', async payload => {
+      console.log('Item Purchased!', payload)
+      fetchActiveTimer(player, setActiveTimer);
+    })
+    .subscribe()
+}
 
   function setupIntercom(mobileDevice) {
     // hide it on embeds until I figure out a good way to pass user credentials to intercom
@@ -112,14 +130,22 @@ export default function Layout({ children, meta }) {
         <meta property="og:image" content={meta.cardImage} />
 
       </Head>
-      {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
+      <nav className='sticky top-0 z-40'>
+      {activeTimer ?
+        activeTimer?.map((activeTimeItem, i) => (
+        <ItemBanner
+          key={i} activeTimeItem={activeTimeItem} />
+        ))
+        : null
+      }
+      {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}</nav>
       <main id="skip">
         {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
-          <SideBar router={router} mobileDevice={mobileDevice} /> 
+          <SideBar router={router} mobileDevice={mobileDevice} />
         </> : null}
 
         {children}
-        
+
       </main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&

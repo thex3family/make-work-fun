@@ -70,7 +70,7 @@ export default function MyApp({ Component, pageProps }) {
           { router.asPath.includes('embed/')  && router.asPath.includes('auth') ? null : 
             <WinManage setRefreshChildStats={setRefreshChildStats} />
           }
-            <Layout meta={meta} setRefreshChildStats={setRefreshChildStats}>
+            <Layout meta={meta}>
               <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} refreshChildStats={refreshChildStats} setRefreshChildStats={setRefreshChildStats} />
             </Layout>
           </UserContextProvider>

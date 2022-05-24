@@ -919,7 +919,6 @@ export async function fetchItemShop(player) {
 export async function fetchShopkeeper(player, setShopKeeperIntro, setShopKeeperTagline) {
   try {
 
-    // See if bonus has already been claimed
     const { data, error } = await supabase
       .from('users')
       .select('shopkeeper_intro, shopkeeper_tagline')
@@ -936,6 +935,30 @@ export async function fetchShopkeeper(player, setShopKeeperIntro, setShopKeeperT
     if (data?.shopkeeper_tagline){
       setShopKeeperTagline(data.shopkeeper_tagline);
     }
+    
+  } catch (error) {
+    // alert(error.message);
+    console.log(error.message);
+  } finally {
+  }
+}
+
+export async function fetchActiveTimer(player, setActiveTimer) {
+  try {
+
+    const { data, error } = await supabase
+      .from('item_purchases')
+      .select('*, item:item_id (name)')
+      .eq('player', player)
+      .gte('expiry_time', new Date().toISOString())
+      .order('expiry_time', {ascending: false})
+
+
+    if (error && status !== 406) {
+      throw error;
+    }
+    
+    setActiveTimer(data);
     
   } catch (error) {
     // alert(error.message);
