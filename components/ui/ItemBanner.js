@@ -64,7 +64,7 @@ const ItemBanner = ({ index, activeTimeItem, setOverrideMetaTitle }) => {
                         {/* <i class="flex p-2 rounded-lg bg-yellow-400 text-xl fas fa-coins text-yellow-800">
                         </i> */}
                         <div class="ml-3 font-medium flex flex-col sm:flex-row items-center gap-1">
-                            You've Purchased An Item! Finish <div className="flex flex-col sm:flex-row gap-1 items-center"><div className="bg-dark bg-opacity-80 px-2 py-1 text-white rounded">{activeTimeItem.item.name}</div> In <div className="bg-dark bg-opacity-80 px-2 py-1 text-white rounded">{timerComponents.length ? timerComponents : <span>0 seconds</span>}</div></div>
+                            You Purchased An Item! Finish <div className="flex flex-col sm:flex-row gap-1 items-center"><div className="bg-dark bg-opacity-80 px-2 py-1 text-white rounded">{activeTimeItem.item.name}</div> In <div className="bg-dark bg-opacity-80 px-2 py-1 text-white rounded">{timerComponents.length ? timerComponents : <span>0 seconds</span>}</div></div>
                         </div>
                     </div>
                     <i className='ml-4 p-2 rounded text-sm fas fa-check text-white bg-emerald-600 hover:bg-dark cursor-pointer' onClick={() => setShow(false)} />

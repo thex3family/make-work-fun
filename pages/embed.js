@@ -603,6 +603,8 @@ export default function embed({metaBase, setMeta}) {
                     <Feature name="Areas" status={true} />
                     <Feature name="Player Card" status={true} />
                     <Feature name="Week's Wins" status={true} />
+                    <Feature name="Item Shop" status={true} />
+                    <Feature name="Item Notification" status={true} />
                   </div>
                 </div>
 
