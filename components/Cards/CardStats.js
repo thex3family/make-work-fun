@@ -98,7 +98,6 @@ export default function CardStats({
   async function fetchItems() {
     setItems(await fetchItemShop(user_id));
     fetchShopkeeper(user_id, setShopKeeperIntro, setShopKeeperTagline);
-    console.log(user_id)
   }
 
   // handle energy update
@@ -196,11 +195,18 @@ export default function CardStats({
 
   async function buyItem(gold_spent) {
     setSaveItem(true);
+
+    if(activeItem.type == 'timer'){
+      var dt = new Date();
+      dt.setMinutes( dt.getMinutes() + purchaseTime );
+    }
+
     try {
       const { data, error } = await supabase.from('item_purchases').insert(
         [{
           item_id: activeItem.id,
           gold_spent: gold_spent,
+          expiry_time: dt,
           player: user_id
         }]
       );
@@ -468,7 +474,7 @@ export default function CardStats({
                     onClick={() => setActiveItem(item)}
                   >
                     <Card.Section className='w-1/3 sm:w-full relative'>
-                      <i className={`absolute top-2 right-2 text-white ${item.type == 'time' ? 'fas fa-stopwatch' : null} ${item.type == 'consumable' ? 'fas fa-pills' : null}`} />
+                      <i className={`absolute top-2 right-2 text-white ${item.type == 'timer' ? 'fas fa-stopwatch' : null} ${item.type == 'consumable' ? 'fas fa-pills' : null}`} />
                       <div className='px-2 py-1 text-center text-md font-semibold bg-yellow-400 text-white rounded absolute bottom-2 right-2 hidden sm:inline-block'>
                         {item.gold_cost} <i className='ml-2 fas fa-coins' />
                       </div>
@@ -514,7 +520,7 @@ export default function CardStats({
                         <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0 || activeItem.gold_cost * purchaseAmount > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost * purchaseAmount)}>Buy</Button>
                       </>
                       : null}
-                    {activeItem.type == 'time' ?
+                    {activeItem.type == 'timer' ?
                       <>
                         <NumberInput
                           defaultValue={purchaseTime}
@@ -605,9 +611,16 @@ export default function CardStats({
                   </svg>
                 </div> */}
                 <div class="text-center m-2 sm:text-left">
-                  <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">{activeItemName} x {purchaseAmount}</h3>
+                  {activeItem?.type == 'consumable' ? 
+                    <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">{activeItemName} x {purchaseAmount}</h3>
+                    : null
+                  }
+                  {activeItem?.type == 'timer' ? 
+                    <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">{activeItemName} x {purchaseTime} mins</h3>
+                    : null
+                  }
                   <div class="mt-2">
-                    <p class="text-sm text-white-500">Are you sure you want to buy this item? Your gold balance will immediately be deducted. This action cannot be undone.</p>
+                    <p class="text-sm text-white-500">Are you sure you want to buy this item? Your gold balance will immediately be deducted by {buyItemConfirmation} <i className='ml-1 fas fa-coins' /></p>
                   </div>
                 </div>
               </div>
@@ -667,7 +680,7 @@ export default function CardStats({
               onChange={setActiveItemType || ''}
               disabled={saveItem}
               data={[{ value: 'consumable', label: 'Consumable' }
-                // , { value: 'time', label: 'Timer' }
+                , { value: 'timer', label: 'Timer' }
               ]}
               required
               label="Type"
