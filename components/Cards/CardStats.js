@@ -28,7 +28,6 @@ export default function CardStats({
   statIconName,
   statIconColor,
   setShowTitleModal,
-  statPlayer,
   displayMode,
   statEnergy,
   user_id,
