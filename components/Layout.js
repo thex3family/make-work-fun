@@ -21,11 +21,13 @@ export default function Layout({ children, meta }) {
   const { user, userProfile, userOnboarding } = userContent();
   const [mobileDevice, setMobileDevice] = useState(false);
 
+
   function detectMob() {
     return window.innerWidth <= 1024;
   }
 
   const [activeTimer, setActiveTimer] = useState(null);
+  const [overrideMetaTitle, setOverrideMetaTitle] = useState(false);
 
   useEffect(() => {
     const mobileDevice = detectMob();
@@ -34,19 +36,19 @@ export default function Layout({ children, meta }) {
     if (user) {
       checkForNewItems(user.id);
       fetchActiveTimer(user.id, setActiveTimer);
-    } 
+    }
   }, [user]);
 
-  
-async function checkForNewItems(player) {
-  const { data, error } = await supabase
-    .from(`item_purchases:player=eq.${player}`)
-    .on('INSERT', async payload => {
-      console.log('Item Purchased!', payload)
-      fetchActiveTimer(player, setActiveTimer);
-    })
-    .subscribe()
-}
+
+  async function checkForNewItems(player) {
+    const { data, error } = await supabase
+      .from(`item_purchases:player=eq.${player}`)
+      .on('INSERT', async payload => {
+        console.log('Item Purchased!', payload)
+        fetchActiveTimer(player, setActiveTimer);
+      })
+      .subscribe()
+  }
 
   function setupIntercom(mobileDevice) {
     // hide it on embeds until I figure out a good way to pass user credentials to intercom
@@ -116,7 +118,7 @@ async function checkForNewItems(player) {
         />
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <meta name="theme-color" content="#317EFB" />
-        <title>{meta.title}</title>
+        <title>{overrideMetaTitle ? overrideMetaTitle : meta.title}</title>
         <link href="/favicon.ico" rel="shortcut icon" />
         <meta content={meta.description} name="description" />
         <meta
@@ -131,14 +133,14 @@ async function checkForNewItems(player) {
 
       </Head>
       <nav className='sticky top-0 z-40'>
-      {activeTimer ?
-        activeTimer?.map((activeTimeItem, i) => (
-        <ItemBanner
-          key={i} activeTimeItem={activeTimeItem} />
-        ))
-        : null
-      }
-      {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}</nav>
+        {activeTimer ?
+          activeTimer?.map((activeTimeItem, i) =>  (
+            <ItemBanner
+              index={i} activeTimeItem={activeTimeItem} setOverrideMetaTitle={setOverrideMetaTitle} />
+          ))
+          : null
+        }
+        {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}</nav>
       <main id="skip">
         {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
           <SideBar router={router} mobileDevice={mobileDevice} />
