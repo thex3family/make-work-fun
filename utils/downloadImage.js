@@ -23,6 +23,16 @@ export async function downloadImage(path, type) {
         const url = URL.createObjectURL(data);
         
         return url;
+      } else {
+        const { data, error } = await supabase.storage
+          .from(type)
+          .download(path);
+        if (error) {
+          throw error;
+        }
+        const url = URL.createObjectURL(data);
+        
+        return url;
       }
     } catch (error) {
       console.log('Error downloading image: ', path, error.message);
