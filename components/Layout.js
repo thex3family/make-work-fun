@@ -139,7 +139,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
         <meta property="og:image" content={meta.cardImage} />
 
       </Head>
-      <nav className='sticky top-0 z-40'>
+      <nav className='sticky top-0 z-20'>
         {activeTimer ?
           activeTimer?.map((activeTimeItem, i) =>  (
             <ItemBanner
