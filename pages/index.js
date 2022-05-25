@@ -329,7 +329,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                           </>
                         ) : (
                           <>
-                            {scrollingPlayers.map((player, i) => (
+                            {scrollingPlayers ? scrollingPlayers.map((player, i) => (
                               <Avatar
                                 key={i}
                                 displayMode={'short'}
@@ -351,7 +351,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                                 statGoldEarned={player.exp_earned_week}
                                 statEarnedDuration={'week'}
                               />
-                            ))}
+                            )) : null}
                             {/* <div href="leaderboard" className="relative">
                               <>
                                 <Link href="/leaderboard">
