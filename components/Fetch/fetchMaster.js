@@ -893,7 +893,7 @@ export async function lookupPlayerFromAuth(auth, setPlayer, setInvalidCredential
   
 }
 
-export async function fetchItemShop(player) {
+export async function fetchItemShop(player, setItemShopLoading) {
   try {
 
     // See if bonus has already been claimed
@@ -913,15 +913,16 @@ export async function fetchItemShop(player) {
     // alert(error.message);
     console.log(error.message);
   } finally {
+    setItemShopLoading(false)
   }
 }
 
-export async function fetchShopkeeper(player, setShopKeeperIntro, setShopKeeperTagline) {
+export async function fetchShopkeeper(player, setShopKeeperIntro, setShopKeeperTagline, setShopkeeperImage) {
   try {
 
     const { data, error } = await supabase
       .from('users')
-      .select('shopkeeper_intro, shopkeeper_tagline')
+      .select('shopkeeper_intro, shopkeeper_tagline, shopkeeper_url')
       .eq('id', player)
       .single();
   
@@ -934,6 +935,11 @@ export async function fetchShopkeeper(player, setShopKeeperIntro, setShopKeeperT
     }
     if (data?.shopkeeper_tagline){
       setShopKeeperTagline(data.shopkeeper_tagline);
+    }
+    if (data?.shopkeeper_url){
+      setShopkeeperImage(await downloadImage(data?.shopkeeper_url, 'shopkeepers'))
+    } else {
+      setShopkeeperImage('missing')
     }
     
   } catch (error) {
