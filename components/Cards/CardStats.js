@@ -11,6 +11,66 @@ import { map } from 'next-pwa/cache';
 import Input from '@/components/ui/Input';
 import Confetti from '@/components/Widgets/confetti';
 import LoadingDots from '../ui/LoadingDots';
+import { downloadImage } from '@/utils/downloadImage';
+
+function ItemCard({ item, activeItem, setActiveItem }) {
+  const [itemImg, setItemImg] = useState(null);
+
+  useEffect(() => {
+    if (item.img_url) {
+      fetchImage();
+    } else {
+      setItemImg('missing');
+    }
+  }, [item.img_url]);
+
+  async function fetchImage() {
+    setItemImg(await downloadImage(item.img_url, 'items'));
+  }
+
+  return (
+    <div>
+      <div className={`cursor-pointer bg-transparent flex flex-row sm:flex-col gap-4 sm:gap-0 hover:bg-gray-600 p-2 rounded ${activeItem == item ? 'bg-gray-600' : null}`}
+        onClick={() => setActiveItem(item)}
+      >
+        <Card.Section className='w-1/3 sm:w-full relative'>
+          <i className={`absolute top-2 right-2 p-2 rounded text-white bg-gray-700 ${item.type == 'timer' ? 'fas fa-stopwatch' : null} ${item.type == 'consumable' ? 'fas fa-pills' : null}`} />
+          <div className='px-2 py-1 text-center text-md font-semibold bg-yellow-400 text-white rounded absolute bottom-2 right-2 hidden sm:inline-block'>
+            {item.gold_cost} <i className='ml-2 fas fa-coins' />
+          </div>
+          {
+            itemImg == 'missing' ?
+              <img
+                src={'https://media.karousell.com/media/photos/products/2018/05/05/mystery_gift_2__30_1525512267_c0a1e40b.jpg'}
+                className='w-full object-cover h-24 sm:h-40 rounded'
+              />
+              :
+              itemImg ?
+                <img
+                  src={itemImg}
+                  className='w-full object-cover h-24 sm:h-40 rounded'
+                />
+                :
+                <div className="w-full object-cover h-24 sm:h-40 rounded">
+                  <div className="h-full w-full bg-gray-600 rounded animate-pulse" />
+                </div>
+          }
+
+
+        </Card.Section>
+        <div className='w-full p-0 sm:p-2'>
+          <Text className="text-white truncate" weight={500}>{item.name}</Text>
+          <Text size="sm" className="text-accents-5 truncate" style={{ lineHeight: 1.5 }}>
+            {item.description}
+          </Text>
+          <div className='px-2 py-1 mt-2 text-center text-md font-semibold bg-yellow-400 text-white rounded w-auto sm:hidden inline-block'>
+            {item.gold_cost} <i className='ml-2 fas fa-coins' />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function CardStats({
   statTitle,
@@ -66,6 +126,8 @@ export default function CardStats({
   const [activeItemType, setActiveItemType] = useState(null);
   const [activeItemGold, setActiveItemGold] = useState(null);
   const [activeItemDesc, setActiveItemDesc] = useState(null);
+  const [activeItemImgUrl, setActiveItemImgUrl] = useState(null);
+  const [saveActiveItemImg, setSaveActiveItemImg] = useState(null);
 
   const [saveItem, setSaveItem] = useState(null);
 
@@ -73,6 +135,7 @@ export default function CardStats({
   const [ShopkeeperIntro, setShopKeeperIntro] = useState(null);
   const [ShopkeeperTagline, setShopKeeperTagline] = useState(null);
   const [shopkeeperImage, setShopkeeperImage] = useState(null);
+  const [saveShopkeeperImage, setSaveShopkeeperImage] = useState(null);
 
   const [buyItemConfirmation, setBuyItemConfirmation] = useState(false);
   const [buySuccess, setBuySuccess] = useState(false);
@@ -87,10 +150,7 @@ export default function CardStats({
 
   useEffect(() => {
     if (activeItem) {
-      setActiveItemName(activeItem.name)
-      setActiveItemDesc(activeItem.description)
-      setActiveItemType(activeItem.type)
-      setActiveItemGold(activeItem.gold_cost)
+      updateActiveItem();
     } else {
       setActiveItemName(null)
       setActiveItemDesc(null)
@@ -98,6 +158,19 @@ export default function CardStats({
       setActiveItemGold(null)
     }
   }, [activeItem]);
+
+  async function updateActiveItem() {
+    setActiveItemName(activeItem.name)
+    setActiveItemDesc(activeItem.description)
+    setActiveItemType(activeItem.type)
+    setActiveItemGold(activeItem.gold_cost)
+    if(activeItem.img_url) {
+      setActiveItemImgUrl(await downloadImage(activeItem.img_url, 'items'))
+    } else {
+      setActiveItemImgUrl(null);
+    }
+    setShopEdit(false);
+  }
 
   async function fetchItems() {
     setItemShopLoading(true)
@@ -127,75 +200,192 @@ export default function CardStats({
     }
   }
 
-  async function upsertItem() {
+  async function upsertItem(event) {
     setSaveItem(true);
     if (activeItem) {
-      try {
-        const { data, error } = await supabase.from('item_shop').update(
-          {
-            name: activeItemName,
-            description: activeItemDesc,
-            type: activeItemType,
-            gold_cost: activeItemGold,
+      // if there is an image upload
+      if (event) {
+        const file = event.target.files[0];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        let { error: uploadError } = await supabase.storage
+          .from('items')
+          .upload(filePath, file);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        try {
+          const { data, error } = await supabase.from('item_shop').update(
+            {
+              name: activeItemName,
+              description: activeItemDesc,
+              type: activeItemType,
+              gold_cost: activeItemGold,
+              img_url: filePath
+            }
+          ).match({ id: activeItem.id });
+          if (error && status !== 406) {
+            throw error;
           }
-        ).match({ id: activeItem.id });
-        if (error && status !== 406) {
-          throw error;
+        } catch (error) {
+          // alert(error.message);
+          console.log(error.message);
+        } finally {
+          setSaveActiveItemImg(null);
         }
-      } catch (error) {
-        // alert(error.message);
-        console.log(error.message);
-      } finally {
-        fetchItems();
-        setItemEdit(false);
-        setActiveItem(null);
-        setSaveItem(false);
+
+      } else {
+        try {
+          const { data, error } = await supabase.from('item_shop').update(
+            {
+              name: activeItemName,
+              description: activeItemDesc,
+              type: activeItemType,
+              gold_cost: activeItemGold
+            }
+          ).match({ id: activeItem.id });
+          if (error && status !== 406) {
+            throw error;
+          }
+        } catch (error) {
+          // alert(error.message);
+          console.log(error.message);
+        } finally {
+        }
       }
+
+      fetchItems();
+      setItemEdit(false);
+      setActiveItem(null);
+      setSaveItem(false);
+
     } else {
-      try {
-        const { data, error } = await supabase.from('item_shop').insert(
-          [{
-            name: activeItemName,
-            description: activeItemDesc,
-            type: activeItemType,
-            gold_cost: activeItemGold,
-            player: user_id
-          }]
-        );
-        if (error && status !== 406) {
-          throw error;
+
+      // if there is an image upload
+      if (event) {
+        const file = event.target.files[0];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        let { error: uploadError } = await supabase.storage
+          .from('items')
+          .upload(filePath, file);
+
+        if (uploadError) {
+          throw uploadError;
         }
-      } catch (error) {
-        // alert(error.message);
-        console.log(error.message);
-      } finally {
-        fetchItems();
-        setItemEdit(false);
-        setActiveItem(null);
-        setSaveItem(false);
+
+
+        try {
+          const { data, error } = await supabase.from('item_shop').insert(
+            [{
+              name: activeItemName,
+              description: activeItemDesc,
+              type: activeItemType,
+              gold_cost: activeItemGold,
+              player: user_id,
+              img_url: filePath
+            }]
+          );
+          if (error && status !== 406) {
+            throw error;
+          }
+        } catch (error) {
+          // alert(error.message);
+          console.log(error.message);
+        } finally {
+          setSaveActiveItemImg(null);
+        }
+      } else {
+        try {
+          const { data, error } = await supabase.from('item_shop').insert(
+            [{
+              name: activeItemName,
+              description: activeItemDesc,
+              type: activeItemType,
+              gold_cost: activeItemGold,
+              player: user_id
+            }]
+          );
+          if (error && status !== 406) {
+            throw error;
+          }
+        } catch (error) {
+          // alert(error.message);
+          console.log(error.message);
+        } finally {
+        }
       }
+      fetchItems();
+      setItemEdit(false);
+      setActiveItem(null);
+      setSaveItem(false);
     }
   }
 
-  async function saveShopInfo() {
-    setSaveItem(true);
-    try {
-      const { data, error } = await supabase.from('users').update(
-        {
-          shopkeeper_intro: ShopkeeperIntro,
-          shopkeeper_tagline: ShopkeeperTagline
-        }
-      ).match({ id: user_id });
-      if (error && status !== 406) {
-        throw error;
+  async function saveShopInfo(event) {
+    // setSaveItem(true);
+    setShopEdit(false);
+
+    // if there is an image upload
+    if (event) {
+      const file = event.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      let { error: uploadError } = await supabase.storage
+        .from('shopkeepers')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
       }
-    } catch (error) {
-      // alert(error.message);
-      console.log(error.message);
-    } finally {
-      setShopEdit(false);
-      setSaveItem(false);
+
+      try {
+        const { data, error } = await supabase.from('users').update(
+          {
+            shopkeeper_intro: ShopkeeperIntro,
+            shopkeeper_tagline: ShopkeeperTagline,
+            shopkeeper_url: filePath,
+          }
+        ).match({ id: user_id });
+        if (error && status !== 406) {
+          throw error;
+        }
+      } catch (error) {
+        // alert(error.message);
+        console.log(error.message);
+      } finally {
+        setSaveShopkeeperImage(null);
+      }
+
+    } else {
+
+      try {
+        const { data, error } = await supabase.from('users').update(
+          {
+            shopkeeper_intro: ShopkeeperIntro,
+            shopkeeper_tagline: ShopkeeperTagline,
+          }
+        ).match({ id: user_id });
+        if (error && status !== 406) {
+          throw error;
+        }
+      } catch (error) {
+        // alert(error.message);
+        console.log(error.message);
+      } finally {
+      }
     }
+    // setShopEdit(false);
+    // setSaveItem(false);
+    // setSaveShopkeeperImage(null);
   }
 
   async function buyItem(gold_spent) {
@@ -234,53 +424,53 @@ export default function CardStats({
 
   const theme = useMantineTheme();
 
-  async function uploadShopkeeper(event) {
-    try {
-      setSaveItem(true);
+  // async function uploadShopkeeper(event) {
+  //   try {
+  //     setSaveItem(true);
 
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.');
-      }
+  //     if (!event.target.files || event.target.files.length === 0) {
+  //       throw new Error('You must select an image to upload.');
+  //     }
 
-      const file = event.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
+  //     const file = event.target.files[0];
+  //     const fileExt = file.name.split('.').pop();
+  //     const fileName = `${Math.random()}.${fileExt}`;
+  //     const filePath = `${fileName}`;
 
-      let { error: uploadError } = await supabase.storage
-        .from('shopkeepers')
-        .upload(filePath, file);
+  //     let { error: uploadError } = await supabase.storage
+  //       .from('shopkeepers')
+  //       .upload(filePath, file);
 
-      if (uploadError) {
-        throw uploadError;
-      }
+  //     if (uploadError) {
+  //       throw uploadError;
+  //     }
 
-      // update database immediately...
+  //     // update database immediately...
 
-      let { error } = await supabase
-        .from('users')
-        .update({
-          shopkeeper_url: filePath,
-          shopkeeper_intro: ShopkeeperIntro,
-          shopkeeper_tagline: ShopkeeperTagline
-        })
-        .eq('id', user_id);
+  //     let { error } = await supabase
+  //       .from('users')
+  //       .update({
+  //         shopkeeper_url: filePath,
+  //         shopkeeper_intro: ShopkeeperIntro,
+  //         shopkeeper_tagline: ShopkeeperTagline
+  //       })
+  //       .eq('id', user_id);
 
 
-      if (error) {
-        throw error;
-      }
+  //     if (error) {
+  //       throw error;
+  //     }
 
-      // refresh shopkeeper image (and everything else)
-      fetchShopkeeper(user_id, setShopKeeperIntro, setShopKeeperTagline, setShopkeeperImage);
+  //     // refresh shopkeeper image (and everything else)
+  //     fetchShopkeeper(user_id, setShopKeeperIntro, setShopKeeperTagline, setShopkeeperImage);
 
-    } catch (error) {
-      // alert(error.message);
-      console.log(error.message);
-    } finally {
-      setSaveItem(false);
-    }
-  }
+  //   } catch (error) {
+  //     // alert(error.message);
+  //     console.log(error.message);
+  //   } finally {
+  //     setSaveItem(false);
+  //   }
+  // }
 
   return (
     <>
@@ -505,188 +695,207 @@ export default function CardStats({
               </div>
             </Tooltip>
           </div>
-          {itemShopLoading ?
-            <div className='text-white grid-col-gap h-auto flex justify-center align-middle'>
-              <div className='h-48 sm:h-96 flex justify-center'>
-                <LoadingDots />
+          <div className='grid grid-cols-1 sm:grid-cols-3 text-white grid-col-gap h-auto'>
+            <div className='grid col-span-2 grid-cols-1 h-48 sm:h-96 overflow-auto sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 pr-6 order-last sm:order-1'>
+              <div className='cursor-pointer flex flex-row gap-4 sm:flex-col p-2'
+                onClick={() => { setItemEdit(true), setActiveItem(null) }}
+              >
+                <div className="w-1/3 sm:w-full h-24 sm:h-40 bg-gray-600 rounded flex align-middle">
+                  <p className="w-full m-auto text-xs sm:text-sm md:text-lg font-semibold text-center">
+                    Add Item <br />+
+                  </p>
+                </div>
+                <div className="grid grid-cols-4 h-24 sm:h-auto w-full gap-1">
+                  <div className="row-start-1 col-span-3 h-6 sm:h-4 rounded-sm bg-gray-600"></div>
+                  <div className="row-start-2 col-span-4 h-8 sm:h-4 rounded-sm bg-gray-600"></div>
+                  <div className="row-start-3 col-span-2 h-8 sm:h-0 rounded-sm bg-gray-600"></div>
+                </div>
               </div>
-            </div>
-            : <div className='grid grid-cols-1 sm:grid-cols-3 text-white grid-col-gap h-auto'>
-              <div className='grid col-span-2 grid-cols-1 h-48 sm:h-96 overflow-auto sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 pr-6 order-last sm:order-1'>
-                <div className='cursor-pointer flex flex-row gap-4 sm:flex-col p-2'
-                  onClick={() => { setItemEdit(true), setActiveItem(null) }}
-                >
-                  <div className="w-1/3 sm:w-full h-24 sm:h-40 bg-gray-600 rounded flex align-middle">
-                    <p className="w-full m-auto text-sm sm:text-xl font-semibold text-center">
-                      Add Item <br />+
-                    </p>
+              {items ? items.map((item, i) =>
+                <ItemCard item={item} activeItem={activeItem} setActiveItem={setActiveItem} />
+              ) :
+                <>
+                  <div className='cursor-pointer flex flex-row gap-4 sm:flex-col p-2 animate-pulse'>
+                    <div className="w-1/3 sm:w-full h-24 sm:h-40 bg-gray-600 rounded flex align-middle" />
+                    <div className="grid grid-cols-4 h-24 sm:h-auto w-full gap-1">
+                      <div className="row-start-1 col-span-3 h-6 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-2 col-span-4 h-8 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-3 col-span-2 h-8 sm:h-0 rounded-sm bg-gray-600"></div>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full gap-1">
-                    <div className="row-start-1 col-span-3 h-6 sm:h-4 rounded-sm bg-gray-600"></div>
-                    <div className="row-start-2 col-span-4 h-8 sm:h-4 rounded-sm bg-gray-600"></div>
-                    <div className="row-start-3 col-span-2 h-8 sm:h-0 rounded-sm bg-gray-600"></div>
+                  <div className='cursor-pointer flex flex-row gap-4 sm:flex-col p-2 animate-pulse'>
+                    <div className="w-1/3 sm:w-full h-24 sm:h-40 bg-gray-600 rounded flex align-middle" />
+                    <div className="grid grid-cols-4 h-24 sm:h-auto w-full gap-1">
+                      <div className="row-start-1 col-span-3 h-6 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-2 col-span-4 h-8 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-3 col-span-2 h-8 sm:h-0 rounded-sm bg-gray-600"></div>
+                    </div>
+                  </div>
+                  <div className='cursor-pointer flex flex-row gap-4 sm:flex-col p-2 animate-pulse'>
+                    <div className="w-1/3 sm:w-full h-24 sm:h-40 bg-gray-600 rounded flex align-middle" />
+                    <div className="grid grid-cols-4 h-24 sm:h-auto w-full gap-1">
+                      <div className="row-start-1 col-span-3 h-6 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-2 col-span-4 h-8 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-3 col-span-2 h-8 sm:h-0 rounded-sm bg-gray-600"></div>
+                    </div>
+                  </div>
+                  <div className='cursor-pointer flex flex-row gap-4 sm:flex-col p-2 animate-pulse'>
+                    <div className="w-1/3 sm:w-full h-24 sm:h-40 bg-gray-600 rounded flex align-middle" />
+                    <div className="grid grid-cols-4 h-24 sm:h-auto w-full gap-1">
+                      <div className="row-start-1 col-span-3 h-6 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-2 col-span-4 h-8 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-3 col-span-2 h-8 sm:h-0 rounded-sm bg-gray-600"></div>
+                    </div>
+                  </div>
+                  <div className='cursor-pointer flex flex-row gap-4 sm:flex-col p-2 animate-pulse'>
+                    <div className="w-1/3 sm:w-full h-24 sm:h-40 bg-gray-600 rounded flex align-middle" />
+                    <div className="grid grid-cols-4 h-24 sm:h-auto w-full gap-1">
+                      <div className="row-start-1 col-span-3 h-6 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-2 col-span-4 h-8 sm:h-4 rounded-sm bg-gray-600"></div>
+                      <div className="row-start-3 col-span-2 h-8 sm:h-0 rounded-sm bg-gray-600"></div>
+                    </div>
+                  </div>
+                </>
+              }
+
+
+            </div>
+            <div className='flex justify-center align-middle relative order-1 sm:order-last'>
+              {activeItem ?
+                <div className='absolute bottom-0 w-full px-6 z-10'>
+                  <div className='bg-opacity-90 rounded p-4 relative speech-bubble'>
+                    <i className='fas fa-pen top-4 right-4 absolute cursor-pointer hover:text-emerald-500' onClick={() => setItemEdit(true)} />
+                    <div className='font-semibold w-11/12'>{activeItem.name}</div>
+                    {activeItem.type == 'consumable' ?
+                      <>
+                        <NumberInput
+                          defaultValue={purchaseAmount}
+                          label="How many do you want?"
+                          required
+                          min={0}
+                          classNames={{
+                            label: 'text-white text-lg mb-2'
+                          }}
+                          onChange={setPurchaseAmount}
+                        />
+                        <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
+                          {activeItem.gold_cost * purchaseAmount} <i className='ml-2 fas fa-coins' />
+                        </div>
+                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0 || activeItem.gold_cost * purchaseAmount > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost * purchaseAmount)}>Buy</Button>
+                      </>
+                      : null}
+                    {activeItem.type == 'timer' ?
+                      <>
+                        <NumberInput
+                          defaultValue={purchaseTime}
+                          label="How much time do you need?"
+                          required
+                          step={5}
+                          min={0}
+                          classNames={{
+                            label: 'text-white text-lg mb-2'
+                          }}
+                          formatter={(value) =>
+                            value + ' min'
+                          }
+                          onChange={setPurchaseTime}
+                        />
+                        <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
+                          {activeItem.gold_cost / 5 * purchaseTime} <i className='ml-2 fas fa-coins' />
+                        </div>
+                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseTime == 0 || activeItem.gold_cost / 5 * purchaseTime > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost / 5 * purchaseTime)}>Buy</Button>
+                      </>
+                      : null}
                   </div>
                 </div>
-                {items ? items.map((item, i) =>
-                  <div>
-                    <div className={`cursor-pointer bg-transparent flex flex-row sm:flex-col gap-4 sm:gap-0 hover:bg-gray-600 p-2 rounded ${activeItem == item ? 'bg-gray-600' : null}`}
-                      onClick={() => setActiveItem(item)}
-                    >
-                      <Card.Section className='w-1/3 sm:w-full relative'>
-                        <i className={`absolute top-2 right-2 text-white ${item.type == 'timer' ? 'fas fa-stopwatch' : null} ${item.type == 'consumable' ? 'fas fa-pills' : null}`} />
-                        <div className='px-2 py-1 text-center text-md font-semibold bg-yellow-400 text-white rounded absolute bottom-2 right-2 hidden sm:inline-block'>
-                          {item.gold_cost} <i className='ml-2 fas fa-coins' />
-                        </div>
-                        <img src="https://media.karousell.com/media/photos/products/2018/05/05/mystery_gift_2__30_1525512267_c0a1e40b.jpg" className='w-full object-cover h-24 sm:h-40 rounded'></img>
-
-                      </Card.Section>
-                      <div className='w-full p-0 sm:p-2'>
-                        <Text className="text-white truncate" weight={500}>{item.name}</Text>
-                        <Text size="sm" className="text-accents-5 truncate" style={{ lineHeight: 1.5 }}>
-                          {item.description}
-                        </Text>
-                        <div className='px-2 py-1 mt-2 text-center text-md font-semibold bg-yellow-400 text-white rounded w-auto sm:hidden inline-block'>
-                          {item.gold_cost} <i className='ml-2 fas fa-coins' />
-                        </div>
-                      </div>
-                    </div>
-                  </div>) : null
-                }
-
-
-              </div>
-              <div className='flex justify-center align-middle relative order-1 sm:order-last'>
-                {activeItem ?
-                  <div className='absolute bottom-0 w-full px-6 z-10'>
-                    <div className='bg-opacity-90 rounded p-4 relative speech-bubble'>
-                      <i className='fas fa-pen top-4 right-4 absolute cursor-pointer hover:text-emerald-500' onClick={() => setItemEdit(true)} />
-                      <div className='font-semibold w-11/12'>{activeItem.name}</div>
-                      {activeItem.type == 'consumable' ?
+                :
+                <div className='absolute bottom-0 w-full px-6 z-10'>
+                  <div className='bg-opacity-90 rounded p-4 relative speech-bubble'>
+                    {
+                      shopEdit ?
                         <>
-                          <NumberInput
-                            defaultValue={purchaseAmount}
-                            label="How many do you want?"
+                          <TextInput
+                            placeholder={'What are you looking for?'}
+                            value={ShopkeeperIntro || ''}
+                            onChange={(event) => setShopKeeperIntro(event.currentTarget.value)}
+                            disabled={saveItem}
                             required
-                            min={0}
                             classNames={{
-                              label: 'text-white text-lg mb-2'
+                              input: 'p-2 bg-transparent text-white font-semibold rounded text-xl'
                             }}
-                            onChange={setPurchaseAmount}
                           />
-                          <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
-                            {activeItem.gold_cost * purchaseAmount} <i className='ml-2 fas fa-coins' />
-                          </div>
-                          <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0 || activeItem.gold_cost * purchaseAmount > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost * purchaseAmount)}>Buy</Button>
+                          <Textarea
+                            placeholder={`Buy anything you want. Add your own items if you'd like!`}
+                            value={ShopkeeperTagline || ''}
+                            onChange={(event) => setShopKeeperTagline(event.currentTarget.value)}
+                            disabled={saveItem}
+                            required
+                            classNames={{
+                              input: 'mt-2 p-2 bg-transparent text-white font-semibold rounded text-sm'
+                            }}
+                          />
+                          <Button variant="prominent" className='text-base mt-3' onClick={() => saveShopInfo(saveShopkeeperImage)}
+                            disabled={saveItem} >Save</Button>
                         </>
-                        : null}
-                      {activeItem.type == 'timer' ?
+                        :
                         <>
-                          <NumberInput
-                            defaultValue={purchaseTime}
-                            label="How much time do you need?"
-                            required
-                            step={5}
-                            min={0}
-                            classNames={{
-                              label: 'text-white text-lg mb-2'
-                            }}
-                            formatter={(value) =>
-                              value + ' min'
-                            }
-                            onChange={setPurchaseTime}
-                          />
-                          <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
-                            {activeItem.gold_cost / 5 * purchaseTime} <i className='ml-2 fas fa-coins' />
-                          </div>
-                          <Button variant="prominent" className="w-full mt-4" disabled={purchaseTime == 0 || activeItem.gold_cost / 5 * purchaseTime > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost / 5 * purchaseTime)}>Buy</Button>
+                          <i className='fas fa-pen top-4 right-4 absolute hover:text-emerald-500 cursor-pointer' onClick={() => setShopEdit(true)} />
+                          <div className='font-semibold w-11/12 text-xl'>{ShopkeeperIntro ? ShopkeeperIntro : 'What are you looking for?'}</div>
+                          <div className='mt-2 text-sm'>{ShopkeeperTagline ? ShopkeeperTagline : `Buy anything you want. Add your own items if you'd like!`}</div>
                         </>
-                        : null}
-                    </div>
+                    }
+
                   </div>
-                  :
-                  <div className='absolute bottom-0 w-full px-6 z-10'>
-                    <div className='bg-opacity-90 rounded p-4 relative speech-bubble'>
-                      {
-                        shopEdit ?
-                          <>
-                            <TextInput
-                              placeholder={'What are you looking for?'}
-                              value={ShopkeeperIntro || ''}
-                              onChange={(event) => setShopKeeperIntro(event.currentTarget.value)}
-                              disabled={saveItem}
-                              required
-                              classNames={{
-                                input: 'p-2 bg-transparent text-white font-semibold rounded text-xl'
-                              }}
-                            />
-                            <Textarea
-                              placeholder={`Buy anything you want. Add your own items if you'd like!`}
-                              value={ShopkeeperTagline || ''}
-                              onChange={(event) => setShopKeeperTagline(event.currentTarget.value)}
-                              disabled={saveItem}
-                              required
-                              classNames={{
-                                input: 'mt-2 p-2 bg-transparent text-white font-semibold rounded text-sm'
-                              }}
-                            />
-                            <Button variant="prominent" className='text-base mt-3' onClick={() => saveShopInfo()}
-                              disabled={saveItem} >Save</Button>
-                          </>
-                          :
-                          <>
-                            <i className='fas fa-pen top-4 right-4 absolute hover:text-emerald-500 cursor-pointer' onClick={() => setShopEdit(true)} />
-                            <div className='font-semibold w-11/12 text-xl'>{ShopkeeperIntro ? ShopkeeperIntro : 'What are you looking for?'}</div>
-                            <div className='mt-2 text-sm'>{ShopkeeperTagline ? ShopkeeperTagline : `Buy anything you want. Add your own items if you'd like!`}</div>
-                          </>
+                </div>}
+
+              <div >
+                {shopEdit ?
+                  <>
+                    <label className="fas fa-image text-7xl absolute bg-dark p-4 rounded-xl opacity-80 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" htmlFor="single">
+                    </label>
+                    <input
+                      style={{
+                        visibility: 'hidden',
+                        position: 'relative',
+                      }}
+                      type="file"
+                      id="single"
+                      accept="image/*"
+                      onChange={(event) => {
+                        if (event.target.files && event.target.files.length > 0) {
+                          setShopkeeperImage(URL.createObjectURL(event.target.files[0])), setSaveShopkeeperImage(event)
+                        }
                       }
-
-                    </div>
-                  </div>}
-
-                <div >
-                  {shopEdit ?
-                    <>
-                      <label className="fas fa-image text-7xl absolute bg-dark p-4 rounded-xl opacity-80 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" htmlFor="single">
-                      </label>
-                      <input
-                        style={{
-                          visibility: 'hidden',
-                          position: 'relative',
-                        }}
-                        type="file"
-                        id="single"
-                        accept="image/*"
-                        onChange={uploadShopkeeper}
-                        disabled={saveItem}
-                      />
-                    </>
-                    : null}
-                  {
-                    shopkeeperImage == 'missing' ?
+                      }
+                      disabled={saveItem}
+                    />
+                  </>
+                  : null}
+                {
+                  shopkeeperImage == 'missing' ?
+                    <img
+                      className="avatar image h-3/4 object-contain w-full sm:w-11/12 mx-auto"
+                      src={`${'https://www.clipstudio.net/wp-content/uploads/2020/01/0050_016.jpg'}`}
+                      alt="Avatar"
+                      htmlFor="single"
+                    />
+                    :
+                    shopkeeperImage ?
                       <img
-                        className="avatar image h-3/4"
-                        src={`${'https://www.clipstudio.net/wp-content/uploads/2020/01/0050_016.jpg'}`}
+                        className="avatar image h-3/4 object-contain w-11/12 mx-auto"
+                        src={`${shopkeeperImage}`}
                         alt="Avatar"
                         htmlFor="single"
                       />
                       :
-                      shopkeeperImage ?
-                        <img
-                          className="avatar image h-3/4"
-                          src={`${shopkeeperImage}`}
-                          alt="Avatar"
-                          htmlFor="single"
-                        />
-                        :
-                        <div className="h-96 flex justify-center w-60 md:w-40 lg:w-60">
-                          <div className="h-2/3 w-full bg-gray-600 rounded animate-pulse" />
-                        </div>
-                  }
+                      <div className="h-96 flex justify-center w-60 md:w-40 lg:w-60">
+                        <div className="h-2/3 w-full bg-gray-600 rounded animate-pulse" />
+                      </div>
+                }
 
-                </div>
               </div>
             </div>
-          }
+          </div>
 
         </div>
         <Modal
@@ -745,7 +954,23 @@ export default function CardStats({
             close: 'text-white hover:bg-gray-800',
           }}
         >
-          <form onSubmit={(e) => { e.preventDefault(), upsertItem() }}>
+          <form onSubmit={(e) => { e.preventDefault(), upsertItem(saveActiveItemImg) }}>
+            <div className='relative'>
+              <img src={`${activeItemImgUrl ? activeItemImgUrl : 'https://media.karousell.com/media/photos/products/2018/05/05/mystery_gift_2__30_1525512267_c0a1e40b.jpg'}`} className='w-full object-contain h-24 sm:h-40 rounded'></img>
+              <label className="fas fa-image text-7xl absolute bg-dark p-4 rounded-xl opacity-80 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" htmlFor="single">
+              </label>
+              <input
+                style={{
+                  visibility: 'hidden',
+                  position: 'absolute',
+                }}
+                type="file"
+                id="single"
+                accept="image/*"
+                onChange={(event) => setActiveItemImgUrl(URL.createObjectURL(event.target.files[0]), setSaveActiveItemImg(event))}
+                disabled={saveItem}
+              />
+            </div>
             <TextInput
               className="text-xl mb-2 font-semibold rounded"
               placeholder="Your item name here..."
