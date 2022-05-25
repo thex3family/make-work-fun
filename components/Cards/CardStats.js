@@ -1022,7 +1022,7 @@ export default function CardStats({
               min={0}
               disabled={saveItem}
               required
-              label="Gold Cost"
+              label={`Gold Cost ${activeItemType == 'timer' ? '(Every 5 mins)' : ''}`}
               classNames={{
                 controlUp: 'bg-white rounded-r-none',
                 controlDown: 'bg-white rounded-r-none',
