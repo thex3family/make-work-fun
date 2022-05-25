@@ -35,16 +35,25 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
     setMobileDevice(mobileDevice);
     if (user) {
       checkForNewItems(user.id);
-      fetchActiveTimer(user.id, setActiveTimer);
+      loadActiveTimer();
     }
   }, [user]);
 
   useEffect(() => {
     if (manualPlayerID) {
       checkForNewItems(manualPlayerID);
-      fetchActiveTimer(manualPlayerID, setActiveTimer);
+      loadActiveTimer();
     }
   }, [manualPlayerID]);
+
+  async function loadActiveTimer(){
+    if (user) {
+      fetchActiveTimer(user.id, setActiveTimer);
+    }
+    if (manualPlayerID) {
+      fetchActiveTimer(manualPlayerID, setActiveTimer);
+    }
+  }
 
 
   async function checkForNewItems(player) {
@@ -52,7 +61,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
       .from(`item_purchases:player=eq.${player}`)
       .on('INSERT', async payload => {
         console.log('Item Purchased!', payload)
-        fetchActiveTimer(player, setActiveTimer);
+        loadActiveTimer();
       })
       .subscribe()
   }
@@ -143,7 +152,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
         {activeTimer ?
           activeTimer?.map((activeTimeItem, i) =>  (
             <ItemBanner
-              index={i} activeTimeItem={activeTimeItem} setOverrideMetaTitle={setOverrideMetaTitle} />
+              index={i} activeTimeItem={activeTimeItem} setOverrideMetaTitle={setOverrideMetaTitle} loadActiveTimer={loadActiveTimer} />
           ))
           : null
         }
