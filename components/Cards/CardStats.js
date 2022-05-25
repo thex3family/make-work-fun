@@ -34,7 +34,7 @@ function ItemCard({ item, activeItem, setActiveItem }) {
         onClick={() => setActiveItem(item)}
       >
         <Card.Section className='w-1/3 sm:w-full relative'>
-          <i className={`absolute top-2 right-2 p-2 rounded text-white bg-gray-700 ${item.type == 'timer' ? 'fas fa-stopwatch' : null} ${item.type == 'consumable' ? 'fas fa-pills' : null}`} />
+          <i className={`absolute top-1 sm:top-2 right-1 sm:right-2 p-2 rounded text-white bg-gray-700 ${item.type == 'timer' ? 'fas fa-stopwatch' : null} ${item.type == 'consumable' ? 'fas fa-pills' : null}`} />
           <div className='px-2 py-1 text-center text-md font-semibold bg-yellow-400 text-white rounded absolute bottom-2 right-2 hidden sm:inline-block'>
             {item.gold_cost} <i className='ml-2 fas fa-coins' />
           </div>
@@ -164,7 +164,7 @@ export default function CardStats({
     setActiveItemDesc(activeItem.description)
     setActiveItemType(activeItem.type)
     setActiveItemGold(activeItem.gold_cost)
-    if(activeItem.img_url) {
+    if (activeItem.img_url) {
       setActiveItemImgUrl(await downloadImage(activeItem.img_url, 'items'))
     } else {
       setActiveItemImgUrl(null);
@@ -910,7 +910,9 @@ export default function CardStats({
         >
           <div class="relative rounded-lg text-left ">
             <div class="">
-              <div class="sm:flex sm:items-start">
+              <div class="sm:flex sm:items-center sm:gap-2">
+                <img src={`${activeItemImgUrl ? activeItemImgUrl : 'https://media.karousell.com/media/photos/products/2018/05/05/mystery_gift_2__30_1525512267_c0a1e40b.jpg'}`} className='w-1/4 object-contain mx-auto rounded'></img>
+
                 {/* <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
 
                   <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
