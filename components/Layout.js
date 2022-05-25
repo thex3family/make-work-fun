@@ -152,7 +152,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
         {activeTimer ?
           activeTimer?.map((activeTimeItem, i) =>  (
             <ItemBanner
-              index={i} activeTimeItem={activeTimeItem} setOverrideMetaTitle={setOverrideMetaTitle} loadActiveTimer={loadActiveTimer} />
+              index={i} activeTimeItem={activeTimeItem} setOverrideMetaTitle={setOverrideMetaTitle} />
           ))
           : null
         }
