@@ -8,10 +8,9 @@ import { Tooltip, Slider, Drawer, Card, Text, Group, useMantineTheme, NumberInpu
 import { supabase } from '@/utils/supabase-client';
 import { fetchItemShop, fetchShopkeeper } from '../Fetch/fetchMaster';
 import { map } from 'next-pwa/cache';
-import Input from '@/components/ui/Input';
 import Confetti from '@/components/Widgets/confetti';
-import LoadingDots from '../ui/LoadingDots';
 import { downloadImage } from '@/utils/downloadImage';
+import useSound from 'use-sound';
 
 function ItemCard({ item, activeItem, setActiveItem }) {
   const [itemImg, setItemImg] = useState(null);
@@ -140,8 +139,7 @@ export default function CardStats({
   const [buyItemConfirmation, setBuyItemConfirmation] = useState(false);
   const [buySuccess, setBuySuccess] = useState(false);
 
-
-  const [itemShopLoading, setItemShopLoading] = useState(false);
+  const [buySFX] = useSound('/sounds/super_mario_coin.mp3');
 
 
   useEffect(() => {
@@ -173,9 +171,8 @@ export default function CardStats({
   }
 
   async function fetchItems() {
-    setItemShopLoading(true)
     fetchShopkeeper(user_id, setShopKeeperIntro, setShopKeeperTagline, setShopkeeperImage);
-    setItems(await fetchItemShop(user_id, setItemShopLoading));
+    setItems(await fetchItemShop(user_id));
   }
 
   // handle energy update
@@ -412,6 +409,7 @@ export default function CardStats({
       // alert(error.message);
       console.log(error.message);
     } finally {
+      buySFX();
       refreshStats();
       setBuyItemConfirmation(false);
       setItemShopOpen(false);

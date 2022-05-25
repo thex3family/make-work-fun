@@ -893,7 +893,7 @@ export async function lookupPlayerFromAuth(auth, setPlayer, setInvalidCredential
   
 }
 
-export async function fetchItemShop(player, setItemShopLoading) {
+export async function fetchItemShop(player) {
   try {
 
     // See if bonus has already been claimed
@@ -913,7 +913,7 @@ export async function fetchItemShop(player, setItemShopLoading) {
     // alert(error.message);
     console.log(error.message);
   } finally {
-    setItemShopLoading(false)
+    
   }
 }
 
