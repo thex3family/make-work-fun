@@ -4,7 +4,7 @@
     "title": "Take A Picture",
     "desc": "Capture your daily moments and be accountable for building your habits.",
     "img_url": "0.43.png",
-    "button_url": "/player?itemshop=true",
+    "button_url": "/dailies",
     "version": "43"
   },
   {
