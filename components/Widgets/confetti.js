@@ -26,7 +26,6 @@ export default class Fireworks extends React.Component {
     this.intervalId = null;
   }
   
-
   getAnimationSettings(originXA, originXB) {
     return {
       startVelocity: 25,
@@ -50,6 +49,9 @@ export default class Fireworks extends React.Component {
     if (!this.isAnimationEnabled) {
       this.isAnimationEnabled = true;
       this.intervalId = setInterval(this.nextTickAnimation, 800);
+      setTimeout(() => {
+        this.handlerClickPause()
+      }, 10000);
     }
   }
 
