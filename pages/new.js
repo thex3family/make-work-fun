@@ -31,6 +31,7 @@ export default function updates({metaBase, setMeta}) {
             date={update.date}
             title={update.title}
             desc={update.desc}
+            desc2={update.desc2}
             img_url={update.img_url}
             button_url={update.button_url}
             version={update.version}

@@ -4,6 +4,8 @@ import CardUpdate from '@/components/Cards/CardUpdate';
 import { Modal } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase-client';
+import Link from 'next/link';
+import Button from '../ui/Button';
 
 export default function ModalUpdates({ user, userProfile }) {
     const [openModal, setOpenModal] = useState(true);
@@ -50,11 +52,12 @@ export default function ModalUpdates({ user, userProfile }) {
                     close: '',
                 }}
             >
+                <div className='flex flex-col'>
                 <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
                     Whoa, there’s new stuff!
                 </h1>
                 <p className="text-xl text-accents-5 text-center sm:text-2xl max-w-2xl m-auto mb-6">
-                    There has been {updatesMissed} updates since you last logged in.
+                    We've shared {updatesMissed > 1 ? updatesMissed + ' updates' : '1 update'} since you last logged in.
                 </p>
                 <div className="timeline grid grid-cols-1 md:grid-cols-3">
                     {UpdateNotes.slice(0, updatesMissed).map((update) => (
@@ -62,11 +65,24 @@ export default function ModalUpdates({ user, userProfile }) {
                             date={update.date}
                             title={update.title}
                             desc={update.desc}
+                            desc2={update.desc2}
                             img_url={update.img_url}
                             button_url={update.button_url}
                             version={update.version}
                         />
                     ))}
+
+                </div>
+                <div className="mx-auto mt-5 mb-10">
+                    <Link
+                        href="/new"
+
+                    >
+                        <Button variant="prominent">
+                            See All Updates
+                        </Button>
+                    </Link>
+                </div>
                 </div>
 
             </Modal>
