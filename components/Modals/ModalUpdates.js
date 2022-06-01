@@ -15,7 +15,7 @@ export default function ModalUpdates({ user, userProfile }) {
 
 
     useEffect(() => {
-        if(updatesMissed > 0) updateLatestVersion(latestUpdate)
+        if (updatesMissed > 0) updateLatestVersion(latestUpdate)
     }, [updatesMissed]);
 
     async function updateLatestVersion({ version }) {
@@ -45,18 +45,18 @@ export default function ModalUpdates({ user, userProfile }) {
                 opened={openModal}
                 onClose={() => setOpenModal(false)}
                 classNames={{
-                    modal: 'text-white bg-dark hideLinkBorder w-full md:w-2/3',
+                    modal: 'text-white bg-dark hideLinkBorder w-full max-w-4xl',
                     title: '',
                     close: '',
                 }}
             >
                 <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                    What's New?
+                    Whoa, there’s new stuff!
                 </h1>
                 <p className="text-xl text-accents-5 text-center sm:text-2xl max-w-2xl m-auto mb-6">
                     There has been {updatesMissed} updates since you last logged in.
                 </p>
-                <div className="timeline">
+                <div className="timeline grid grid-cols-1 md:grid-cols-3">
                     {UpdateNotes.slice(0, updatesMissed).map((update) => (
                         <CardUpdate
                             date={update.date}
