@@ -12,7 +12,10 @@ import Confetti from '@/components/Widgets/confetti';
 import { downloadImage } from '@/utils/downloadImage';
 import useSound from 'use-sound';
 
+import { useRouter } from 'next/router';
+
 function ItemCard({ item, activeItem, setActiveItem }) {
+
   const [itemImg, setItemImg] = useState(null);
 
   useEffect(() => {
@@ -140,6 +143,16 @@ export default function CardStats({
   const [buySuccess, setBuySuccess] = useState(false);
 
   const [buySFX] = useSound('/sounds/super_mario_coin.mp3');
+
+  const router = useRouter();
+
+  const { itemshop } = router.query;
+  console.log(itemshop);
+
+  
+  useEffect(() => {
+    if (itemshop) setItemShopOpen(true);
+  }, [itemshop]);
 
 
   useEffect(() => {
