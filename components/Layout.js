@@ -14,6 +14,7 @@ import ModalPlayer from './Modals/ModalPlayer';
 import ItemBanner from './ui/ItemBanner';
 import { fetchActiveTimer } from './Fetch/fetchMaster';
 import { supabase } from '@/utils/supabase-client';
+import ModalUpdates from './Modals/ModalUpdates';
 
 
 export default function Layout({ children, meta, manualPlayerID, manualPlayerStats }) {
@@ -46,7 +47,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
     }
   }, [manualPlayerID]);
 
-  async function loadActiveTimer(){
+  async function loadActiveTimer() {
     if (user) {
       fetchActiveTimer(user.id, setActiveTimer);
     }
@@ -150,7 +151,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
       </Head>
       <nav className='sticky top-0 z-20'>
         {activeTimer ?
-          activeTimer?.map((activeTimeItem, i) =>  (
+          activeTimer?.map((activeTimeItem, i) => (
             <ItemBanner
               index={i} activeTimeItem={activeTimeItem} setOverrideMetaTitle={setOverrideMetaTitle} />
           ))
@@ -161,7 +162,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
         {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
           <SideBar router={router} mobileDevice={mobileDevice} />
         </> : null}
-
+        {user && userProfile ? <ModalUpdates user = {user} userProfile = {userProfile}/> : null }
         {children}
 
       </main>
