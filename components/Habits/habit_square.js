@@ -289,13 +289,14 @@ export default function HabitSquare({
               <p className="text-sm sm:text-md mb-2 sm:mb-2 text-black">
                 Take A Picture!
               </p>
-              <div className="relative">
-                <label className="absolute top-1/2 left-0 sm:left-1/2 transform sm:-translate-x-1/2 -translate-y-1/2 fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer" htmlFor="single">
+              <div className="relative mb-4">
+                <label className="fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer" htmlFor="single">
                 </label>
                 <input
                   style={{
                     visibility: 'hidden',
                     position: 'relative',
+                    display: 'none'
                   }}
                   type="file"
                   id="single"
