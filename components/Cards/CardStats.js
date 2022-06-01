@@ -777,9 +777,9 @@ export default function CardStats({
                           onChange={setPurchaseAmount}
                         />
                         <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
-                          {activeItem.gold_cost * purchaseAmount} <i className='ml-2 fas fa-coins' />
+                          {purchaseAmount ? activeItem.gold_cost * purchaseAmount : 0} <i className='ml-2 fas fa-coins' />
                         </div>
-                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0 || activeItem.gold_cost * purchaseAmount > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost * purchaseAmount)}>Buy</Button>
+                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0 || !purchaseAmount || activeItem.gold_cost * purchaseAmount > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost * purchaseAmount)}>Buy</Button>
                       </>
                       : null}
                     {activeItem.type == 'timer' ?
@@ -787,21 +787,23 @@ export default function CardStats({
                         <NumberInput
                           defaultValue={purchaseTime}
                           label="How much time do you need?"
+                          description="In Minutes"
                           required
                           step={5}
                           min={0}
                           classNames={{
                             label: 'text-white text-lg mb-2'
                           }}
-                          formatter={(value) =>
-                            value + ' min'
-                          }
+                          // formatter={(value) =>
+                          //   !Number.isNaN(parseFloat(value)) ? value + ' min' 
+                          //   : null
+                          // }
                           onChange={setPurchaseTime}
                         />
                         <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
-                          {activeItem.gold_cost / 5 * purchaseTime} <i className='ml-2 fas fa-coins' />
+                          {purchaseTime ? activeItem.gold_cost / 5 * purchaseTime : 0} <i className='ml-2 fas fa-coins' />
                         </div>
-                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseTime == 0 || activeItem.gold_cost / 5 * purchaseTime > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost / 5 * purchaseTime)}>Buy</Button>
+                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseTime == 0 || !purchaseTime || activeItem.gold_cost / 5 * purchaseTime > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost / 5 * purchaseTime)}>Buy</Button>
                       </>
                       : null}
                   </div>
