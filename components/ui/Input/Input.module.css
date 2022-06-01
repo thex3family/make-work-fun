@@ -11,7 +11,7 @@
 }
 
 .dailies {
-  @apply bg-white text-black;
+  @apply bg-white text-black bg-opacity-75;
 }
 
 .dailies:disabled {
