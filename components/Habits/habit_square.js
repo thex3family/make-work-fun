@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase-client';
 import Input from '@/components/ui/Input';
 import ModalDQDetail from '../Modals/ModalDQDetail';
+import { downloadImage } from '@/utils/downloadImage';
 
 export default function HabitSquare({
   habit_id,
@@ -28,12 +29,23 @@ export default function HabitSquare({
   const [details, setDetails] = useState(null);
   const [timeDenominator, setTimeDenominator] = useState('MINS');
 
-  const [demoCompleted, setDemoCompleted] = useState(false);
   const [showDailyQuestDetail, setShowDailyQuestDetail] = useState(false);
+
+  const [picture, setPicture] = useState(false);
 
   useEffect(() => {
     if (streak_end) wasHabitCompletedToday(streak_end);
   }, [streak_end]);
+
+  
+  useEffect(() => {
+  if (habit_type == "Picture") loadDailiesPicture(habit_detail);
+  }, [habit_type]);
+
+  async function loadDailiesPicture(url){
+    setPicture(await downloadImage(url, 'dailies'))
+  }
+
 
   function wasHabitCompletedToday(streak_end) {
     const habitCompletedToday =
@@ -135,18 +147,46 @@ export default function HabitSquare({
     }
   }
 
-  function handleHabitCompletionStatusChange(habit_id, type, inputDetails) {
+  async function handleHabitCompletionStatusChange(habit_id, type, inputDetails) {
     if (displayMode == 'demo') {
       setDetails(inputDetails);
       setHabitCompletedToday(inputDetails ? true : !habitCompletedToday)
       console.log('Demo Pressed')
     } else {
-      setDetails(inputDetails);
+      if(type == 'Picture'){
+        try {
+          setSaving(true);
+    
+          const file = inputDetails.target.files[0];
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Math.random()}.${fileExt}`;
+          const filePath = `${fileName}`;
+    
+          let { error: uploadError } = await supabase.storage
+            .from('dailies')
+            .upload(filePath, file);
+    
+          if (uploadError) {
+            throw uploadError;
+          }
 
-      //console.log('handleHabitCompletionStatusChange');
-      toggleHabitStatus(habit_id, type, inputDetails).then(() => {
-        fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
-      });
+          toggleHabitStatus(habit_id, type, filePath).then(() => {
+            fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
+          });
+
+        } catch (error) {
+          // alert(error.message);
+          console.log(error.message);
+        } finally {
+        }
+
+      } else {
+        setDetails(inputDetails);
+        //console.log('handleHabitCompletionStatusChange');
+        toggleHabitStatus(habit_id, type, inputDetails).then(() => {
+          fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
+        });
+      }
     }
   }
 
@@ -178,16 +218,20 @@ export default function HabitSquare({
       //       : () => handleHabitCompletionStatusChange(habit_id)
       //     : null
       // }
-      className={`animate-fade-in-down my-4 mb-0 sm:mb-8 p-4 sm:p-6 w-full sm:w-64 relative ${habitCompletedToday
-          ? details == 'meh'
-            ? `bg-yellow-500 border-yellow-700`
-            : details == 'unhappy'
-              ? `bg-red-500 border-red-700`
-              : `bg-emerald-500 border-emerald-700`
-          : `bg-dailies-light border-dailies-dark`
+      className={`animate-fade-in-down w-full my-4 mb-0 sm:mb-8 sm:w-64 relative bg-cover bg-center object-cover ${habitCompletedToday
+        ? details == 'meh'
+          ? `bg-yellow-500 border-yellow-700`
+          : details == 'unhappy'
+            ? `bg-red-500 border-red-700`
+            : `bg-emerald-500 border-emerald-700`
+        : `bg-dailies-light border-dailies-dark`
         } rounded z-10 square shadow-lg border-4 ${habit_type == 'Checkbox' ? null : null
         }`}
+        style={{
+          backgroundImage: `url(${picture})`
+        }}
     >
+      <div className={`p-4 sm:p-6 h-full ${picture ? 'bg-white bg-opacity-75' : null}`}>
       {saving ? (
         <div className="inline-flex absolute top-0 right-0 mt-2 mr-2 text-xs font-semibold py-2 px-3 uppercase rounded text-white bg-gradient-to-r from-emerald-500 to-blue-500 border-emerald-500 z-50">
           <svg
@@ -240,15 +284,43 @@ export default function HabitSquare({
           <h2 className="text-lg sm:text-xl font-bold mb-1 sm:mb-3 leading-snug text-black">
             {habit_title}<span className='z-50 ml-2 fas fa-info-circle cursor-pointer' onClick={() => setShowDailyQuestDetail(true)} />
           </h2>
+          {habit_type == 'Picture' ? (
+            <div>
+              <p className="text-sm sm:text-md mb-2 sm:mb-2 text-black">
+                Upload Me!
+              </p>
+              <div className="relative">
+                <label className="absolute top-1/2 left-0 sm:left-1/2 transform sm:-translate-x-1/2 -translate-y-1/2 fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer" htmlFor="single">
+                </label>
+                <input
+                  style={{
+                    visibility: 'hidden',
+                    position: 'relative',
+                  }}
+                  type="file"
+                  id="single"
+                  accept="image/*"
+                  onChange={(event) => {
+                    if (event.target.files && event.target.files.length > 0) {
+                      setPicture(URL.createObjectURL(event.target.files[0]))
+                      , handleHabitCompletionStatusChange(habit_id, 'Picture', event)
+                    }
+                  }
+                  }
+                  disabled={saving}
+                />
+              </div>
+            </div>
+          ) : null}
           {habit_type == 'Checkbox' ? (
             <div>
               <p className="text-sm sm:text-md mb-2 sm:mb-2 text-black">
                 {habit_progress_statement(streak_duration)}
               </p>
               <div className="flex justify-start sm:justify-center">
-                <button className="fas fa-check text-2xl sm:text-3xl self-center font-semibold text-black" 
-                disabled={saving}
-                onClick={() => handleHabitCompletionStatusChange(habit_id)} />
+                <button className="fas fa-check text-2xl sm:text-3xl self-center font-semibold text-black"
+                  disabled={saving}
+                  onClick={() => handleHabitCompletionStatusChange(habit_id)} />
               </div>
             </div>
           ) : null}
@@ -260,10 +332,10 @@ export default function HabitSquare({
               <div className="flex-row flex gap-2 justify-start sm:justify-center mb-4">
                 <button
                   className={`text-4xl text-black far fa-smile ${habitCompletedToday
-                      ? details == 'happy'
-                        ? `opacity-100`
-                        : `opacity-10 hover:opacity-100`
-                      : `hover:text-emerald-500`
+                    ? details == 'happy'
+                      ? `opacity-100`
+                      : `opacity-10 hover:opacity-100`
+                    : `hover:text-emerald-500`
                     }`}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
@@ -276,10 +348,10 @@ export default function HabitSquare({
                 />
                 <button
                   className={`text-4xl text-black far fa-meh ${habitCompletedToday
-                      ? details == 'meh'
-                        ? `opacity-100`
-                        : `opacity-10 hover:opacity-100`
-                      : `hover:text-yellow-500`
+                    ? details == 'meh'
+                      ? `opacity-100`
+                      : `opacity-10 hover:opacity-100`
+                    : `hover:text-yellow-500`
                     }`}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
@@ -292,10 +364,10 @@ export default function HabitSquare({
                 />
                 <button
                   className={`text-4xl text-black far fa-frown ${habitCompletedToday
-                      ? details == 'unhappy'
-                        ? `opacity-100`
-                        : `opacity-10 hover:opacity-100`
-                      : `hover:text-red-500`
+                    ? details == 'unhappy'
+                      ? `opacity-100`
+                      : `opacity-10 hover:opacity-100`
+                    : `hover:text-red-500`
                     }`}
                   onClick={() =>
                     handleHabitCompletionStatusChange(
@@ -312,10 +384,10 @@ export default function HabitSquare({
           {habit_type == 'Note' ? (
             <div className="flex flex-col">
               <form
-               onSubmit={(e) => {
-                e.preventDefault()
-                handleHabitCompletionStatusChange(habit_id, 'Note', details)
-              }}>
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleHabitCompletionStatusChange(habit_id, 'Note', details)
+                }}>
                 <Input
                   className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
                   variant="dailies"
@@ -330,7 +402,7 @@ export default function HabitSquare({
                   variant="slim"
                   disabled={saving}
                   type="submit"
-                
+
                 >
                   {habitCompletedToday ? 'Update' : 'Save'}
                 </button>
@@ -404,7 +476,7 @@ export default function HabitSquare({
           {habit_type == 'Duration' ? (
             <div className="flex flex-col">
               <form className="flex flex-row align-middle"
-                 onSubmit={(e) => {
+                onSubmit={(e) => {
                   e.preventDefault()
                   handleHabitCompletionStatusChange(
                     habit_id,
@@ -445,7 +517,7 @@ export default function HabitSquare({
                     MINS
                   </button>
                 </div>
-                </form>
+              </form>
               <button
                 className="font-semibold text-sm text-black self-start sm:self-center"
                 variant="slim"
@@ -464,6 +536,7 @@ export default function HabitSquare({
             </p>
           </div>
         </div>
+      </div>
       </div>
     </div>
 
