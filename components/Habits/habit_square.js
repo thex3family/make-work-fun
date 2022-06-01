@@ -401,7 +401,6 @@ export default function HabitSquare({
                   className="font-semibold text-sm text-black self-start sm:self-center"
                   variant="slim"
                   disabled={saving}
-                  type="submit"
 
                 >
                   {habitCompletedToday ? 'Update' : 'Save'}
@@ -521,7 +520,6 @@ export default function HabitSquare({
               <button
                 className="font-semibold text-sm text-black self-start sm:self-center"
                 variant="slim"
-                type="submit"
                 disabled={saving}
               >
                 {habitCompletedToday ? 'Update' : 'Save'}
