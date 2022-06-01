@@ -1,0 +1,65 @@
+[
+  {
+    "date": "May 17, 2022",
+    "title": "Connect Notion With One-Click",
+    "desc": "With the Notion API officially out of beta, we've leveled up our integration to help you easily connect your wins from Notion.",
+    "img_url": "0.41.png",
+    "button_url": "/account?tab=connect&via=notion",
+    "version": "41"
+  },
+  {
+    "date": "Apr 12, 2022",
+    "title": "Faster Parties",
+    "desc": "We've drastically improved the speed it takes to access your party details, so you can swiftly embark on your adventure.",
+    "button_url": "/parties",
+    "version": "40"
+  },
+  {
+    "date": "Mar 27, 2022",
+    "title": "Let's Get Energized⚡",
+    "desc": "We've made it simple for you to keep track your energy levels during the day to help you be in touch with your body and avoid burnout.",
+    "img_url": "0.39.png",
+    "button_url": "/player",
+    "version": "39"
+  },
+  {
+    "date": "Mar 21, 2022",
+    "title": "Have Clarity On Where You're Leveling Up",
+    "desc": "Determine how your daily quests help you level up by tagging them with the appropriate areas of competence.",
+    "img_url": "0.38.png",
+    "button_url": "/dailies/edit",
+    "version": "38"
+  },
+  {
+    "date": "Mar 11, 2022",
+    "title": "Revamped Account Page",
+    "desc": "We care about your control over the app, so we've created management tools for you and improved navigation within the account page.",
+    "img_url": "0.37.png",
+    "button_url": "/account?tab=profile",
+    "version": "37"
+  },
+  {
+    "date": "Mar 01, 2022",
+    "title": "Create A Story For Your Daily Quests",
+    "desc": "Click on the (i) on any of your daily quests to jot down notes, reminders, and more - creating your own personalized questing experience!",
+    "img_url": "0.36.png",
+    "button_url": "/dailies",
+    "version": "36"
+  },
+  {
+    "date": "Feb 24, 2022",
+    "title": "Custom API For Developers",
+    "desc": "We made it easy for developers to directly send wins to their avatar via their API secret key for the Make Work Fun app.",
+    "img_url": "0.35.png",
+    "button_url": "/account?tab=profile",
+    "version": "35"
+  },
+  {
+    "date": "Feb 18, 2022",
+    "title": "View Your Avatar Everywher",
+    "desc": "We know that you want to see your amazing avatar all the time, so we've made your avatar follow you and give updates wherever you go.",
+    "img_url": "0.34.png",
+    "button_url": "/signin",
+    "version": "34"
+  }
+]

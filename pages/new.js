@@ -2,6 +2,8 @@ import Button from '@/components/ui/Button';
 import CardLUpdate from '@/components/Cards/CardLUpdate';
 import CardRUpdate from '@/components/Cards/CardRUpdate';
 import { useEffect } from 'react';
+import UpdateNotes from '@/utils/updates.json';
+import CardUpdate from '@/components/Cards/CardUpdate';
 
 export default function updates({metaBase, setMeta}) {
   useEffect(() => {
@@ -24,8 +26,18 @@ export default function updates({metaBase, setMeta}) {
           </p>
         </div>
         <div className="timeline z-10 grid grid-cols-3">
+        {UpdateNotes.map((update) => (
+          <CardUpdate 
+            date={update.date}
+            title={update.title}
+            desc={update.desc}
+            img_url={update.img_url}
+            button_url={update.button_url}
+            version={update.version}
+          />
+        ))}
           {/* start  */}
-          <CardRUpdate
+          {/* <CardRUpdate
             date="May 17, 2022"
             title="Connect Notion With One-Click"
             desc="With the Notion API officially out of beta, we've leveled up our integration to help you easily connect your wins from Notion."
@@ -358,7 +370,7 @@ export default function updates({metaBase, setMeta}) {
             img_url="updates/0.02.png"
             button_url="/account"
             version="v.02"
-          />
+          /> */}
           <div className="col-start-1 col-end-4 text-center">
             <span className="text-lg font-semibold inline-block py-1 mb-2 px-2 rounded text-emerald-600 bg-emerald-200 uppercase last:mr-0 mr-1">
               Jun 12, 2021
