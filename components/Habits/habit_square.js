@@ -446,6 +446,15 @@ export default function HabitSquare({
           ) : null}
           {habit_type == 'Location' ? (
             <div className="flex flex-col">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleHabitCompletionStatusChange(
+                    habit_id,
+                    'Location',
+                    details
+                  )
+                }}>
               <Input
                 className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
                 variant="dailies"
@@ -459,17 +468,10 @@ export default function HabitSquare({
                 className="font-semibold text-sm text-black self-start sm:self-center"
                 variant="slim"
                 disabled={saving}
-                onClick={() =>
-                  handleHabitCompletionStatusChange(
-                    habit_id,
-                    'Location',
-                    details
-                  )
-                }
-                disabled={saving}
               >
                 {habitCompletedToday ? 'Update' : 'Save'}
               </button>
+              </form>
             </div>
           ) : null}
           {habit_type == 'Duration' ? (
