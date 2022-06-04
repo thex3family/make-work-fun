@@ -147,8 +147,6 @@ export default function CardStats({
   const router = useRouter();
 
   const { itemshop } = router.query;
-  console.log(itemshop);
-
   
   useEffect(() => {
     if (itemshop) setItemShopOpen(true);
