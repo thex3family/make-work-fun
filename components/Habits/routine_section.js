@@ -1,5 +1,6 @@
 import HabitSquare from '@/components/Habits/habit_square';
 import { useEffect, useState } from 'react';
+import HabitRow from './habit_row';
 
 export default function RoutineSection({
   habit_group_name,
@@ -28,10 +29,10 @@ export default function RoutineSection({
   return (
     <div className="animate-fade-in-up" key={habit_group_name}>
       <div className="flex items-center">
-        <div
+        {/* <div
           className="border-t-2 border-white flex-grow mb-6 sm:mb-3 mr-3"
           aria-hidden="true"
-        ></div>
+        ></div> */}
 
         <div
           className="text-xl sm:text-2xl md:text-3xl font-bold text-primary pb-5 cursor-pointer inline-block"
@@ -61,10 +62,44 @@ export default function RoutineSection({
       <div
         className={
           (showHide ? '' : 'hidden ') +
-          'flex flex-col sm:flex-row gap-3 sm:gap-5 overflow-x-auto flex-nowrap mb-10'
+          'flex flex-col gap-3 overflow-x-auto flex-nowrap mb-10'
         }
       >
         {/* start */}
+        {associated_habits.map((h) => (
+          <HabitRow 
+            key={h.id}
+            habit_id={h.id}
+            habit_title={h.habit}
+            habit_type={h.habit_type}
+            habit_detail={h.latest_details}
+            habit_description={h.description}
+            streak_duration={h.streak_duration}
+            streak_start={h.streak_start}
+            streak_end={h.streak_end}
+            exp_reward={h.exp_reward}
+            habit_icon={h.icon}
+            fetchDailies={fetchDailies}
+            fetchDailiesCompletedToday={fetchDailiesCompletedToday}
+            habitCounter={habitCounter}
+            setHabitCounter={setHabitCounter}
+            player = {player}
+            setHabits = {setHabits} 
+            setLevelUp = {setLevelUp} 
+            setDailiesCount = {setDailiesCount}
+            displayMode={display}
+          />
+        ))}
+        
+      </div>
+      {/* <div
+        className={
+          (showHide ? '' : 'hidden ') +
+          'flex flex-col sm:flex-row gap-3 sm:gap-5 overflow-x-auto flex-nowrap mb-10'
+        }
+      >
+       
+        
         {associated_habits.map((h) => (
           <HabitSquare
             key={h.id}
@@ -89,7 +124,7 @@ export default function RoutineSection({
             displayMode={display}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
