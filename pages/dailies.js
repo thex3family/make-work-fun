@@ -27,7 +27,7 @@ import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
 import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 
-export default function dailies({user, metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
+export default function dailies({ user, metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [habits, setHabits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bonusLoading, setBonusLoading] = useState(false);
@@ -36,14 +36,38 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
 
   const [levelUp, setLevelUp] = useState(false);
 
-  const [showWinModal, setShowWinModal] = useState(false);
-  const [activeModalStats, setActiveModalStats] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
+
+
+  // Get the last 7 days 
+
+  // const dates = [];
+  // const NUM_OF_DAYS = 7;
+
+  // for (let i = 0; i < NUM_OF_DAYS; i++) {
+  //   const date = moment().subtract(i, 'days');
+  //   dates.push(date);
+  // }
+
+  // console.log(dates)
+
+  // handle the empty array
+
+  // [{ name: ccc, sat:false, sunday:false},{...}]
+
+  // habits = [...] 
+  // init = []
+  // for i < habits.length 
+  //   init.pish({name: habit:name, x:false,x:false,x:false,x:false,x:false,x:false,x:false})
+  // for habits (pull it from completed)
+  //   if(init[0].date === h.date) {
+  //     init[0].x = calculatecomplexthing(h[0])
+  //   }
 
   const [backgroundUrl, setBackgroundUrl] = useState(
     '/'
   );
-  
+
   const [newToSeason, setNewToSeason] = useState(null);
 
   // const [entryDate, setEntryDate] = useState(moment().startOf('day').format('yyyy-MM-DD'));
@@ -91,9 +115,9 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
     fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
     refreshStats();
   }
-  
+
   useEffect(() => {
-    if(refreshChildStats){
+    if (refreshChildStats) {
       refreshStats();
       setRefreshChildStats(false);
     }
@@ -122,13 +146,13 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
   if (!playerStats) {
     return (
       <>
-      <DailiesSkeleton />
+        <DailiesSkeleton />
         {
-          newToSeason ? 
-          <ModalOnboarding onboardingState={5} />
-          : null
+          newToSeason ?
+            <ModalOnboarding onboardingState={5} />
+            : null
         }
-    </>
+      </>
     )
   }
 
@@ -160,46 +184,46 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
                       <i className="text-yellow-400 fas fa-star" />
                       <i className="text-yellow-400 fas fa-star" />
                     </div>
-                    {dailyBonus ? 
-                     (
-                      <div>
-                        <Button
-                          variant="prominent"
-                          className="animate-fade-in-up mt-5 text-center font-bold"
-                          disabled={bonusLoading}
-                          onClick={() => claimDailyBonus(player, setDailyBonus, setBonusLoading)}
-                        >
-                          Claim Rewards
-                        </Button>
+                    {dailyBonus ?
+                      (
+                        <div>
+                          <Button
+                            variant="prominent"
+                            className="animate-fade-in-up mt-5 text-center font-bold"
+                            disabled={bonusLoading}
+                            onClick={() => claimDailyBonus(player, setDailyBonus, setBonusLoading)}
+                          >
+                            Claim Rewards
+                          </Button>
 
-                        <div className="mt-3 animate-fade-in-up">
-                          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-2">
-                            +50 💰{' '}
-                          </span>
-                          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
-                            +100 XP
-                          </span>
+                          <div className="mt-3 animate-fade-in-up">
+                            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-2">
+                              +50 💰{' '}
+                            </span>
+                            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 last:mr-0 mr-1">
+                              +100 XP
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <Button
-                          variant="prominent"
-                          disabled={true}
-                          className="animate-fade-in-up mt-5 text-center font-bold"
-                        >
-                          Rewards Claimed!
-                        </Button>
-                        <div className="mt-3 animate-fade-in-up">
-                          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-2">
-                            +50 💰{' '}
-                          </span>
-                          <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1">
-                            +100 XP
-                          </span>
+                      ) : (
+                        <div>
+                          <Button
+                            variant="prominent"
+                            disabled={true}
+                            className="animate-fade-in-up mt-5 text-center font-bold"
+                          >
+                            Rewards Claimed!
+                          </Button>
+                          <div className="mt-3 animate-fade-in-up">
+                            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-2">
+                              +50 💰{' '}
+                            </span>
+                            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-gray-600 bg-gray-200 last:mr-0 mr-1">
+                              +100 XP
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                   </div>
                 ) : dailiesCount >= 3 ? (
                   <div>
@@ -263,7 +287,44 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
             {/* <button onClick={() => console.log(habits)}>
           Push me to check if data is pulled properly
         </button>  */}
+
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
+              <div className='grid grid-cols-3 mb-4'>
+                <div className='col-span-1'>
+                </div>
+                <div className='col-span-2'>
+                  <div className='grid grid-cols-7 justify-items-center pr-5'>
+                    <div>
+                      Jun 18
+                      <br />Sat
+                    </div>
+                    <div>
+                      Jun 19
+                      <br />Sun
+                    </div>
+                    <div>
+                      Jun 20
+                      <br />Mon
+                    </div>
+                    <div>
+                      Jun 21
+                      <br />Tue
+                    </div>
+                    <div>
+                      Jun 22
+                      <br />Wed
+                    </div>
+                    <div>
+                      Jun 23
+                      <br />Thu
+                    </div>
+                    <div>
+                      Jun 24
+                      <br />Fri
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="text-center">
                 {habits != null ? (
                   habits.length != 0 ? (
@@ -272,9 +333,9 @@ export default function dailies({user, metaBase, setMeta, refreshChildStats, set
                       fetchDailies={fetchDailies}
                       fetchDailiesCompletedToday={fetchDailiesCompletedToday}
                       player={user.id}
-                      setHabits = {setHabits} 
-                      setLevelUp = {setLevelUp} 
-                      setDailiesCount = {setDailiesCount}
+                      setHabits={setHabits}
+                      setLevelUp={setLevelUp}
+                      setDailiesCount={setDailiesCount}
                     />
                   ) : (
                     <span className="text-center text-dailies font-semibold text-md">
