@@ -358,12 +358,7 @@ export default function HabitRow({
             </div>
           </div>
           <div className='col-span-2'>
-            <div className='grid grid-cols-7 justify-items-center items-center place-self-center self-center h-full'>
-              <span className="text-sm font-semibold text-black">...</span>
-              <span className="text-sm font-semibold text-black">...</span>
-              <span className="text-sm font-semibold text-black">...</span>
-              <span className="text-sm font-semibold text-black">...</span>
-              <span className="text-sm font-semibold text-black">...</span>
+            <div className='grid grid-cols-2 justify-items-center items-center place-self-center self-center h-full'>
               <span className="text-sm font-semibold text-black">...</span>
 
               {habit_type == 'Checkbox' ?

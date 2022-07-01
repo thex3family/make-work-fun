@@ -293,34 +293,14 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                 <div className='col-span-1'>
                 </div>
                 <div className='col-span-2'>
-                  <div className='grid grid-cols-7 justify-items-center pr-5'>
+                  <div className='grid grid-cols-2 justify-items-center pr-5'>
                     <div>
-                      Jun 18
-                      <br />Sat
+                      <div className='font-bold'>Yesterday</div>
+                      <div className='text-sm'>Coming Soon</div>
                     </div>
                     <div>
-                      Jun 19
-                      <br />Sun
-                    </div>
-                    <div>
-                      Jun 20
-                      <br />Mon
-                    </div>
-                    <div>
-                      Jun 21
-                      <br />Tue
-                    </div>
-                    <div>
-                      Jun 22
-                      <br />Wed
-                    </div>
-                    <div>
-                      Jun 23
-                      <br />Thu
-                    </div>
-                    <div>
-                      Today
-                      <br />Fri
+                    <div className='font-bold'>Today</div>
+                    <div className='text-sm'>{moment().format('dddd')}</div>
                     </div>
                   </div>
                 </div>
