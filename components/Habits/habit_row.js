@@ -224,7 +224,7 @@ export default function HabitRow({
       //       : () => handleHabitCompletionStatusChange(habit_id)
       //     : null
       // }
-      className={`animate-fade-in-down w-full my-4 mb-0 relative bg-cover bg-center object-cover ${habitCompletedToday
+      className={`overflow-x-hidden animate-fade-in-down w-full my-4 mb-0 relative bg-cover bg-center object-cover ${habitCompletedToday
         ? details == 'meh'
           ? `bg-yellow-500 border-yellow-700`
           : details == 'unhappy'
@@ -412,9 +412,15 @@ export default function HabitRow({
                 <Popover
                   opened={opened}
                   onClose={() => setOpened(false)}
-                  target={<button className="fas fa-clock text-2xl sm:text-3xl self-center font-semibold text-black hideLinkBorder"
-                    disabled={saving}
-                    onClick={() => setOpened((o) => !o)} />
+                  target={
+                    <div className='flex flex-col'>
+                      <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
+                        {details ? details : 0} {timeDenominator}
+                      </div>
+                      <button className="far fa-clock text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100"
+                        disabled={saving}
+                        onClick={() => setOpened((o) => !o)} />
+                    </div>
                   }
                   position="bottom"
                   withArrow
@@ -545,13 +551,20 @@ export default function HabitRow({
                 <Popover
                   opened={opened}
                   onClose={() => setOpened(false)}
-                  target={<button className="fas fa-map-pin text-2xl sm:text-3xl self-center font-semibold text-black hideLinkBorder"
-                    disabled={saving}
-                    onClick={() => setOpened((o) => !o)} />
+                  target={
+                    <div className='flex flex-col flex-wrap'>
+                      <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
+                        {details ? details : null}
+                      </div>
+                      <button className="fas fa-map-pin text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100"
+                        disabled={saving}
+                        onClick={() => setOpened((o) => !o)} />
+                    </div>
                   }
                   position="bottom"
                   withArrow
                 >
+
                   <form className="flex flex-col"
                     onSubmit={(e) => {
                       e.preventDefault()
@@ -585,9 +598,15 @@ export default function HabitRow({
                 <Popover
                   opened={opened}
                   onClose={() => setOpened(false)}
-                  target={<button className="fas fa-sticky-note text-2xl sm:text-3xl self-center font-semibold text-black hideLinkBorder"
-                    disabled={saving}
-                    onClick={() => setOpened((o) => !o)} />
+                  target={
+                    <div className='flex flex-col flex-wrap'>
+                    <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
+                      {details ? details : null}
+                    </div>
+                    <button className="far fa-sticky-note text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100"
+                      disabled={saving}
+                      onClick={() => setOpened((o) => !o)} />
+                  </div>
                   }
                   position="bottom"
                   withArrow
@@ -598,22 +617,22 @@ export default function HabitRow({
                       handleHabitCompletionStatusChange(habit_id, 'Note', details)
                     }}>
                     <Input
-                    className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
-                    variant="dailies"
-                    id="Note"
-                    type="varchar"
-                    placeholder="Add your note here!"
-                    value={details || ''}
-                    onChange={(v) => setDetails(v)}
-                  />
-                  <button
-                    className="font-semibold text-sm text-black hideLinkBorder self-start sm:self-center"
-                    variant="slim"
-                    disabled={saving}
-                    onClick={() => setOpened((o) => !o)}
-                  >
-                    {habitCompletedToday ? 'Update' : 'Save'}
-                  </button>
+                      className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
+                      variant="dailies"
+                      id="Note"
+                      type="varchar"
+                      placeholder="Add your note here!"
+                      value={details || ''}
+                      onChange={(v) => setDetails(v)}
+                    />
+                    <button
+                      className="font-semibold text-sm text-black hideLinkBorder self-start sm:self-center"
+                      variant="slim"
+                      disabled={saving}
+                      onClick={() => setOpened((o) => !o)}
+                    >
+                      {habitCompletedToday ? 'Update' : 'Save'}
+                    </button>
                   </form>
                 </Popover>
                 : null}
