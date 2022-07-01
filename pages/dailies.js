@@ -319,7 +319,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                       <br />Thu
                     </div>
                     <div>
-                      Jun 24
+                      Today
                       <br />Fri
                     </div>
                   </div>
