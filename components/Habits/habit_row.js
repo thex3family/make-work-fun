@@ -268,7 +268,7 @@ export default function HabitRow({
         {/* {saving ? <div className="relative"><div className="absolute right-0 top-0 text-xs font-semibold py-1 px-2 uppercase rounded text-gray-600 bg-gray-200">
                     Saving...
                   </div></div> : <div></div>} */}
-        <div className='grid grid-cols-3 '>
+        <div className='grid grid-cols-3'>
           <div className='col-span-1'>
             <div className="self-center flex flex-row align-center">
               <div className="flex flex-col justify-center m-auto w-1/3 mr-3 align-center">
@@ -289,9 +289,12 @@ export default function HabitRow({
               </div>
               {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
               <div className="text-left w-2/3 self-center">
-                <h2 className="text-lg sm:text-xl font-bold mb-1 leading-snug text-black">
-                  {habit_title}<span className='z-50 ml-2 fas fa-info-circle cursor-pointer' onClick={() => setShowDailyQuestDetail(true)} />
+                <div className='flex gap-2 flex-row items-center mb-1'>
+                <h2 className="text-lg sm:text-xl font-bold leading-snug text-black truncate">
+                  {habit_title}
                 </h2>
+                <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
+                </div>
                 {habit_type == 'Picture' ? (
                   <div>
                     <p className="text-sm sm:text-md mb-2 text-black">
@@ -681,6 +684,7 @@ export default function HabitRow({
           setHabits={setHabits}
           setLevelUp={setLevelUp}
           setDailiesCount={setDailiesCount}
+          habit_title={habit_title}
         />
       </>
     ) : null}

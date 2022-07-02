@@ -7,7 +7,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
 export default function ModalDQDetail({ setShowDailyQuestDetail, habit_id, habit_description, fetchDailies,
-  player, setHabits, setLevelUp, setDailiesCount }) {
+  player, setHabits, setLevelUp, setDailiesCount, habit_title }) {
 
   const [saving, setSaving] = useState(false);
 
@@ -296,7 +296,11 @@ export default function ModalDQDetail({ setShowDailyQuestDetail, habit_id, habit
           <div className="relative w-full my-6 mx-auto max-w-xl max-h-screen z-50">
             {/*content*/}
             <div className="border-4 border-dailies-dark rounded-lg shadow-lg relative flex flex-col w-full bg-dailies-light outline-none focus:outline-none">
-
+            <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                <h3 className="text-xl sm:text-2xl font-semibold text-black">
+                  {habit_title}
+                </h3>
+              </div>
               {/*body*/}
               <div className="p-6 text-black">
                 <div className="text-left">
