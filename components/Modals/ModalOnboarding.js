@@ -30,7 +30,7 @@ export default function ModalOnboarding({ onboardingState, player }) {
 
       // don't need onboarding state = 2 because it is the case where only API key is saved (can't happen anymore)
     } else if (onboardingState == 3) {
-      setHeader('⚔ Your Database Is Connected!');
+      setHeader('Your Database Is Connected!');
       setDescription("It's time to hand in your first quest!");
       setSteps('hand-in')
       setMediaLink(
@@ -38,14 +38,14 @@ export default function ModalOnboarding({ onboardingState, player }) {
       );
       setMediaType('iframe');
     } else if (onboardingState == 5) {
-      setHeader("⚔ It's A Brand New Season!");
+      setHeader("It's A Brand New Season!");
       setDescription("It's a new season for growth.");
       setSteps('new-season')
       setMediaLink('/img/new_season_motivation.png');
       setMediaType('img');
       setCustomLink('new-season')
     } else if (onboardingState == 'new_season_embed') {
-      setHeader("⚔ It's A Brand New Season!");
+      setHeader("It's A Brand New Season!");
       setDescription("It's a new season for growth.");
       setSteps('new-season')
       setCustomLink('new-season-embed')
