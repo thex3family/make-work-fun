@@ -296,7 +296,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                   <div className='grid grid-cols-2 justify-items-center pr-5'>
                     <div>
                       <div className='font-bold'>Yesterday</div>
-                      <div className='text-sm'>Coming Soon</div>
+                      <div className='text-sm'>(Coming Soon)</div>
                     </div>
                     <div>
                     <div className='font-bold'>Today</div>
