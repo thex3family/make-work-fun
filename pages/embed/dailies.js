@@ -22,7 +22,8 @@ import {
   fetchDailiesCompletedToday,
   dailyBonusButtons,
   claimDailyBonus,
-  lookupPlayerFromAuth
+  lookupPlayerFromAuth,
+  fetchHabitChanges
 } from '@/components/Fetch/fetchMaster';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import WinModal from '@/components/Modals/ModalWin';
@@ -129,7 +130,8 @@ export default function dailies() {
 
   async function loadPlayer() {
     console.log('Loading Player');
-    fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
+    refreshDailies();
+    fetchHabitChanges(player, refreshDailies);
     refreshStats();
     fetchLatestWin(
       setActiveModalStats,
@@ -145,6 +147,11 @@ export default function dailies() {
     setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
     dailyBonusButtons(player, setDailyBonus);
     setLoading(false);
+  }
+  
+  async function refreshDailies() {
+    console.log('Refreshing Dailies');
+    fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
   }
 
   useEffect(() => {

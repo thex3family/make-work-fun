@@ -38,8 +38,15 @@ export default function HabitRow({
   const [opened, setOpened] = useState(false);
 
   useEffect(() => {
-    if (streak_end) wasHabitCompletedToday(streak_end);
-  }, [streak_end]);
+    if (streak_end) {
+      wasHabitCompletedToday(streak_end);
+    } else {
+      setHabitCompletedToday(false)
+      // need something here to remove the habit counter if changed from elsewhere.
+      setHabitCounter((v) => v.splice(0, v.length - 1));
+      setDetails(null);
+    }
+  }, [streak_end, habit_detail]);
 
 
   useEffect(() => {
@@ -133,7 +140,6 @@ export default function HabitRow({
             .match({ id: fetchData[0].id });
 
           setHabitCompletedToday(false);
-          setHabitCounter((v) => v.splice(0, v.length - 1));
 
           if (error && status !== 406) {
             throw error;
@@ -175,6 +181,7 @@ export default function HabitRow({
           }
 
           toggleHabitStatus(habit_id, type, filePath).then(() => {
+            // may not be necessary in the future. Figure out how we can abstract out the click.
             fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
           });
 
