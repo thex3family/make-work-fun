@@ -21,7 +21,8 @@ import {
   fetchDailies,
   fetchDailiesCompletedToday,
   dailyBonusButtons,
-  claimDailyBonus
+  claimDailyBonus,
+  fetchHabitChanges
 } from '@/components/Fetch/fetchMaster';
 import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
@@ -112,7 +113,8 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
 
   async function loadPlayer() {
     console.log('Loading Player');
-    fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
+    refreshDailies();
+    fetchHabitChanges(player, refreshDailies);
     refreshStats();
   }
 
@@ -128,6 +130,12 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
     setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
     dailyBonusButtons(player, setDailyBonus);
     setLoading(false);
+  }
+
+  
+  async function refreshDailies() {
+    console.log('Refreshing Dailies');
+    fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
   }
 
   useEffect(() => {

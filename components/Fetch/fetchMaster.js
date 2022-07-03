@@ -972,3 +972,22 @@ export async function fetchActiveTimer(player, setActiveTimer) {
   } finally {
   }
 }
+
+export async function fetchHabitChanges(player, refreshDailies) {
+  console.log('Checking for habit changes')
+  const { data, error } = await supabase
+    .from(`completed_habits:player=eq.${player}`)
+    .on('INSERT', payload => {
+      console.log('Habit Completed', payload)
+      refreshDailies();
+    })
+    .on('UPDATE', payload => {
+      console.log('Habit Updated', payload)
+      refreshDailies();
+    })
+    .on('DELETE', payload => {
+      console.log('Habit Deleted', payload)
+      refreshDailies();
+    })
+    .subscribe()
+}
