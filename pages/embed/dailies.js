@@ -645,6 +645,22 @@ export default function dailies() {
           Push me to check if data is pulled properly
         </button>  */}
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
+            <div className='grid grid-cols-3 mb-4'>
+                <div className='col-span-1'>
+                </div>
+                <div className='col-span-2'>
+                  <div className='grid grid-cols-2 justify-items-center pr-5'>
+                    <div>
+                      <div className='font-bold'>Yesterday</div>
+                      <div className='text-sm'>(Coming Soon)</div>
+                    </div>
+                    <div>
+                    <div className='font-bold'>Today</div>
+                    <div className='text-sm'>{moment().format('dddd')}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="text-center">
                 {habits != null ? (
                   habits.length != 0 ? (
