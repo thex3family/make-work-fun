@@ -302,10 +302,10 @@ export default function HabitRow({
               {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
               <div className="text-left w-2/3 self-center">
                 <div className='flex gap-2 flex-row items-center mb-1'>
-                <h2 className="text-lg sm:text-xl font-bold leading-snug text-black truncate">
-                  {habit_title}
-                </h2>
-                <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
+                  <h2 className="text-lg sm:text-xl font-bold leading-snug text-black truncate">
+                    {habit_title}
+                  </h2>
+                  <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
                 </div>
                 {habit_type == 'Picture' ? (
                   <div>
@@ -377,7 +377,8 @@ export default function HabitRow({
               <span className="text-sm font-semibold text-black">...</span>
 
               {habit_type == 'Checkbox' ?
-                <button className="fas fa-check text-2xl sm:text-3xl font-semibold text-black hideLinkBorder"
+                <button className={`fas fa-check text-2xl sm:text-3xl font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompletedToday ? `opacity-100` : ``
+                  }`}
                   disabled={saving}
                   onClick={() => handleHabitCompletionStatusChange(habit_id)} />
                 : null}
@@ -392,7 +393,6 @@ export default function HabitRow({
                       <button
                         className={`text-2xl opacity-10 text-black hideLinkBorder far fa-minus-square ${details > 0 ? `hover:opacity-100` : ``
                           }`}
-                        disabled={details > 0 ? false : true}
                         onClick={() =>
                           handleHabitCompletionStatusChange(
                             habit_id,
@@ -400,7 +400,7 @@ export default function HabitRow({
                             Number(details) - 1
                           )
                         }
-                        disabled={saving}
+                        disabled={saving || !details}
                       />
                       <button
                         className="text-2xl opacity-10 text-black hideLinkBorder far fa-plus-square hover:opacity-100"
@@ -427,7 +427,8 @@ export default function HabitRow({
                       <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
                         {details ? details : 0} {timeDenominator}
                       </div>
-                      <button className="far fa-clock text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100"
+                      <button className={`far fa-clock text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details > 0 ? `opacity-100` : ``
+                        }`}
                         disabled={saving}
                         onClick={() => setOpened((o) => !o)} />
                     </div>
@@ -496,8 +497,9 @@ export default function HabitRow({
                   opened={opened}
                   onClose={() => setOpened(false)}
                   target={<button
-                    className={`text-4xl text-black hideLinkBorder ${habitCompletedToday
-                      ? (details == 'happy' ? 'far fa-smile' : details == 'meh' ? 'far fa-meh' : details == 'unhappy' ? 'far fa-frown' : null) : 'far fa-meh'} `}
+                    className={`text-4xl text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
+                      } ${habitCompletedToday
+                        ? (details == 'happy' ? 'far fa-smile' : details == 'meh' ? 'far fa-meh' : details == 'unhappy' ? 'far fa-frown' : null) : 'far fa-meh'} `}
                     onClick={() => setOpened((o) => !o)}
                     disabled={saving}
                   />}
@@ -566,7 +568,8 @@ export default function HabitRow({
                       <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
                         {details ? details : null}
                       </div>
-                      <button className="fas fa-map-pin text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100"
+                      <button className={`fas fa-map-pin text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
+                        }`}
                         disabled={saving}
                         onClick={() => setOpened((o) => !o)} />
                     </div>
@@ -610,13 +613,14 @@ export default function HabitRow({
                   onClose={() => setOpened(false)}
                   target={
                     <div className='flex flex-col flex-wrap'>
-                    <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
-                      {details ? details : null}
+                      <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
+                        {details ? details : null}
+                      </div>
+                      <button className={`far fa-sticky-note text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
+                        }`}
+                        disabled={saving}
+                        onClick={() => setOpened((o) => !o)} />
                     </div>
-                    <button className="far fa-sticky-note text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100"
-                      disabled={saving}
-                      onClick={() => setOpened((o) => !o)} />
-                  </div>
                   }
                   position="bottom"
                   withArrow
@@ -649,7 +653,9 @@ export default function HabitRow({
 
               {habit_type == 'Picture' ?
                 <div className="relative">
-                  <button className="fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer hideLinkBorder" htmlFor="single"
+                  <button className={`fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer hideLinkBorder opacity-10 hover:opacity-100 ${habitCompletedToday ? `opacity-100` : ``
+                    }`}
+                    htmlFor="single"
                     onClick={() => fileRef.current.click()}>
                   </button>
                   <input
