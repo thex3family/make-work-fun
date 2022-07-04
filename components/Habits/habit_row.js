@@ -68,6 +68,9 @@ export default function HabitRow({
       setHabitCounter((v) => [...v, 'Complete']);
       // hacky way of not showing the previous time's habit_detail. 
       setDetails(habit_detail);
+    } else {
+      // I have an issue where removals of habits doesn't lower the count
+      // setHabitCounter((v) => v.splice(0, v.length - 1));
     }
   }
 
@@ -102,6 +105,7 @@ export default function HabitRow({
         // if not completed, post to database (i.e. fetchData is an empty array)
 
         let testDateStr = new Date();
+        let testDate = moment().startOf('day').format('YYYY-MM-DD');
         // console.log('testDateStr: ' + testDateStr);
         /*
                 Notes from us trying to resolve that timezone issue (supabase is still not saving the timezone)
@@ -114,6 +118,7 @@ export default function HabitRow({
           {
             player: player,
             closing_date: testDateStr,
+            completed_on: testDate,
             exp_reward: 25,
             details: inputDetails,
             habit: habit_id
