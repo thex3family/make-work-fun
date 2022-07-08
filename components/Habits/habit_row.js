@@ -8,6 +8,326 @@ import { downloadImage } from '@/utils/downloadImage';
 
 import { Popover } from '@mantine/core';
 
+export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_id, habit_type, setPicture, handleHabitCompletionStatusChange, timeDenominator, getTimeInHours, getTimeInMinutes, convertTime, saving }) {
+  const [opened, setOpened] = useState(false);
+  const fileRef = useRef();
+
+  const [details, setDetails] = useState(insertedDetails);
+
+  useEffect(() => {
+    setDetails(insertedDetails);
+  }, [insertedDetails]);
+
+  return (
+    <>
+      {habit_type == 'Checkbox' ?
+        <button className={`fas fa-check text-2xl sm:text-3xl font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``
+          }`}
+          disabled={saving}
+          onClick={() => handleHabitCompletionStatusChange(habit_id, null, null, date)} />
+        : null}
+      {habit_type == 'Counter' ?
+        <>
+          <div className="">
+            <div className="text-3xl mb-0.5 px-2 self-center font-semibold text-black">
+              {details ? details : 0}
+            </div>
+            <div className='flex flex-row gap-2'>
+
+              <button
+                className={`text-2xl opacity-10 text-black hideLinkBorder far fa-minus-square ${details > 0 ? `hover:opacity-100` : ``
+                  }`}
+                onClick={() =>
+                  handleHabitCompletionStatusChange(
+                    habit_id,
+                    'countdown',
+                    Number(details) - 1, date
+                  )
+                }
+                disabled={saving || !details}
+              />
+              <button
+                className="text-2xl opacity-10 text-black hideLinkBorder far fa-plus-square hover:opacity-100"
+                onClick={() =>
+                  handleHabitCompletionStatusChange(
+                    habit_id,
+                    'countup',
+                    Number(details) + 1, date
+                  )
+                }
+                disabled={saving}
+              />
+            </div>
+
+          </div>
+        </>
+        : null}
+      {habit_type == 'Duration' ?
+        <Popover
+          opened={opened}
+          onClose={() => setOpened(false)}
+          target={
+            <div className='flex flex-col'>
+              <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
+                {details ? details : 0} {timeDenominator}
+              </div>
+              <button className={`far fa-clock text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details > 0 ? `opacity-100` : ``
+                }`}
+                disabled={saving}
+                onClick={() => setOpened((o) => !o)} />
+            </div>
+          }
+          position="bottom"
+          withArrow
+        >
+          <form className="flex flex-col"
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleHabitCompletionStatusChange(
+                habit_id,
+                'Duration',
+                timeDenominator === 'HRS'
+                  ? getTimeInMinutes(details)
+                  : details, date
+              )
+            }}>
+            <div className="flex flex-row align-middle">
+              <Input
+                className="text-xs sm:text-sm mt-0.5 sm:mt-1 mb-2 sm:mb-4 font-semibold rounded"
+                variant="dailies"
+                id="Note"
+                type="number"
+                placeholder="Add duration here!"
+                value={details || ''}
+                onChange={(v) => setDetails(v)}
+              />
+              <div className="flex flex-col">
+                <button
+                  className={`font-semibold text-xs sm:text-sm text-black hideLinkBorder ml-2 text-left ${timeDenominator == 'HRS' ? `opacity-100` : `opacity-30`
+                    }`}
+                  variant="slim"
+                  type="button"
+                  disabled={timeDenominator == 'HRS'}
+                  onClick={() => setDetails(convertTime('HRS', details))}
+                >
+                  HRS
+                </button>
+                <button
+                  className={`font-semibold text-xs sm:text-sm text-black hideLinkBorder ml-2 text-left ${timeDenominator == 'MINS' ? `opacity-100` : `opacity-30`
+                    }`}
+                  variant="slim"
+                  type="button"
+                  disabled={timeDenominator == 'MINS'}
+                  onClick={() => setDetails(convertTime('MINS', details))}
+                >
+                  MINS
+                </button>
+              </div>
+            </div>
+            <button
+              className="font-semibold text-sm text-black hideLinkBorder self-start sm:self-center"
+              variant="slim"
+              disabled={saving}
+              onClick={() => setOpened((o) => !o)}
+            >
+              {habitCompleted ? 'Update' : 'Save'}
+            </button>
+          </form>
+        </Popover>
+        // need an if statement to show the time when it is done
+        : null}
+      {habit_type == 'Feeling' ?
+        <Popover
+          opened={opened}
+          onClose={() => setOpened(false)}
+          target={<button
+            className={`text-4xl text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
+              } ${habitCompleted
+                ? (details == 'happy' ? 'far fa-smile' : details == 'meh' ? 'far fa-meh' : details == 'unhappy' ? 'far fa-frown' : null) : 'far fa-meh'} `}
+            onClick={() => setOpened((o) => !o)}
+            disabled={saving}
+          />}
+          position="bottom"
+          withArrow
+        >
+          <div className="flex-row flex gap-2 justify-center">
+            <button
+              className={`text-4xl text-black hideLinkBorder far fa-smile ${habitCompleted
+                ? details == 'happy'
+                  ? `opacity-100`
+                  : `opacity-10 hover:opacity-100`
+                : `hover:text-emerald-500`
+                }`}
+              onClick={() =>
+              (handleHabitCompletionStatusChange(
+                habit_id,
+                'Feeling',
+                `${details == 'happy' ? '' : 'happy'}`, date
+              ), setOpened((o) => !o))
+              }
+              disabled={saving}
+            />
+            <button
+              className={`text-4xl text-black hideLinkBorder far fa-meh ${habitCompleted
+                ? details == 'meh'
+                  ? `opacity-100`
+                  : `opacity-10 hover:opacity-100`
+                : `hover:text-yellow-500`
+                }`}
+              onClick={() =>
+              (handleHabitCompletionStatusChange(
+                habit_id,
+                'Feeling',
+                `${details == 'meh' ? '' : 'meh'}`, date
+              ), setOpened((o) => !o))
+              }
+              disabled={saving}
+            />
+            <button
+              className={`text-4xl text-black hideLinkBorder far fa-frown ${habitCompleted
+                ? details == 'unhappy'
+                  ? `opacity-100`
+                  : `opacity-10 hover:opacity-100`
+                : `hover:text-red-500`
+                }`}
+              onClick={() =>
+              (handleHabitCompletionStatusChange(
+                habit_id,
+                'Feeling',
+                `${details == 'unhappy' ? '' : 'unhappy'}`, date
+              ), setOpened((o) => !o))
+              }
+              disabled={saving}
+            />
+          </div>
+        </Popover>
+
+        : null}
+      {habit_type == 'Location' ?
+        <Popover
+          opened={opened}
+          onClose={() => setOpened(false)}
+          target={
+            <div className='flex flex-col flex-wrap'>
+              <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
+                {details ? details : null}
+              </div>
+              <button className={`fas fa-map-pin text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
+                }`}
+                disabled={saving}
+                onClick={() => setOpened((o) => !o)} />
+            </div>
+          }
+          position="bottom"
+          withArrow
+        >
+
+          <form className="flex flex-col"
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleHabitCompletionStatusChange(
+                habit_id,
+                'Location',
+                details, date
+              )
+            }}>
+            <Input
+              className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
+              variant="dailies"
+              id="Note"
+              type="varchar"
+              placeholder="Add location here!"
+              value={details || ''}
+              onChange={(v) => setDetails(v)}
+            />
+            <button
+              className="font-semibold text-sm text-black hideLinkBorder self-start sm:self-center"
+              variant="slim"
+              disabled={saving}
+              onClick={() => setOpened((o) => !o)}
+            >
+              {habitCompleted ? 'Update' : 'Save'}
+            </button>
+          </form>
+        </Popover>
+        : null}
+      {habit_type == 'Note' ?
+        <Popover
+          opened={opened}
+          onClose={() => setOpened(false)}
+          target={
+            <div className='flex flex-col flex-wrap'>
+              <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
+                {details ? details : null}
+              </div>
+              <button className={`far fa-sticky-note text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
+                }`}
+                disabled={saving}
+                onClick={() => setOpened((o) => !o)} />
+            </div>
+          }
+          position="bottom"
+          withArrow
+        >
+          <form className="flex flex-col"
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleHabitCompletionStatusChange(habit_id, 'Note', details, date)
+            }}>
+            <Input
+              className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
+              variant="dailies"
+              id="Note"
+              type="varchar"
+              placeholder="Add your note here!"
+              value={details || ''}
+              onChange={(v) => setDetails(v)}
+            />
+            <button
+              className="font-semibold text-sm text-black hideLinkBorder self-start sm:self-center"
+              variant="slim"
+              disabled={saving}
+              onClick={() => setOpened((o) => !o)}
+            >
+              {habitCompleted ? 'Update' : 'Save'}
+            </button>
+          </form>
+        </Popover>
+        : null}
+
+      {habit_type == 'Picture' ?
+        <div className="relative">
+          <button className={`fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``
+            }`}
+            htmlFor="single"
+            onClick={() => fileRef.current.click()}>
+          </button>
+          <input
+            ref={fileRef}
+            style={{
+              visibility: 'hidden',
+              position: 'relative',
+              display: 'none'
+            }}
+            hidden
+            type="file"
+            id="single"
+            accept="image/*"
+            onChange={(event) => {
+              if (event.target.files && event.target.files.length > 0) {
+                setPicture(URL.createObjectURL(event.target.files[0]))
+                  , handleHabitCompletionStatusChange(habit_id, 'Picture', event, date)
+              }
+            }
+            }
+            disabled={saving}
+          />
+        </div>
+        : null}
+    </>
+  );
+}
+
 export default function HabitRow({
   habit_id,
   habit_title,
@@ -24,29 +344,58 @@ export default function HabitRow({
   habitCounter,
   setHabitCounter,
   displayMode,
-  player, setHabits, setLevelUp, setDailiesCount
+  player, setHabits, setLevelUp, setDailiesCount,
+  downstreamHabitRefresh,
+  setDownstreamHabitRefresh
 }) {
   const [saving, setSaving] = useState(false);
   const [habitCompletedToday, setHabitCompletedToday] = useState(false);
-  const [details, setDetails] = useState(null);
   const [timeDenominator, setTimeDenominator] = useState('MINS');
 
   const [showDailyQuestDetail, setShowDailyQuestDetail] = useState(false);
 
   const [picture, setPicture] = useState(false);
 
-  const [opened, setOpened] = useState(false);
+  const [todayHabit, setTodayHabit] = useState(null);
+  const [yesterdayHabit, setYesterdayHabit] = useState(null);
+
+  const [cardDetails, setCardDetails] = useState(null);
+
+  // useEffect(() => {
+  //   if (streak_end) {
+  //     wasHabitCompletedToday(streak_end);
+  //     setCardDetails(habit_detail)
+  //   } else {
+  //     setHabitCompletedToday(false)
+  //     // need something here to remove the habit counter if changed from elsewhere.
+  //     // setHabitCounter((v) => v.splice(0, v.length - 1));
+  //     setCardDetails(null);
+  //   }
+  // }, [streak_end, habit_detail]);
 
   useEffect(() => {
-    if (streak_end) {
-      wasHabitCompletedToday(streak_end);
+    if (downstreamHabitRefresh) {
+      // fetch Habits
+      setHabitCounter([]);
+      fetchHabitState(habit_id, moment().startOf('day').format('yyyy-MM-DD'), setTodayHabit);
+      fetchHabitState(habit_id, moment().startOf('day').subtract(1, "days").format('yyyy-MM-DD'), setYesterdayHabit);
+      setDownstreamHabitRefresh(false)
+    }
+  }, [downstreamHabitRefresh]);
+
+
+  useEffect(() => {
+    if (todayHabit?.length > 0) {
+      setHabitCompletedToday(true)
+      setHabitCounter((v) => [...v, 'Complete']);
+      setCardDetails(todayHabit[0].details)
     } else {
       setHabitCompletedToday(false)
       // need something here to remove the habit counter if changed from elsewhere.
-      setHabitCounter((v) => v.splice(0, v.length - 1));
-      setDetails(null);
+      // setHabitCounter((v) => v.splice(0, v.length - 1));
+      setCardDetails(null);
     }
-  }, [streak_end, habit_detail]);
+  }, [todayHabit]);
 
 
   useEffect(() => {
@@ -58,21 +407,21 @@ export default function HabitRow({
   }
 
 
-  function wasHabitCompletedToday(streak_end) {
-    const habitCompletedToday =
-      moment(streak_end).format('yyyy-MM-DD') == moment().startOf('day').format('yyyy-MM-DD');
-    setHabitCompletedToday(habitCompletedToday);
+  // function wasHabitCompletedToday(streak_end) {
+  //   const habitCompletedToday =
+  //     moment(streak_end).format('yyyy-MM-DD') == moment().startOf('day').format('yyyy-MM-DD');
+  //   setHabitCompletedToday(habitCompletedToday);
 
-    if (habitCompletedToday) {
-      // make sure the habit counter only adds if the habitcompleted today is tue
-      setHabitCounter((v) => [...v, 'Complete']);
-      // hacky way of not showing the previous time's habit_detail. 
-      setDetails(habit_detail);
-    } else {
-      // I have an issue where removals of habits doesn't lower the count
-      // setHabitCounter((v) => v.splice(0, v.length - 1));
-    }
-  }
+  //   if (habitCompletedToday) {
+  //     // make sure the habit counter only adds if the habitcompleted today is tue
+  //     setHabitCounter((v) => [...v, 'Complete']);
+  //     // hacky way of not showing the previous time's habit_detail. 
+  //     setCardDetails(habit_detail);
+  //   } else {
+  //     // I have an issue where removals of habits doesn't lower the count
+  //     // setHabitCounter((v) => v.splice(0, v.length - 1));
+  //   }
+  // }
 
   function habit_progress_statement(streak_duration) {
     return (streak_duration != 0) & (streak_duration != null)
@@ -82,7 +431,7 @@ export default function HabitRow({
       : 'You got this! ✊';
   }
 
-  async function toggleHabitStatus(habit_id, type, inputDetails) {
+  async function toggleHabitStatus(habit_id, type, inputDetails, date) {
     setSaving(true);
     try {
       // See if the habit has been completed today
@@ -91,7 +440,7 @@ export default function HabitRow({
         .select('*')
         .eq('player', player)
         .eq('habit', habit_id)
-        .gte('closing_date', moment().startOf('day').utc().format());
+        .eq('completed_on', date);
 
       if (error && status !== 406) {
         throw error;
@@ -105,7 +454,7 @@ export default function HabitRow({
         // if not completed, post to database (i.e. fetchData is an empty array)
 
         let testDateStr = new Date();
-        let testDate = moment().startOf('day').format('YYYY-MM-DD');
+        // let testDate = moment().startOf('day').format('YYYY-MM-DD');
         // console.log('testDateStr: ' + testDateStr);
         /*
                 Notes from us trying to resolve that timezone issue (supabase is still not saving the timezone)
@@ -118,7 +467,7 @@ export default function HabitRow({
           {
             player: player,
             closing_date: testDateStr,
-            completed_on: testDate,
+            completed_on: date,
             exp_reward: 25,
             details: inputDetails,
             habit: habit_id
@@ -144,7 +493,7 @@ export default function HabitRow({
             .delete()
             .match({ id: fetchData[0].id });
 
-          setHabitCompletedToday(false);
+          // setHabitCompletedToday(false);
 
           if (error && status !== 406) {
             throw error;
@@ -162,10 +511,10 @@ export default function HabitRow({
     }
   }
 
-  async function handleHabitCompletionStatusChange(habit_id, type, inputDetails) {
+  async function handleHabitCompletionStatusChange(habit_id, type, inputDetails, date) {
     if (displayMode == 'demo') {
-      setDetails(inputDetails);
-      setHabitCompletedToday(inputDetails ? true : !habitCompletedToday)
+      // setDetails(inputDetails);
+      // setHabitCompletedToday(inputDetails ? true : !habitCompletedToday)
       console.log('Demo Pressed')
     } else {
       if (type == 'Picture') {
@@ -185,7 +534,7 @@ export default function HabitRow({
             throw uploadError;
           }
 
-          toggleHabitStatus(habit_id, type, filePath).then(() => {
+          toggleHabitStatus(habit_id, type, filePath, date).then(() => {
             // may not be necessary in the future. Figure out how we can abstract out the click.
             fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
           });
@@ -197,9 +546,9 @@ export default function HabitRow({
         }
 
       } else {
-        setDetails(inputDetails);
+        // setDetails(inputDetails);
         //console.log('handleHabitCompletionStatusChange');
-        toggleHabitStatus(habit_id, type, inputDetails).then(() => {
+        toggleHabitStatus(habit_id, type, inputDetails, date).then(() => {
           fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
         });
       }
@@ -218,13 +567,39 @@ export default function HabitRow({
 
   function convertTime(denomination, time) {
     if (denomination == 'HRS') {
-      setDetails(getTimeInHours(time));
+      return (getTimeInHours(time));
     } else if (denomination == 'MINS') {
-      setDetails(getTimeInMinutes(time));
+      return (getTimeInMinutes(time));
     }
   }
 
-  const fileRef = useRef();
+  async function fetchHabitState(habit_id, date, setHabit) {
+    console.log('Polling for state', date)
+    try {
+
+      const { data, error } = await supabase
+        .from('completed_habits')
+        .select('*')
+        .eq('habit', habit_id)
+        .eq('completed_on', date)
+        .limit(1);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+
+      if (data) {
+        setHabit(data);
+        // console.log(habit_id, data);
+      }
+
+
+    } catch (error) {
+      // alert(error.message);
+      console.log(error.message);
+    } finally {
+    }
+  }
 
   return (<>
     <div
@@ -237,9 +612,9 @@ export default function HabitRow({
       //     : null
       // }
       className={`overflow-x-hidden animate-fade-in-down w-full my-4 mb-0 relative bg-cover bg-center object-cover ${habitCompletedToday
-        ? details == 'meh'
+        ? cardDetails == 'meh'
           ? `bg-yellow-500 border-yellow-700`
-          : details == 'unhappy'
+          : cardDetails == 'unhappy'
             ? `bg-red-500 border-red-700`
             : `bg-emerald-500 border-emerald-700`
         : `bg-dailies-light border-dailies-dark`
@@ -374,312 +749,56 @@ export default function HabitRow({
           </div>
           <div className='col-span-2'>
             <div className='grid grid-cols-2 justify-items-center items-center place-self-center self-center h-full'>
-              <span className="text-sm font-semibold text-black">...</span>
-
-              {habit_type == 'Checkbox' ?
-                <button className={`fas fa-check text-2xl sm:text-3xl font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompletedToday ? `opacity-100` : ``
-                  }`}
-                  disabled={saving}
-                  onClick={() => handleHabitCompletionStatusChange(habit_id)} />
-                : null}
-              {habit_type == 'Counter' ?
-                <>
-                  <div className="">
-                    <div className="text-3xl mb-0.5 px-2 self-center font-semibold text-black">
-                      {details ? details : 0}
-                    </div>
-                    <div className='flex flex-row gap-2'>
-
-                      <button
-                        className={`text-2xl opacity-10 text-black hideLinkBorder far fa-minus-square ${details > 0 ? `hover:opacity-100` : ``
-                          }`}
-                        onClick={() =>
-                          handleHabitCompletionStatusChange(
-                            habit_id,
-                            'countdown',
-                            Number(details) - 1
-                          )
-                        }
-                        disabled={saving || !details}
-                      />
-                      <button
-                        className="text-2xl opacity-10 text-black hideLinkBorder far fa-plus-square hover:opacity-100"
-                        onClick={() =>
-                          handleHabitCompletionStatusChange(
-                            habit_id,
-                            'countup',
-                            Number(details) + 1
-                          )
-                        }
-                        disabled={saving}
-                      />
-                    </div>
-
-                  </div>
-                </>
-                : null}
-              {habit_type == 'Duration' ?
-                <Popover
-                  opened={opened}
-                  onClose={() => setOpened(false)}
-                  target={
-                    <div className='flex flex-col'>
-                      <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
-                        {details ? details : 0} {timeDenominator}
-                      </div>
-                      <button className={`far fa-clock text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details > 0 ? `opacity-100` : ``
-                        }`}
-                        disabled={saving}
-                        onClick={() => setOpened((o) => !o)} />
-                    </div>
-                  }
-                  position="bottom"
-                  withArrow
-                >
-                  <form className="flex flex-col"
-                    onSubmit={(e) => {
-                      e.preventDefault()
-                      handleHabitCompletionStatusChange(
-                        habit_id,
-                        'Duration',
-                        timeDenominator === 'HRS'
-                          ? getTimeInMinutes(details)
-                          : details
-                      )
-                    }}>
-                    <div className="flex flex-row align-middle">
-                      <Input
-                        className="text-xs sm:text-sm mt-0.5 sm:mt-1 mb-2 sm:mb-4 font-semibold rounded"
-                        variant="dailies"
-                        id="Note"
-                        type="number"
-                        placeholder="Add duration here!"
-                        value={details || ''}
-                        onChange={(v) => setDetails(v)}
-                      />
-                      <div className="flex flex-col">
-                        <button
-                          className={`font-semibold text-xs sm:text-sm text-black hideLinkBorder ml-2 text-left ${timeDenominator == 'HRS' ? `opacity-100` : `opacity-30`
-                            }`}
-                          variant="slim"
-                          type="button"
-                          disabled={timeDenominator == 'HRS'}
-                          onClick={() => convertTime('HRS', details)}
-                        >
-                          HRS
-                        </button>
-                        <button
-                          className={`font-semibold text-xs sm:text-sm text-black hideLinkBorder ml-2 text-left ${timeDenominator == 'MINS' ? `opacity-100` : `opacity-30`
-                            }`}
-                          variant="slim"
-                          type="button"
-                          disabled={timeDenominator == 'MINS'}
-                          onClick={() => convertTime('MINS', details)}
-                        >
-                          MINS
-                        </button>
-                      </div>
-                    </div>
-                    <button
-                      className="font-semibold text-sm text-black hideLinkBorder self-start sm:self-center"
-                      variant="slim"
-                      disabled={saving}
-                      onClick={() => setOpened((o) => !o)}
-                    >
-                      {habitCompletedToday ? 'Update' : 'Save'}
-                    </button>
-                  </form>
-                </Popover>
-                // need an if statement to show the time when it is done
-                : null}
-              {habit_type == 'Feeling' ?
-                <Popover
-                  opened={opened}
-                  onClose={() => setOpened(false)}
-                  target={<button
-                    className={`text-4xl text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
-                      } ${habitCompletedToday
-                        ? (details == 'happy' ? 'far fa-smile' : details == 'meh' ? 'far fa-meh' : details == 'unhappy' ? 'far fa-frown' : null) : 'far fa-meh'} `}
-                    onClick={() => setOpened((o) => !o)}
-                    disabled={saving}
-                  />}
-                  position="bottom"
-                  withArrow
-                >
-                  <div className="flex-row flex gap-2 justify-center">
-                    <button
-                      className={`text-4xl text-black hideLinkBorder far fa-smile ${habitCompletedToday
-                        ? details == 'happy'
-                          ? `opacity-100`
-                          : `opacity-10 hover:opacity-100`
-                        : `hover:text-emerald-500`
-                        }`}
-                      onClick={() =>
-                      (handleHabitCompletionStatusChange(
-                        habit_id,
-                        'Feeling',
-                        `${details == 'happy' ? '' : 'happy'}`
-                      ), setOpened((o) => !o))
-                      }
-                      disabled={saving}
-                    />
-                    <button
-                      className={`text-4xl text-black hideLinkBorder far fa-meh ${habitCompletedToday
-                        ? details == 'meh'
-                          ? `opacity-100`
-                          : `opacity-10 hover:opacity-100`
-                        : `hover:text-yellow-500`
-                        }`}
-                      onClick={() =>
-                      (handleHabitCompletionStatusChange(
-                        habit_id,
-                        'Feeling',
-                        `${details == 'meh' ? '' : 'meh'}`
-                      ), setOpened((o) => !o))
-                      }
-                      disabled={saving}
-                    />
-                    <button
-                      className={`text-4xl text-black hideLinkBorder far fa-frown ${habitCompletedToday
-                        ? details == 'unhappy'
-                          ? `opacity-100`
-                          : `opacity-10 hover:opacity-100`
-                        : `hover:text-red-500`
-                        }`}
-                      onClick={() =>
-                      (handleHabitCompletionStatusChange(
-                        habit_id,
-                        'Feeling',
-                        `${details == 'unhappy' ? '' : 'unhappy'}`
-                      ), setOpened((o) => !o))
-                      }
-                      disabled={saving}
-                    />
-                  </div>
-                </Popover>
-
-                : null}
-              {habit_type == 'Location' ?
-                <Popover
-                  opened={opened}
-                  onClose={() => setOpened(false)}
-                  target={
-                    <div className='flex flex-col flex-wrap'>
-                      <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
-                        {details ? details : null}
-                      </div>
-                      <button className={`fas fa-map-pin text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
-                        }`}
-                        disabled={saving}
-                        onClick={() => setOpened((o) => !o)} />
-                    </div>
-                  }
-                  position="bottom"
-                  withArrow
-                >
-
-                  <form className="flex flex-col"
-                    onSubmit={(e) => {
-                      e.preventDefault()
-                      handleHabitCompletionStatusChange(
-                        habit_id,
-                        'Location',
-                        details
-                      )
-                    }}>
-                    <Input
-                      className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
-                      variant="dailies"
-                      id="Note"
-                      type="varchar"
-                      placeholder="Add location here!"
-                      value={details || ''}
-                      onChange={(v) => setDetails(v)}
-                    />
-                    <button
-                      className="font-semibold text-sm text-black hideLinkBorder self-start sm:self-center"
-                      variant="slim"
-                      disabled={saving}
-                      onClick={() => setOpened((o) => !o)}
-                    >
-                      {habitCompletedToday ? 'Update' : 'Save'}
-                    </button>
-                  </form>
-                </Popover>
-                : null}
-              {habit_type == 'Note' ?
-                <Popover
-                  opened={opened}
-                  onClose={() => setOpened(false)}
-                  target={
-                    <div className='flex flex-col flex-wrap'>
-                      <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
-                        {details ? details : null}
-                      </div>
-                      <button className={`far fa-sticky-note text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
-                        }`}
-                        disabled={saving}
-                        onClick={() => setOpened((o) => !o)} />
-                    </div>
-                  }
-                  position="bottom"
-                  withArrow
-                >
-                  <form className="flex flex-col"
-                    onSubmit={(e) => {
-                      e.preventDefault()
-                      handleHabitCompletionStatusChange(habit_id, 'Note', details)
-                    }}>
-                    <Input
-                      className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
-                      variant="dailies"
-                      id="Note"
-                      type="varchar"
-                      placeholder="Add your note here!"
-                      value={details || ''}
-                      onChange={(v) => setDetails(v)}
-                    />
-                    <button
-                      className="font-semibold text-sm text-black hideLinkBorder self-start sm:self-center"
-                      variant="slim"
-                      disabled={saving}
-                      onClick={() => setOpened((o) => !o)}
-                    >
-                      {habitCompletedToday ? 'Update' : 'Save'}
-                    </button>
-                  </form>
-                </Popover>
-                : null}
-
-              {habit_type == 'Picture' ?
-                <div className="relative">
-                  <button className={`fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer hideLinkBorder opacity-10 hover:opacity-100 ${habitCompletedToday ? `opacity-100` : ``
-                    }`}
-                    htmlFor="single"
-                    onClick={() => fileRef.current.click()}>
-                  </button>
-                  <input
-                    ref={fileRef}
-                    style={{
-                      visibility: 'hidden',
-                      position: 'relative',
-                      display: 'none'
-                    }}
-                    hidden
-                    type="file"
-                    id="single"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (event.target.files && event.target.files.length > 0) {
-                        setPicture(URL.createObjectURL(event.target.files[0]))
-                          , handleHabitCompletionStatusChange(habit_id, 'Picture', event)
-                      }
-                    }
-                    }
-                    disabled={saving}
-                  />
-                </div>
-                : null}
+              {yesterdayHabit ?
+                <HabitInteraction
+                  date={moment().startOf('day').subtract(1, "days").format('yyyy-MM-DD')}
+                  habitCompleted={yesterdayHabit.length > 0 ? true : false}
+                  insertedDetails={yesterdayHabit[0]?.details ? yesterdayHabit[0].details : null}
+                  habit_id={habit_id}
+                  habit_type={habit_type}
+                  setPicture={setPicture}
+                  handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
+                  timeDenominator={timeDenominator}
+                  getTimeInHours={getTimeInHours}
+                  getTimeInMinutes={getTimeInMinutes}
+                  convertTime={convertTime}
+                  saving={saving}
+                />
+                :
+                <span className="text-sm font-semibold text-black">...</span>
+              }
+              {todayHabit ?
+                <HabitInteraction
+                  date={moment().startOf('day').format('yyyy-MM-DD')}
+                  habitCompleted={todayHabit.length > 0 ? true : false}
+                  insertedDetails={todayHabit[0]?.details ? todayHabit[0].details : null}
+                  habit_id={habit_id}
+                  habit_type={habit_type}
+                  setPicture={setPicture}
+                  handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
+                  timeDenominator={timeDenominator}
+                  getTimeInHours={getTimeInHours}
+                  getTimeInMinutes={getTimeInMinutes}
+                  convertTime={convertTime}
+                  saving={saving}
+                />
+                :
+                <span className="text-sm font-semibold text-black">...</span>
+              }
+              {/* <HabitInteraction
+                habitCompleted={habitCompletedToday}
+                details={details}
+                habit_id={habit_id}
+                habit_type={habit_type}
+                setPicture={setPicture}
+                setDetails={setDetails}
+                handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
+                timeDenominator={timeDenominator}
+                getTimeInHours={getTimeInHours}
+                getTimeInMinutes={getTimeInMinutes}
+                convertTime={convertTime}
+                saving={saving}
+              /> */}
 
 
             </div>

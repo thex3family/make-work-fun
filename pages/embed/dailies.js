@@ -144,15 +144,21 @@ export default function dailies() {
   }
 
   async function refreshStats() {
+    console.log('Refreshing Stats');
     setPlayerStats(await fetchPlayerStats(player, setNewToSeason));
     dailyBonusButtons(player, setDailyBonus);
     setLoading(false);
   }
   
+
+  const [downstreamHabitRefresh, setDownstreamHabitRefresh] = useState(false);
+
   async function refreshDailies() {
     console.log('Refreshing Dailies');
     fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
+    setDownstreamHabitRefresh(true);
   }
+
 
   useEffect(() => {
     if (playerStats && style != 'dark') loadBackgroundURL();
@@ -679,6 +685,8 @@ export default function dailies() {
                       setHabits={setHabits}
                       setLevelUp={setLevelUp}
                       setDailiesCount={setDailiesCount}
+                      downstreamHabitRefresh={downstreamHabitRefresh}
+                      setDownstreamHabitRefresh={setDownstreamHabitRefresh}
                       display={display}
                     />
                   ) : (

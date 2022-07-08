@@ -72,7 +72,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
   const [newToSeason, setNewToSeason] = useState(null);
 
   // const [entryDate, setEntryDate] = useState(moment().startOf('day').format('yyyy-MM-DD'));
-  //const [entryDate, setEntryDate] = useState(null);
+  // const [entryDate, setEntryDate] = useState(null);
 
   const router = useRouter();
   const {
@@ -132,10 +132,12 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
     setLoading(false);
   }
 
-  
+  const [downstreamHabitRefresh, setDownstreamHabitRefresh] = useState(false);
+
   async function refreshDailies() {
     console.log('Refreshing Dailies');
     fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
+    setDownstreamHabitRefresh(true);
   }
 
   useEffect(() => {
@@ -324,6 +326,8 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                       setHabits={setHabits}
                       setLevelUp={setLevelUp}
                       setDailiesCount={setDailiesCount}
+                      downstreamHabitRefresh={downstreamHabitRefresh}
+                      setDownstreamHabitRefresh={setDownstreamHabitRefresh}
                     />
                   ) : (
                     <span className="text-center text-dailies font-semibold text-md">
