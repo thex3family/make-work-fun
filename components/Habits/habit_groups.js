@@ -1,6 +1,8 @@
 import RoutineSection from '@/components/Habits/routine_section'
 
-export default function HabitGroups({ habits, fetchDailies, fetchDailiesCompletedToday, player, setHabits, setLevelUp, setDailiesCount, display }) {
+export default function HabitGroups({ habits, fetchDailies, fetchDailiesCompletedToday, player, setHabits, setLevelUp, setDailiesCount, display,
+  downstreamHabitRefresh,
+  setDownstreamHabitRefresh }) {
 
   function generate_habit_map(habits) {
     var habit_map = new Map();
@@ -65,6 +67,8 @@ export default function HabitGroups({ habits, fetchDailies, fetchDailiesComplete
         setLevelUp = {setLevelUp} 
         setDailiesCount = {setDailiesCount}
         display = {display}
+        downstreamHabitRefresh={downstreamHabitRefresh}
+        setDownstreamHabitRefresh={setDownstreamHabitRefresh}
       />
     );
 

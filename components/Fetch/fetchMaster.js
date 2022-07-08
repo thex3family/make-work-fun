@@ -764,7 +764,7 @@ export async function fetchDailiesCompletedToday(player) {
       .from('completed_habits')
       .select('*')
       .eq('player', player)
-      .gte('closing_date', moment().startOf('day').utc().format());
+      .gte('completed_on', moment().startOf('day').format());
 
     if(data){
       return data.length;
