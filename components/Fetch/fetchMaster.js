@@ -241,7 +241,7 @@ export async function fetchSpecificWins(upstream_id, start_date, due_date) {
       .select(
         'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname'
       )
-      .like('upstream_id', '%'+upstream_id+'%')
+      .like('upstream_id', '%' + upstream_id + '%')
       .gte('closing_date', start_date)
       .lte('closing_date', due_date)
       .order('closing_date', { ascending: false })
@@ -261,7 +261,7 @@ export async function fetchSpecificWins(upstream_id, start_date, due_date) {
 }
 
 export async function fetchWinsPastDate(player, start_date, due_date) {
-  
+
   try {
     const { data, error } = await supabase
       .from('success_plan')
@@ -766,7 +766,7 @@ export async function fetchDailiesCompletedToday(player) {
       .eq('player', player)
       .gte('completed_on', moment().startOf('day').format());
 
-    if(data){
+    if (data) {
       return data.length;
     }
     //dailyBonusButtons();
@@ -834,8 +834,8 @@ export async function claimDailyBonus(player, setDailyBonus, setBonusLoading) {
       throw error;
     }
   } catch (error) {
-   // alert(error.message);
-   console.log(error.message);
+    // alert(error.message);
+    console.log(error.message);
   } finally {
     setBonusLoading(false);
     setDailyBonus(false);
@@ -869,28 +869,28 @@ export async function fetchAuthenticationLink(utility, setAuthenticationLink, se
 
 
 export async function lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials) {
- 
-    try {
-      const { data, error } = await supabase
-        .from('authentication_links')
-        .select('*')
-        .eq('id', auth)
-        .single()
-  
-      if(data){
-        setPlayer(data.user);
-      } else {
-        setInvalidCredentials(true)
-      }
-  
-      if (error && status !== 406) {
-        throw error;
-      }
-    } catch (error) {
-      // alert(error.message)
-    } finally {
+
+  try {
+    const { data, error } = await supabase
+      .from('authentication_links')
+      .select('*')
+      .eq('id', auth)
+      .single()
+
+    if (data) {
+      setPlayer(data.user);
+    } else {
+      setInvalidCredentials(true)
     }
-  
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+
 }
 
 export async function fetchItemShop(player) {
@@ -902,7 +902,7 @@ export async function fetchItemShop(player) {
       .select('*')
       .eq('player', player)
       .order('id', { ascending: true })
-  
+
 
     if (error && status !== 406) {
       throw error;
@@ -913,7 +913,7 @@ export async function fetchItemShop(player) {
     // alert(error.message);
     console.log(error.message);
   } finally {
-    
+
   }
 }
 
@@ -925,23 +925,23 @@ export async function fetchShopkeeper(player, setShopKeeperIntro, setShopKeeperT
       .select('shopkeeper_intro, shopkeeper_tagline, shopkeeper_url')
       .eq('id', player)
       .single();
-  
+
 
     if (error && status !== 406) {
       throw error;
     }
-    if (data?.shopkeeper_intro){
+    if (data?.shopkeeper_intro) {
       setShopKeeperIntro(data.shopkeeper_intro);
     }
-    if (data?.shopkeeper_tagline){
+    if (data?.shopkeeper_tagline) {
       setShopKeeperTagline(data.shopkeeper_tagline);
     }
-    if (data?.shopkeeper_url){
+    if (data?.shopkeeper_url) {
       setShopkeeperImage(await downloadImage(data?.shopkeeper_url, 'shopkeepers'))
     } else {
       setShopkeeperImage('missing')
     }
-    
+
   } catch (error) {
     // alert(error.message);
     console.log(error.message);
@@ -957,15 +957,15 @@ export async function fetchActiveTimer(player, setActiveTimer) {
       .select('*, item:item_id (name)')
       .eq('player', player)
       .gte('expiry_time', new Date().toISOString())
-      .order('expiry_time', {ascending: true})
+      .order('expiry_time', { ascending: true })
 
 
     if (error && status !== 406) {
       throw error;
     }
-    
+
     setActiveTimer(data);
-    
+
   } catch (error) {
     // alert(error.message);
     console.log(error.message);
@@ -975,19 +975,29 @@ export async function fetchActiveTimer(player, setActiveTimer) {
 
 export async function fetchHabitChanges(player, refreshDailies) {
   console.log('Checking for habit changes')
-  const { data, error } = await supabase
-    .from(`completed_habits:player=eq.${player}`)
-    .on('INSERT', payload => {
-      console.log('Habit Completed', payload)
-      refreshDailies();
-    })
-    .on('UPDATE', payload => {
-      console.log('Habit Updated', payload)
-      refreshDailies();
-    })
-    .on('DELETE', payload => {
-      console.log('Habit Deleted', payload)
-      refreshDailies();
-    })
-    .subscribe()
+  try {
+    const { data, error } = await supabase
+      .from(`completed_habits:player=eq.${player}`)
+      .on('INSERT', payload => {
+        console.log('Habit Completed', payload)
+        refreshDailies();
+      })
+      .on('UPDATE', payload => {
+        console.log('Habit Updated', payload)
+        refreshDailies();
+      })
+      .on('DELETE', payload => {
+        console.log('Habit Deleted', payload)
+        refreshDailies();
+      })
+      .subscribe()
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message);
+    console.log(error.message);
+  } finally {
+  }
 }

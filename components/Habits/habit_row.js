@@ -574,7 +574,6 @@ export default function HabitRow({
   }
 
   async function fetchHabitState(habit_id, date, setHabit) {
-    console.log('Polling for state', date)
     try {
 
       const { data, error } = await supabase
