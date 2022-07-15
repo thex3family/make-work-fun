@@ -22,6 +22,8 @@ export default function WinManage({setRefreshChildStats}) {
     // this also runs more times than it should
 
     // need to improve this, i think refactoring is necessary...
+    // basically this only runs once - so if you switch to a logged in state, it doesn't work properly until the next hard refresh. 
+
     useEffect(() => {
         fetchLatestWin(
             setActiveModalStats,
@@ -34,7 +36,7 @@ export default function WinManage({setRefreshChildStats}) {
             setShowCardWin,
             setActiveWinStats
         );
-    }, [user]);
+    }, []);
 
 
     async function refreshStats() {
