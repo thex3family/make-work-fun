@@ -299,10 +299,12 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
         </button>  */}
 
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
+              {habits != null ? (
+                  habits.length != 0 ? (
               <div className='grid grid-cols-3 mb-4'>
                 <div className='col-span-1'>
                 </div>
-                <div className='col-span-2'>
+                <div className='col-span-2 text-white'>
                   <div className='grid grid-cols-2 justify-items-center pr-5'>
                     <div>
                       <div className='font-bold'>Yesterday</div>
@@ -314,7 +316,8 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> 
+              ) : null ) : null}
               <div className="text-center">
                 {habits != null ? (
                   habits.length != 0 ? (
@@ -330,7 +333,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                       setDownstreamHabitRefresh={setDownstreamHabitRefresh}
                     />
                   ) : (
-                    <span className="text-center text-dailies font-semibold text-md">
+                    <span className="text-center text-white font-semibold text-md">
                       You have no active habits...let's change that!
                     </span>
                   )
