@@ -24,21 +24,17 @@ export default function DailiesSkeleton() {
             </div>
             <div className="animate-fade-in-up mx-0">
               <div className="flex items-center w-full">
-                <div
-                  className="border-t-2 border-gray-600 flex-grow mb-6 sm:mb-3 mr-3"
-                  aria-hidden="true"
-                ></div>
 
-                <div className="mx-auto max-w-lg w-40 h-10 bg-gray-600 rounded animate-pulse mb-6" />
+                <div className="mx-auto max-w-lg w-60 h-10 bg-gray-600 rounded animate-pulse mb-6" />
                 <div
                   className="border-t-2 border-gray-600 flex-grow mb-6 sm:mb-3 ml-3"
                   aria-hidden="true"
                 ></div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 overflow-x-auto flex-nowrap mb-10 justify-center">
-                <div className="w-full sm:w-56 h-36 sm:h-64 bg-gray-600 rounded animate-pulse mb-6" />
-                <div className="w-full sm:w-56 h-36 sm:h-64 bg-gray-600 rounded animate-pulse mb-6" />
-                <div className="w-full sm:w-56 h-36 sm:h-64 bg-gray-600 rounded animate-pulse mb-6" />
+              <div className="flex flex-col gap-3 sm:gap-5 overflow-x-auto flex-nowrap mb-10 justify-center">
+                <div className="w-full h-28 sm:h-36 bg-gray-600 rounded animate-pulse mb-6" />
+                <div className="w-full h-28 sm:h-36 bg-gray-600 rounded animate-pulse mb-6" />
+                <div className="w-full h-28 sm:h-36 bg-gray-600 rounded animate-pulse mb-6" />
                 {/* start */}
               </div>
             </div>
