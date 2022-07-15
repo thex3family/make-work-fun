@@ -8,15 +8,35 @@ import { downloadImage } from '@/utils/downloadImage';
 
 import { Popover } from '@mantine/core';
 
-export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_id, habit_type, setPicture, handleHabitCompletionStatusChange, timeDenominator, getTimeInHours, getTimeInMinutes, convertTime, saving }) {
+export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_id, habit_type, setPicture, handleHabitCompletionStatusChange, saving }) {
   const [opened, setOpened] = useState(false);
   const fileRef = useRef();
 
   const [details, setDetails] = useState(insertedDetails);
+  
+  const [timeDenominator, setTimeDenominator] = useState('MINS');
 
   useEffect(() => {
     setDetails(insertedDetails);
-  }, [insertedDetails]);
+  }, [insertedDetails]);  
+
+  function getTimeInMinutes(time) {
+    setTimeDenominator('MINS');
+    return time * 60;
+  }
+
+  function getTimeInHours(time) {
+    setTimeDenominator('HRS');
+    return time / 60;
+  }
+
+  function convertTime(denomination, time) {
+    if (denomination == 'HRS') {
+      return (getTimeInHours(time));
+    } else if (denomination == 'MINS') {
+      return (getTimeInMinutes(time));
+    }
+  }
 
   return (
     <>
@@ -350,7 +370,6 @@ export default function HabitRow({
 }) {
   const [saving, setSaving] = useState(false);
   const [habitCompletedToday, setHabitCompletedToday] = useState(false);
-  const [timeDenominator, setTimeDenominator] = useState('MINS');
 
   const [showDailyQuestDetail, setShowDailyQuestDetail] = useState(false);
 
@@ -555,24 +574,6 @@ export default function HabitRow({
     }
   }
 
-  function getTimeInMinutes(time) {
-    setTimeDenominator('MINS');
-    return time * 60;
-  }
-
-  function getTimeInHours(time) {
-    setTimeDenominator('HRS');
-    return time / 60;
-  }
-
-  function convertTime(denomination, time) {
-    if (denomination == 'HRS') {
-      return (getTimeInHours(time));
-    } else if (denomination == 'MINS') {
-      return (getTimeInMinutes(time));
-    }
-  }
-
   async function fetchHabitState(habit_id, date, setHabit) {
     try {
 
@@ -757,10 +758,6 @@ export default function HabitRow({
                   habit_type={habit_type}
                   setPicture={setPicture}
                   handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
-                  timeDenominator={timeDenominator}
-                  getTimeInHours={getTimeInHours}
-                  getTimeInMinutes={getTimeInMinutes}
-                  convertTime={convertTime}
                   saving={saving}
                 />
                 :
@@ -775,10 +772,6 @@ export default function HabitRow({
                   habit_type={habit_type}
                   setPicture={setPicture}
                   handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
-                  timeDenominator={timeDenominator}
-                  getTimeInHours={getTimeInHours}
-                  getTimeInMinutes={getTimeInMinutes}
-                  convertTime={convertTime}
                   saving={saving}
                 />
                 :
