@@ -333,7 +333,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                       setDownstreamHabitRefresh={setDownstreamHabitRefresh}
                     />
                   ) : (
-                    <span className="text-center text-white font-semibold text-md">
+                    <span className="text-center text-accents-6 font-semibold text-md">
                       You have no active habits...let's change that!
                     </span>
                   )
