@@ -13,29 +13,26 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
   const fileRef = useRef();
 
   const [details, setDetails] = useState(insertedDetails);
-  
-  const [timeDenominator, setTimeDenominator] = useState('MINS');
+
+  const [hours, setHours] = useState(null);
+  const [mins, setMins] = useState(null);
+
 
   useEffect(() => {
     setDetails(insertedDetails);
-  }, [insertedDetails]);  
+  }, [insertedDetails]);
 
-  function getTimeInMinutes(time) {
-    setTimeDenominator('MINS');
-    return time * 60;
-  }
-
-  function getTimeInHours(time) {
-    setTimeDenominator('HRS');
-    return time / 60;
-  }
-
-  function convertTime(denomination, time) {
-    if (denomination == 'HRS') {
-      return (getTimeInHours(time));
-    } else if (denomination == 'MINS') {
-      return (getTimeInMinutes(time));
+  
+  useEffect(() => {
+    if(habit_type == "Duration" && insertedDetails){
+      setHours(Math.floor(insertedDetails/60))
+      setMins(insertedDetails%60)
     }
+  }, [habit_type]);
+
+  function getTimeInMinutes(hours, mins) {
+    var totalTime = (Number(hours) * 60) + Number(mins); 
+    return totalTime;
   }
 
   return (
@@ -89,7 +86,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
           target={
             <div className='flex flex-col'>
               <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
-                {details ? details : 0} {timeDenominator}
+                {details ? details : 0} MINS
               </div>
               <button className={`far fa-clock text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details > 0 ? `opacity-100` : ``
                 }`}
@@ -106,42 +103,38 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
               handleHabitCompletionStatusChange(
                 habit_id,
                 'Duration',
-                timeDenominator === 'HRS'
-                  ? getTimeInMinutes(details)
-                  : details, date
+                getTimeInMinutes(hours, mins), 
+                date
               )
             }}>
-            <div className="flex flex-row align-middle">
+            <div className="flex flex-row align-middle items-center gap-2 mb-4 mt-2">
               <Input
-                className="text-xs sm:text-sm mt-0.5 sm:mt-1 mb-2 sm:mb-4 font-semibold rounded"
+                className="text-xs sm:text-sm font-semibold rounded"
                 variant="dailies"
                 id="Note"
                 type="number"
                 placeholder="Add duration here!"
-                value={details || ''}
-                onChange={(v) => setDetails(v)}
+                value={hours || ''}
+                onChange={(v) => setHours(v)}
               />
-              <div className="flex flex-col">
-                <button
-                  className={`font-semibold text-xs sm:text-sm text-black hideLinkBorder ml-2 text-left ${timeDenominator == 'HRS' ? `opacity-100` : `opacity-30`
-                    }`}
-                  variant="slim"
-                  type="button"
-                  disabled={timeDenominator == 'HRS'}
-                  onClick={() => setDetails(convertTime('HRS', details))}
-                >
-                  HRS
-                </button>
-                <button
-                  className={`font-semibold text-xs sm:text-sm text-black hideLinkBorder ml-2 text-left ${timeDenominator == 'MINS' ? `opacity-100` : `opacity-30`
-                    }`}
-                  variant="slim"
-                  type="button"
-                  disabled={timeDenominator == 'MINS'}
-                  onClick={() => setDetails(convertTime('MINS', details))}
-                >
-                  MINS
-                </button>
+              <div
+                className={`font-semibold text-xs sm:text-sm text-black mr-2 opacity-30`}
+              >
+                HRS
+              </div>
+              <Input
+                className="text-xs sm:text-sm font-semibold rounded"
+                variant="dailies"
+                id="Note"
+                type="number"
+                placeholder="Add duration here!"
+                value={mins || ''}
+                onChange={(v) => setMins(v)}
+              />
+              <div
+                className={`font-semibold text-xs sm:text-sm text-black mr-2 opacity-30`}
+              >
+                MINS
               </div>
             </div>
             <button
@@ -418,8 +411,11 @@ export default function HabitRow({
 
 
   useEffect(() => {
-    if (habit_type == "Picture") loadDailiesPicture(habit_detail);
-  }, [habit_type]);
+    if (habit_type == "Picture" && habit_detail) {
+      console.log('habit picture detail: ', habit_detail)
+      loadDailiesPicture(habit_detail);
+    }
+  }, [habit_type, habit_detail]);
 
   async function loadDailiesPicture(url) {
     setPicture(await downloadImage(url, 'dailies'))
