@@ -21,8 +21,8 @@ const Input = (props) => {
         onChange={handleOnChange}
         autoComplete="off"
         autoCorrect="off"
-        autoCapitalize="off"
-        spellCheck="false"
+        autoCapitalize="on"
+        spellCheck="on"
         {...rest}
       />
     </label>
