@@ -118,7 +118,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
                 onChange={(v) => setHours(v)}
               />
               <div
-                className={`font-semibold text-xs sm:text-sm text-black mr-2 opacity-30`}
+                className={`font-semibold text-xs sm:text-sm text-black mr-1 opacity-30`}
               >
                 HRS
               </div>
@@ -132,7 +132,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
                 onChange={(v) => setMins(v)}
               />
               <div
-                className={`font-semibold text-xs sm:text-sm text-black mr-2 opacity-30`}
+                className={`font-semibold text-xs sm:text-sm text-black mr-1 opacity-30`}
               >
                 MINS
               </div>
