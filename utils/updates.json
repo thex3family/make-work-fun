@@ -1,5 +1,13 @@
 [
   {
+  "date": "Aug 25, 2022",
+  "title": "Track Your Sleep",
+  "desc": "We've made it simple for you to keep track of your sleep, runs, and so much more. Try it out with duration habit type in your daily quests!",
+  "img_url": "0.45.png",
+  "button_url": "/dailies/edit",
+  "version": "45"
+  },
+  {
   "date": "Jul 13, 2022",
   "title": "Catch Up On Yesterday's Dailies",
   "desc": "With our updated dailies interface, see how today's dailies match up to yesterday's trends and edit them if you've missed anything.",
