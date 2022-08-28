@@ -181,7 +181,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                 <div className="text-center mb-5">
                   <div className="font-semibold text-dailies text-xl mb-3">
                     Complete 80% of your daily quests to receive bonus rewards!
-                  </div> 
+                  </div>
 
                   <div className="w-24 h-24 border-4 border-dailies-dark shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
                     {dailiesCount}/{Math.floor(habits.length * 0.8)}
@@ -189,7 +189,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                   {/* {Array.from({ length: dailiesCount }, (_, i) => <span key={i}><i className="text-yellow-400 fas fa-star"/></span>)} */}
                   <div>
                     <div className="text-3xl">
-                      {
+                      {/* {
                         dailiesCount ?
                           Array.from({ length: dailiesCount }, (item, index) =>
                             <i className="text-yellow-400 fas fa-star" />
@@ -202,7 +202,25 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                             <i className="text-gray-800 far fa-star" />
                           )
                           : null
-                      }
+                      } */}
+                      <div className="flex flex-wrap">
+                        <div className="relative w-full m-auto max-w-sm flex-grow flex-1">
+                          <div className="flex items-center">
+                            <span className="mr-2 text-dailies font-semibold text-lg">
+                              {Math.floor((dailiesCount/Math.floor(habits.length * 0.8))*100)}%
+                            </span>
+                            <div className="relative w-full">
+                              <div className="overflow-hidden h-3 text-xs flex rounded-lg bg-dailies-light">
+                                <div
+                                  style={{ width: `${(dailiesCount/Math.floor(habits.length * 0.8))*100}%` }}
+                                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-dailies-dark"
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
                     </div>
                     {dailiesCount >= Math.floor(habits.length * 0.8) ? (dailyBonus ?
                       (
