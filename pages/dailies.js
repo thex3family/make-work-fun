@@ -177,24 +177,34 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
               <h1 className="text-4xl font-extrabold text-center sm:text-6xl text-dailies pb-5">
                 Daily Quests
               </h1>
-              <div className="text-center mb-5">
-                {/* <div className="font-semibold text-dailies text-xl mb-3">
-                Complete 4 comissions daily to receive bonus rewards!{' '}
-              </div> */}
+              {habits?.length != 0 ?
+                <div className="text-center mb-5">
+                  <div className="font-semibold text-dailies text-xl mb-3">
+                    Complete 80% of your daily quests to receive bonus rewards!
+                  </div> 
 
-                <div className="w-24 h-24 border-4 border-dailies-dark shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
-                  {dailiesCount}/4
-                </div>
-                {/* {Array.from({ length: dailiesCount }, (_, i) => <span key={i}><i className="text-yellow-400 fas fa-star"/></span>)} */}
-                {dailiesCount >= 4 ? (
+                  <div className="w-24 h-24 border-4 border-dailies-dark shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
+                    {dailiesCount}/{Math.floor(habits.length * 0.8)}
+                  </div>
+                  {/* {Array.from({ length: dailiesCount }, (_, i) => <span key={i}><i className="text-yellow-400 fas fa-star"/></span>)} */}
                   <div>
                     <div className="text-3xl">
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-yellow-400 fas fa-star" />
+                      {
+                        dailiesCount ?
+                          Array.from({ length: dailiesCount }, (item, index) =>
+                            <i className="text-yellow-400 fas fa-star" />
+                          )
+                          : null
+                      }
+                      {
+                        habits ?
+                          Array.from({ length: (Math.floor(habits.length * 0.8) - dailiesCount) }, (item, index) =>
+                            <i className="text-gray-800 far fa-star" />
+                          )
+                          : null
+                      }
                     </div>
-                    {dailyBonus ?
+                    {dailiesCount >= Math.floor(habits.length * 0.8) ? (dailyBonus ?
                       (
                         <div>
                           <Button
@@ -233,52 +243,10 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                             </span>
                           </div>
                         </div>
-                      )}
+                      )) : <Countdown date={moment().endOf('day').utc().format()} />}
                   </div>
-                ) : dailiesCount >= 3 ? (
-                  <div>
-                    <div className="text-3xl">
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                    </div>
-                    <Countdown date={moment().endOf('day').utc().format()} />
-                  </div>
-                ) : dailiesCount >= 2 ? (
-                  <div>
-                    <div className="text-3xl">
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                    </div>
 
-                    <Countdown date={moment().endOf('day').utc().format()} />
-                  </div>
-                ) : dailiesCount >= 1 ? (
-                  <div>
-                    <div className="text-3xl">
-                      <i className="text-yellow-400 fas fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                    </div>
-
-                    <Countdown date={moment().endOf('day').utc().format()} />
-                  </div>
-                ) : (
-                  <div>
-                    <div className="text-3xl">
-                      <i className="text-gray-800 far fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                      <i className="text-gray-800 far fa-star" />
-                    </div>
-                    <Countdown date={moment().endOf('day').utc().format()} />
-                  </div>
-                )}
-                {/* <div className="w-72 mx-auto">
+                  {/* <div className="w-72 mx-auto">
                   <div className="mb-2 font-semibold text-dailies text-left">
                     Time Travel
                   </div>
@@ -292,7 +260,8 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                     />
                   </div>
                 </div> */}
-              </div>
+                </div>
+                : null}
             </div>
             {/* <button onClick={() => console.log(habits)}>
           Push me to check if data is pulled properly
@@ -300,24 +269,24 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
 
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
               {habits != null ? (
-                  habits.length != 0 ? (
-              <div className='grid grid-cols-3 mb-4'>
-                <div className='col-span-1'>
-                </div>
-                <div className='col-span-2 text-white'>
-                  <div className='grid grid-cols-2 justify-items-center pr-5'>
-                    <div>
-                      <div className='font-bold'>Yesterday</div>
-                      <div className='text-sm'>{moment().subtract(1,"days").format('dddd')}</div>
+                habits.length != 0 ? (
+                  <div className='grid grid-cols-3 mb-4'>
+                    <div className='col-span-1'>
                     </div>
-                    <div>
-                    <div className='font-bold'>Today</div>
-                    <div className='text-sm'>{moment().format('dddd')}</div>
+                    <div className='col-span-2 text-white'>
+                      <div className='grid grid-cols-2 justify-items-center pr-5'>
+                        <div>
+                          <div className='font-bold'>Yesterday</div>
+                          <div className='text-sm'>{moment().subtract(1, "days").format('dddd')}</div>
+                        </div>
+                        <div>
+                          <div className='font-bold'>Today</div>
+                          <div className='text-sm'>{moment().format('dddd')}</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div> 
-              ) : null ) : null}
+                ) : null) : null}
               <div className="text-center">
                 {habits != null ? (
                   habits.length != 0 ? (
