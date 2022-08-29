@@ -16,9 +16,9 @@ export async function fetchLatestWin(
   friends
 ) {
   try {
-    console.log('Checking for wins')
     // check if there is any win (only works when the app is open) - future will move it to a server
     if (!player_id) {
+      console.log('Checking for wins');
       const user = supabase.auth.user();
       const { data, error } = await supabase
         .from('success_plan')
@@ -77,6 +77,7 @@ export async function fetchLatestWin(
     }
 
     if (player_id) {
+      console.log('Checking for wins for ', player_id);
       const { data, error } = await supabase
         .from('success_plan')
         .on('INSERT', async (payload) => {
