@@ -224,12 +224,12 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
           setCount(2);
         }
       }, 3000);
-    }
 
-    // remember to clear timers
-    return function cleanup() {
-      clearInterval(interval);
-    };
+      // remember to clear timers
+      return function cleanup() {
+        clearInterval(interval);
+      };
+    }
   });
 
 
