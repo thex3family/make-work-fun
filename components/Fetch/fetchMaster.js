@@ -1000,5 +1000,7 @@ export async function fetchHabitChanges(player, refreshDailies) {
     // alert(error.message);
     console.log(error.message);
   } finally {
+    const subscriptions = supabase.getSubscriptions();
+    console.log(subscriptions);
   }
 }

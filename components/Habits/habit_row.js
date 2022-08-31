@@ -50,7 +50,6 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
               {details ? details : 0}
             </div>
             <div className='flex flex-row gap-2'>
-
               <button
                 className={`text-2xl opacity-10 text-black hideLinkBorder far fa-minus-square ${details > 0 ? `hover:opacity-100` : ``
                   }`}
@@ -651,10 +650,10 @@ export default function HabitRow({
         {/* {saving ? <div className="relative"><div className="absolute right-0 top-0 text-xs font-semibold py-1 px-2 uppercase rounded text-gray-600 bg-gray-200">
                     Saving...
                   </div></div> : <div></div>} */}
-        <div className='grid grid-cols-3'>
-          <div className='col-span-1'>
+        <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4'>
+          <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
             <div className="self-center flex flex-row align-center">
-              <div className="flex flex-col justify-center m-auto w-1/3 mr-3 align-center">
+              <div className="flex flex-col justify-center mr-5 align-center">
                 <div className="flex justify-center">
                   <IconPickerItem
                     className=""
@@ -671,7 +670,7 @@ export default function HabitRow({
                 </p>
               </div>
               {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
-              <div className="text-left w-2/3 self-center">
+              <div className="text-left w-2/3 pr-5 self-center">
                 <div className='flex gap-2 flex-row items-center mb-1'>
                   <h2 className="text-lg sm:text-xl font-bold leading-snug text-black truncate">
                     {habit_title}

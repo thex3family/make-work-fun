@@ -207,12 +207,12 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                         <div className="relative w-full m-auto max-w-sm flex-grow flex-1">
                           <div className="flex items-center">
                             <span className="mr-2 text-dailies font-semibold text-lg">
-                              {Math.floor((dailiesCount/Math.floor(habits.length * 0.8))*100)}%
+                              {Math.floor((dailiesCount / Math.floor(habits.length * 0.8)) * 100)}%
                             </span>
                             <div className="relative w-full">
                               <div className="overflow-hidden h-3 text-xs flex rounded-lg bg-dailies-light">
                                 <div
-                                  style={{ width: `${(dailiesCount/Math.floor(habits.length * 0.8))*100}%` }}
+                                  style={{ width: `${(dailiesCount / Math.floor(habits.length * 0.8)) * 100}%` }}
                                   className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-dailies-dark"
                                 ></div>
                               </div>
@@ -286,39 +286,39 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
         </button>  */}
 
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
-              {habits != null ? (
-                habits.length != 0 ? (
-                  <div className='grid grid-cols-3 mb-4'>
-                    <div className='col-span-1'>
-                    </div>
-                    <div className='col-span-2 text-white'>
-                      <div className='grid grid-cols-2 justify-items-center pr-5'>
-                        <div>
-                          <div className='font-bold'>Yesterday</div>
-                          <div className='text-sm'>{moment().subtract(1, "days").format('dddd')}</div>
-                        </div>
-                        <div>
-                          <div className='font-bold'>Today</div>
-                          <div className='text-sm'>{moment().format('dddd')}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : null) : null}
               <div className="text-center">
                 {habits != null ? (
                   habits.length != 0 ? (
-                    <HabitGroups
-                      habits={habits}
-                      fetchDailies={fetchDailies}
-                      fetchDailiesCompletedToday={fetchDailiesCompletedToday}
-                      player={user.id}
-                      setHabits={setHabits}
-                      setLevelUp={setLevelUp}
-                      setDailiesCount={setDailiesCount}
-                      downstreamHabitRefresh={downstreamHabitRefresh}
-                      setDownstreamHabitRefresh={setDownstreamHabitRefresh}
-                    />
+                    <>
+                      <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 mb-4'>
+                        <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
+                        </div>
+                        <div className='col-span-2 text-white'>
+                          <div className='grid grid-cols-2 justify-items-center pr-5'>
+                            <div>
+                              <div className='font-bold sm:text-base text-sm hidden sm:block'>Yesterday</div>
+                              <div className='text-xs sm:text-sm font-semibold'>{moment().subtract(1, "days").format('ddd')}</div>
+                            </div>
+                            <div>
+                              <div className='font-bold sm:text-base text-sm hidden sm:block'>Today</div>
+                              <div className='text-xs sm:text-sm font-semibold'>{moment().format('ddd')}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <HabitGroups
+                        habits={habits}
+                        fetchDailies={fetchDailies}
+                        fetchDailiesCompletedToday={fetchDailiesCompletedToday}
+                        player={user.id}
+                        setHabits={setHabits}
+                        setLevelUp={setLevelUp}
+                        setDailiesCount={setDailiesCount}
+                        downstreamHabitRefresh={downstreamHabitRefresh}
+                        setDownstreamHabitRefresh={setDownstreamHabitRefresh}
+                      />
+                    </>
+
                   ) : (
                     <span className="text-center text-accents-6 font-semibold text-md">
                       You have no active habits...let's change that!
