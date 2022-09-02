@@ -11,6 +11,8 @@
     "build:tailwind": "tailwind build styles/index.css -o styles/tailwind.css"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.0.5",
+    "@dnd-kit/sortable": "^7.0.1",
     "@fortawesome/fontawesome-free": "5.15.3",
     "@giphy/js-fetch-api": "^4.0.2",
     "@giphy/react-components": "^3.0.7",

@@ -27,6 +27,7 @@ import {
 import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
 import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
+import EditDailies from '@/components/Habits/edit_habits';
 
 export default function dailies({ user, metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [habits, setHabits] = useState(null);
@@ -35,9 +36,34 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
   const [dailiesCount, setDailiesCount] = useState(0);
   const [dailyBonus, setDailyBonus] = useState(null);
 
+
   const [levelUp, setLevelUp] = useState(false);
 
   const [playerStats, setPlayerStats] = useState(null);
+
+  const [activeMode, setActiveMode] = useState(1);
+  const router = useRouter();
+
+  const { mode } = router.query;
+
+  useEffect(() => {
+    if (mode == 'play') {
+      setActiveMode(1);
+    }
+    if (mode == 'edit') {
+      setActiveMode(2);
+    }
+  }, []);
+
+  async function changeMode(mode_id) {
+    if (mode_id == 1) {
+      router.push(`dailies/?mode=play`, undefined, { shallow: true })
+    }
+    if (mode_id == 2) {
+      router.push(`dailies/?mode=edit`, undefined, { shallow: true })
+    }
+    setActiveMode(mode_id);
+  }
 
 
   // Get the last 7 days 
@@ -74,7 +100,6 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
   // const [entryDate, setEntryDate] = useState(moment().startOf('day').format('yyyy-MM-DD'));
   // const [entryDate, setEntryDate] = useState(null);
 
-  const router = useRouter();
   const {
     userOnboarding,
   } = userContent();
@@ -286,54 +311,62 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
         </button>  */}
 
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative pt-14">
-              <div className="text-center">
-                {habits != null ? (
-                  habits.length != 0 ? (
-                    <>
-                      <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 mb-4'>
-                        <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
-                        </div>
-                        <div className='col-span-2 text-white'>
-                          <div className='grid grid-cols-2 justify-items-center pr-5'>
-                            <div>
-                              <div className='font-bold sm:text-base text-sm hidden sm:block'>Yesterday</div>
-                              <div className='text-xs sm:text-sm font-semibold'>{moment().subtract(1, "days").format('ddd')}</div>
+              {activeMode == 1 ?
+                <>
+                  <div className="text-center">
+                    {habits != null ? (
+                      habits.length != 0 ? (
+                        <>
+                          <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 mb-4'>
+                            <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
                             </div>
-                            <div>
-                              <div className='font-bold sm:text-base text-sm hidden sm:block'>Today</div>
-                              <div className='text-xs sm:text-sm font-semibold'>{moment().format('ddd')}</div>
+                            <div className='col-span-2 text-white'>
+                              <div className='grid grid-cols-2 justify-items-center pr-5'>
+                                <div>
+                                  <div className='font-bold sm:text-base text-sm hidden sm:block'>Yesterday</div>
+                                  <div className='text-xs sm:text-sm font-semibold'>{moment().subtract(1, "days").format('ddd')}</div>
+                                </div>
+                                <div>
+                                  <div className='font-bold sm:text-base text-sm hidden sm:block'>Today</div>
+                                  <div className='text-xs sm:text-sm font-semibold'>{moment().format('ddd')}</div>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      <HabitGroups
-                        habits={habits}
-                        fetchDailies={fetchDailies}
-                        fetchDailiesCompletedToday={fetchDailiesCompletedToday}
-                        player={user.id}
-                        setHabits={setHabits}
-                        setLevelUp={setLevelUp}
-                        setDailiesCount={setDailiesCount}
-                        downstreamHabitRefresh={downstreamHabitRefresh}
-                        setDownstreamHabitRefresh={setDownstreamHabitRefresh}
-                      />
-                    </>
+                          <HabitGroups
+                            habits={habits}
+                            fetchDailies={fetchDailies}
+                            fetchDailiesCompletedToday={fetchDailiesCompletedToday}
+                            player={user.id}
+                            setHabits={setHabits}
+                            setLevelUp={setLevelUp}
+                            setDailiesCount={setDailiesCount}
+                            downstreamHabitRefresh={downstreamHabitRefresh}
+                            setDownstreamHabitRefresh={setDownstreamHabitRefresh}
+                          />
+                        </>
 
-                  ) : (
-                    <span className="text-center text-accents-6 font-semibold text-md">
-                      You have no active habits...let's change that!
-                    </span>
-                  )
-                ) : null}
-              </div>
+                      ) : (
+                        <span className="text-center text-accents-6 font-semibold text-md">
+                          You have no active habits...let's change that!
+                        </span>
+                      )
+                    ) : null}
+                  </div>
+                  <div className="text-center my-5">
+                    <button className="px-5 border-2 border-dailies-dark text-center text-dailies bg-dailies-light font-bold py-2 rounded hover:bg-dailies-dark hover:border-white hover:text-white"
+                      onClick={() => (changeMode(2), setDownstreamHabitRefresh(true))}>
+                      Edit Dailies
+                    </button>
+                  </div>
+                </>
+                : null }
 
-              <div className="text-center my-5">
-                <Link href="/dailies/edit">
-                  <button className="px-5 border-2 border-dailies-dark text-center text-dailies bg-dailies-light font-bold py-2 rounded hover:bg-dailies-dark hover:border-white hover:text-white">
-                    Edit Dailies
-                  </button>
-                </Link>
-              </div>
+                {activeMode == 2 ?
+                <>
+                  <EditDailies player={player} changeMode={changeMode} />
+                  
+                </> : null}
             </div>
           </div>
         </div>
