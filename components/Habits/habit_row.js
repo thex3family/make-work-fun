@@ -411,7 +411,7 @@ export default function HabitRow({
 
   useEffect(() => {
     if (habit_type == "Picture" && habit_detail) {
-      console.log('habit picture detail: ', habit_detail)
+      // console.log('habit picture detail: ', habit_detail)
       loadDailiesPicture(habit_detail);
     }
   }, [habit_type, habit_detail]);
