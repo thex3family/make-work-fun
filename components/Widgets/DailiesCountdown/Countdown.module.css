@@ -1,7 +1,7 @@
 .Countdown{
     margin: 10px auto;
     padding-top: 20px;
-    padding-bottom: 20px;
+    /* padding-bottom: 20px; */
   }
   
   .Countdowncol{
@@ -38,7 +38,7 @@
     padding: .5em 0.5em;
     display:inline-block;
     vertical-align: middle;
-    width: 80px;
+    width: 90px;
     font-weight: 600;
     color: #8e745e;
     text-align: left;
