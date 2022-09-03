@@ -6,8 +6,7 @@ import { supabase } from '@/utils/supabase-client';
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
-export default function ModalDQDetail({ setShowDailyQuestDetail, habit_id, habit_description, fetchDailies,
-  player, setHabits, setLevelUp, setDailiesCount, habit_title }) {
+export default function ModalDQDetail({ setShowDailyQuestDetail, habit_id, habitDescription, setHabitDescription, habit_title }) {
 
   const [saving, setSaving] = useState(false);
 
@@ -169,7 +168,7 @@ export default function ModalDQDetail({ setShowDailyQuestDetail, habit_id, habit
         class: 'prose border-2 leading-relaxed w-full rounded px-2 py-2 outline-none focus:outline-none overflow-y-auto h-96',
       },
     },
-    content: habit_description ? habit_description : {
+    content: habitDescription ? habitDescription : {
       "type": "doc",
       "content": [
         {
@@ -276,12 +275,14 @@ export default function ModalDQDetail({ setShowDailyQuestDetail, habit_id, habit
   async function saveDailyQuestDetail() {
     setSaving(true);
     const json = editor.getJSON()
+    setHabitDescription(json);
+    
     const { data, error } = await supabase
       .from('habits')
       .update({ description: json })
       .eq('id', habit_id);
 
-    fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
+    // fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
     setShowDailyQuestDetail(false);
   }
 

@@ -10,6 +10,15 @@ import { Switch, TextInput } from '@mantine/core';
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import Button from '../ui/Button';
+
+export function SimpleOverlay(props) {
+  const { id } = props;
+
+  return <div className={`animate-pulse h-28 w-full my-4 mb-0 relative bg-cover bg-center object-cover rounded z-10 square shadow-lg border-4 bg-dailies-light border-dailies-dark flex justify-center`}>
+    <div className='text-dailies text-lg font-bold m-auto'>Drag me around!</div>
+  </div>;
+}
 
 export default function EditHabitRow({
   habit_id,
@@ -21,6 +30,9 @@ export default function EditHabitRow({
   habit_area,
   exp_reward,
   habit_icon,
+  habit_active,
+  items,
+  setItems,
   player
 }) {
 
@@ -41,14 +53,60 @@ export default function EditHabitRow({
 
   const [showDailyQuestDetail, setShowDailyQuestDetail] = useState(false);
 
+  const [habitTitle, setHabitTitle] = useState(habit_title);
+  const [habitDescription, setHabitDescription] = useState(habit_description);
+  const [habitArea, setHabitArea] = useState(habit_area);
+  const [habitIcon, setHabitIcon] = useState(habit_icon);
+  const [habitActive, setHabitActive] = useState(habit_active);
+
+
+  async function editMaster(value, column) {
+    setSaving(true);
+
+    const newData = items[habit_group]
+    const index = (newData.findIndex((item) => habit_id === item.id));
+    const item = newData[index];
+    newData.splice(index, 1, { ...item, [`${column}`]: value });
+
+    console.log(newData);
+
+    // reinsert this object back into the big array.
+    items[habit_group] = newData;
+
+    setItems(items);
+
+    setSaving(false);
+
+    // const newData = [...items];
+    // const index = newData.findIndex((item) => habit_id === item.id);
+    // const item = newData[index];
+    // if (column === 'name') {
+    //   newData.splice(index, 1, { ...item, name: input });
+    // }
+    // console.log(newData);
+
+    // need to update the database
+
+    // try {
+    //   const { data, error } = await supabase.from('habits').upsert(newData);
+
+    //   if (error && status !== 406) {
+    //     throw error;
+    //   }
+    // } catch (error) {
+    //   // alert(error.message);
+    //   console.log(error.message);
+    // } finally {
+    //   setLoading(false);
+    //   setSaving(false);
+    // }
+  }
 
   return (
     <>
       <div
-        ref={setNodeRef} style={style} {...attributes} {...listeners}
-        key={habit_id}
-        className={`overflow-x-hidden animate-fade-in-down w-full my-4 mb-0 relative bg-cover bg-center object-cover rounded z-10 square shadow-lg border-4 bg-dailies-light border-dailies-dark ${habit_type == 'Checkbox' ? null : null
-          }`}
+        ref={setNodeRef} style={style}
+        className={`animate-fade-in-down w-full my-4 mb-0 relative bg-cover bg-center object-cover rounded square shadow-lg border-4 bg-dailies-light border-dailies-dark`}
       >
         <div className={`p-4 h-full`}>
           {saving ? (
@@ -78,77 +136,80 @@ export default function EditHabitRow({
           ) : (
             <div></div>
           )}
-          <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 gap-4'>
-            <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
-              <div className="self-center flex flex-row align-center">
-                <div className="flex flex-col justify-center mr-5 align-center">
-                  <div className="flex justify-center">
-                    <IconPicker
-                      className=""
-                      value={habit_icon}
-                      size={35}
-                      color="#000"
-                    />
-                  </div>
+            <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 gap-4'>
+              <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
+                <div className="self-center flex flex-row align-center">
+                  <div className="flex flex-col justify-center mr-5 align-center">
+                    <div className="flex justify-center">
+                      <IconPicker
+                        className=""
+                        value={habitIcon}
+                        onChange={(v) => setHabitIcon(v)}
+                        size={35}
+                        color="#000"
+                      />
+                    </div>
 
-                  <p className="text-xs mt-3 mx-auto">
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                      +{exp_reward} XP
-                    </span>
-                  </p>
-                </div>
-                <div className="text-left w-2/3 pr-5 self-center">
-                  <div className='flex gap-2 flex-row items-center mb-1'>
-                    <TextInput
-                      placeholder={'Your Habit Name'}
-                      value={habit_title || ''}
-                      classNames={{
-                        input: 'text-lg sm:text-xl font-bold leading-snug text-black'
-                      }}
-                    />
-                    <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
-                  </div>
-                  <p className="text-sm sm:text-md mt-2 pl-3 text-black">
-                    Type: {habit_type}
-                  </p>
-                  <div className="hidden sm:visible">
-                    <p className="text-xs mt-3">
+                    <p className="text-xs mt-3 mx-auto">
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
                         +{exp_reward} XP
                       </span>
                     </p>
                   </div>
+                  <div className="text-left w-2/3 pr-5 self-center">
+                    <div className='flex gap-2 flex-row items-center mb-1'>
+                      <TextInput
+                        placeholder={'Your Habit Name'}
+                        value={habitTitle || ''}
+                        onChange={(event) => (setHabitTitle(event.currentTarget.value))}
+                        onBlur={()=>editMaster(habitTitle, 'name')}
+                        classNames={{
+                          input: 'text-lg sm:text-xl font-bold leading-snug text-black'
+                        }}
+                      />
+                      <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
+                    </div>
+                    <p className="text-sm sm:text-md mt-2 pl-3 text-black">
+                      Type: {habit_type}
+                    </p>
+                    <div className="hidden sm:visible">
+                      <p className="text-xs mt-3">
+                        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+                          +{exp_reward} XP
+                        </span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <div className='col-span-2 flex flex-row self-center text-left gap-4 justify-end'>
+                <TextInput
+                  placeholder={'What are you looking for?'}
+                  value={habitArea || ''}
+                  onChange={(event) => setHabitArea(event.currentTarget.value)}
+                  onBlur={()=>editMaster(habitArea, 'area')}
+                  classNames={{
+                    input: 'p-2 text-accents-1 font-semibold rounded'
+                  }}
+                />
+                <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />;
+                <i className='fas fa-bars text-black text-xl mt-auto mb-auto hideLinkBorder' {...attributes} {...listeners} />
+              </div>
             </div>
-            <div className='col-span-2 flex flex-row self-center text-left gap-4 justify-end'>
-              <TextInput
-                placeholder={'What are you looking for?'}
-                value={habit_area || ''}
-                classNames={{
-                  input: 'p-2 text-accents-1 font-semibold rounded'
-                }}
-              />
-              <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" />;
-            </div>
-          </div>
+            
         </div>
       </div>
 
 
       {showDailyQuestDetail ? (
         <>
-          {/* <ModalDQDetail
-          setShowDailyQuestDetail={setShowDailyQuestDetail}
-          habit_id={habit_id}
-          habit_description={habit_description}
-          fetchDailies={fetchDailies}
-          player={player}
-          setHabits={setHabits}
-          setLevelUp={setLevelUp}
-          setDailiesCount={setDailiesCount}
-          habit_title={habit_title}
-        /> */}
+          <ModalDQDetail
+            setShowDailyQuestDetail={setShowDailyQuestDetail}
+            habit_id={habit_id}
+            habitDescription={habitDescription}
+            setHabitDescription={setHabitDescription}
+            habit_title={habit_title}
+          />
         </>
       ) : null}
     </>

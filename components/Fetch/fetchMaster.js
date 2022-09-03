@@ -974,33 +974,24 @@ export async function fetchActiveTimer(player, setActiveTimer) {
   }
 }
 
-export async function fetchHabitChanges(player, refreshDailies) {
-  console.log('Checking for habit changes')
-  try {
-    const { data, error } = await supabase
-      .from(`completed_habits:player=eq.${player}`)
-      .on('INSERT', payload => {
-        console.log('Habit Completed', payload)
-        refreshDailies();
-      })
-      .on('UPDATE', payload => {
-        console.log('Habit Updated', payload)
-        refreshDailies();
-      })
-      .on('DELETE', payload => {
-        console.log('Habit Deleted', payload)
-        refreshDailies();
-      })
-      .subscribe()
+// export async function fetchHabitChanges(player, refreshDailies) {
+//   console.log('Checking for habit changes')
+//     const habitSubscription = await supabase
+//       .from(`completed_habits:player=eq.${player}`)
+//       .on('INSERT', payload => {
+//         console.log('Habit Completed', payload)
+//         refreshDailies();
+//       })
+//       .on('UPDATE', payload => {
+//         console.log('Habit Updated', payload)
+//         refreshDailies();
+//       })
+//       .on('DELETE', payload => {
+//         console.log('Habit Deleted', payload)
+//         refreshDailies();
+//       })
+//       .subscribe()
 
-    if (error && status !== 406) {
-      throw error;
-    }
-  } catch (error) {
-    // alert(error.message);
-    console.log(error.message);
-  } finally {
-    const subscriptions = supabase.getSubscriptions();
-    console.log(subscriptions);
-  }
-}
+//     const subscriptions = supabase.getSubscriptions();
+//     console.log(subscriptions);
+// }

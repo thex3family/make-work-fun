@@ -100,7 +100,7 @@ class Countdown extends Component {
           </span>
         </span> */}
         
-        <div className={s.Countdowndesc}>Bonus Resets...</div>
+        <div className={s.Countdowndesc}>Quests Reset In...</div>
         <span className={s.Countdowncol}>
           <span className={s.Countdowncolelement}>
             <strong>{this.addLeadingZeros(countDown.hours)}</strong>

@@ -371,6 +371,7 @@ export default function HabitRow({
   const [yesterdayHabit, setYesterdayHabit] = useState(null);
 
   const [cardDetails, setCardDetails] = useState(null);
+  const [habitDescription, setHabitDescription] = useState(habit_description);
 
   // useEffect(() => {
   //   if (streak_end) {
@@ -802,12 +803,8 @@ export default function HabitRow({
         <ModalDQDetail
           setShowDailyQuestDetail={setShowDailyQuestDetail}
           habit_id={habit_id}
-          habit_description={habit_description}
-          fetchDailies={fetchDailies}
-          player={player}
-          setHabits={setHabits}
-          setLevelUp={setLevelUp}
-          setDailiesCount={setDailiesCount}
+          habitDescription={habitDescription}
+          setHabitDescription={setHabitDescription}
           habit_title={habit_title}
         />
       </>
