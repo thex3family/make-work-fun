@@ -23,19 +23,17 @@ export default function CardWin({
   var width = 1;
 
   useEffect(() => {
-    setInterval(function () {
-      frame();
+    var i = setInterval(function () {
+      if (width < 100) {
+        width++;
+        setProgress(width);
+      } else {
+        console.log('Card win complete')
+        setShowCardWin(false);
+        clearInterval(i);
+      }
     }, 50);
   }, []);
-
-  function frame() {
-    if (width < 100) {
-      width++;
-      setProgress(width);
-    } else {
-      setShowCardWin(false);
-    }
-  }
 
   let short_name = truncateString(player_name, 10);
 
@@ -45,9 +43,8 @@ export default function CardWin({
 
   return (
     <div
-      className={`ml-5 mr-5 fixed right-0 top-0 text-xs font-semibold uppercase rounded-tl-md rounded-tr-md bg-gradient-to-r from-emerald-500 to-blue-500 filter shadow-xl opacity-50 hover:opacity-100 transition duration-400 ease-in-out ${
-        position == 'top' ? 'mt-5' : 'mt-24'
-      }`}
+      className={`ml-5 mr-5 fixed right-0 top-0 text-xs font-semibold uppercase rounded-tl-md rounded-tr-md bg-gradient-to-r from-emerald-500 to-blue-500 filter shadow-xl opacity-50 hover:opacity-100 transition duration-400 ease-in-out ${position == 'top' ? 'mt-5' : 'mt-24'
+        }`}
     >
       <div className="mt-2 mx-2 flex flex-row gap-2 items-center h-24 py-1 px-5">
         {avatarUrl ? (

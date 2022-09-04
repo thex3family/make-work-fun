@@ -13,8 +13,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { UserProvider } from '@supabase/supabase-auth-helpers/react';
 import { supabase } from 'utils/supabase-client.js';
 
-import WinManage from '@/components/WinManage/winManage';
-
 // function setupIntercom(mobileDevice) {
 //   if (process.env.NODE_ENV === 'production') {
 //     window.intercomSettings = {

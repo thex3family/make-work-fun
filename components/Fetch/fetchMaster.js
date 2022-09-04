@@ -3,125 +3,125 @@ import notifyMe from '@/components/Notify/win_notification';
 import { downloadImage } from '@/utils/downloadImage';
 import moment from 'moment';
 
-export async function fetchLatestWin(
-  setActiveModalStats,
-  refreshStats,
-  setLevelUp,
-  triggerWinModal,
-  setShowWinModal,
-  player_id,
-  triggerCardWin,
-  setShowCardWin,
-  setActiveWinStats,
-  friends
-) {
-  try {
-    // check if there is any win (only works when the app is open) - future will move it to a server
-    if (!player_id) {
-      console.log('Checking for wins');
-      const user = supabase.auth.user();
-      const { data, error } = await supabase
-        .from('success_plan')
-        .on('INSERT', async (payload) => {
-          console.log('New Win Incoming!', payload, payload.new.player);
+// export async function fetchLatestWin(
+//   setActiveModalStats,
+//   refreshStats,
+//   setLevelUp,
+//   triggerWinModal,
+//   setShowWinModal,
+//   player_id,
+//   triggerCardWin,
+//   setShowCardWin,
+//   setActiveWinStats,
+//   friends
+// ) {
+//   try {
+//     // check if there is any win (only works when the app is open) - future will move it to a server
+//     if (!player_id) {
+//       console.log('Checking for wins');
+//       const user = supabase.auth.user();
+//       const { data, error } = await supabase
+//         .from('success_plan')
+//         .on('INSERT', async (payload) => {
+//           console.log('New Win Incoming!', payload, payload.new.player);
 
-          // checking if the win is assigned to the current user
-          if (user) {
-            if (payload.new.player === user.id) {
-              // Get the latest updated stats of the user
-              const player = await fetchPlayerStats();
-              // check if user leveled up
+//           // checking if the win is assigned to the current user
+//           if (user) {
+//             if (payload.new.player === user.id) {
+//               // Get the latest updated stats of the user
+//               const player = await fetchPlayerStats();
+//               // check if user leveled up
 
-              if (player.current_level > player.previous_level) {
-                // level up animation
-                setLevelUp(player.current_level);
-                notifyMe('level', player.current_level);
-              }
+//               if (player.current_level > player.previous_level) {
+//                 // level up animation
+//                 setLevelUp(player.current_level);
+//                 notifyMe('level', player.current_level);
+//               }
 
-              // If win is from success plan, set up the modal
-              // if(payload.new.type !== 'Daily Quest'){
-              triggerWinModal(
-                setActiveModalStats,
-                setShowWinModal,
-                payload.new
-              );
-              notifyMe('win', payload.new);
-              // }
-            } else {
-              // if it is not the current user
-              // if Show Card Win Exists (usually on leaderboard)
-              if (triggerCardWin) {
-                triggerCardWin(setActiveWinStats, setShowCardWin, payload.new);
-              }
-            }
-          } else {
-            // if not logged in
-            // if Show Card Win Exists (usually on leaderboard)
-            if (triggerCardWin) {
-              if (friends) {
-                if (friends.includes(payload.new.player)) {
-                  triggerCardWin(
-                    setActiveWinStats,
-                    setShowCardWin,
-                    payload.new
-                  );
-                }
-              } else {
-                triggerCardWin(setActiveWinStats, setShowCardWin, payload.new);
-              }
-            }
-          }
-          refreshStats();
-        })
-        .subscribe();
-    }
+//               // If win is from success plan, set up the modal
+//               // if(payload.new.type !== 'Daily Quest'){
+//               triggerWinModal(
+//                 setActiveModalStats,
+//                 setShowWinModal,
+//                 payload.new
+//               );
+//               notifyMe('win', payload.new);
+//               // }
+//             } else {
+//               // if it is not the current user
+//               // if Show Card Win Exists (usually on leaderboard)
+//               if (triggerCardWin) {
+//                 triggerCardWin(setActiveWinStats, setShowCardWin, payload.new);
+//               }
+//             }
+//           } else {
+//             // if not logged in
+//             // if Show Card Win Exists (usually on leaderboard)
+//             if (triggerCardWin) {
+//               if (friends) {
+//                 if (friends.includes(payload.new.player)) {
+//                   triggerCardWin(
+//                     setActiveWinStats,
+//                     setShowCardWin,
+//                     payload.new
+//                   );
+//                 }
+//               } else {
+//                 triggerCardWin(setActiveWinStats, setShowCardWin, payload.new);
+//               }
+//             }
+//           }
+//           refreshStats();
+//         })
+//         .subscribe();
+//     }
 
-    if (player_id) {
-      console.log('Checking for wins for ', player_id);
-      const { data, error } = await supabase
-        .from('success_plan')
-        .on('INSERT', async (payload) => {
-          console.log(
-            'New Specific Win Incoming!',
-            payload,
-            payload.new.player
-          );
+//     if (player_id) {
+//       console.log('Checking for wins for ', player_id);
+//       const { data, error } = await supabase
+//         .from('success_plan')
+//         .on('INSERT', async (payload) => {
+//           console.log(
+//             'New Specific Win Incoming!',
+//             payload,
+//             payload.new.player
+//           );
 
-          // checking if the win is assigned to the current user
-          if (player_id) {
-            if (payload.new.player === player_id) {
-              // Get the latest updated stats of the user
-              const player = await fetchPlayerStats(player_id);
+//           // checking if the win is assigned to the current user
+//           if (player_id) {
+//             if (payload.new.player === player_id) {
+//               // Get the latest updated stats of the user
+//               const player = await fetchPlayerStats(player_id);
 
-              // check if user leveled up
+//               // check if user leveled up
 
-              if (player.current_level > player.previous_level) {
-                // level up animation
-                setLevelUp(player.current_level);
-                notifyMe('level', player.current_level);
-              }
+//               if (player.current_level > player.previous_level) {
+//                 // level up animation
+//                 setLevelUp(player.current_level);
+//                 notifyMe('level', player.current_level);
+//               }
 
-              // If win is from success plan, set up the modal
-              // if(payload.new.type !== 'Daily Quest'){
-              triggerWinModal(
-                setActiveModalStats,
-                setShowWinModal,
-                payload.new
-              );
-              notifyMe('win', payload.new);
-              // }
-            }
-          }
-          refreshStats();
-        })
-        .subscribe();
-    }
-  } catch (error) {
-    // alert(error.message);
-    console.log(error.message);
-  } finally {
-  }
-}
+//               // If win is from success plan, set up the modal
+//               // if(payload.new.type !== 'Daily Quest'){
+//               triggerWinModal(
+//                 setActiveModalStats,
+//                 setShowWinModal,
+//                 payload.new
+//               );
+//               notifyMe('win', payload.new);
+//               // }
+//             }
+//           }
+//           refreshStats();
+//         })
+//         .subscribe();
+//     }
+//   } catch (error) {
+//     // alert(error.message);
+//     console.log(error.message);
+//   } finally {
+//   }
+// }
 
 export async function fetchPlayerStats(player, setNewToSeason) {
   try {

@@ -1,50 +1,22 @@
-import { fetchLatestWin, fetchPlayerStats } from '../Fetch/fetchMaster';
-import { triggerCardWin, triggerWinModal } from '../Modals/ModalHandler';
+import { triggerCardWin } from '../Modals/ModalHandler';
 import { useState, useEffect } from 'react';
-import { userContent } from '@/utils/useUser';
 
-import ModalLevelUp from '../Modals/ModalLevelUp';
-import WinModal from '../Modals/ModalWin';
 import CardWin from '../Cards/CardWin';
 
 import { supabase } from '@/utils/supabase-client';
 
 
-export default function WinManage({ user, setRefreshChildStats }) {
-    // Handle Win Modal
-    // const { user } = userContent();
-    const [levelUp, setLevelUp] = useState(false);
-    const [showWinModal, setShowWinModal] = useState(false);
-    const [activeModalStats, setActiveModalStats] = useState(null);
-    const [activeWinStats, setActiveWinStats] = useState(null);
-    const [playerStats, setPlayerStats] = useState(null);
+export default function WinManage() {
+    const [payload, setPayload] = useState(null);
     const [showCardWin, setShowCardWin] = useState(false);
 
-    // this also runs more times than it should
-
-    // need to improve this, i think refactoring is necessary...
-    // basically this only runs once - so if you switch to a logged in state, it doesn't work properly until the next hard refresh. 
-
-    // useEffect(() => {
-    //     fetchLatestWin(
-    //         setActiveModalStats,
-    //         refreshStats,
-    //         setLevelUp,
-    //         triggerWinModal,
-    //         setShowWinModal,
-    //         null,
-    //         triggerCardWin,
-    //         setShowCardWin,
-    //         setActiveWinStats
-    //     );
-    // }, []);
-
     useEffect(() => {
-        console.log('Checking for wins for ' + user?.id)
+        console.log('Checking for wins')
         const winSubscription = supabase
             .from('success_plan')
             .on('INSERT', async (payload) => {
                 console.log('New Win Incoming!', payload, payload.new.player);
+                setPayload(payload)
             })
             .subscribe();
 
@@ -60,47 +32,26 @@ export default function WinManage({ user, setRefreshChildStats }) {
         }
     }, []);
 
-    async function refreshStats() {
-        setRefreshChildStats(true);
-        setPlayerStats(await fetchPlayerStats());
-    }
+    useEffect(() => {
+        if (payload) {
+            // show card win 
+            console.log('User not signed in');
+            triggerCardWin(setActiveWinStats, setShowCardWin, payload.new);
+        }
+    }, [payload]);
 
-    if (user) return (
-        <>
-            {/* Level Up Modal */}
-            {levelUp ? (
-                <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
-            ) : null}
-
-            {/* // Win Modal */}
-            {showWinModal ? (
-                <>
-                    <WinModal
-                        page={'leaderboard'}
-                        activeModalStats={activeModalStats}
-                        setShowWinModal={setShowWinModal}
-                        playerStats={playerStats}
-                        refreshStats={refreshStats}
-                    />
-                </>
-            ) : null}
-
-
-        </>
-    );
-
-    if (!user) return (
+    return (
         <>
             {/* Card Win */}
-            {
-                showCardWin ? (
-                    <CardWin
-                        setShowCardWin={setShowCardWin}
-                        win={activeWinStats}
-                        player_name={showCardWin.full_name}
-                        avatarUrl={showCardWin.avatar_url}
-                    />
-                ) : null
-            }</>
+            {showCardWin ? (
+                <CardWin
+                    setShowCardWin={setShowCardWin}
+                    win={activeWinStats}
+                    player_name={showCardWin.full_name}
+                    avatarUrl={showCardWin.avatar_url}
+                />
+            ) : null}
+
+        </>
     );
 }
