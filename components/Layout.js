@@ -15,8 +15,9 @@ import ItemBanner from './ui/ItemBanner';
 import { fetchActiveTimer } from './Fetch/fetchMaster';
 import { supabase } from '@/utils/supabase-client';
 import ModalUpdates from './Modals/ModalUpdates';
-import WinManage from './WinManage/winManage';
+import UserWinManage from './WinManage/userWinManage';
 import ItemManage from './ui/itemManage';
+import WinManage from './WinManage/winManage';
 
 
 export default function Layout({ children, meta, manualPlayerID, manualPlayerStats, setRefreshChildStats }) {
@@ -121,18 +122,21 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
 
       </Head>
       <nav className='sticky top-0 z-20'>
-        {
-          user ?
-            <ItemManage player={user} setOverrideMetaTitle={setOverrideMetaTitle} />
-            : manualPlayerID ? <ItemManage player={manualPlayerID} setOverrideMetaTitle={setOverrideMetaTitle} /> : null
-        }
-        {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}</nav>
+        {user ?
+          <ItemManage player={user} setOverrideMetaTitle={setOverrideMetaTitle} />
+          : manualPlayerID ? <ItemManage player={manualPlayerID} setOverrideMetaTitle={setOverrideMetaTitle} /> : null}
+        {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
+      </nav>
       {router.asPath.includes('embed/') && router.asPath.includes('auth') ? null :
-        user ? <WinManage user={user} setRefreshChildStats={setRefreshChildStats} /> : null
-      }
+        user ? 
+        <UserWinManage user={user} setRefreshChildStats={setRefreshChildStats} /> 
+        : 
+        // forget it for anonymous users for now. <WinManage />
+        null
+        }
       <main id="skip">
         {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
-          {/* <SideBar router={router} mobileDevice={mobileDevice} /> */}
+          <SideBar router={router} mobileDevice={mobileDevice} />
         </> : null}
         {user && userProfile ? <ModalUpdates user={user} userProfile={userProfile} /> : null}
         {children}
