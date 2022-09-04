@@ -13,9 +13,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { UserProvider } from '@supabase/supabase-auth-helpers/react';
 import { supabase } from 'utils/supabase-client.js';
 
-import Head from 'next/head';
-
-
 import WinManage from '@/components/WinManage/winManage';
 
 // function setupIntercom(mobileDevice) {
@@ -45,13 +42,12 @@ export default function MyApp({ Component, pageProps }) {
     cardImage: '/og.png',
   };
 
-  
   const [meta, setMeta] = useState(metaBase);
   const [refreshChildStats, setRefreshChildStats] = useState(false);
   const [manualPlayerID, setManualPlayerID] = useState(null);
   const [manualPlayerStats, setManualPlayerStats] = useState(null);
-  
-  const router = useRouter();
+
+  // const router = useRouter();
 
   // useEffect(() => {
   //   const mobileDevice = detectMob();
@@ -69,10 +65,7 @@ export default function MyApp({ Component, pageProps }) {
 
         <UserProvider supabaseClient={supabase}>
           <UserContextProvider>
-          { router.asPath.includes('embed/')  && router.asPath.includes('auth') ? null : 
-            <WinManage setRefreshChildStats={setRefreshChildStats} />
-          }
-            <Layout meta={meta} manualPlayerID={manualPlayerID} manualPlayerStats={manualPlayerStats}>
+            <Layout meta={meta} manualPlayerID={manualPlayerID} manualPlayerStats={manualPlayerStats} setRefreshChildStats={setRefreshChildStats} >
               <Component {...pageProps} metaBase={metaBase} setMeta={setMeta} refreshChildStats={refreshChildStats} setRefreshChildStats={setRefreshChildStats} setManualPlayerID={setManualPlayerID} setManualPlayerStats={setManualPlayerStats} />
             </Layout>
           </UserContextProvider>

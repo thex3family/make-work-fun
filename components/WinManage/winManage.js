@@ -7,11 +7,12 @@ import ModalLevelUp from '../Modals/ModalLevelUp';
 import WinModal from '../Modals/ModalWin';
 import CardWin from '../Cards/CardWin';
 
+import { supabase } from '@/utils/supabase-client';
 
-export default function WinManage({setRefreshChildStats}) {
+
+export default function WinManage({ user, setRefreshChildStats }) {
     // Handle Win Modal
-
-    const { user } = userContent();
+    // const { user } = userContent();
     const [levelUp, setLevelUp] = useState(false);
     const [showWinModal, setShowWinModal] = useState(false);
     const [activeModalStats, setActiveModalStats] = useState(null);
@@ -24,20 +25,40 @@ export default function WinManage({setRefreshChildStats}) {
     // need to improve this, i think refactoring is necessary...
     // basically this only runs once - so if you switch to a logged in state, it doesn't work properly until the next hard refresh. 
 
-    useEffect(() => {
-        fetchLatestWin(
-            setActiveModalStats,
-            refreshStats,
-            setLevelUp,
-            triggerWinModal,
-            setShowWinModal,
-            null,
-            triggerCardWin,
-            setShowCardWin,
-            setActiveWinStats
-        );
-    }, []);
+    // useEffect(() => {
+    //     fetchLatestWin(
+    //         setActiveModalStats,
+    //         refreshStats,
+    //         setLevelUp,
+    //         triggerWinModal,
+    //         setShowWinModal,
+    //         null,
+    //         triggerCardWin,
+    //         setShowCardWin,
+    //         setActiveWinStats
+    //     );
+    // }, []);
 
+    useEffect(() => {
+        console.log('Checking for wins for ' + user?.id)
+        const winSubscription = supabase
+            .from('success_plan')
+            .on('INSERT', async (payload) => {
+                console.log('New Win Incoming!', payload, payload.new.player);
+            })
+            .subscribe();
+
+        async function removeSubscription() {
+            await supabase.removeSubscription(winSubscription);
+        }
+
+        console.log('winSubscription', winSubscription);
+
+        return () => {
+            console.log('Removing winSubscription');
+            removeSubscription();
+        }
+    }, []);
 
     async function refreshStats() {
         setRefreshChildStats(true);

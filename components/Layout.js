@@ -15,9 +15,11 @@ import ItemBanner from './ui/ItemBanner';
 import { fetchActiveTimer } from './Fetch/fetchMaster';
 import { supabase } from '@/utils/supabase-client';
 import ModalUpdates from './Modals/ModalUpdates';
+import WinManage from './WinManage/winManage';
+import ItemManage from './ui/itemManage';
 
 
-export default function Layout({ children, meta, manualPlayerID, manualPlayerStats }) {
+export default function Layout({ children, meta, manualPlayerID, manualPlayerStats, setRefreshChildStats }) {
   const router = useRouter();
   const { user, userProfile, userOnboarding } = userContent();
   const [mobileDevice, setMobileDevice] = useState(false);
@@ -27,45 +29,14 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
     return window.innerWidth <= 1024;
   }
 
-  const [activeTimer, setActiveTimer] = useState(null);
   const [overrideMetaTitle, setOverrideMetaTitle] = useState(false);
 
   useEffect(() => {
     const mobileDevice = detectMob();
     setupIntercom(mobileDevice);
     setMobileDevice(mobileDevice);
-    if (user) {
-      checkForNewItems(user.id);
-      loadActiveTimer();
-    }
+
   }, [user]);
-
-  useEffect(() => {
-    if (manualPlayerID) {
-      checkForNewItems(manualPlayerID);
-      loadActiveTimer();
-    }
-  }, [manualPlayerID]);
-
-  async function loadActiveTimer() {
-    if (user) {
-      fetchActiveTimer(user.id, setActiveTimer);
-    }
-    if (manualPlayerID) {
-      fetchActiveTimer(manualPlayerID, setActiveTimer);
-    }
-  }
-
-
-  async function checkForNewItems(player) {
-    const { data, error } = await supabase
-      .from(`item_purchases:player=eq.${player}`)
-      .on('INSERT', async payload => {
-        console.log('Item Purchased!', payload)
-        loadActiveTimer();
-      })
-      .subscribe()
-  }
 
   function setupIntercom(mobileDevice) {
     // hide it on embeds until I figure out a good way to pass user credentials to intercom
@@ -150,21 +121,21 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
 
       </Head>
       <nav className='sticky top-0 z-20'>
-        {activeTimer ?
-          activeTimer?.map((activeTimeItem, i) => (
-            <ItemBanner
-              index={i} activeTimeItem={activeTimeItem} setOverrideMetaTitle={setOverrideMetaTitle} />
-          ))
-          : null
+        {
+          user ?
+            <ItemManage player={user} setOverrideMetaTitle={setOverrideMetaTitle} />
+            : manualPlayerID ? <ItemManage player={manualPlayerID} setOverrideMetaTitle={setOverrideMetaTitle} /> : null
         }
         {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}</nav>
+      {router.asPath.includes('embed/') && router.asPath.includes('auth') ? null :
+        user ? <WinManage user={user} setRefreshChildStats={setRefreshChildStats} /> : null
+      }
       <main id="skip">
         {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
-          <SideBar router={router} mobileDevice={mobileDevice} />
+          {/* <SideBar router={router} mobileDevice={mobileDevice} /> */}
         </> : null}
-        {user && userProfile ? <ModalUpdates user = {user} userProfile = {userProfile}/> : null }
+        {user && userProfile ? <ModalUpdates user={user} userProfile={userProfile} /> : null}
         {children}
-
       </main>
       {userOnboarding ? (
         userOnboarding.onboarding_state.includes('4') &&
