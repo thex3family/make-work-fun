@@ -10,7 +10,7 @@ import { supabase } from '@/utils/supabase-client';
 import notifyMe from '../Notify/win_notification';
 
 
-export default function UserWinManage({ user, setRefreshChildStats }) {
+export default function UserWinManage({ user, setRefreshChildStats, win, lvl }) {
     const [payload, setPayload] = useState(null);
     const [levelUp, setLevelUp] = useState(false);
     const [showWinModal, setShowWinModal] = useState(false);
@@ -85,12 +85,12 @@ export default function UserWinManage({ user, setRefreshChildStats }) {
     return (
         <>
             {/* Level Up Modal */}
-            {levelUp ? (
+            {levelUp && lvl !== 'false' ? (
                 <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
             ) : null}
 
             {/* // Win Modal */}
-            {showWinModal ? (
+            {showWinModal && win !== 'false' ? (
                 <>
                     <WinModal
                         page={'leaderboard'}
@@ -103,7 +103,7 @@ export default function UserWinManage({ user, setRefreshChildStats }) {
             ) : null}
 
             {/* Card Win */}
-            {showCardWin ? (
+            {showCardWin && win !== 'false' ? (
                 <CardWin
                     setShowCardWin={setShowCardWin}
                     win={activeWinStats}

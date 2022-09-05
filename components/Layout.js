@@ -85,6 +85,9 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
     }
   }
 
+  const { win } = router.query;
+  const { lvl } = router.query;
+
   return (
     <>
       <Head>
@@ -127,13 +130,12 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
           : manualPlayerID ? <ItemManage player={manualPlayerID} setOverrideMetaTitle={setOverrideMetaTitle} /> : null}
         {!router.asPath.includes('embed/') && !router.asPath.includes('signin') && !router.asPath.includes('auth') ? <Navbar /> : null}
       </nav>
-      {router.asPath.includes('embed/') && router.asPath.includes('auth') ? null :
-        user ? 
-        <UserWinManage user={user} setRefreshChildStats={setRefreshChildStats} /> 
-        : 
+      {user ?
+        <UserWinManage user={user} setRefreshChildStats={setRefreshChildStats} win={win} lvl={lvl} />
+        :
         // forget it for anonymous users for now. <WinManage />
-        null
-        }
+        manualPlayerID ? <UserWinManage user={manualPlayerID} setRefreshChildStats={setRefreshChildStats} win={win} lvl={lvl} /> : null
+      }
       <main id="skip">
         {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
           <SideBar router={router} mobileDevice={mobileDevice} />

@@ -17,7 +17,6 @@ import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 // functions
 import {
   fetchPlayerStats,
-  fetchLatestWin,
   fetchDailies,
   fetchDailiesCompletedToday,
   dailyBonusButtons,
@@ -25,8 +24,6 @@ import {
   lookupPlayerFromAuth,
   fetchHabitChanges
 } from '@/components/Fetch/fetchMaster';
-import { triggerWinModal } from '@/components/Modals/ModalHandler';
-import WinModal from '@/components/Modals/ModalWin';
 import { downloadImage } from '@/utils/downloadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
 import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
@@ -37,12 +34,9 @@ export default function dailies() {
   const [bonusLoading, setBonusLoading] = useState(false);
   const [dailiesCount, setDailiesCount] = useState(0);
   const [dailyBonus, setDailyBonus] = useState(null);
+  const [playerStats, setPlayerStats] = useState(null);
 
   const [levelUp, setLevelUp] = useState(false);
-
-  const [showWinModal, setShowWinModal] = useState(false);
-  const [activeModalStats, setActiveModalStats] = useState(null);
-  const [playerStats, setPlayerStats] = useState(null);
 
   const [backgroundUrl, setBackgroundUrl] = useState(
     '/'
@@ -67,8 +61,6 @@ export default function dailies() {
 
   const { auth } = router.query;
   const { style } = router.query;
-  const { win } = router.query;
-  const { lvl } = router.query;
   const { opacity } = router.query;
   const { display } = router.query;
 
@@ -133,14 +125,14 @@ export default function dailies() {
     refreshDailies();
     fetchHabitChanges(player, refreshDailies);
     refreshStats();
-    fetchLatestWin(
-      setActiveModalStats,
-      refreshStats,
-      setLevelUp,
-      triggerWinModal,
-      setShowWinModal,
-      player
-    );
+    // fetchLatestWin(
+    //   setActiveModalStats,
+    //   refreshStats,
+    //   setLevelUp,
+    //   triggerWinModal,
+    //   setShowWinModal,
+    //   player
+    // );
   }
 
   async function refreshStats() {
@@ -713,7 +705,7 @@ export default function dailies() {
         </div>
       </section>
       {/* level up modal */}
-      {levelUp && (lvl || display == 'demo') ? (
+      {levelUp ? (
         <ModalLevelUp
           playerLevel={levelUp}
           setLevelUp={setLevelUp}
@@ -721,20 +713,6 @@ export default function dailies() {
       ) : (
         null
       )}
-
-      {/* // Modal Section */}
-      {showWinModal && (win || display == 'demo') ? (
-        <>
-          <WinModal
-            page={'dailies'}
-            activeModalStats={activeModalStats}
-            setShowWinModal={setShowWinModal}
-            playerStats={playerStats}
-            refreshStats={refreshStats}
-            display={display}
-          />
-        </>
-      ) : null}
     </>
   );
 }
