@@ -12,15 +12,10 @@ import {
   fetchAreaStats,
   fetchTitles,
   fetchWeekWins,
-  fetchLatestWin,
   lookupPlayerFromAuth
 } from '@/components/Fetch/fetchMaster';
 
 import { pushTitle } from '@/components/Push/pushMaster';
-
-import { triggerWinModal } from '@/components/Modals/ModalHandler';
-import WinModal from '@/components/Modals/ModalWin';
-import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import Button from '@/components/ui/Button';
 import TitleModal from '@/components/Modals/ModalTitle';
 
@@ -167,8 +162,8 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
 
   const { auth } = router.query;
   const { style } = router.query;
-  const { win } = router.query;
-  const { lvl } = router.query;
+  // const { win } = router.query;
+  // const { lvl } = router.query;
   const { opacity } = router.query;
   const { display } = router.query;
 
@@ -183,24 +178,9 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
     if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
   }, [auth]);
 
-  // win modal stuff
-
-  const [showWinModal, setShowWinModal] = useState(false);
-  const [levelUp, setLevelUp] = useState(false);
-  const [activeModalStats, setActiveModalStats] = useState(null);
 
   useEffect(() => {
     if (player) refreshStats();
-    if (player && win) {
-      fetchLatestWin(
-        setActiveModalStats,
-        refreshStats,
-        setLevelUp,
-        triggerWinModal,
-        setShowWinModal,
-        player
-      );
-    }
     if (player) setManualPlayerID(player);
   }, [player]);
 
@@ -424,25 +404,6 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
           user_id={player}
           refreshStats={refreshStats}
         />
-      ) : null}
-
-      {/* // Modal Section */}
-      {showWinModal && (win || display == 'demo') ? (
-        <>
-          <WinModal
-            page={'player'}
-            activeModalStats={activeModalStats}
-            setShowWinModal={setShowWinModal}
-            playerStats={playerStats}
-            refreshStats={refreshStats}
-            display={display}
-          />
-        </>
-      ) : null}
-
-      {/* level up modal */}
-      {levelUp && (lvl || display == 'demo') ? (
-        <ModalLevelUp playerLevel={levelUp} setLevelUp={setLevelUp} />
       ) : null}
     </>
   );

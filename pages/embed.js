@@ -79,11 +79,11 @@ export default function embed({metaBase, setMeta}) {
           0,
           t.lastIndexOf('/')
         )}/embed/player-details?auth=${detailsAuthLink}`;
-        if (win) {
-          embed_link_temp = embed_link_temp + '&win=true';
+        if (!win) {
+          embed_link_temp = embed_link_temp + '&win=false';
         }
-        if (lvl) {
-          embed_link_temp = embed_link_temp + '&lvl=true';
+        if (!lvl) {
+          embed_link_temp = embed_link_temp + '&lvl=false';
         }
       } else {
         var embed_link_temp = '/embed/player-details?display=demo';
