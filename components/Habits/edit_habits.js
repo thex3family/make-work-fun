@@ -10,6 +10,7 @@ import {
     PointerSensor,
     useSensor,
     useSensors,
+    useDroppable,
 } from '@dnd-kit/core';
 import {
     arrayMove,
@@ -20,6 +21,7 @@ import {
 
 import EditHabitRow, { SimpleOverlay } from '@/components/Habits/edit_habit_row';
 import { IconPickerItem } from 'react-fa-icon-picker';
+import HabitContainer from './habit_container';
 
 export default function EditDailies({ player, changeMode }) {
     const [habits, setHabits] = useState(null);
@@ -38,16 +40,27 @@ export default function EditDailies({ player, changeMode }) {
         try {
             const { data, error } = await supabase
                 .from('habits')
-                .select('id, name, player, is_active, description, icon, sort, group (id, name), type (id, name), exp_reward, area')
+                .select('id, name, player, is_active, description, icon, sort, group (id, name, sort), type (id, name), exp_reward, area')
                 .eq('player', player)
-                .order('group', { ascending: true })
+                .order('sort', { foreignTable: 'group', ascending: true })
                 .order('sort', { ascending: true })
                 .order('name', { ascending: true });
 
             const groupByRoutine = groupBy(data, (h) => h.group.name);
 
             // add if statement if doesn't exist
-            // groupByRoutine['Empty Category'] = []
+            const habit_group = { data } = await supabase
+                .from('habit_group')
+                .select('*')
+                .or('player.eq.' + player + ', player.is.null')
+                .order('sort', { ascending: true });
+
+            console.log(habit_group);
+
+            habit_group.map((g) => {
+                groupByRoutine[g.name] ? null : groupByRoutine[g.name] = [];
+            }
+            )
 
             console.log(groupByRoutine);
             setItems(groupByRoutine);
@@ -104,7 +117,6 @@ export default function EditDailies({ player, changeMode }) {
 
     useEffect(() => {
         fetchHabits();
-        // fetchGroups();
     }, []);
 
     const sensors = useSensors(
@@ -166,7 +178,6 @@ export default function EditDailies({ player, changeMode }) {
         console.log(newArray);
     }
 
-
     return (
         <>
             <div className="animate-fade-in-up">
@@ -200,24 +211,14 @@ export default function EditDailies({ player, changeMode }) {
                                     items={g[1]}
                                     strategy={verticalListSortingStrategy}
                                 >
-                                    {g[1] ? g[1].map((h) => (
-                                        < EditHabitRow
-                                            key={h.id}
-                                            habit_id={h.id}
-                                            habit_title={h.name}
-                                            habit_type={h.type.name}
-                                            habit_group={findContainer(h.id)}
-                                            habit_sort={h.sort}
-                                            habit_area={h.area}
-                                            habit_description={h.description}
-                                            exp_reward={h.exp_reward}
-                                            habit_icon={h.icon}
-                                            habit_active={h.is_active}
-                                            player={player}
-                                            items={items}
-                                            setItems={setItems}
-                                        />
-                                    )) : null}
+                                    <HabitContainer 
+                                        id={g[0]}
+                                        habits={g[1]}
+                                        player={player}
+                                        items={items}
+                                        setItems={setItems}
+                                        findContainer={findContainer}
+                                    ></HabitContainer>
                                     {/* <div className={`animate-fade-in-up w-full my-4 mb-0 relative bg-cover bg-center object-cover rounded z-10 square shadow-lg border-4 border-dotted border-dailies-dark flex flex-col justify-center p-4`}>
                                         <div className='text-white text-lg font-semibold mb-4'>Add A New Daily Quest!</div>
                                         <div className='mb-4 flex flex-row gap-2'>
