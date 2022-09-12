@@ -70,36 +70,31 @@ export default function EditHabitRow({
 
 
     // reinsert this object back into the big array. apparently no need, since it is already updated.
-    
+
     console.log('Updating Master', items);
     // items[habit_group] = newData;
     // setItems(items); 
 
-    setSaving(false);
-
-    // const newData = [...items];
-    // const index = newData.findIndex((item) => habit_id === item.id);
-    // const item = newData[index];
-    // if (column === 'name') {
-    //   newData.splice(index, 1, { ...item, name: input });
-    // }
-    // console.log(newData);
 
     // need to update the database
 
-    // try {
-    //   const { data, error } = await supabase.from('habits').upsert(newData);
+    const updatedData = {
+      [column]: value
+    }
 
-    //   if (error && status !== 406) {
-    //     throw error;
-    //   }
-    // } catch (error) {
-    //   // alert(error.message);
-    //   console.log(error.message);
-    // } finally {
-    //   setLoading(false);
-    //   setSaving(false);
-    // }
+    try {
+      const { data, error } = await supabase.from('habits')
+        .update(updatedData)
+        .match({ id: habit_id });
+
+      if (error && status !== 406) {
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -187,15 +182,15 @@ export default function EditHabitRow({
                 <div className='text-black font-semibold'>
                   Area:
                 </div>
-                  <TextInput
-                    placeholder={'What are you looking for?'}
-                    value={habitArea || ''}
-                    onChange={(event) => setHabitArea(event.currentTarget.value)}
-                    onBlur={() => editMaster(habitArea, 'area')}
-                    classNames={{
-                      input: 'p-2 text-black font-semibold rounded'
-                    }}
-                  />
+                <TextInput
+                  placeholder={'What are you looking for?'}
+                  value={habitArea || ''}
+                  onChange={(event) => setHabitArea(event.currentTarget.value)}
+                  onBlur={() => editMaster(habitArea, 'area')}
+                  classNames={{
+                    input: 'p-2 text-black font-semibold rounded'
+                  }}
+                />
               </div>
               <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />;
               <i className='fas fa-bars text-black text-xl mt-auto mb-auto hideLinkBorder' {...attributes} {...listeners} />
