@@ -68,12 +68,12 @@ export default function EditHabitRow({
     const item = newData[index];
     newData.splice(index, 1, { ...item, [`${column}`]: value });
 
-    console.log(newData);
 
-    // reinsert this object back into the big array.
-    items[habit_group] = newData;
-
-    setItems(items);
+    // reinsert this object back into the big array. apparently no need, since it is already updated.
+    
+    console.log('Updating Master', items);
+    // items[habit_group] = newData;
+    // setItems(items); 
 
     setSaving(false);
 
@@ -136,67 +136,72 @@ export default function EditHabitRow({
           ) : (
             <div></div>
           )}
-            <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 gap-4'>
-              <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
-                <div className="self-center flex flex-row align-center">
-                  <div className="flex flex-col justify-center mr-5 align-center">
-                    <div className="flex justify-center">
-                      <IconPicker
-                        className=""
-                        value={habitIcon}
-                        onChange={(v) => setHabitIcon(v)}
-                        size={35}
-                        color="#000"
-                      />
-                    </div>
+          <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 gap-4'>
+            <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
+              <div className="self-center flex flex-row align-center">
+                <div className="flex flex-col justify-center mr-5 align-center">
+                  <div className="flex justify-center">
+                    <IconPicker
+                      className=""
+                      value={habitIcon}
+                      onChange={(v) => setHabitIcon(v)}
+                      size={35}
+                      color="#000"
+                    />
+                  </div>
 
-                    <p className="text-xs mt-3 mx-auto">
+                  <p className="text-xs mt-3 mx-auto">
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+                      +{exp_reward} XP
+                    </span>
+                  </p>
+                </div>
+                <div className="text-left w-2/3 pr-5 self-center">
+                  <div className='flex gap-2 flex-row items-center mb-1'>
+                    <TextInput
+                      placeholder={'Your Habit Name'}
+                      value={habitTitle || ''}
+                      onChange={(event) => (setHabitTitle(event.currentTarget.value))}
+                      onBlur={() => editMaster(habitTitle, 'name')}
+                      classNames={{
+                        input: 'text-lg sm:text-xl font-bold leading-snug text-black'
+                      }}
+                    />
+                    <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
+                  </div>
+                  <p className="text-sm sm:text-md mt-2 pl-3 text-black">
+                    Type: {habit_type}
+                  </p>
+                  <div className="hidden sm:visible">
+                    <p className="text-xs mt-3">
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
                         +{exp_reward} XP
                       </span>
                     </p>
                   </div>
-                  <div className="text-left w-2/3 pr-5 self-center">
-                    <div className='flex gap-2 flex-row items-center mb-1'>
-                      <TextInput
-                        placeholder={'Your Habit Name'}
-                        value={habitTitle || ''}
-                        onChange={(event) => (setHabitTitle(event.currentTarget.value))}
-                        onBlur={()=>editMaster(habitTitle, 'name')}
-                        classNames={{
-                          input: 'text-lg sm:text-xl font-bold leading-snug text-black'
-                        }}
-                      />
-                      <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
-                    </div>
-                    <p className="text-sm sm:text-md mt-2 pl-3 text-black">
-                      Type: {habit_type}
-                    </p>
-                    <div className="hidden sm:visible">
-                      <p className="text-xs mt-3">
-                        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                          +{exp_reward} XP
-                        </span>
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </div>
-              <div className='col-span-2 flex flex-row self-center text-left gap-4 justify-end'>
-                <TextInput
-                  placeholder={'What are you looking for?'}
-                  value={habitArea || ''}
-                  onChange={(event) => setHabitArea(event.currentTarget.value)}
-                  onBlur={()=>editMaster(habitArea, 'area')}
-                  classNames={{
-                    input: 'p-2 text-accents-1 font-semibold rounded'
-                  }}
-                />
-                <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />;
-                <i className='fas fa-bars text-black text-xl mt-auto mb-auto hideLinkBorder' {...attributes} {...listeners} />
-              </div>
             </div>
-            
+            <div className='col-span-2 flex flex-row self-center text-left gap-4 justify-end'>
+              <div className='flex flex-row gap-2 items-center'>
+                <div className='text-black font-semibold'>
+                  Area:
+                </div>
+                  <TextInput
+                    placeholder={'What are you looking for?'}
+                    value={habitArea || ''}
+                    onChange={(event) => setHabitArea(event.currentTarget.value)}
+                    onBlur={() => editMaster(habitArea, 'area')}
+                    classNames={{
+                      input: 'p-2 text-black font-semibold rounded'
+                    }}
+                  />
+              </div>
+              <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />;
+              <i className='fas fa-bars text-black text-xl mt-auto mb-auto hideLinkBorder' {...attributes} {...listeners} />
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -208,7 +213,7 @@ export default function EditHabitRow({
             habit_id={habit_id}
             habitDescription={habitDescription}
             setHabitDescription={setHabitDescription}
-            habit_title={habit_title}
+            habit_title={habitTitle}
           />
         </>
       ) : null}

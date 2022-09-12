@@ -1,7 +1,6 @@
 import { supabase } from '@/utils/supabase-client';
 import React, { useState, useEffect } from 'react';
 
-
 import {
     DndContext,
     DragOverlay,
@@ -22,6 +21,7 @@ import {
 import EditHabitRow, { SimpleOverlay } from '@/components/Habits/edit_habit_row';
 import { IconPickerItem } from 'react-fa-icon-picker';
 import HabitContainer from './habit_container';
+import AddMenu from './add_menu';
 
 export default function EditDailies({ player, changeMode }) {
     const [habits, setHabits] = useState(null);
@@ -55,16 +55,12 @@ export default function EditDailies({ player, changeMode }) {
                 .or('player.eq.' + player + ', player.is.null')
                 .order('sort', { ascending: true });
 
-            console.log(habit_group);
-
             habit_group.map((g) => {
                 groupByRoutine[g.name] ? null : groupByRoutine[g.name] = [];
-            }
-            )
+            })
 
             console.log(groupByRoutine);
             setItems(groupByRoutine);
-            // setHabits(data);
 
             if (error && status !== 406) {
                 throw error;
@@ -117,6 +113,7 @@ export default function EditDailies({ player, changeMode }) {
 
     useEffect(() => {
         fetchHabits();
+        fetchHabitTypes();
     }, []);
 
     const sensors = useSensors(
@@ -126,62 +123,75 @@ export default function EditDailies({ player, changeMode }) {
         })
     );
 
-    const habitTypes =
-        [
-            {
-                "id": 1,
-                "name": "Checkbox"
-            },
-            {
-                "id": 2,
-                "name": "Counter"
-            },
-            {
-                "id": 3,
-                "name": "Duration"
-            },
-            {
-                "id": 4,
-                "name": "Location"
-            },
-            {
-                "id": 5,
-                "name": "Feeling"
-            },
-            {
-                "id": 6,
-                "name": "Note"
-            },
-            {
-                "id": 7,
-                "name": "Picture"
-            }
-        ]
 
-    async function insertNewHabit() {
-        const newRow = [{
+
+    const [habitTypes, setHabitTypes] = useState(null);
+    async function fetchHabitTypes() {
+        try {
+            const { data, error } = await supabase
+                .from('habit_type')
+                .select('*')
+                .order('id', { ascending: true });
+
+            setHabitTypes(data);
+
+            if (error && status !== 406) {
+                throw error;
+            }
+        } catch (error) {
+            // alert(error.message)
+        } finally {
+        }
+    }
+
+    async function insertNewHabit(type_name, type_id, group_name, group_id) {
+        const newHabit = {
             description: null,
             exp_reward: 25,
-            group: 1,
+            group: group_id,
             icon: 'FaCheck',
             is_active: true,
-            name: 'New Habit',
+            name: 'New ' + type_name + ' Habit',
             player: player,
-            sort: 1,
-            type: 1,
+            type: type_id,
             area: 'Daily Quest'
-        }];
+        };
 
-        console.log(newRow);
+        try {
+            const { data, error } = await supabase.from('habits').insert(newHabit);
 
-        const newArray = items.Recurring.push(newRow);
-        console.log(newArray);
+            if (error && status !== 406) {
+                throw error;
+            }
+
+
+            // need to get back the information that was inserted, and then add to array
+            console.log('sb insert data', data[0]);
+
+            const newArray = [...items[group_name], data[0]];
+
+            setItems((items) => ({
+                ...items,
+                [group_name]: newArray
+            }));
+
+
+        } catch (error) {
+            alert(error.message);
+        } finally {
+        }
+
     }
+
+
+    useEffect(() => {
+        // diagnosing when items change.
+        console.log('Items Changed', items)
+    }, [items]);
 
     return (
         <>
             <div className="animate-fade-in-up">
-
                 {/* start */}
                 <DndContext
                     sensors={sensors}
@@ -193,25 +203,26 @@ export default function EditDailies({ player, changeMode }) {
                     {items ? Object.entries(items).map((g) =>
                     (
                         <>
-                            <div
-                                className="flex items-center">
-                                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary pb-5 inline-block">
-                                    {g[0]}
+                            <SortableContext
+                                id={g[0]}
+                                items={g[1]}
+                                strategy={verticalListSortingStrategy}
+                            >
+                                <div
+                                    className="flex items-center">
+                                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary inline-block">
+                                        {g[0]}
+                                    </div>
+                                    <div
+                                        className="border-t-2 border-white flex-grow ml-3"
+                                        aria-hidden="true"
+                                    ></div>
+                                    <AddMenu habitTypes={habitTypes} insertNewHabit={insertNewHabit} group_name={'Uncategorized'} group_id={1} />
                                 </div>
                                 <div
-                                    className="border-t-2 border-white flex-grow mb-6 sm:mb-3 ml-3"
-                                    aria-hidden="true"
-                                ></div>
-                            </div>
-                            <div
-                                className={'flex flex-col gap-3 flex-nowrap mb-10'}
-                            >
-                                <SortableContext
-                                    id={g[0]}
-                                    items={g[1]}
-                                    strategy={verticalListSortingStrategy}
+                                    className='flex flex-col gap-3 flex-nowrap mb-10'
                                 >
-                                    <HabitContainer 
+                                    <HabitContainer
                                         id={g[0]}
                                         habits={g[1]}
                                         player={player}
@@ -238,8 +249,8 @@ export default function EditDailies({ player, changeMode }) {
                                             </div>
                                         </div>
                                     </div> */}
-                                </SortableContext>
-                            </div>
+                                </div>
+                            </SortableContext>
                         </>)) :
                         <div className="animate-fade-in-up mx-0">
                             <div className="flex items-center w-full">
@@ -267,7 +278,7 @@ export default function EditDailies({ player, changeMode }) {
     );
     function findContainer(id) {
         if (id in items) {
-            console.log(id);
+            // console.log(id);
             return id;
         }
 
@@ -319,7 +330,7 @@ export default function EditDailies({ player, changeMode }) {
 
                 const modifier = isBelowLastItem ? 1 : 0;
 
-                console.log("overIndex>>>", overIndex);
+                // console.log("overIndex>>>", overIndex);
                 newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
             }
 
