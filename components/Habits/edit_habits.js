@@ -82,7 +82,6 @@ export default function EditDailies({ player, changeMode }) {
         await Promise.all(
             habits.map(async (h, index) => {
                 // We are just updating the sort and group for everything in this array.
-                console.log(h.id, index, containerID);
                 
                 try {
                     const { data, error } = await supabase.from('habits')
@@ -95,8 +94,6 @@ export default function EditDailies({ player, changeMode }) {
                     if (error && status !== 406) {
                         throw error;
                     }
-    
-                    console.log(data)
     
                 } catch (error) {
                     alert(error.message)
