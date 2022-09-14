@@ -36,6 +36,9 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
     if (mode == 'edit') {
       setActiveMode(2);
     }
+    if (mode == 'track') {
+      setActiveMode(3);
+    }
   }, []);
 
   async function changeMode(mode_id) {
@@ -44,6 +47,9 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
     }
     if (mode_id == 2) {
       router.push(`dailies/?mode=edit`, undefined, { shallow: true })
+    }
+    if (mode_id == 3) {
+      router.push(`dailies/?mode=track`, undefined, { shallow: true })
     }
     setActiveMode(mode_id);
   }
@@ -210,7 +216,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                     }`}
                   onClick={() => changeMode(3)}
                 >
-                  Analytics
+                  Track
                 </div>
               </div>
               {activeMode == 1 ?
@@ -223,6 +229,12 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
               {activeMode == 2 ?
                 <>
                   <EditDailies player={player} changeMode={changeMode} />
+                </> : null}
+              {activeMode == 3 ?
+                <>
+                  <div className="font-semibold">
+                    Analytics Coming Soon!
+                  </div>
                 </> : null}
             </div>
           </div>
