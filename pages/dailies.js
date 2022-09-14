@@ -18,12 +18,8 @@ import EditDailies from '@/components/Habits/edit_habits';
 import PlayDailies from '@/components/Habits/play_habits';
 
 export default function dailies({ user, metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
-
-
   const [levelUp, setLevelUp] = useState(false);
-
   const [playerStats, setPlayerStats] = useState(null);
-
   const [activeMode, setActiveMode] = useState(1);
   const router = useRouter();
 
@@ -54,40 +50,11 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
     setActiveMode(mode_id);
   }
 
-
-  // Get the last 7 days 
-
-  // const dates = [];
-  // const NUM_OF_DAYS = 7;
-
-  // for (let i = 0; i < NUM_OF_DAYS; i++) {
-  //   const date = moment().subtract(i, 'days');
-  //   dates.push(date);
-  // }
-
-  // console.log(dates)
-
-  // handle the empty array
-
-  // [{ name: ccc, sat:false, sunday:false},{...}]
-
-  // habits = [...] 
-  // init = []
-  // for i < habits.length 
-  //   init.pish({name: habit:name, x:false,x:false,x:false,x:false,x:false,x:false,x:false})
-  // for habits (pull it from completed)
-  //   if(init[0].date === h.date) {
-  //     init[0].x = calculatecomplexthing(h[0])
-  //   }
-
   const [backgroundUrl, setBackgroundUrl] = useState(
     '/'
   );
 
   const [newToSeason, setNewToSeason] = useState(null);
-
-  // const [entryDate, setEntryDate] = useState(moment().startOf('day').format('yyyy-MM-DD'));
-  // const [entryDate, setEntryDate] = useState(null);
 
   const {
     userOnboarding,
