@@ -139,7 +139,7 @@ export default function EditHabitRow({
                     <IconPicker
                       className=""
                       value={habitIcon}
-                      onChange={(v) => setHabitIcon(v)}
+                      onChange={(v) => (setHabitIcon(v), editMaster(v, 'icon'))}
                       size={35}
                       color="#000"
                     />
