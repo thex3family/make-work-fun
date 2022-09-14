@@ -18,6 +18,7 @@ import ModalUpdates from './Modals/ModalUpdates';
 import UserWinManage from './WinManage/userWinManage';
 import ItemManage from './ui/itemManage';
 import WinManage from './WinManage/winManage';
+import DemoWinManage from './WinManage/demoWinManage';
 
 
 export default function Layout({ children, meta, manualPlayerID, manualPlayerStats, setRefreshChildStats }) {
@@ -87,6 +88,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
 
   const { win } = router.query;
   const { lvl } = router.query;
+  const { display } = router.query;
 
   return (
     <>
@@ -136,6 +138,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
         // forget it for anonymous users for now. <WinManage />
         manualPlayerID ? <UserWinManage user={manualPlayerID} setRefreshChildStats={setRefreshChildStats} win={win} lvl={lvl} /> : null
       }
+      { display ? display == 'demo' ? <DemoWinManage win={true} lvl={true} /> : null : null}
       <main id="skip">
         {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
           <SideBar router={router} mobileDevice={mobileDevice} />
