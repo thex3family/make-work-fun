@@ -179,6 +179,7 @@ export default function EditHabitRow({
                     />
                   </div>
                 </div>
+                <div className='text-black fas fa-info-circle cursor-pointer mt-2' onClick={() => setShowDailyQuestDetail(true)} />
               </div>
             </div>
             <div className='flex flex-row gap-6'>
