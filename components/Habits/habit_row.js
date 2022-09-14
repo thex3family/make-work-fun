@@ -8,7 +8,7 @@ import { downloadImage } from '@/utils/downloadImage';
 
 import { Popover } from '@mantine/core';
 
-export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_id, habit_type, setPicture, handleHabitCompletionStatusChange, saving }) {
+export function HabitInteraction({ date, habitState, habitCompletedToday, setHabitCompletedToday, insertedD, habit_id, habit_type, setPicture, handleHabitCompletionStatusChange, saving, day }) {
   const [opened, setOpened] = useState(false);
   const fileRef = useRef();
 
@@ -16,7 +16,9 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
 
   const [hours, setHours] = useState(null);
   const [mins, setMins] = useState(null);
-
+  
+  const [habitCompleted, setHabitCompleted] = useState(habitState);
+  const [insertedDetails, setInsertedDetails] = useState(insertedD);
 
   useEffect(() => {
     setDetails(insertedDetails);
@@ -41,7 +43,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
         <button className={`fas fa-check text-2xl sm:text-3xl font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``
           }`}
           disabled={saving}
-          onClick={() => handleHabitCompletionStatusChange(habit_id, null, null, date)} />
+          onClick={() => handleHabitCompletionStatusChange(habit_id, null, null, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)} />
         : null}
       {habit_type == 'Counter' ?
         <>
@@ -57,7 +59,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
                   handleHabitCompletionStatusChange(
                     habit_id,
                     'countdown',
-                    Number(details) - 1, date
+                    Number(details) - 1, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
                   )
                 }
                 disabled={saving || !details}
@@ -68,7 +70,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
                   handleHabitCompletionStatusChange(
                     habit_id,
                     'countup',
-                    Number(details) + 1, date
+                    Number(details) + 1, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
                   )
                 }
                 disabled={saving}
@@ -103,7 +105,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
                 habit_id,
                 'Duration',
                 getTimeInMinutes(hours, mins), 
-                date
+                date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               )
             }}>
             <div className="flex flex-row align-middle items-center gap-2 mb-4 mt-2">
@@ -174,7 +176,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
               (handleHabitCompletionStatusChange(
                 habit_id,
                 'Feeling',
-                `${details == 'happy' ? '' : 'happy'}`, date
+                `${details == 'happy' ? '' : 'happy'}`, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               ), setOpened((o) => !o))
               }
               disabled={saving}
@@ -190,7 +192,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
               (handleHabitCompletionStatusChange(
                 habit_id,
                 'Feeling',
-                `${details == 'meh' ? '' : 'meh'}`, date
+                `${details == 'meh' ? '' : 'meh'}`, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               ), setOpened((o) => !o))
               }
               disabled={saving}
@@ -206,7 +208,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
               (handleHabitCompletionStatusChange(
                 habit_id,
                 'Feeling',
-                `${details == 'unhappy' ? '' : 'unhappy'}`, date
+                `${details == 'unhappy' ? '' : 'unhappy'}`, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               ), setOpened((o) => !o))
               }
               disabled={saving}
@@ -240,7 +242,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
               handleHabitCompletionStatusChange(
                 habit_id,
                 'Location',
-                details, date
+                details, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               )
             }}>
             <Input
@@ -284,7 +286,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
           <form className="flex flex-col"
             onSubmit={(e) => {
               e.preventDefault()
-              handleHabitCompletionStatusChange(habit_id, 'Note', details, date)
+              handleHabitCompletionStatusChange(habit_id, 'Note', details, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)
             }}>
             <Input
               className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
@@ -328,7 +330,7 @@ export function HabitInteraction({ date, habitCompleted, insertedDetails, habit_
             onChange={(event) => {
               if (event.target.files && event.target.files.length > 0) {
                 setPicture(URL.createObjectURL(event.target.files[0]))
-                  , handleHabitCompletionStatusChange(habit_id, 'Picture', event, date)
+                  , handleHabitCompletionStatusChange(habit_id, 'Picture', event, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)
               }
             }
             }
@@ -526,11 +528,22 @@ export default function HabitRow({
     }
   }
 
-  async function handleHabitCompletionStatusChange(habit_id, type, inputDetails, date) {
+  useEffect(() => {
     if (displayMode == 'demo') {
-      // setDetails(inputDetails);
-      // setHabitCompletedToday(inputDetails ? true : !habitCompletedToday)
-      console.log('Demo Pressed')
+      setTodayHabit([]);
+      setYesterdayHabit([]);
+    }
+  }, [displayMode]);
+
+  async function handleHabitCompletionStatusChange(habit_id, type, inputDetails, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails){
+    if (displayMode == 'demo') {
+      console.log(inputDetails);
+      setInsertedDetails(inputDetails);
+      setHabitCompleted(inputDetails ? true : !habitCompleted);
+      if(day=='today'){
+        setHabitCompletedToday(inputDetails ? true : !habitCompleted);
+        setCardDetails(inputDetails);
+      }
     } else {
       if (type == 'Picture') {
         try {
@@ -748,8 +761,9 @@ export default function HabitRow({
               {yesterdayHabit ?
                 <HabitInteraction
                   date={moment().startOf('day').subtract(1, "days").format('yyyy-MM-DD')}
-                  habitCompleted={yesterdayHabit.length > 0 ? true : false}
-                  insertedDetails={yesterdayHabit[0]?.details ? yesterdayHabit[0].details : null}
+                  habitState={yesterdayHabit.length > 0 ? true : false}
+                  setHabitCompletedToday={setHabitCompletedToday}
+                  insertedD={yesterdayHabit[0]?.details ? yesterdayHabit[0].details : null}
                   habit_id={habit_id}
                   habit_type={habit_type}
                   setPicture={setPicture}
@@ -762,13 +776,15 @@ export default function HabitRow({
               {todayHabit ?
                 <HabitInteraction
                   date={moment().startOf('day').format('yyyy-MM-DD')}
-                  habitCompleted={todayHabit.length > 0 ? true : false}
-                  insertedDetails={todayHabit[0]?.details ? todayHabit[0].details : null}
+                  habitState={todayHabit.length > 0 ? true : false}
+                  setHabitCompletedToday={setHabitCompletedToday}
+                  insertedD={todayHabit[0]?.details ? todayHabit[0].details : null}
                   habit_id={habit_id}
                   habit_type={habit_type}
                   setPicture={setPicture}
                   handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
                   saving={saving}
+                  day={'today'}
                 />
                 :
                 <span className="text-sm font-semibold text-black">...</span>
