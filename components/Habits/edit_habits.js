@@ -24,8 +24,8 @@ import HabitContainer from './habit_container';
 import AddMenu from './add_menu';
 
 export default function EditDailies({ player, changeMode }) {
-    const [habits, setHabits] = useState(null);
     const [items, setItems] = useState(null);
+    const [saveToDatabase, setSaveToDatabase] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
@@ -46,7 +46,7 @@ export default function EditDailies({ player, changeMode }) {
                 .order('sort', { ascending: true })
                 .order('name', { ascending: true });
 
-            const groupByRoutine = groupBy(data, (h) => h.group.name);
+            const groupByRoutine = groupBy(data, (h) => h.group.id);
 
             // add if statement if doesn't exist
             const habit_group = { data } = await supabase
@@ -55,12 +55,16 @@ export default function EditDailies({ player, changeMode }) {
                 .or('player.eq.' + player + ', player.is.null')
                 .order('sort', { ascending: true });
 
+            const renamedGroupByRoutine = {}
+
             habit_group.map((g) => {
-                groupByRoutine[g.name] ? null : groupByRoutine[g.name] = [];
+                groupByRoutine[g.id] ?
+                    (renamedGroupByRoutine[g.name + ' - ' + g.id] = groupByRoutine[g.id])
+                    : renamedGroupByRoutine[g.name + ' - ' + g.id] = [];
             })
 
-            console.log(groupByRoutine);
-            setItems(groupByRoutine);
+            console.log(renamedGroupByRoutine);
+            setItems(renamedGroupByRoutine);
 
             if (error && status !== 406) {
                 throw error;
@@ -72,42 +76,34 @@ export default function EditDailies({ player, changeMode }) {
         }
     }
 
-    async function saveHabits() {
+    async function saveHabitContainer(habits, containerID) {
         setSaving(true);
 
-        // make the sort # the index
-
-        const sortedHabits = habits.map((h, index) => {
-            return {
-                sort: index,
-                id: h.id,
-                group: h.group.id,
-                // Don't need any of the below because that is handled by the individual component.
-                // name: h.name,
-                // player: h.player,
-                // is_active: h.is_active,
-                // description: h.description,
-                // icon: h.icon,
-                // type: h.type.id,
-                // exp_reward: h.exp_reward,
-                // area: h.area
-            }
-        });
-
-
-        console.log('Upserting All Habits')
-        try {
-            const { data, error } = await supabase
-                .from('habits')
-                .upsert(sortedHabits)
-            if (error && status !== 406) {
-                throw error;
-            }
-        } catch (error) {
-            alert(error.message)
-        } finally {
-        }
-
+        await Promise.all(
+            habits.map(async (h, index) => {
+                // We are just updating the sort and group for everything in this array.
+                console.log(h.id, index, containerID);
+                
+                try {
+                    const { data, error } = await supabase.from('habits')
+                        .update({
+                            sort: index,
+                            group: containerID
+                        })
+                        .match({ id: h.id })
+    
+                    if (error && status !== 406) {
+                        throw error;
+                    }
+    
+                    console.log(data)
+    
+                } catch (error) {
+                    alert(error.message)
+                } finally {
+                }
+            })
+        );
         setSaving(false);
     }
 
@@ -185,8 +181,13 @@ export default function EditDailies({ player, changeMode }) {
 
 
     useEffect(() => {
-        // diagnosing when items change.
         console.log('Items Changed', items)
+        if (saveToDatabase) {
+            // Update database if save to database
+            console.log('Save To Database');
+            saveHabitContainer(items[saveToDatabase], saveToDatabase.replace(/[^0-9]/g, ''));
+            setSaveToDatabase(false);
+        }
     }, [items]);
 
     return (
@@ -217,7 +218,7 @@ export default function EditDailies({ player, changeMode }) {
                                         className="border-t-2 border-white flex-grow ml-3"
                                         aria-hidden="true"
                                     ></div>
-                                    <AddMenu habitTypes={habitTypes} insertNewHabit={insertNewHabit} group_name={'Uncategorized'} group_id={1} />
+                                    <AddMenu habitTypes={habitTypes} insertNewHabit={insertNewHabit} group_name={g[0]} group_id={g[0].replace(/[^0-9]/g, '')} />
                                 </div>
                                 <div
                                     className='flex flex-col gap-3 flex-nowrap mb-10'
@@ -293,6 +294,7 @@ export default function EditDailies({ player, changeMode }) {
     }
 
     function handleDragOver(event) {
+        // Triggered whenever the row is dragged over another row.
         const { active, over } = event;
 
 
@@ -346,9 +348,13 @@ export default function EditDailies({ player, changeMode }) {
                 ]
             };
         });
+
+        console.log('Saving habit id ' + active.id + ' to ' + overContainer)
+        setSaveToDatabase(overContainer);
     }
 
     function handleDragEnd(event) {
+        console.log('Drag Finished');
         const { active, over } = event;
         //  const { id } = active;
         const { id: overId } = over;
@@ -372,6 +378,9 @@ export default function EditDailies({ player, changeMode }) {
                 ...items,
                 [overContainer]: arrayMove(items[overContainer], activeIndex, overIndex)
             }));
+
+            console.log('Saving habit id ' + active.id + ' to ' + overContainer)
+            setSaveToDatabase(overContainer);
         }
 
         setActiveId(null);
