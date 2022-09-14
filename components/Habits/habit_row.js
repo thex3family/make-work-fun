@@ -543,7 +543,7 @@ export default function HabitRow({
         setHabitCompletedToday(inputDetails ? true : !habitCompleted);
         setCardDetails(inputDetails);
       }
-    // } else {
+    if (displayMode !== 'demo') {
       if (type == 'Picture') {
         try {
           setSaving(true);
@@ -579,7 +579,7 @@ export default function HabitRow({
           fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
         });
       }
-    // }
+    }
   }
 
   async function fetchHabitState(habit_id, date, setHabit) {
