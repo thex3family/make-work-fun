@@ -536,15 +536,14 @@ export default function HabitRow({
   }, [displayMode]);
 
   async function handleHabitCompletionStatusChange(habit_id, type, inputDetails, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails){
-    if (displayMode == 'demo') {
-      console.log(inputDetails);
+    // if (displayMode == 'demo') {
       setInsertedDetails(inputDetails);
       setHabitCompleted(inputDetails ? true : !habitCompleted);
       if(day=='today'){
         setHabitCompletedToday(inputDetails ? true : !habitCompleted);
         setCardDetails(inputDetails);
       }
-    } else {
+    // } else {
       if (type == 'Picture') {
         try {
           setSaving(true);
@@ -580,7 +579,7 @@ export default function HabitRow({
           fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
         });
       }
-    }
+    // }
   }
 
   async function fetchHabitState(habit_id, date, setHabit) {
