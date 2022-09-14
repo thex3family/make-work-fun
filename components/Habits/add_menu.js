@@ -28,7 +28,7 @@ export default function AddMenu({ habitTypes, insertNewHabit, group_name, group_
                             ? closeDropdownPopover()
                             : openDropdownPopover();
                     }}
-                    className='m-auto' variant='prominent'>Add New Quest</Button>
+                    className='m-auto' variant='prominent'>Add New</Button>
                 <div
                     ref={popoverDropdownRef}
                     className={
