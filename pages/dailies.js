@@ -224,6 +224,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                   <PlayDailies
                     player={player}
                     setLevelUp={setLevelUp}
+                    changeMode={changeMode}
                   />
                 </> : null}
               {activeMode == 2 ?

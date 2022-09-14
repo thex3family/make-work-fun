@@ -209,7 +209,7 @@ export default function EditDailies({ player, changeMode }) {
                                 <div
                                     className="flex items-center">
                                     <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary inline-block">
-                                        {g[0]}
+                                        {g[0].split(' -')[0]}
                                     </div>
                                     <div
                                         className="border-t-2 border-white flex-grow ml-3"

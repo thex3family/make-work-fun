@@ -9,7 +9,11 @@ export default function DailiesSkeleton() {
           <div className="animate-fade-in-up rounded sm:bg-black sm:bg-opacity-90 bg-none bg-opacity-100 opacity-95">
             <div className="pt-10 pb-5">
               <div className="mx-auto max-w-lg w-full sm:w-96 h-12 sm:h-20 bg-gray-600 rounded animate-pulse mb-6" />
-              <div className="text-center mb-5">
+              <div className="mx-auto max-w-lg h-8 sm:h-10 bg-gray-600 rounded animate-pulse" />
+              <div className="mx-auto max-w-sm h-14 sm:h-16 mt-6 bg-primary-2 rounded-xl mb-6 grid grid-cols-2 px-2 gap-2" >
+              <div className="w-full bg-gray-600 rounded-xl animate-pulse my-2" />
+              </div>
+              {/* <div className="text-center mb-5">
                 <div className="w-24 h-24 border-4 border-primary-2 bg-gray-600 shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl"></div>
                 <div>
                   <div className="text-3xl animate-pulse">
@@ -20,7 +24,7 @@ export default function DailiesSkeleton() {
                   </div>
                 </div>
                 <div className="mx-auto max-w-xs w-full sm:w-72 h-14 sm:h-16 mt-6 bg-gray-600 rounded animate-pulse mb-6" />
-              </div>
+              </div> */}
             </div>
             <div className="animate-fade-in-up mx-0">
               <div className="flex items-center w-full">

@@ -15,7 +15,7 @@ import {
     claimDailyBonus
 } from '@/components/Fetch/fetchMaster';
 
-export default function PlayDailies({ player, setLevelUp }) {
+export default function PlayDailies({ player, setLevelUp, changeMode }) {
     const [downstreamHabitRefresh, setDownstreamHabitRefresh] = useState(false);
 
     const [habits, setHabits] = useState(null);
@@ -203,7 +203,7 @@ export default function PlayDailies({ player, setLevelUp }) {
 
                     ) : (
                         <span className="text-center text-accents-6 font-semibold text-md">
-                            You have no active habits...let's change that!
+                            You have no active habits... <a onClick={()=>changeMode(2)} className="text-emerald-500 font-semibold cursor-pointer">let's change that!</a>
                         </span>
                     )
                 ) : null}
