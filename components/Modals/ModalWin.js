@@ -215,10 +215,10 @@ export default function WinModal({
                   Delete
                 </button>
                 :
-                <span className='text-gray-800 font-bold uppercase background-transparent mx-6 my-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'>
+                <span className='text-gray-800 font-bold uppercase background-transparent mx-6 my-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 hideLinkBorder'>
                   Are You Sure?{' '}
                   <button
-                    className="mx-2 text-red-500 font-bold uppercase hover:text-emerald-500"
+                    className="mx-2 text-red-500 font-bold uppercase hover:text-emerald-500 hideLinkBorder"
                     type="button"
                     onClick={() => deleteWin()}
                   >
@@ -226,7 +226,7 @@ export default function WinModal({
                   </button>
                   /
                   <button
-                    className="ml-2 text-red-500 font-bold uppercase hover:text-emerald-500"
+                    className="ml-2 text-red-500 font-bold uppercase hover:text-emerald-500 hideLinkBorder"
                     type="button"
                     onClick={() => setDeleteOption(false)}
                   >

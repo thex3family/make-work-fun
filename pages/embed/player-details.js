@@ -16,7 +16,6 @@ import {
 } from '@/components/Fetch/fetchMaster';
 
 import { pushTitle } from '@/components/Push/pushMaster';
-import Button from '@/components/ui/Button';
 import TitleModal from '@/components/Modals/ModalTitle';
 
 export default function playerDetails({setManualPlayerID, setManualPlayerStats}) {
@@ -125,30 +124,6 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
     w1d7: 9
   };
 
-  const demoModalStats = {
-    area: 'Make Work Fun',
-    closing_date: '2021-10-08',
-    database_nickname: null,
-    difficulty: 1,
-    do_date: '2021-10-07',
-    entered_on: '2021-10-07T16:19:54.619076Z',
-    exp_reward: 25,
-    gif_url: null,
-    gold_reward: 25,
-    health_reward: null,
-    id: 0,
-    impact: '10x 🔺',
-    name: 'My First Win',
-    notion_id: '',
-    party_id: null,
-    player: '',
-    punctuality: +1,
-    trend: 'up',
-    type: 'Task',
-    upstream: 'Starting My Adventure',
-    upstream_id: ''
-  };
-
   useEffect(() => {
     if (!router.isReady) return;
 
@@ -189,7 +164,7 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
       setPlayerStats(demoPlayerStats);
       setAreaStats(demoAreaStats);
       setWeekWins(demoWeekWins);
-      setActiveModalStats(demoModalStats);
+      // setActiveModalStats(demoModalStats);
       setLoading(false);
     }
   }, [display]);
@@ -290,25 +265,6 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
               : `bg-black ${bg_opacity} responsiveBackground`
           }
         >
-          {display == 'demo' ? (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center bg-dark py-4 px-4">
-              <Button
-                className="w-full sm:w-auto"
-                variant="incognito"
-                onClick={() => setShowWinModal(true)}
-              >
-                Demo: New Win
-              </Button>
-
-              <Button
-                className=" w-full sm:w-auto"
-                variant="incognito"
-                onClick={() => setLevelUp(2)}
-              >
-                Demo: Level Up!
-              </Button>
-            </div>
-          ) : null}
           <div className="px-4 md:px-10 mx-auto w-full">
             <div className="relative py-10">
               <div className="px-4 md:px-10 mx-auto w-full">
