@@ -131,54 +131,59 @@ export default function EditHabitRow({
           ) : (
             <div></div>
           )}
-          <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 gap-4'>
-            <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
-              <div className="self-center flex flex-row align-center">
-                <div className="flex flex-col justify-center mr-5 align-center">
-                  <div className="flex justify-center">
-                    <IconPicker
-                      className=""
-                      value={habitIcon}
-                      onChange={(v) => (setHabitIcon(v), editMaster(v, 'icon'))}
-                      size={35}
-                      color="#000"
-                    />
-                  </div>
-
-                  <p className="text-xs mt-3 mx-auto">
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                      +{exp_reward} XP
-                    </span>
-                  </p>
+          <div className='flex flex-col md:flex-row justify-between gap-4'>
+            <div className='flex md:flex-row flex-row-reverse gap-6'>
+              <div className="flex flex-col justify-center align-center">
+                <div className="flex justify-center">
+                  <IconPicker
+                    className=""
+                    value={habitIcon}
+                    onChange={(v) => (setHabitIcon(v), editMaster(v, 'icon'))}
+                    size={35}
+                    color="#000"
+                  />
                 </div>
-                <div className="text-left w-2/3 pr-5 self-center">
-                  <div className='flex gap-2 flex-row items-center mb-1'>
+
+                <p className="text-xs mt-3 mx-auto w-14 font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+                  +{exp_reward} XP
+                </p>
+              </div>
+              <div className="flex flex-row w-full align-center gap-2">
+                <div className="text-left self-center w-full flex flex-col gap-2">
+                  <div className='flex flex-row justify-between gap-2 items-center'>
+                    <div className='text-black font-semibold'>
+                      Name:
+                    </div>
                     <TextInput
                       placeholder={'Your Habit Name'}
                       value={habitTitle || ''}
                       onChange={(event) => (setHabitTitle(event.currentTarget.value))}
                       onBlur={() => editMaster(habitTitle, 'name')}
+                      className='w-full'
                       classNames={{
-                        input: 'text-lg sm:text-xl font-bold leading-snug text-black'
+                        input: 'font-semibold leading-snug text-black'
                       }}
                     />
-                    <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
                   </div>
-                  <p className="text-sm sm:text-md mt-2 pl-3 text-black">
-                    Type: {habit_type}
-                  </p>
-                  <div className="hidden sm:visible">
-                    <p className="text-xs mt-3">
-                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                        +{exp_reward} XP
-                      </span>
-                    </p>
+                  <div className='flex flex-row justify-between gap-2 items-center'>
+                    <div className='text-black font-semibold'>
+                      Type:
+                    </div>
+                    <TextInput
+                      value={habit_type || ''}
+                      disabled={true}
+                      className='w-full'
+                      classNames={{
+                        input: 'font-semibold'
+                      }}
+                    />
                   </div>
                 </div>
               </div>
             </div>
-            <div className='col-span-2 flex flex-row self-center text-left gap-4 justify-end'>
-              <div className='flex flex-row gap-2 items-center'>
+            <div className='flex flex-row gap-6'>
+            <div className='flex flex-col w-full text-left gap-2'>
+              <div className='flex flex-row w-full justify-between gap-2 items-center'>
                 <div className='text-black font-semibold'>
                   Area:
                 </div>
@@ -187,14 +192,31 @@ export default function EditHabitRow({
                   value={habitArea || ''}
                   onChange={(event) => setHabitArea(event.currentTarget.value)}
                   onBlur={() => editMaster(habitArea, 'area')}
+                  className='w-full'
                   classNames={{
                     input: 'p-2 text-black font-semibold rounded'
                   }}
                 />
               </div>
+              <div className='flex flex-row justify-between gap-2 items-center'>
+                <div className='text-black font-semibold'>
+                  Goal:
+                </div>
+                <TextInput
+                  value={'Coming Soon'}
+                  disabled={true}
+                  className='w-full'
+                  classNames={{
+                    input: 'p-2 text-black font-semibold rounded'
+                  }}
+                />
+              </div>
+            </div>
+            <div className='flex flex-col md:flex-row self-center text-left gap-0 md:gap-2 justify-end items-center'>
               <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />;
               <i className='fas fa-bars text-black text-xl mt-auto mb-auto hideLinkBorder' {...attributes} {...listeners} />
             </div>
+          </div>
           </div>
 
         </div>
