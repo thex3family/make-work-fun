@@ -739,7 +739,7 @@ export default function HabitRow({
                   ddd={yesterday}
                 />
                 :
-                <span className="text-sm font-semibold text-black">...</span>
+                <span className="text-sm font-semibold text-black w-16">...</span>
               }
               {todayHabit ?
                 <HabitInteraction
