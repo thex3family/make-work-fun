@@ -6,7 +6,7 @@ import Input from '@/components/ui/Input';
 import ModalDQDetail from '../Modals/ModalDQDetail';
 import { downloadImage } from '@/utils/downloadImage';
 
-import { Switch, TextInput } from '@mantine/core';
+import { MultiSelect, Switch, TextInput } from '@mantine/core';
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -150,8 +150,8 @@ export default function EditHabitRow({
               </div>
               <div className="flex flex-row w-full align-center gap-2">
                 <div className="text-left self-center w-full flex flex-col gap-2">
-                  <div className='flex flex-row justify-between gap-2 items-center'>
-                    <div className='text-black font-semibold'>
+                  <div className='grid grid-cols-5 gap-2 items-center'>
+                    <div className='col-span-1 text-black font-semibold'>
                       Name:
                     </div>
                     <TextInput
@@ -159,65 +159,76 @@ export default function EditHabitRow({
                       value={habitTitle || ''}
                       onChange={(event) => (setHabitTitle(event.currentTarget.value))}
                       onBlur={() => editMaster(habitTitle, 'name')}
-                      className='w-full'
+                      className='w-full col-span-4'
                       classNames={{
                         input: 'font-semibold leading-snug text-black'
                       }}
                     />
-                  </div>
-                  <div className='flex flex-row justify-between gap-2 items-center'>
-                    <div className='text-black font-semibold'>
+                    <div className='col-span-1 text-black font-semibold'>
                       Type:
                     </div>
                     <TextInput
                       value={habit_type || ''}
                       disabled={true}
-                      className='w-full'
+                      className='w-full col-span-4'
                       classNames={{
                         input: 'font-semibold'
                       }}
                     />
                   </div>
                 </div>
-                <div className='text-black fas fa-info-circle cursor-pointer mt-2' onClick={() => setShowDailyQuestDetail(true)} />
+              </div>
+            </div>
+            <div className='flex flex-row gap-6 m-auto'>
+              <div className='flex flex-col w-full text-left gap-2'>
+                <div className='flex flex-row gap-2 items-center'>
+                  <div className='text-black font-semibold'>
+                    Description:
+                  </div>
+                  <div className='text-black fas fa-info-circle cursor-pointer' onClick={() => setShowDailyQuestDetail(true)} />
+                </div>
+                <div className='flex flex-row gap-2 items-center'>
+                  <div className='text-black font-semibold'>
+                  Recurrence: Daily
+                  </div>
+                  {/* <div className='text-black fas fa-sync-alt cursor-pointer' onClick={() => setShowDailyQuestDetail(true)} /> */}
+                </div>
               </div>
             </div>
             <div className='flex flex-row gap-6'>
-            <div className='flex flex-col w-full text-left gap-2'>
-              <div className='flex flex-row w-full justify-between gap-2 items-center'>
-                <div className='text-black font-semibold'>
-                  Area:
+              <div className='flex flex-col w-full text-left gap-2'>
+                <div className='grid grid-cols-5 gap-2 items-center'>
+                  <div className='col-span-1 text-black font-semibold'>
+                    Area:
+                  </div>
+                  <TextInput
+                    placeholder={'What are you looking for?'}
+                    value={habitArea || ''}
+                    onChange={(event) => setHabitArea(event.currentTarget.value)}
+                    onBlur={() => editMaster(habitArea, 'area')}
+                    className='w-full col-span-4'
+                    classNames={{
+                      input: 'p-2 text-black font-semibold rounded'
+                    }}
+                  />
+                  <div className='col-span-1 text-black font-semibold'>
+                    Goal:
+                  </div>
+                  <TextInput
+                    value={'Coming Soon'}
+                    disabled={true}
+                    className='w-full col-span-4'
+                    classNames={{
+                      input: 'p-2 text-black font-semibold rounded'
+                    }}
+                  />
                 </div>
-                <TextInput
-                  placeholder={'What are you looking for?'}
-                  value={habitArea || ''}
-                  onChange={(event) => setHabitArea(event.currentTarget.value)}
-                  onBlur={() => editMaster(habitArea, 'area')}
-                  className='w-full'
-                  classNames={{
-                    input: 'p-2 text-black font-semibold rounded'
-                  }}
-                />
               </div>
-              <div className='flex flex-row justify-between gap-2 items-center'>
-                <div className='text-black font-semibold'>
-                  Goal:
-                </div>
-                <TextInput
-                  value={'Coming Soon'}
-                  disabled={true}
-                  className='w-full'
-                  classNames={{
-                    input: 'p-2 text-black font-semibold rounded'
-                  }}
-                />
+              <div className='flex flex-col md:flex-row self-center text-left gap-0 md:gap-2 justify-end items-center'>
+                <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />;
+                <i className='fas fa-bars text-black text-xl mt-auto mb-auto hideLinkBorder' {...attributes} {...listeners} />
               </div>
             </div>
-            <div className='flex flex-col md:flex-row self-center text-left gap-0 md:gap-2 justify-end items-center'>
-              <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />;
-              <i className='fas fa-bars text-black text-xl mt-auto mb-auto hideLinkBorder' {...attributes} {...listeners} />
-            </div>
-          </div>
           </div>
 
         </div>
