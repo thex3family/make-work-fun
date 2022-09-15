@@ -137,10 +137,13 @@ export default function EditHabitRow({
                 <div className="flex justify-center">
                   <IconPicker
                     className=""
-                    value={habitIcon}
-                    onChange={(v) => (setHabitIcon(v), editMaster(v, 'icon'))}
-                    size={35}
-                    color="#000"
+                    searchInputStyles={{
+                      color: 'black',
+                    }}
+                  value={habitIcon}
+                  onChange={(v) => (setHabitIcon(v), editMaster(v, 'icon'))}
+                  size={35}
+                  color="#000"
                   />
                 </div>
 
@@ -189,7 +192,7 @@ export default function EditHabitRow({
                 </div>
                 <div className='flex flex-row gap-2 items-center'>
                   <div className='text-black font-semibold'>
-                  Recurrence: Daily
+                    Recurrence: Daily
                   </div>
                   {/* <div className='text-black fas fa-sync-alt cursor-pointer' onClick={() => setShowDailyQuestDetail(true)} /> */}
                 </div>
