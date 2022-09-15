@@ -74,6 +74,7 @@ export default function RoutineSection({
             habit_id={h.id}
             habit_title={h.habit}
             habit_type={h.habit_type}
+            habit_type_desc={h.habit_type_desc}
             habit_detail={h.latest_details}
             habit_description={h.description}
             streak_duration={h.streak_duration}
