@@ -63,7 +63,6 @@ export default function EditDailies({ player, changeMode }) {
                     : renamedGroupByRoutine[g.name + ' - ' + g.id] = [];
             })
 
-            console.log(renamedGroupByRoutine);
             setItems(renamedGroupByRoutine);
 
             if (error && status !== 406) {
@@ -178,7 +177,6 @@ export default function EditDailies({ player, changeMode }) {
 
 
     useEffect(() => {
-        console.log('Items Changed', items)
         if (saveToDatabase) {
             // Update database if save to database
             console.log('Save To Database');
