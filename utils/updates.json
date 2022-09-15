@@ -1,10 +1,18 @@
 [
   {
+  "date": "Sept 15, 2022",
+  "title": "Manage Your Dailies",
+  "desc": "We've completely revamped the way you interact with daily quests. Create, define, sort, and track your habits with ease.",
+  "img_url": "0.46.png",
+  "button_url": "/dailies?mode=edit",
+  "version": "46"
+  },
+  {
   "date": "Aug 25, 2022",
   "title": "Track Your Sleep",
   "desc": "We've made it simple for you to keep track of your sleep, runs, and so much more. Try it out with duration habit type in your daily quests!",
   "img_url": "0.45.png",
-  "button_url": "/dailies/edit",
+  "button_url": "/dailies?mode=edit",
   "version": "45"
   },
   {
@@ -61,7 +69,7 @@
     "title": "Have Clarity On Where You're Leveling Up",
     "desc": "Determine how your daily quests help you level up by tagging them with the appropriate areas of competence.",
     "img_url": "0.38.png",
-    "button_url": "/dailies/edit",
+    "button_url": "/dailies?mode=edit",
     "version": "38"
   },
   {
