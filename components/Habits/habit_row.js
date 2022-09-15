@@ -8,7 +8,7 @@ import { downloadImage } from '@/utils/downloadImage';
 
 import { Popover } from '@mantine/core';
 
-export function HabitInteraction({ date, habitState, habitCompletedToday, setHabitCompletedToday, insertedD, habit_id, habit_type, setPicture, handleHabitCompletionStatusChange, saving, day }) {
+export function HabitInteraction({ date, habitState, habitCompletedToday, setHabitCompletedToday, insertedD, habit_id, habit_type, setPicture, handleHabitCompletionStatusChange, saving, day, ddd }) {
   const [opened, setOpened] = useState(false);
   const fileRef = useRef();
 
@@ -40,20 +40,22 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
   return (
     <>
       {habit_type == 'Checkbox' ?
-        <button className={`fas fa-check text-2xl sm:text-3xl font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``
-          }`}
+        <button className={`flex flex-col items-center text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``}`}
           disabled={saving}
-          onClick={() => handleHabitCompletionStatusChange(habit_id, null, null, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)} />
+          onClick={() => handleHabitCompletionStatusChange(habit_id, null, null, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)}>
+          <div className='w-16 fas fa-check text-2xl sm:text-3xl font-semibold' />
+          <div className='mt-2 text-xs font-semibold'>{ddd}</div>
+        </button>
         : null}
       {habit_type == 'Counter' ?
         <>
-          <div className="">
-            <div className="text-3xl mb-0.5 px-2 self-center font-semibold text-black">
+          <div className={`flex flex-col items-center text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``}`}>
+            <div className="w-16 text-3xl self-center font-semibold text-black">
               {details ? details : 0}
             </div>
-            <div className='flex flex-row gap-2'>
+            <div className='flex flex-row gap-2 self-center'>
               <button
-                className={`text-2xl opacity-10 text-black hideLinkBorder far fa-minus-square ${details > 0 ? `hover:opacity-100` : ``
+                className={`text-xl opacity-100 text-black hideLinkBorder far fa-minus-square ${details > 0 ? `hover:opacity-100` : ``
                   }`}
                 onClick={() =>
                   handleHabitCompletionStatusChange(
@@ -65,7 +67,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
                 disabled={saving || !details}
               />
               <button
-                className="text-2xl opacity-10 text-black hideLinkBorder far fa-plus-square hover:opacity-100"
+                className="text-xl opacity-100 text-black hideLinkBorder far fa-plus-square hover:opacity-100"
                 onClick={() =>
                   handleHabitCompletionStatusChange(
                     habit_id,
@@ -76,7 +78,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
                 disabled={saving}
               />
             </div>
-
+            <div className='mt-2 text-xs font-semibold'>{ddd}</div>
           </div>
         </>
         : null}
@@ -85,14 +87,15 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
           opened={opened}
           onClose={() => setOpened(false)}
           target={
-            <div className='flex flex-col'>
+            <div className={`flex flex-col items-center text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``}`}>
               <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
                 {details ? details : 0} MINS
               </div>
-              <button className={`far fa-clock text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details > 0 ? `opacity-100` : ``
+              <button className={`far fa-clock text-2xl self-center font-semibold text-black hideLinkBorder opacity-100 hover:opacity-100 ${details > 0 ? `opacity-100` : ``
                 }`}
                 disabled={saving}
                 onClick={() => setOpened((o) => !o)} />
+              <div className='mt-2 text-xs font-semibold'>{ddd}</div>
             </div>
           }
           position="bottom"
@@ -154,13 +157,20 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
         <Popover
           opened={opened}
           onClose={() => setOpened(false)}
-          target={<button
-            className={`text-4xl text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
-              } ${habitCompleted
-                ? (details == 'happy' ? 'far fa-smile' : details == 'meh' ? 'far fa-meh' : details == 'unhappy' ? 'far fa-frown' : null) : 'far fa-meh'} `}
-            onClick={() => setOpened((o) => !o)}
-            disabled={saving}
-          />}
+          target={
+
+            <div className={`flex flex-col items-center text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``}`}>
+              <button
+                className={`w-16 text-4xl text-black hideLinkBorder opacity-100 hover:opacity-100 ${details ? `opacity-100` : ``
+                  } ${habitCompleted
+                    ? (details == 'happy' ? 'far fa-smile' : details == 'meh' ? 'far fa-meh' : details == 'unhappy' ? 'far fa-frown' : null) : 'far fa-meh'} `}
+                onClick={() => setOpened((o) => !o)}
+                disabled={saving}
+              />
+
+              <div className='mt-2 text-xs font-semibold'>{ddd}</div>
+            </div>
+          }
           position="bottom"
           withArrow
         >
@@ -222,14 +232,15 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
           opened={opened}
           onClose={() => setOpened(false)}
           target={
-            <div className='flex flex-col flex-wrap'>
+            <div className={`flex flex-col items-center text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``}`}>
               <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
                 {details ? details : null}
               </div>
-              <button className={`fas fa-map-pin text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
+              <button className={`fas fa-map-pin text-2xl self-center font-semibold text-black hideLinkBorder opacity-100 hover:opacity-100 ${details ? `opacity-100` : ``
                 }`}
                 disabled={saving}
                 onClick={() => setOpened((o) => !o)} />
+              <div className='mt-2 text-xs font-semibold'>{ddd}</div>
             </div>
           }
           position="bottom"
@@ -270,14 +281,15 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
           opened={opened}
           onClose={() => setOpened(false)}
           target={
-            <div className='flex flex-col flex-wrap'>
+            <div className={`flex flex-col items-center text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``}`}>
               <div className='w-16 truncate text-sm mb-2 self-center font-semibold text-black'>
                 {details ? details : null}
               </div>
-              <button className={`far fa-sticky-note text-2xl self-center font-semibold text-black hideLinkBorder opacity-10 hover:opacity-100 ${details ? `opacity-100` : ``
+              <button className={`far fa-sticky-note text-2xl self-center font-semibold text-black hideLinkBorder opacity-100 hover:opacity-100 ${details ? `opacity-100` : ``
                 }`}
                 disabled={saving}
                 onClick={() => setOpened((o) => !o)} />
+              <div className='mt-2 text-xs font-semibold'>{ddd}</div>
             </div>
           }
           position="bottom"
@@ -310,32 +322,35 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
         : null}
 
       {habit_type == 'Picture' ?
-        <div className="relative">
-          <button className={`fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``
-            }`}
-            htmlFor="single"
-            onClick={() => fileRef.current.click()}>
-          </button>
-          <input
-            ref={fileRef}
-            style={{
-              visibility: 'hidden',
-              position: 'relative',
-              display: 'none'
-            }}
-            hidden
-            type="file"
-            id="single"
-            accept="image/*"
-            onChange={(event) => {
-              if (event.target.files && event.target.files.length > 0) {
-                setPicture(URL.createObjectURL(event.target.files[0]))
-                  , handleHabitCompletionStatusChange(habit_id, 'Picture', event, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)
+        <div className={`flex flex-col items-center text-black hideLinkBorder opacity-10 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``}`}>
+          <div className="relative">
+            <button className={`w-16 fas fa-camera text-2xl sm:text-3xl self-center font-semibold text-black cursor-pointer hideLinkBorder opacity-100 hover:opacity-100 ${habitCompleted ? `opacity-100` : ``
+              }`}
+              htmlFor="single"
+              onClick={() => fileRef.current.click()}>
+            </button>
+            <input
+              ref={fileRef}
+              style={{
+                visibility: 'hidden',
+                position: 'relative',
+                display: 'none'
+              }}
+              hidden
+              type="file"
+              id="single"
+              accept="image/*"
+              onChange={(event) => {
+                if (event.target.files && event.target.files.length > 0) {
+                  setPicture(URL.createObjectURL(event.target.files[0]))
+                    , handleHabitCompletionStatusChange(habit_id, 'Picture', event, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)
+                }
               }
-            }
-            }
-            disabled={saving}
-          />
+              }
+              disabled={saving}
+            />
+          </div>
+          <div className='mt-2 text-xs font-semibold'>{ddd}</div>
         </div>
         : null}
     </>
@@ -423,6 +438,9 @@ export default function HabitRow({
   async function loadDailiesPicture(url) {
     setPicture(await downloadImage(url, 'dailies'))
   }
+
+  const yesterday = moment().subtract(1, "days").format('ddd');
+  const today = moment().format('ddd');
 
 
   // function wasHabitCompletedToday(streak_end) {
@@ -620,7 +638,7 @@ export default function HabitRow({
       //       : () => handleHabitCompletionStatusChange(habit_id)
       //     : null
       // }
-      className={`overflow-x-hidden animate-fade-in-down w-full my-4 mb-0 relative bg-cover bg-center object-cover ${habitCompletedToday
+      className={`animate-fade-in-down w-full h-full my-4 mb-0 relative bg-cover bg-center object-cover ${habitCompletedToday
         ? cardDetails == 'meh'
           ? `bg-yellow-500 border-yellow-700`
           : cardDetails == 'unhappy'
@@ -633,7 +651,7 @@ export default function HabitRow({
         backgroundImage: `url(${picture})`
       }}
     >
-      <div className={`p-4 h-full ${picture ? 'bg-white bg-opacity-75' : null}`}>
+      <div className={`p-4 h-full ${picture ? 'bg-white bg-opacity-90' : null}`}>
         {saving ? (
           <div className="inline-flex absolute top-0 right-0 mt-2 mr-2 text-xs font-semibold py-2 px-3 uppercase rounded text-white bg-gradient-to-r from-emerald-500 to-blue-500 border-emerald-500 z-50">
             <svg
@@ -661,67 +679,52 @@ export default function HabitRow({
         ) : (
           <div></div>
         )}
-        {/* {saving ? <div className="relative"><div className="absolute right-0 top-0 text-xs font-semibold py-1 px-2 uppercase rounded text-gray-600 bg-gray-200">
-                    Saving...
-                  </div></div> : <div></div>} */}
-        <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4'>
-          <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
-            <div className="self-center flex flex-row align-center">
-              <div className="flex flex-col justify-center mr-5 align-center">
-                <div className="flex justify-center">
-                  <IconPickerItem
-                    className=""
-                    icon={habit_icon}
-                    size={35}
-                    color="#000"
-                  />
-                </div>
+        <div className="self-center flex flex-row align-center gap-5">
+          <div className="flex flex-col justify-center align-center">
+            <div className="flex justify-center">
+              <IconPickerItem
+                className=""
+                icon={habit_icon}
+                size={35}
+                color="#000"
+              />
+            </div>
 
-                <p className="text-xs mt-3 mx-auto">
+            <p className="text-xs mt-3 mx-auto">
+              <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+                +{exp_reward} XP
+              </span>
+            </p>
+          </div>
+          {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
+          <div className='flex flex-col sm:flex-row justify-between gap-2 w-full'>
+            <div className="flex flex-col text-left w-full p-3 sm:self-center bg-dailies-dark bg-opacity-5 rounded">
+              <div className='flex flex-row items-center gap-2 mb-1'>
+                <div className="text-lg sm:text-xl font-bold text-black text-wrap">
+                  {habit_title}
+                </div>
+                <div className='text-black fas fa-info-circle cursor-pointer' onClick={() => setShowDailyQuestDetail(true)} />
+              </div>
+              {habit_type_desc ? (
+                <div>
+                  <p className="text-sm sm:text-md text-black">
+                    {habit_type_desc}
+                  </p>
+                </div>
+              ) : <div>
+                <p className="text-sm sm:text-md  text-black">
+                  {habit_progress_statement(streak_duration)}
+                </p>
+              </div>}
+              <div className="hidden sm:visible">
+                <p className="text-xs mt-3">
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
                     +{exp_reward} XP
                   </span>
                 </p>
               </div>
-              {/* <img className="mb-6 m-auto w-1/2" src="img/example_habit.png" /> */}
-              <div className="text-left w-2/3 pr-5 self-center">
-                <div className='flex gap-2 flex-row items-center mb-1'>
-                  <h2 className="text-lg sm:text-xl font-bold leading-snug text-black truncate">
-                    {habit_title}
-                  </h2>
-                  <div className='text-black fas fa-info-circle cursor-pointer ' onClick={() => setShowDailyQuestDetail(true)} />
-                </div>
-                {habit_type == 'Picture' ? (
-                  <div>
-                    <p className="text-sm sm:text-md mb-2 text-black">
-                      Take A Picture!
-                    </p>
-
-                  </div>
-                ) : null}
-                {habit_type_desc ? (
-                  <div>
-                    <p className="text-sm sm:text-md mb-2 text-black">
-                      {habit_type_desc}
-                    </p>
-                  </div>
-                ) : <div>
-                  <p className="text-sm sm:text-md mb-2  text-black">
-                    {habit_progress_statement(streak_duration)}
-                  </p>
-                </div>}
-                <div className="hidden sm:visible">
-                  <p className="text-xs mt-3">
-                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                      +{exp_reward} XP
-                    </span>
-                  </p>
-                </div>
-              </div>
             </div>
-          </div>
-          <div className='col-span-2'>
-            <div className='grid grid-cols-2 justify-items-center items-center place-self-center self-center h-full'>
+            <div className='grid grid-cols-2 sm:place-self-center items-center h-full gap-4 md:gap-10 lg:gap-20 sm:flex-shrink-0 mt-1 sm:mt-0'>
               {yesterdayHabit ?
                 <HabitInteraction
                   date={moment().startOf('day').subtract(1, "days").format('yyyy-MM-DD')}
@@ -733,6 +736,7 @@ export default function HabitRow({
                   setPicture={setPicture}
                   handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
                   saving={saving}
+                  ddd={yesterday}
                 />
                 :
                 <span className="text-sm font-semibold text-black">...</span>
@@ -749,28 +753,12 @@ export default function HabitRow({
                   handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
                   saving={saving}
                   day={'today'}
+                  ddd={today}
                 />
                 :
                 <span className="text-sm font-semibold text-black">...</span>
               }
-              {/* <HabitInteraction
-                habitCompleted={habitCompletedToday}
-                details={details}
-                habit_id={habit_id}
-                habit_type={habit_type}
-                setPicture={setPicture}
-                setDetails={setDetails}
-                handleHabitCompletionStatusChange={handleHabitCompletionStatusChange}
-                timeDenominator={timeDenominator}
-                getTimeInHours={getTimeInHours}
-                getTimeInMinutes={getTimeInMinutes}
-                convertTime={convertTime}
-                saving={saving}
-              /> */}
-
-
             </div>
-
           </div>
         </div>
 

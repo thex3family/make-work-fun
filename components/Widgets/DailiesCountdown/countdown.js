@@ -100,7 +100,9 @@ class Countdown extends Component {
           </span>
         </span> */}
         
+        <div className='flex gap-2 justify-center items-center'>
         <div className={s.Countdowndesc}>Quests Reset In...</div>
+        <div className='flex flex-row'>
         <span className={s.Countdowncol}>
           <span className={s.Countdowncolelement}>
             <strong>{this.addLeadingZeros(countDown.hours)}</strong>
@@ -122,6 +124,8 @@ class Countdown extends Component {
             <span className={s.Countdowncolformat}>Sec</span>
           </span>
         </span>
+        </div>
+        </div>
       </div>
     );
   }

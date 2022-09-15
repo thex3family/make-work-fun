@@ -98,7 +98,7 @@ export default function PlayDailies({ player, setLevelUp, changeMode }) {
     return (
         <>
             {habits?.length != 0 ?
-                <div className="text-center w-full sm:w-3/4 md:w-1/2 m-auto mb-10 p-10 bg-dailies-default rounded">
+                <div className="text-center w-full sm:w-3/4 lg:w-1/2 m-auto mb-10 p-10 bg-dailies-default rounded">
 
                     {/* <div className="w-24 h-24 border-4 border-dailies-dark bg-dailies-light shadow-lg text-center inline-flex items-center justify-center mx-auto text-black my-2 font-semibold uppercase rounded-full text-4xl">
                         {dailiesCount}/{Math.floor(habits.length * 0.8)}
@@ -172,22 +172,6 @@ export default function PlayDailies({ player, setLevelUp, changeMode }) {
                 {habits != null ? (
                     habits.length != 0 ? (
                         <>
-                            <div className='grid grid-cols-6 sm:grid-cols-5 lg:grid-cols-4 mb-4'>
-                                <div className='col-span-4 sm:col-span-3 lg:col-span-2'>
-                                </div>
-                                <div className='col-span-2 text-white'>
-                                    <div className='grid grid-cols-2 justify-items-center pr-5'>
-                                        <div>
-                                            <div className='font-bold sm:text-base text-sm hidden sm:block'>Yesterday</div>
-                                            <div className='text-xs sm:text-sm font-semibold'>{moment().subtract(1, "days").format('ddd')}</div>
-                                        </div>
-                                        <div>
-                                            <div className='font-bold sm:text-base text-sm hidden sm:block'>Today</div>
-                                            <div className='text-xs sm:text-sm font-semibold'>{moment().format('ddd')}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <HabitGroups
                                 habits={habits}
                                 fetchDailies={fetchDailies}
