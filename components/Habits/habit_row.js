@@ -16,7 +16,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
 
   const [hours, setHours] = useState(null);
   const [mins, setMins] = useState(null);
-  
+
   const [habitCompleted, setHabitCompleted] = useState(habitState);
   const [insertedDetails, setInsertedDetails] = useState(insertedD);
 
@@ -24,16 +24,16 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
     setDetails(insertedDetails);
   }, [insertedDetails]);
 
-  
+
   useEffect(() => {
-    if(habit_type == "Duration" && insertedDetails){
-      setHours(Math.floor(insertedDetails/60))
-      setMins(insertedDetails%60)
+    if (habit_type == "Duration" && insertedDetails) {
+      setHours(Math.floor(insertedDetails / 60))
+      setMins(insertedDetails % 60)
     }
   }, [habit_type]);
 
   function getTimeInMinutes(hours, mins) {
-    var totalTime = (Number(hours) * 60) + Number(mins); 
+    var totalTime = (Number(hours) * 60) + Number(mins);
     return totalTime;
   }
 
@@ -104,7 +104,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
               handleHabitCompletionStatusChange(
                 habit_id,
                 'Duration',
-                getTimeInMinutes(hours, mins), 
+                getTimeInMinutes(hours, mins),
                 date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               )
             }}>
@@ -176,7 +176,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
               (handleHabitCompletionStatusChange(
                 habit_id,
                 'Feeling',
-                `${details == 'happy' ? '' : 'happy'}`, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
+                `${details == 'happy' ? '' : 'happy'}`, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               ), setOpened((o) => !o))
               }
               disabled={saving}
@@ -192,7 +192,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
               (handleHabitCompletionStatusChange(
                 habit_id,
                 'Feeling',
-                `${details == 'meh' ? '' : 'meh'}`, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
+                `${details == 'meh' ? '' : 'meh'}`, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               ), setOpened((o) => !o))
               }
               disabled={saving}
@@ -208,7 +208,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
               (handleHabitCompletionStatusChange(
                 habit_id,
                 'Feeling',
-                `${details == 'unhappy' ? '' : 'unhappy'}`, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
+                `${details == 'unhappy' ? '' : 'unhappy'}`, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               ), setOpened((o) => !o))
               }
               disabled={saving}
@@ -242,7 +242,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
               handleHabitCompletionStatusChange(
                 habit_id,
                 'Location',
-                details, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
+                details, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails
               )
             }}>
             <Input
@@ -286,7 +286,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
           <form className="flex flex-col"
             onSubmit={(e) => {
               e.preventDefault()
-              handleHabitCompletionStatusChange(habit_id, 'Note', details, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)
+              handleHabitCompletionStatusChange(habit_id, 'Note', details, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)
             }}>
             <Input
               className="text-xs sm:text-sm mt-1 mb-2 sm:mb-4 font-semibold rounded"
@@ -330,7 +330,7 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
             onChange={(event) => {
               if (event.target.files && event.target.files.length > 0) {
                 setPicture(URL.createObjectURL(event.target.files[0]))
-                  , handleHabitCompletionStatusChange(habit_id, 'Picture', event, date , day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)
+                  , handleHabitCompletionStatusChange(habit_id, 'Picture', event, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails)
               }
             }
             }
@@ -348,6 +348,7 @@ export default function HabitRow({
   habit_type,
   habit_detail,
   habit_description,
+  habit_type_desc,
   streak_duration,
   streak_start,
   streak_end,
@@ -535,14 +536,14 @@ export default function HabitRow({
     }
   }, [displayMode]);
 
-  async function handleHabitCompletionStatusChange(habit_id, type, inputDetails, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails){
+  async function handleHabitCompletionStatusChange(habit_id, type, inputDetails, date, day, habitCompleted, setHabitCompleted, setHabitCompletedToday, setInsertedDetails) {
     // if (displayMode == 'demo') {
-      setInsertedDetails(inputDetails);
-      setHabitCompleted(inputDetails ? true : !habitCompleted);
-      if(day=='today'){
-        setHabitCompletedToday(inputDetails ? true : !habitCompleted);
-        setCardDetails(inputDetails);
-      }
+    setInsertedDetails(inputDetails);
+    setHabitCompleted(inputDetails ? true : !habitCompleted);
+    if (day == 'today') {
+      setHabitCompletedToday(inputDetails ? true : !habitCompleted);
+      setCardDetails(inputDetails);
+    }
     if (displayMode !== 'demo') {
       if (type == 'Picture') {
         try {
@@ -698,53 +699,17 @@ export default function HabitRow({
 
                   </div>
                 ) : null}
-                {habit_type == 'Checkbox' ? (
-                  <div>
-                    <p className="text-sm sm:text-md mb-2  text-black">
-                      {habit_progress_statement(streak_duration)}
-                    </p>
-
-                  </div>
-                ) : null}
-                {habit_type == 'Feeling' ? (
+                {habit_type_desc ? (
                   <div>
                     <p className="text-sm sm:text-md mb-2 text-black">
-                      How are you feeling?
-                    </p>
-
-                  </div>
-                ) : null}
-                {habit_type == 'Note' ? (
-                  <div className="flex flex-col">
-
-                    <p className="text-sm sm:text-md mb-1 text-black">
-                      Leave a note!
+                      {habit_type_desc}
                     </p>
                   </div>
-                ) : null}
-                {habit_type == 'Counter' ? (
-                  <div className="">
-                    <p className="text-sm sm:text-md mb-1 text-black">
-                      How many times?
-                    </p>
-
-                  </div>
-                ) : null}
-                {habit_type == 'Location' ? (
-                  <div className="flex flex-col">
-                    <p className="text-sm sm:text-md mb-1 text-black">
-                      Where was it?
-                    </p>
-                  </div>
-                ) : null}
-                {habit_type == 'Duration' ? (
-                  <div className="flex flex-col">
-
-                    <p className="text-sm sm:text-md mb-1 text-black">
-                      How long was it?
-                    </p>
-                  </div>
-                ) : null}
+                ) : <div>
+                  <p className="text-sm sm:text-md mb-2  text-black">
+                    {habit_progress_statement(streak_duration)}
+                  </p>
+                </div>}
                 <div className="hidden sm:visible">
                   <p className="text-xs mt-3">
                     <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
