@@ -1,5 +1,5 @@
 .Countdown{
-    margin: 10px auto;
+    margin: 0px auto;
     padding-top: 20px;
     /* padding-bottom: 20px; */
   }
@@ -42,6 +42,5 @@
     font-weight: 600;
     color: #8e745e;
     text-align: left;
-    margin: 5px 10px;
     font-size:1em;
   }
