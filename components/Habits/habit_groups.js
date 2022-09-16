@@ -4,6 +4,8 @@ export default function HabitGroups({ habits, fetchDailies, fetchDailiesComplete
   downstreamHabitRefresh,
   setDownstreamHabitRefresh }) {
 
+    console.log(habits);
+
   function generate_habit_map(habits) {
     var habit_map = new Map();
 
