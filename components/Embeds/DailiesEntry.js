@@ -4,13 +4,30 @@ import HabitSquare from '../Habits/habit_square';
 export default function DailiesEntry() {
   const demoHabits = [
     {
-      "id": 86,
+      "id": 1,
+      "habit": "Drink Water",
+      "description": null,
+      "streak_duration": null,
+      "streak_start": null,
+      "streak_end": null,
+      "player": "32bf9641-f33f-43bb-8006-a264d07261ec",
+      "is_active": true,
+      "habit_group": "Recurring",
+      "group_sort": 1,
+      "exp_reward": 25,
+      "icon": "FaFillDrip",
+      "habit_type": "Counter",
+      "habit_type_desc": "How many times?",
+      "sort": 1,
+      "latest_details": null
+    },
+    {
+      "id": 2,
       "habit": "Morning Mood",
       "description": null,
       "streak_duration": null,
       "streak_start": null,
       "streak_end": null,
-      "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
       "is_active": true,
       "habit_group": "Morning",
       "group_sort": 2,
@@ -21,13 +38,29 @@ export default function DailiesEntry() {
       "latest_details": "happy"
     },
     {
-      "id": 12,
+      "id": 3,
+      "habit": "Track Sleep",
+      "streak_duration": null,
+      "streak_start": null,
+      "streak_end": null,
+      "player": "32bf9641-f33f-43bb-8006-a264d07261ec",
+      "is_active": true,
+      "habit_group": "Morning",
+      "group_sort": 2,
+      "exp_reward": 25,
+      "icon": "FaMoon",
+      "habit_type": "Duration",
+      "habit_type_desc": "How long was it?",
+      "sort": 1,
+      "latest_details": "525"
+    },
+    {
+      "id": 4,
       "habit": "Make My Bed",
       "description": null,
       "streak_duration": 1,
       "streak_start": "2022-01-10T19:06:22.328+00:00",
       "streak_end": "2022-01-10T19:06:22.328+00:00",
-      "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
       "is_active": true,
       "habit_group": "Morning",
       "group_sort": 2,
@@ -37,23 +70,6 @@ export default function DailiesEntry() {
       "sort": 3,
       "latest_details": null
     },
-    {
-      "id": 37,
-      "habit": "Plan My Day",
-      "description": null,
-      "streak_duration": null,
-      "streak_start": null,
-      "streak_end": null,
-      "player": "17ae471a-3096-4c57-af41-1cf67e52dd67",
-      "is_active": true,
-      "habit_group": "Morning",
-      "group_sort": 2,
-      "exp_reward": 25,
-      "icon": "FaBrain",
-      "habit_type": "Checkbox",
-      "sort": 5,
-      "latest_details": null
-    }
   ];
 
   return (
@@ -62,10 +78,10 @@ export default function DailiesEntry() {
     //     'flex flex-col sm:flex-row gap-3 sm:gap-5 overflow-x-auto flex-nowrap mb-10 justify-center'
     //   }
     // >
-      <HabitGroups
-        habits={demoHabits}
-        display={'demo'}
-      />
+    <HabitGroups
+      habits={demoHabits}
+      display={'demo'}
+    />
     // </div>
   );
 }

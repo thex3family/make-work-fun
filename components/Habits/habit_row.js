@@ -691,7 +691,7 @@ export default function HabitRow({
             </div>
 
             <p className="text-xs mt-3 mx-auto">
-              <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+              <span className="text-xs mx-auto w-14 font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
                 +{exp_reward} XP
               </span>
             </p>
@@ -716,15 +716,8 @@ export default function HabitRow({
                   {habit_progress_statement(streak_duration)}
                 </p>
               </div>}
-              <div className="hidden sm:visible">
-                <p className="text-xs mt-3">
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                    +{exp_reward} XP
-                  </span>
-                </p>
-              </div>
             </div>
-            <div className='grid grid-cols-2 sm:place-self-center items-center h-full gap-4 md:gap-10 lg:gap-20 sm:flex-shrink-0 mt-1 sm:mt-0'>
+            <div className='grid grid-cols-2 sm:place-self-center items-center h-full gap-4 md:gap-10 lg:gap-20 sm:flex-shrink-0 mt-1 sm:mt-0 text-center'>
               {yesterdayHabit ?
                 <HabitInteraction
                   date={moment().startOf('day').subtract(1, "days").format('yyyy-MM-DD')}
