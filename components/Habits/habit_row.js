@@ -459,12 +459,14 @@ export default function HabitRow({
   //   }
   // }
 
-  function habit_progress_statement(streak_duration) {
+  function habit_progress_statement(streak_duration, habit_type_desc) {
     return (streak_duration != 0) & (streak_duration != null)
       ? '' +
       (streak_duration > 9 ? '9+ ' : streak_duration + ' day ') +
       'streak! 🔥'
-      : 'You got this! ✊';
+      : habit_type_desc ?
+        habit_type_desc
+        : 'You got this! ✊';
   }
 
   async function toggleHabitStatus(habit_id, type, inputDetails, date) {
@@ -705,17 +707,11 @@ export default function HabitRow({
                 </div>
                 <div className='text-black fas fa-info-circle cursor-pointer' onClick={() => setShowDailyQuestDetail(true)} />
               </div>
-              {habit_type_desc ? (
-                <div>
-                  <p className="text-sm sm:text-md text-black">
-                    {habit_type_desc}
-                  </p>
-                </div>
-              ) : <div>
+              <div>
                 <p className="text-sm sm:text-md  text-black">
-                  {habit_progress_statement(streak_duration)}
+                  {habit_progress_statement(streak_duration, habit_type_desc)}
                 </p>
-              </div>}
+              </div>
             </div>
             <div className='grid grid-cols-2 sm:place-self-center items-center h-full gap-4 md:gap-10 lg:gap-20 sm:flex-shrink-0 mt-1 sm:mt-0 text-center'>
               {yesterdayHabit ?
