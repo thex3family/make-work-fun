@@ -272,6 +272,7 @@ export default function parties({ metaBase, setMeta }) {
         .from('party')
         .select('*')
         .or('status.eq.1,status.eq.2')
+        .order('status', { ascending: true })
 
       var recruitingParties = data;
 

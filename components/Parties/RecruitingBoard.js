@@ -37,7 +37,7 @@ export default function RecruitingBoard({
     left: `font-bold bg-yellow-700`,
     right: `font-bold bg-yellow-700`,
     scroll: `font-bold p-1`,
-    partyList: `overflow-x-auto sm:overflow-hidden flex justify-start party-list-box w-full px-2.5`
+    partyList: `grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 party-list-box w-full px-2.5`
   };
   const tabs = [`⏱ Time Challenge`, `🐉 Slay Your Dragons`];
   const sections = [`Season Pass Completion`];
