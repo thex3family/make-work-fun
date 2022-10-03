@@ -95,7 +95,7 @@ const Navbar = () => {
                   aria-label="Global"
                 >
                   <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
-                    <div className="flex items-center justify-between w-full md:w-auto">
+                    <div className="flex items-center justify-between w-full lg:w-auto">
                       <a href="/" className={s.logo}>
                         <span className="sr-only">Home</span>
                         <img
@@ -106,7 +106,7 @@ const Navbar = () => {
                           Beta
                         </span>
                       </a>
-                      <div className="-mr-2 flex items-center md:hidden">
+                      <div className="-mr-2 flex items-center lg:hidden">
                         <a className="mr-1.5 text-lg fas fa-question-circle launch_intercom" />
                         <Popover.Button className="bg-primary-2 rounded-md p-2 inline-flex items-center justify-center text-white hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500">
                           <span className="sr-only">Open main menu</span>
@@ -118,7 +118,7 @@ const Navbar = () => {
 
                   {/* manage the main menu  */}
 
-                  <div className="hidden md:block items-center md:ml-10 md:pr-4 md:space-x-8">
+                  <div className="hidden lg:block items-center lg:ml-10 lg:pr-4 lg:space-x-8">
                     {user ?
                       <Menu as="div" className="relative inline-block text-left">
                         <div>
@@ -215,7 +215,7 @@ const Navbar = () => {
                 <Popover.Panel
                   focus
                   static
-                  className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
+                  className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right lg:hidden"
                 >
                   <div className="rounded-lg shadow-md bg-primary-2 bg-opacity-90 ring-1 ring-black ring-opacity-5 overflow-hidden">
                     <div className="px-5 pt-4 pb-2 flex items-center justify-between">
