@@ -165,7 +165,7 @@ export default function ModalDQDetail({ setShowDailyQuestDetail, habit_id, habit
     ],
     editorProps: {
       attributes: {
-        class: 'prose border-2 leading-relaxed w-full rounded px-2 py-2 outline-none focus:outline-none overflow-y-auto h-96',
+        class: 'prose border-2 leading-relaxed w-full rounded px-2 py-2 outline-none focus:outline-none overflow-y-auto h-60',
       },
     },
     content: habitDescription ? habitDescription : {
