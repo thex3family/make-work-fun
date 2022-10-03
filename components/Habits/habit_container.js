@@ -28,7 +28,7 @@ export default function HabitContainer({ id, player, items, setItems, habits, fi
                     setItems={setItems}
                 />
             )) :
-                <div className={`animate-fade-in-up w-full my-4 mb-0 relative bg-cover bg-center object-cover rounded z-10 square shadow-lg border-4 border-dailies-dark flex flex-col justify-center p-4`}>
+                <div className={`animate-fade-in-up w-full my-4 mb-0 relative bg-cover bg-center object-cover rounded square shadow-lg border-4 border-dailies-dark flex flex-col justify-center p-4`}>
                     <div className='text-white text-lg font-semibold'>No Quests For This Group. Add A New Quest Or Drag An Existing One Into This Section To Get Started!</div>
                 </div>}
         </div>
