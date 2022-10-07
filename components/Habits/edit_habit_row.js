@@ -1,4 +1,4 @@
-import { IconPicker } from 'react-fa-icon-picker';
+import { IconPicker, IconPickerItem } from 'react-fa-icon-picker';
 import moment from 'moment';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabase-client';
@@ -6,7 +6,7 @@ import Input from '@/components/ui/Input';
 import ModalDQDetail from '../Modals/ModalDQDetail';
 import { downloadImage } from '@/utils/downloadImage';
 
-import { MultiSelect, Switch, TextInput } from '@mantine/core';
+import { Modal, MultiSelect, Switch, TextInput } from '@mantine/core';
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -58,6 +58,7 @@ export default function EditHabitRow({
   const [habitArea, setHabitArea] = useState(habit_area);
   const [habitIcon, setHabitIcon] = useState(habit_icon);
   const [habitActive, setHabitActive] = useState(habit_active);
+  const [deleteRow, setDeleteRow] = useState(null);
 
 
   async function editMaster(value, column) {
@@ -97,7 +98,9 @@ export default function EditHabitRow({
     }
   }
 
-  return (
+  if (!habitActive) return null;
+
+  if (habitActive) return (
     <>
       <div
         ref={setNodeRef} style={style}
@@ -140,10 +143,10 @@ export default function EditHabitRow({
                     searchInputStyles={{
                       color: 'black',
                     }}
-                  value={habitIcon}
-                  onChange={(v) => (setHabitIcon(v), editMaster(v, 'icon'))}
-                  size={35}
-                  color="#000"
+                    value={habitIcon}
+                    onChange={(v) => (setHabitIcon(v), editMaster(v, 'icon'))}
+                    size={35}
+                    color="#000"
                   />
                 </div>
 
@@ -227,8 +230,9 @@ export default function EditHabitRow({
                   />
                 </div>
               </div>
-              <div className='flex flex-col md:flex-row self-center text-left gap-0 md:gap-2 justify-end items-center'>
-                <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />;
+              <div className='flex flex-col md:flex-row self-center text-left gap-0 md:gap-4 justify-end items-center'>
+                <i className='fas fa-trash text-gray-400 hover:text-red-500 text-2xl mt-auto mb-auto hideLinkBorder cursor-pointer' onClick={() => setDeleteRow(true)} />
+                {/* <Switch onLabel='ON' offLabel='OFF' size="lg" color="teal" checked={habitActive} onChange={(event) => (setHabitActive(event.currentTarget.checked), editMaster(event.currentTarget.checked, 'is_active'))} />; */}
                 <i className='fas fa-bars text-black text-xl mt-auto mb-auto hideLinkBorder' {...attributes} {...listeners} />
               </div>
             </div>
@@ -236,6 +240,44 @@ export default function EditHabitRow({
 
         </div>
       </div>
+
+      <Modal
+        centered
+        opened={deleteRow}
+        onClose={() => setDeleteRow(false)}
+        classNames={{
+          modal: 'text-white bg-dark hideLinkBorder',
+          title: 'hidden',
+          close: 'hidden',
+        }}
+      >
+        <div class="relative rounded-lg text-left ">
+          <div class="">
+            <div class="sm:flex sm:items-center sm:gap-2">
+            <IconPickerItem
+                className=""
+                icon={habitIcon}
+                size={35}
+                color="#fff"
+              />
+              <div class="text-center m-2 sm:text-left">
+                <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">{habitTitle}</h3>
+                <div class="mt-2">
+                  <p class="text-sm text-white-500">Are you sure you want to delete this daily quest? Your statistics for this daily will not be tracked any more.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="mt-4 mb-5 sm:flex sm:flex-row-reverse">
+          <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
+            onClick={() => (setHabitActive(false), editMaster(false, 'is_active'))}
+          >Delete</button>
+          <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-dark text-base font-medium text-gray-700 hover:bg-black focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={() => setDeleteRow(false)}>Cancel</button>
+        </div>
+
+      </Modal>
 
 
       {showDailyQuestDetail ? (

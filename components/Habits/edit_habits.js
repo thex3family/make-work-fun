@@ -42,6 +42,7 @@ export default function EditDailies({ player, changeMode }) {
                 .from('habits')
                 .select('id, name, player, is_active, description, icon, sort, group (id, name, sort), type (id, name), exp_reward, area')
                 .eq('player', player)
+                .eq('is_active', true)
                 .order('sort', { foreignTable: 'group', ascending: true })
                 .order('sort', { ascending: true })
                 .order('name', { ascending: true });
