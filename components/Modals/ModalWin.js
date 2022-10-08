@@ -11,7 +11,9 @@ export default function WinModal({
   setShowWinModal,
   playerStats,
   refreshStats,
-  display
+  display,
+  hideShareWithFamily,
+  hideDelete
 }) {
   const [activeGIF, setActiveGIF] = useState(null);
   const [sharedWithFamily, setSharedWithFamily] = useState(false);
@@ -163,7 +165,7 @@ export default function WinModal({
                       </button>
                     </a>
                     </div>
-                  ) : display !== 'demo' ? (
+                  ) : display !== 'demo' && !hideShareWithFamily ? (
                     <div className="inline-block mx-auto">
                     <button
                       className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -206,7 +208,7 @@ export default function WinModal({
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-              {!deleteOption ?
+              {!hideDelete ? !deleteOption ?
                 <button
                   className="text-red-500 background-transparent font-bold uppercase mx-6 my-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
@@ -233,7 +235,7 @@ export default function WinModal({
                     No
                   </button>
                 </span>
-              }
+              : null}
 
             </div>
             {page !== 'player' && display !== 'demo' ? (
