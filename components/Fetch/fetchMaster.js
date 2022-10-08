@@ -180,16 +180,15 @@ export async function fetchPlayerStats(player, setNewToSeason) {
   }
 }
 
-export async function fetchWins() {
+export async function fetchWins(user) {
   try {
-    const user = supabase.auth.user();
 
     const { data, error } = await supabase
       .from('success_plan')
       .select(
         'id, name, type, punctuality, closing_date, gold_reward, exp_reward, upstream, trend, notion_id, gif_url, entered_on, database_nickname, player)'
       )
-      .eq('player', user.id)
+      .eq('player', user)
       .order('closing_date', { ascending: false })
       .order('entered_on', { ascending: false });
     if (data) {

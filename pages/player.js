@@ -275,7 +275,7 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
     setLoading(false);
     setTitles(await fetchTitles());
     setAreaStats(await fetchAreaStats());
-    setWins(await fetchWins());
+    setWins(await fetchWins(user.id));
   }
 
   useEffect(() => {
