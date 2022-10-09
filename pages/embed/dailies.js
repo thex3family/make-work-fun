@@ -474,7 +474,7 @@ export default function dailies() {
 
   return (
     <>
-      <section className="animate-slow-fade-in justify-center bg-fixed bg-cover bg-center"
+      <section className="justify-center bg-fixed bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundUrl})` }}>
 
         <div className=" max-w-6xl mx-auto py-0 sm:py-8 md:pt-24 px-0 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
