@@ -278,7 +278,7 @@ export default function recentWins() {
 
   if (!wins || loading) {
     return <>
-      <div className="h-screen">
+      <div className={`h-screen ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
         <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">
           <div className="flex flex-wrap mt-4">
             <div className="w-full px-4">
@@ -340,7 +340,7 @@ export default function recentWins() {
   return (
     <>
       <section
-        className={`animate-slow-fade-in h-screen responsiveBackground ${style == 'dark' ? 'bg-dark' : 'bg-white'
+        className={`h-screen responsiveBackground ${style == 'dark' ? 'bg-dark' : 'bg-white'
           }`}
       >
         <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8 my-auto w-full flex flex-col">

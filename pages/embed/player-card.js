@@ -97,7 +97,7 @@ export default function playerDetails() {
 
   if (!playerStats || loading) {
     return <>
-      <div className="h-screen flex justify-center">
+      <div className={`h-screen flex justify-center ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
         <LoadingDots />
       </div>
       {
@@ -116,7 +116,7 @@ export default function playerDetails() {
   return (
     <>
       <section
-        className={`animate-slow-fade-in h-screen responsiveBackground ${
+        className={`h-screen responsiveBackground ${
           style == 'dark' ? 'bg-dark' : 'bg-white'
         }`}
       >

@@ -215,6 +215,7 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
     if (style == 'dark') {
     } else {
       if (path) {
+
         try {
           const { data, error } = await supabase.storage
             .from('backgrounds')
@@ -255,7 +256,7 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
   return (
     <>
       <section
-        className="animate-slow-fade-in bg-fixed bg-cover bg-center bg-dark responsiveBackground"
+        className="bg-fixed bg-cover bg-center bg-dark responsiveBackground"
         style={{ backgroundImage: `url(${background_url})` }}
       >
         <div
