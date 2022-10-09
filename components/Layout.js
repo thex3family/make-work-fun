@@ -140,7 +140,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
       }
       { display ? display == 'demo' ? <DemoWinManage win={true} lvl={true} /> : null : null}
       <main id="skip">
-        {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') ? <>
+        {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') && !router.asPath.includes('demo') ? <>
           <SideBar router={router} mobileDevice={mobileDevice} />
         </> : null}
         {user && userProfile ? <ModalUpdates user={user} userProfile={userProfile} /> : null}

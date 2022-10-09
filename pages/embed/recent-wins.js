@@ -85,30 +85,72 @@ export default function recentWins() {
     if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
   }, [auth]);
 
-  const demoPlayerStats = {
-    player_rank: 17,
-    next_rank: 0,
-    full_name: 'Conrad',
-    current_level: 1,
-    total_exp: 75,
-    exp_progress: 75,
-    level_exp: 200,
-    total_gold: 25,
-    player: '0',
-    name: 'Make My Bed',
-    type: 'Daily Quest',
-    exp_reward: 25,
-    gold_reward: 0,
-    avatar_url: '0.4857466039220286.png',
-    background_url: '0.5372695271833878.jpg',
-    role: 'Party Leader, Contributor',
-    title: 'Party Leader ✊',
-    previous_level: 1,
-    exp_earned_today: 2575,
-    gold_earned_today: 1250,
-    season: '2S',
-    latest: true
-  };
+  const demoWins = [
+    {
+      "id": 4,
+      "name": "Launch My Side Project",
+      "type": "Key Result",
+      "punctuality": 0,
+      "closing_date": "2022-10-04",
+      "gold_reward": 0,
+      "exp_reward": 250,
+      "upstream": "🗃 Have Courage",
+      "trend": "check",
+      "notion_id": null,
+      "gif_url": "https://media3.giphy.com/media/12UlfHpF05ielO/giphy.gif?cid=083ffd94be51c603562f87807a6bad1311e9c1e122ca1e0f&rid=giphy.gif&ct=g",
+      "entered_on": "2022-08-03T12:31:34.120418",
+      "database_nickname": "Success Plan",
+      "player": "17ae471a-3096-4c57-af41-1cf67e52dd67"
+    },
+    {
+      "id": 3,
+      "name": "Daily Quest Bonus Reward",
+      "type": "Bonus",
+      "punctuality": 0,
+      "closing_date": "2022-10-03",
+      "gold_reward": 50,
+      "exp_reward": 100,
+      "upstream": null,
+      "trend": "check",
+      "notion_id": null,
+      "gif_url": "https://media2.giphy.com/media/ZE6HYckyroMWwSp11C/giphy.gif?cid=083ffd9438915b712d4eda3816ca3c17b8fc80f418b01242&rid=giphy.gif&ct=g",
+      "entered_on": "2022-09-05T05:33:43.841104",
+      "database_nickname": null,
+      "player": "32bf9641-f33f-43bb-8006-a264d07261ec"
+    },
+    {
+      "id": 2,
+      "name": "Help A Community Member",
+      "type": "Task",
+      "punctuality": 0,
+      "closing_date": "2022-10-02",
+      "gold_reward": 100,
+      "exp_reward": 100,
+      "upstream": "🗃 Care For Family And Friends",
+      "trend": "check",
+      "notion_id": null,
+      "gif_url": "https://media3.giphy.com/media/LkjlH3rVETgsg/giphy.gif?cid=083ffd9483b8af7636e82c73a90f0d3ad678852dcf368ebe&rid=giphy.gif&ct=g",
+      "entered_on": "2022-08-26T03:08:13.7346",
+      "database_nickname": "Success Plan",
+      "player": "17ae471a-3096-4c57-af41-1cf67e52dd67"
+    },
+    {
+      "id": 1,
+      "name": "My First Win This Season",
+      "type": "Bonus",
+      "punctuality": 0,
+      "closing_date": "2022-10-01",
+      "gold_reward": 25,
+      "exp_reward": 25,
+      "upstream": null,
+      "trend": "check",
+      "notion_id": null,
+      "gif_url": "https://media4.giphy.com/media/YRtLgsajXrz1FNJ6oy/giphy.gif?cid=083ffd9416d1a990ae35cc3205b23af83aaf21d67b3726bc&rid=giphy.gif&ct=g",
+      "entered_on": "2022-10-03T08:49:42.115519",
+      "database_nickname": null,
+      "player": "32bf9641-f33f-43bb-8006-a264d07261ec"
+    }
+  ];
 
   const NameCustom = (row) => (
     <div data-tag="allowRowEvents" className="">
@@ -229,7 +271,7 @@ export default function recentWins() {
   useEffect(() => {
     if (display == 'demo') {
       // need to add demo case
-      setWins(demoPlayerStats);
+      setWins(demoWins);
       setLoading(false);
     }
   }, [display]);

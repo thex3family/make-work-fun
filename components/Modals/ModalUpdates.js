@@ -74,14 +74,13 @@ export default function ModalUpdates({ user, userProfile }) {
 
                 </div>
                 <div className="mx-auto mt-5 mb-10">
-                    <Link
+                    <a 
                         href="/new"
-
                     >
                         <Button variant="prominent">
                             See All Updates
                         </Button>
-                    </Link>
+                    </a>
                 </div>
                 </div>
 

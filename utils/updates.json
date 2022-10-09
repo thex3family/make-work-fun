@@ -1,5 +1,13 @@
 [
   {
+  "date": "Oct 09, 2022",
+  "title": "Recent Win Embed",
+  "desc": "We've made it easy for you to see your recent wins anywhere and share with the world what you've been up to recently.",
+  "img_url": "0.47.png",
+  "button_url": "/embed?component=recent-wins",
+  "version": "47"
+  },
+  {
   "date": "Sept 15, 2022",
   "title": "Manage Your Dailies",
   "desc": "We've completely revamped the way you interact with daily quests. Create, define, sort, and track your habits with ease.",

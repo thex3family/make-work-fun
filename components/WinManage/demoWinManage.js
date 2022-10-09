@@ -82,6 +82,8 @@ export default function DemoWinManage({ win, lvl }) {
                         playerStats={playerStats}
                         refreshStats={refreshStats}
                         display={'demo'}
+                        hideShareWithFamily={true}
+                        hideDelete={true}
                     />
                 </>
             ) : null}
