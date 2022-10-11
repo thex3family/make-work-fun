@@ -237,7 +237,7 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
 
   if (!playerStats || loading) {
     return <>
-      <div className="h-screen flex justify-center">
+      <div className={`h-screen flex justify-center ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
         <LoadingDots />
       </div>
       {
