@@ -94,7 +94,11 @@ export default function CardStats({
   displayMode,
   statEnergy,
   user_id,
-  refreshStats
+  refreshStats,
+  hideManageTitle,
+  hideEnergy,
+  hideItemShop,
+  hideChangeName
 }) {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
@@ -147,7 +151,7 @@ export default function CardStats({
   const router = useRouter();
 
   const { itemshop } = router.query;
-  
+
   useEffect(() => {
     if (itemshop) setItemShopOpen(true);
   }, [itemshop]);
@@ -487,36 +491,50 @@ export default function CardStats({
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-
-              <Tooltip
-                placement="start"
-                label="Click me to update your title!"
-                withArrow
-                arrowSize={3}
-              >
-                <button
-                  className="text-emerald-400 uppercase font-bold text-xs hideLinkBorder"
-                  onClick={() => {
-                    setShowTitleModal ? setShowTitleModal(true) : null;
-                  }}
-                >
-                  {statTitle ? statTitle : 'Newbie'}
-                </button>
-              </Tooltip>
-              <p className="font-semibold text-xl text-white-700 cursor-pointer">
-                <Tooltip
+              {
+                !hideManageTitle ? <Tooltip
                   placement="start"
-                  label="Click me to change your name!"
+                  label="Click me to update your title!"
                   withArrow
                   arrowSize={3}
                 >
-                  <Link href="/account?tab=profile" >
-                    <a className='hideLinkBorder'>
-                      {statName ? statName : 'Anonymous Adventurer'}
-                    </a>
-                  </Link>
+                  <button
+                    className="text-emerald-400 uppercase font-bold text-xs hideLinkBorder"
+                    onClick={() => {
+                      setShowTitleModal ? setShowTitleModal(true) : null;
+                    }}
+                  >
+                    {statTitle ? statTitle : 'Newbie'}
+                  </button>
                 </Tooltip>
-              </p>
+                  : <button
+                    className="text-emerald-400 uppercase font-bold text-xs hideLinkBorder"
+                  // onClick={() => {
+                  //   setShowTitleModal ? setShowTitleModal(true) : null;
+                  // }}
+                  >
+                    {statTitle ? statTitle : 'Newbie'}
+                  </button>
+              }
+              {!hideChangeName ?
+                <p className="font-semibold text-xl text-white-700 cursor-pointer">
+                  <Tooltip
+                    placement="start"
+                    label="Click me to change your name!"
+                    withArrow
+                    arrowSize={3}
+                  >
+                    <Link href="/account?tab=profile" >
+                      <a className='hideLinkBorder'>
+                        {statName ? statName : 'Anonymous Adventurer'}
+                      </a>
+                    </Link>
+                  </Tooltip>
+                </p> : <p className="font-semibold text-xl text-white-700">
+                  <a className='hideLinkBorder'>
+                    {statName ? statName : 'Anonymous Adventurer'}
+                  </a>
+                </p>}
               <span className="font-semibold text-l text-white-700">
                 Level {statLevel}
               </span>
@@ -597,7 +615,7 @@ export default function CardStats({
             </div>
           </div>
           <div className="flex flex-row flex-nowrap items-center gap-4">
-
+          {!hideItemShop ? 
             <Tooltip
               className="mt-4 w-full text-center font-semibold border py-2 rounded hover:bg-yellow-400 hover:text-yellow-800"
               label="Spend Your Gold!"
@@ -612,6 +630,19 @@ export default function CardStats({
                 {statGold} 💰
               </div>
             </Tooltip>
+            :  <Tooltip
+            className="mt-4 w-full text-center font-semibold border py-2 rounded"
+            label="Spend Your Gold!"
+            withArrow
+            arrowSize={3}
+          >
+            <div
+              variant="slim"
+              className="cursor-pointer "
+            >
+              {statGold} 💰
+            </div>
+          </Tooltip>}
             <Tooltip
               className="mt-4 w-full text-center font-semibold border py-2 rounded"
               label="Life Points Coming Soon!"
@@ -640,7 +671,7 @@ export default function CardStats({
               <span className="whitespace-nowrap">{statDescription}</span>
             </Button> */}
           </div>
-          <Slider
+          {!hideEnergy ? <><Slider
             value={energyValue} onChange={setEnergyValue}
             className='hideLinkBorder my-5'
             color="yellow"
@@ -657,15 +688,16 @@ export default function CardStats({
               { value: 100, label: '💛' },
             ]}
           />
-          {(initialEnergyValue !== energyValue) && displayMode != 'demo' ?
+            {(initialEnergyValue !== energyValue) && displayMode != 'demo' ?
 
-            <div className='flex justify-end mt-8'>
-              {!saveEnergy ?
-                <button className='hideLinkBorder text-yellow-500 background-transparent font-bold uppercase text-xs ease-linear transition-all duration-150'
-                  onClick={() => updateEnergy(energyValue)}>Update Energy</button>
-                : <div className='hideLinkBorder text-yellow-500 background-transparent font-bold uppercase text-xs ease-linear transition-all duration-150'>Saving...</div>}
-            </div>
-            : null}
+              <div className='flex justify-end mt-8'>
+                {!saveEnergy ?
+                  <button className='hideLinkBorder text-yellow-500 background-transparent font-bold uppercase text-xs ease-linear transition-all duration-150'
+                    onClick={() => updateEnergy(energyValue)}>Update Energy</button>
+                  : <div className='hideLinkBorder text-yellow-500 background-transparent font-bold uppercase text-xs ease-linear transition-all duration-150'>Saving...</div>}
+              </div>
+              : null}</> : null}
+
         </div>
       </div>
       <Drawer
