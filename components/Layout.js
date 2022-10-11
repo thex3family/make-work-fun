@@ -89,6 +89,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
   const { win } = router.query;
   const { lvl } = router.query;
   const { display } = router.query;
+  const { hideWinManage } = router.query;
 
   return (
     <>
@@ -138,7 +139,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
         // forget it for anonymous users for now. <WinManage />
         manualPlayerID ? <UserWinManage user={manualPlayerID} setRefreshChildStats={setRefreshChildStats} win={win} lvl={lvl} /> : null
       }
-      { display ? display == 'demo' ? <DemoWinManage win={true} lvl={true} /> : null : null}
+      { display ? (display == 'demo' && hideWinManage != 'true') ? <DemoWinManage win={true} lvl={true} /> : null : null}
       <main id="skip">
         {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') && !router.asPath.includes('demo') ? <>
           <SideBar router={router} mobileDevice={mobileDevice} />
