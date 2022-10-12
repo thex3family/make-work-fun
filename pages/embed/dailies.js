@@ -71,7 +71,7 @@ export default function dailies() {
   const [invalidCredentials, setInvalidCredentials] = useState(null);
 
   useEffect(() => {
-    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
+    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials, 'dailies'));
   }, [auth]);
 
   const [userOnboarding, setUserOnboarding] = useState(null);

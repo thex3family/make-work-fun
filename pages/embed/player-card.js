@@ -41,7 +41,7 @@ export default function playerDetails() {
   const [invalidCredentials, setInvalidCredentials] = useState(null);
 
   useEffect(() => {
-    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
+    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials, 'player-card'));
   }, [auth]);
 
 
