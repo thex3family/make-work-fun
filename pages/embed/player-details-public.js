@@ -18,7 +18,7 @@ import {
 import { pushTitle } from '@/components/Push/pushMaster';
 import TitleModal from '@/components/Modals/ModalTitle';
 
-export default function playerDetails({setManualPlayerID, setManualPlayerStats}) {
+export default function playerDetails({ setManualPlayerID, setManualPlayerStats }) {
   const router = useRouter();
   const [playerStats, setPlayerStats] = useState(null);
   const [avatarStatus, setAvatarStatus] = useState(null);
@@ -183,7 +183,7 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
       if (!playerStats.avatar_url) {
         setAvatarStatus('Missing');
       } else {
-        if (playerStats.avatar_url.includes('blob:')){
+        if (playerStats.avatar_url.includes('blob:')) {
           setAvatarUrl(playerStats.avatar_url);
         } else {
           downloadImage(playerStats.avatar_url)
@@ -272,10 +272,11 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
                 <div>
                   {/* Card stats */}
                   <div className="flex flex-wrap md:flex-nowrap items-center gap-5 opacity-90">
-                    <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 md:w-2/3 lg:w-1/2 h-full text-center relative">
+                    <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 md:w-2/3 lg:w-1/2 h-full text-center relative"
+                      onMouseEnter={() => setShowHide(false)}
+                      onMouseLeave={() => setShowHide(true)}>
                       <div
-                        className={`${showHide ? 'hidden' : ''
-                          } animate-fade-in`}
+                        className={`absolute w-full top-0 ${showHide ? 'hidden' : ''} animate-fade-in`}
                         onClick={() => {
                           showHide ? setShowHide(false) : setShowHide(true);
                         }}
@@ -283,7 +284,7 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
                         <CardAreaStats areaStats={areaStats} />
                       </div>
                       <div
-                        className={`${showHide ? '' : 'hidden'
+                        className={`${showHide ? '' : ''
                           } animate-fade-in`}
                       >
                         {avatarStatus == 'Missing' ? (
@@ -304,7 +305,7 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
                               showHide ? setShowHide(false) : setShowHide(true);
                             }}
                           />
-                        ) : <LoadingDots/>}
+                        ) : <LoadingDots />}
                       </div>
                     </div>
                     <div className="flex-grow w-full sm:w-2/3 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
