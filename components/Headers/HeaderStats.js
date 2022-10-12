@@ -39,18 +39,18 @@ export default function HeaderStats({
           <div>
             {/* Card stats */}
             <div className="flex flex-wrap md:flex-nowrap items-center gap-5">
-              <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 md:w-2/3 lg:w-1/2 h-full text-center relative" 
+              <div className="w-full mx-auto py-4 xs:w-1/4 md:w-2/3 lg:w-1/2 h-full text-center relative" 
                   onMouseEnter={()=>setShowHide(false)}
                   onMouseLeave={()=>setShowHide(true)}>
                 <div
-                  className={`absolute w-full top-0 ${showHide ? 'hidden' : ''} animate-fade-in`}
+                  className={`w-full ${showHide ? 'hidden' : ''} animate-fade-in`}
                   onClick={() => {
                     showHide ? setShowHide(false) : setShowHide(true);
                   }}
                 >
                   <CardAreaStats areaStats={areaStats} />
                 </div>
-                <div data-intercom-target="avatar" className={`${showHide ? '' : ''} animate-fade-in`}
+                <div data-intercom-target="avatar" className={`${showHide ? '' : 'hidden'} animate-fade-in`}
                 >
                   <Avatar
                     avatarUrl={avatarUrl}
