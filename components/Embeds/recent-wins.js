@@ -50,7 +50,7 @@ createTheme('game', {
   }
 });
 
-export default function RecentWins({hideDelete, hideShareWithFamily}) {
+export default function RecentWins({utility, hideDelete, hideShareWithFamily}) {
   const router = useRouter();
   const [playerStats, setPlayerStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,7 +82,7 @@ export default function RecentWins({hideDelete, hideShareWithFamily}) {
   const [invalidCredentials, setInvalidCredentials] = useState(null);
 
   useEffect(() => {
-    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
+    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials, utility));
   }, [auth]);
 
   const demoWins = [

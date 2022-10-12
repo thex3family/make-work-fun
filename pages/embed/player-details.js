@@ -150,7 +150,7 @@ export default function playerDetails({setManualPlayerID, setManualPlayerStats})
   const [invalidCredentials, setInvalidCredentials] = useState(null);
 
   useEffect(() => {
-    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials));
+    if (auth && display !== 'demo') (lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials, 'player-details'));
   }, [auth]);
 
 

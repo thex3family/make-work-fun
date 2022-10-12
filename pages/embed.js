@@ -83,11 +83,11 @@ export default function embed({ metaBase, setMeta }) {
           0,
           t.lastIndexOf('/')
         )}/embed/player-details?auth=${detailsAuthLink}`;
-        if (!win) {
-          embed_link_temp = embed_link_temp + '&win=false';
+        if (win) {
+          embed_link_temp = embed_link_temp + '&win=true';
         }
-        if (!lvl) {
-          embed_link_temp = embed_link_temp + '&lvl=false';
+        if (lvl) {
+          embed_link_temp = embed_link_temp + '&lvl=true';
         }
       } else {
         var embed_link_temp = '/embed/player-details?display=demo';
@@ -99,7 +99,6 @@ export default function embed({ metaBase, setMeta }) {
           0,
           t.lastIndexOf('/')
         )}/embed/player-details-public?auth=${detailsPublicAuthLink}`;
-        embed_link_temp = embed_link_temp + '&win=false' + '&lvl=false';
       } else {
         var embed_link_temp = '/embed/player-details-public?display=demo&hideWinManage=true';
       }
@@ -165,7 +164,6 @@ export default function embed({ metaBase, setMeta }) {
           0,
           t.lastIndexOf('/')
         )}/embed/recent-wins-public?auth=${winsPublicAuthLink}`;
-        embed_link_temp = embed_link_temp + '&win=false' + '&lvl=false';
       } else {
         var embed_link_temp = '/embed/recent-wins-public?display=demo&hideWinManage=true';
       }

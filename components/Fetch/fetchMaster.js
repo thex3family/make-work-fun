@@ -869,13 +869,14 @@ export async function fetchAuthenticationLink(utility, setAuthenticationLink, se
 }
 
 
-export async function lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials) {
+export async function lookupPlayerFromAuth(auth, setPlayer, setInvalidCredentials, utility) {
 
   try {
     const { data, error } = await supabase
       .from('authentication_links')
       .select('*')
       .eq('id', auth)
+      .eq('utility', utility)
       .single()
 
     if (data) {
