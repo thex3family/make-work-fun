@@ -272,11 +272,11 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
                 <div>
                   {/* Card stats */}
                   <div className="flex flex-wrap md:flex-nowrap items-center gap-5 opacity-90">
-                    <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 md:w-2/3 lg:w-1/2 h-full text-center relative"
+                    <div className="w-full mx-auto py-5 xs:w-1/4 md:w-2/3 lg:w-1/2 xl:w-1/3 h-full text-center relative"
                       onMouseEnter={() => setShowHide(false)}
                       onMouseLeave={() => setShowHide(true)}>
                       <div
-                        className={`absolute w-full top-0 ${showHide ? 'hidden' : ''} animate-fade-in`}
+                        className={`w-full ${showHide ? 'hidden' : ''} animate-fade-in`}
                         onClick={() => {
                           showHide ? setShowHide(false) : setShowHide(true);
                         }}
@@ -284,7 +284,7 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
                         <CardAreaStats areaStats={areaStats} />
                       </div>
                       <div
-                        className={`${showHide ? '' : ''
+                        className={`${showHide ? '' : 'hidden'
                           } animate-fade-in`}
                       >
                         {avatarStatus == 'Missing' ? (
@@ -308,7 +308,7 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
                         ) : <LoadingDots />}
                       </div>
                     </div>
-                    <div className="flex-grow w-full sm:w-2/3 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
+                    <div className="flex-grow w-full sm:w-2/3 sm:items-right lg:w-1/2 h-full py-0 sm:py-5 justify-center justify-self-center">
                       <div className="flex 2xl:flex-row flex-col gap-4">
                         <div className="2xl:w-1/2 w-full">
                           <CardStats
