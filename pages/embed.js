@@ -99,7 +99,7 @@ export default function embed({ metaBase, setMeta }) {
           0,
           t.lastIndexOf('/')
         )}/embed/player-details-public?auth=${detailsPublicAuthLink}`;
-          embed_link_temp = embed_link_temp + '&win=false'+ '&lvl=false';
+        embed_link_temp = embed_link_temp + '&win=false' + '&lvl=false';
       } else {
         var embed_link_temp = '/embed/player-details-public?display=demo&hideWinManage=true';
       }
@@ -141,7 +141,7 @@ export default function embed({ metaBase, setMeta }) {
       }
     }
 
-    if (embedComponent == 4) {
+    if (embedComponent == 4 && activeTab == 'private') {
       if (winsAuthLink) {
         var embed_link_temp = `${t.substr(
           0,
@@ -156,6 +156,18 @@ export default function embed({ metaBase, setMeta }) {
         }
       } else {
         var embed_link_temp = '/embed/recent-wins?display=demo';
+      }
+    }
+    
+    if (embedComponent == 4 && activeTab == 'public') {
+      if (winsPublicAuthLink) {
+        var embed_link_temp = `${t.substr(
+          0,
+          t.lastIndexOf('/')
+        )}/embed/recent-wins-public?auth=${winsPublicAuthLink}`;
+        embed_link_temp = embed_link_temp + '&win=false' + '&lvl=false';
+      } else {
+        var embed_link_temp = '/embed/recent-wins-public?display=demo&hideWinManage=true';
       }
     }
 
@@ -206,10 +218,11 @@ export default function embed({ metaBase, setMeta }) {
   const [detailsPublicAuthLink, setDetailsPublicAuthLink] = useState(null);
   const [cardAuthLink, setCardAuthLink] = useState(null);
   const [winsAuthLink, setWinsAuthLink] = useState(null);
+  const [winsPublicAuthLink, setWinsPublicAuthLink] = useState(null);
 
   useEffect(() => {
     if (user) handleEmbedLink(dark);
-  }, [user, dark, embedComponent, activeTab, friends, friendshipLink, win, lvl, dailiesAuthLink, detailsAuthLink, detailsPublicAuthLink, cardAuthLink, winsAuthLink]);
+  }, [user, dark, embedComponent, activeTab, friends, friendshipLink, win, lvl, dailiesAuthLink, detailsAuthLink, detailsPublicAuthLink, cardAuthLink, winsAuthLink, winsPublicAuthLink]);
 
   useEffect(() => {
     fetchPlayers(setPlayers);
@@ -220,6 +233,7 @@ export default function embed({ metaBase, setMeta }) {
     fetchAuthenticationLink('player-details-public', setDetailsPublicAuthLink, setLoading);
     fetchAuthenticationLink('player-card', setCardAuthLink, setLoading);
     fetchAuthenticationLink('recent-wins', setWinsAuthLink, setLoading);
+    fetchAuthenticationLink('recent-wins-public', setWinsPublicAuthLink, setLoading);
   }, []);
 
   useEffect(() => {
@@ -229,7 +243,7 @@ export default function embed({ metaBase, setMeta }) {
 
   useEffect(() => {
     setGenerating(false);
-  }, [friendshipLink, dailiesAuthLink, detailsAuthLink, detailsPublicAuthLink, cardAuthLink, winsAuthLink]);
+  }, [friendshipLink, dailiesAuthLink, detailsAuthLink, detailsPublicAuthLink, cardAuthLink, winsAuthLink, winsPublicAuthLink]);
 
   const columns = [
     {
@@ -485,7 +499,7 @@ export default function embed({ metaBase, setMeta }) {
       // alert(error.message);
       console.log(error.message);
     } finally {
-      fetchAuthenticationLink(utility, utility == 'dailies' ? setDailiesAuthLink : utility == 'player-details' ? setDetailsAuthLink : utility == 'player-details-public' ? setDetailsPublicAuthLink : utility == 'player-card' ? setCardAuthLink : utility == 'recent-wins' ? setWinsAuthLink : null, setLoading);
+      fetchAuthenticationLink(utility, utility == 'dailies' ? setDailiesAuthLink : utility == 'player-details' ? setDetailsAuthLink : utility == 'player-details-public' ? setDetailsPublicAuthLink : utility == 'player-card' ? setCardAuthLink : utility == 'recent-wins' ? setWinsAuthLink : utility == 'recent-wins-public' ? setWinsPublicAuthLink : null, setLoading);
     }
   }
 
@@ -519,6 +533,9 @@ export default function embed({ metaBase, setMeta }) {
       }
       if (utility == 'recent-wins') {
         setWinsAuthLink(null)
+      }
+      if (utility == 'recent-wins-public') {
+        setWinsPublicAuthLink(null)
       }
       reloadIframe(utility);
     }
@@ -1169,106 +1186,213 @@ export default function embed({ metaBase, setMeta }) {
             {embedComponent == 4 ?
               // recent wins component
               <div className="my-6">
-                <div className='px-4 pt-4 mb-4 rounded border-2 border-gray-500'>
-                  <div className="text-lg mb-4 font-semibold text-accents-4">
-                    Customization Options
-                  </div>
-                  <div className="flex flex-row flex-wrap mb-4 text-xl font-semibold gap-2">
-                    <button
-                      onClick={() => setDark(dark ? false : true)}
-                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                <div className="text-center bg-black bg-opacity-90 px-4 sm:px-10 rounded-0 sm:rounded-b relative mt-7 pt-14">
+                  <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 w-full rounded-0 sm:rounded-xl sm:max-w-md h-14 align-middle shadow-xl grid grid-cols-2 place-items-center text-lg fontmedium px-2 gap-2">
+                    <div
+                      className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 'private'
+                        ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                        : 'text-blueGray-500'
                         }`}
+                      onClick={() => setActiveTab('private')}
                     >
-                      <i
-                        className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
-                          }`}
-                      />
-                      Dark Mode
-                    </button>
-                    <button
-                      onClick={() => setWin(win ? false : true)}
-                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
+                      Private 🔒
+                    </div>
+                    <div
+                      className={`shadow-xl py-2 w-full rounded-lg font-semibold cursor-pointer ${activeTab == 'public'
+                        ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
+                        : 'text-blueGray-500'
                         }`}
+                      onClick={() => setActiveTab('public')}
                     >
-                      <i
-                        className={`mr-2 ${win ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
-                          }`}
-                      />
-                      Win Notification
-                    </button>
-                    <button
-                      onClick={() => setLvl(lvl ? false : true)}
-                      className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
-                        ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
-                        : 'text-red-700 bg-red-100 border-2 border-red-500'
-                        }`}
-                    >
-                      <i
-                        className={`mr-2 ${lvl ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
-                          }`}
-                      />
-                      Level Up Notification
-                    </button>
-                  </div>
-                  <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
-                    <Feature name="Share With Family" status={false} />
-                    <Feature name="Delete Win" status={false} />
+                      Public 🌍
+                    </div>
                   </div>
                 </div>
-
-                {!winsAuthLink ?
-                  <div className="mb-6 items-center w-full">
-                    <Button
-                      className="w-full"
-                      variant="slim"
-                      onClick={() => generateSecretLink('recent-wins')}
-                      disabled={generating || loading}
-                    >
-                      {generating ? 'Generating...' : 'Generate Secret Embed Link'}
-                    </Button>
-                  </div> :
-                  <div className="mb-8">
-                    <div className="grid grid-cols-8 items-center gap-3">
-                      <div className="col-span-4">
-                        <Input
-                          className="text-xl font-semibold rounded"
-                          value={embed_link}
-                        />
+                {activeTab == 'private' ?
+                  <>
+                    <div className='px-4 pt-4 mb-4 rounded border-2 border-gray-500'>
+                      <div className="text-lg mb-4 font-semibold text-accents-4">
+                        Customization Options
                       </div>
-                      <Button
-                        className="col-span-3"
-                        variant="slim"
-                        onClick={() => copyEmbedLink()}
-                        disabled={generating}
-                      >
-                        {copyText}
-                      </Button>
-                      <Button
-                        className="col-span-1"
-                        variant="delete"
-                        onClick={() => deleteSecretLink('recent-wins')}
-                        disabled={generating}
-                      >
-                        <i className='fas fa-trash-alt text-white' />
-                      </Button>
-
-                    </div>
-                    {/* 
-                      {dailiesAuthLink ? (
+                      <div className="flex flex-row flex-wrap mb-4 text-xl font-semibold gap-2">
                         <button
-                          onClick={() => deleteSecretLink('dailies')}
-                          className="text-red-500 mt-2 mr-5 font-semibold"
-                          disabled={generating}
+                          onClick={() => setDark(dark ? false : true)}
+                          className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
+                            ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                            : 'text-red-700 bg-red-100 border-2 border-red-500'
+                            }`}
                         >
-                          {generating ? 'Deleting...' : 'Delete Generated Link'}
+                          <i
+                            className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                              }`}
+                          />
+                          Dark Mode
                         </button>
-                      ) : null} 
-                    */}
-                  </div>
+                        <button
+                          onClick={() => setWin(win ? false : true)}
+                          className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${win
+                            ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                            : 'text-red-700 bg-red-100 border-2 border-red-500'
+                            }`}
+                        >
+                          <i
+                            className={`mr-2 ${win ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                              }`}
+                          />
+                          Win Notification
+                        </button>
+                        <button
+                          onClick={() => setLvl(lvl ? false : true)}
+                          className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${lvl
+                            ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                            : 'text-red-700 bg-red-100 border-2 border-red-500'
+                            }`}
+                        >
+                          <i
+                            className={`mr-2 ${lvl ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                              }`}
+                          />
+                          Level Up Notification
+                        </button>
+                      </div>
+                      <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
+                        <Feature name="Recent Wins" status={true} />
+                        <Feature name="Share With Family" status={true} />
+                        <Feature name="Delete Win" status={true} />
+                      </div>
+                    </div>
+
+                    {!winsAuthLink ?
+                      <div className="mb-6 items-center w-full">
+                        <Button
+                          className="w-full"
+                          variant="slim"
+                          onClick={() => generateSecretLink('recent-wins')}
+                          disabled={generating || loading}
+                        >
+                          {generating ? 'Generating...' : 'Generate Secret Embed Link'}
+                        </Button>
+                      </div> :
+                      <div className="mb-8">
+                        <div className="grid grid-cols-8 items-center gap-3">
+                          <div className="col-span-4">
+                            <Input
+                              className="text-xl font-semibold rounded"
+                              value={embed_link}
+                            />
+                          </div>
+                          <Button
+                            className="col-span-3"
+                            variant="slim"
+                            onClick={() => copyEmbedLink()}
+                            disabled={generating}
+                          >
+                            {copyText}
+                          </Button>
+                          <Button
+                            className="col-span-1"
+                            variant="delete"
+                            onClick={() => deleteSecretLink('recent-wins')}
+                            disabled={generating}
+                          >
+                            <i className='fas fa-trash-alt text-white' />
+                          </Button>
+
+                        </div>
+                        {/* 
+                        {dailiesAuthLink ? (
+                          <button
+                            onClick={() => deleteSecretLink('dailies')}
+                            className="text-red-500 mt-2 mr-5 font-semibold"
+                            disabled={generating}
+                          >
+                            {generating ? 'Deleting...' : 'Delete Generated Link'}
+                          </button>
+                        ) : null} 
+                      */}
+                      </div>
+                    }</>
+                  :
+                  null
+                }
+                {activeTab == 'public' ?
+                  <>
+                    <div className='px-4 pt-4 mb-4 rounded border-2 border-gray-500'>
+                      <div className="text-lg mb-4 font-semibold text-accents-4">
+                        Customization Options
+                      </div>
+                      <div className="flex flex-row flex-wrap mb-4 text-xl font-semibold gap-2">
+                        <button
+                          onClick={() => setDark(dark ? false : true)}
+                          className={`font-semibold inline-flex items-center justify-center px-2 py-2 leading-none rounded ${dark
+                            ? 'text-emerald-700 bg-emerald-100 border-2 border-emerald-500'
+                            : 'text-red-700 bg-red-100 border-2 border-red-500'
+                            }`}
+                        >
+                          <i
+                            className={`mr-2 ${dark ? 'mt-0.5 fas fa-check' : 'mt-0.5 fas fa-times'
+                              }`}
+                          />
+                          Dark Mode
+                        </button>
+                      </div>
+                      <div className="flex flex-row flex-wrap mb-6 text-xl font-semibold gap-2">
+                        <Feature name="Recent Wins" status={true} />
+                      </div>
+                    </div>
+
+                    {!winsPublicAuthLink ?
+                      <div className="mb-6 items-center w-full">
+                        <Button
+                          className="w-full"
+                          variant="slim"
+                          onClick={() => generateSecretLink('recent-wins-public')}
+                          disabled={generating || loading}
+                        >
+                          {generating ? 'Generating...' : 'Generate Secret Embed Link'}
+                        </Button>
+                      </div> :
+                      <div className="mb-8">
+                        <div className="grid grid-cols-8 items-center gap-3">
+                          <div className="col-span-4">
+                            <Input
+                              className="text-xl font-semibold rounded"
+                              value={embed_link}
+                            />
+                          </div>
+                          <Button
+                            className="col-span-3"
+                            variant="slim"
+                            onClick={() => copyEmbedLink()}
+                            disabled={generating}
+                          >
+                            {copyText}
+                          </Button>
+                          <Button
+                            className="col-span-1"
+                            variant="delete"
+                            onClick={() => deleteSecretLink('recent-wins-public')}
+                            disabled={generating}
+                          >
+                            <i className='fas fa-trash-alt text-white' />
+                          </Button>
+
+                        </div>
+                        {/* 
+                        {dailiesAuthLink ? (
+                          <button
+                            onClick={() => deleteSecretLink('dailies')}
+                            className="text-red-500 mt-2 mr-5 font-semibold"
+                            disabled={generating}
+                          >
+                            {generating ? 'Deleting...' : 'Delete Generated Link'}
+                          </button>
+                        ) : null} 
+                      */}
+                      </div>
+                    }</>
+                  :
+                  null
                 }
 
                 <div className="flex items-center mt-6 mb-3">
