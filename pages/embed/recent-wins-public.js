@@ -4,8 +4,8 @@ export default function recentWinsWrapper() {
   return (
     <>
       <RecentWins
-        hideShareWithFamily={false}
-        hideDelete={false} />
+        hideShareWithFamily={true}
+        hideDelete={true} />
     </>
   );
 }
