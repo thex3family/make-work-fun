@@ -5,3 +5,7 @@
 .avatar {
   max-height:432px;
 }
+
+.big-avatar {
+  min-height:432px;
+}

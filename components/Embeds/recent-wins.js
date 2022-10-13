@@ -50,7 +50,7 @@ createTheme('game', {
   }
 });
 
-export default function RecentWins({utility, hideDelete, hideShareWithFamily}) {
+export default function RecentWins({utility, hideAttribution, hideDelete, hideShareWithFamily}) {
   const router = useRouter();
   const [playerStats, setPlayerStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -365,6 +365,14 @@ export default function RecentWins({utility, hideDelete, hideShareWithFamily}) {
             </div>
           </div>
         </div>
+        {!hideAttribution ? <div className='flex justify-center'>
+            <a
+              className='hideLinkBorder rounded py-2 px-4 text-white bg-primary bg-opacity-80'
+              href="https://makework.fun?utm_source=embed"
+              target="_blank">
+              ⚡ Powered By Make Work Fun
+            </a>
+          </div> : null}
       </section>
       {/* // Modal Section */}
       {showWinModal ? (

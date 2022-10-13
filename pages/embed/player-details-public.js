@@ -289,7 +289,7 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
                       >
                         {avatarStatus == 'Missing' ? (
                           <img
-                            className="avatar image h-40 sm:h-72 md:h-auto m-auto cursor-pointer"
+                            className="avatar image h-40 sm:h-72 md:h-auto md:big-avatar m-auto cursor-pointer"
                             src="/img/default_avatar.png"
                             alt="Avatar"
                             onClick={() => {
@@ -298,7 +298,7 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
                           />
                         ) : avatar_url ? (
                           <img
-                            className="avatar image h-40 sm:h-72 md:h-auto m-auto cursor-pointer"
+                            className="avatar image h-40 sm:h-72 md:h-auto md:big-avatar m-auto cursor-pointer"
                             src={avatar_url}
                             alt="Avatar"
                             onClick={() => {
@@ -354,7 +354,16 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
               </div>
             </div>
           </div>
+          <div className='flex justify-center'>
+            <a
+              className='hideLinkBorder rounded py-2 px-4 text-white bg-primary bg-opacity-80'
+              href="https://makework.fun?utm_source=embed"
+              target="_blank">
+              ⚡ Powered By Make Work Fun
+            </a>
+          </div>
         </div>
+
       </section>
 
       {showTitleModal ? (

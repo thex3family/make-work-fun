@@ -289,7 +289,7 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
                       >
                         {avatarStatus == 'Missing' ? (
                           <img
-                            className="avatar image h-40 sm:h-72 md:h-auto m-auto cursor-pointer"
+                            className="avatar image h-40 sm:h-72 md:h-auto md:big-avatar m-auto cursor-pointer"
                             src="/img/default_avatar.png"
                             alt="Avatar"
                             onClick={() => {
@@ -298,7 +298,7 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
                           />
                         ) : avatar_url ? (
                           <img
-                            className="avatar image h-40 sm:h-72 md:h-auto m-auto cursor-pointer"
+                            className="avatar image h-40 sm:h-72 md:h-auto md:big-avatar m-auto cursor-pointer"
                             src={avatar_url}
                             alt="Avatar"
                             onClick={() => {
