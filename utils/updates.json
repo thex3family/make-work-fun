@@ -1,5 +1,13 @@
 [
   {
+  "date": "Oct 12, 2022",
+  "title": "Private vs Public Embeds",
+  "desc": "We know you love sharing your avatar to the world so we've created safe versions (without edit permissions) of your favourite embeds to share on your websites!",
+  "img_url": "0.48.png",
+  "button_url": "/embed?component=player-details",
+  "version": "48"
+  },
+  {
   "date": "Oct 09, 2022",
   "title": "Recent Win Embed",
   "desc": "We've made it easy for you to see your recent wins anywhere and share with the world what you've been up to recently.",
