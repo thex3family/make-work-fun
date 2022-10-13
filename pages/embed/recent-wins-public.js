@@ -5,6 +5,7 @@ export default function recentWinsWrapper() {
     <>
       <RecentWins
         utility={'recent-wins-public'}
+        hideAttribution={false}
         hideShareWithFamily={true}
         hideDelete={true} />
     </>
