@@ -844,7 +844,7 @@ export default function embed({ metaBase, setMeta }) {
                 <iframe
                   id="player-details"
                   className="w-full"
-                  height="650"
+                  height="675"
                   src={embed_link}
                 />
               </div>
