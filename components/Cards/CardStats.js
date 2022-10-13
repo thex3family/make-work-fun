@@ -638,7 +638,7 @@ export default function CardStats({
           >
             <div
               variant="slim"
-              className="cursor-pointer "
+              className=""
             >
               {statGold} 💰
             </div>
