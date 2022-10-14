@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { useRouter } from 'next/router';
 import Avatar from '@/components/Cards/CardAvatar';
+import CardAvatarSkeleton from '@/components/Skeletons/CardAvatarSkeleton';
 
 import {
   fetchPlayerStats,
@@ -17,7 +18,7 @@ export default function playerDetails() {
   const [loading, setLoading] = useState(true);
 
   const [newToSeason, setNewToSeason] = useState(null);
-  
+
   useEffect(() => {
     if (!router.isReady) return;
 
@@ -28,7 +29,7 @@ export default function playerDetails() {
     }
 
   }, [router.isReady]);
-  
+
   const { auth } = router.query;
   const { style } = router.query;
   const { id } = router.query;
@@ -87,7 +88,7 @@ export default function playerDetails() {
     setLoading(false);
   }
 
-  
+
   useEffect(() => {
     if (display == 'demo') {
       setPlayerStats(demoPlayerStats);
@@ -98,7 +99,10 @@ export default function playerDetails() {
   if (!playerStats || loading) {
     return <>
       <div className={`h-screen flex justify-center ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
-        <LoadingDots />
+        <div
+          className="py-5"
+        >
+          <CardAvatarSkeleton displayMode={'short'} /></div>
       </div>
       {
         invalidCredentials ?
@@ -116,9 +120,8 @@ export default function playerDetails() {
   return (
     <>
       <section
-        className={`h-screen responsiveBackground ${
-          style == 'dark' ? 'bg-dark' : 'bg-white'
-        }`}
+        className={`h-screen responsiveBackground ${style == 'dark' ? 'bg-dark' : 'bg-white'
+          }`}
       >
         <div className="mx-5 py-5">
           {player || display == "demo" ? (
