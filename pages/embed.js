@@ -1407,7 +1407,7 @@ export default function embed({ metaBase, setMeta }) {
                 <iframe
                   id="recent-wins"
                   className="w-full resize"
-                  height="600"
+                  height="630"
                   src={embed_link}
                 />
               </div>

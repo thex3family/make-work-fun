@@ -238,7 +238,7 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
 
   if (!playerStats || loading) {
     return <>
-      <div className={`h-screen flex justify-center ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
+      <section className={`h-screen flex justify-center ${style == 'dark' ? 'bg-dark' : 'bg-white'}`}>
         <div className="max-w-6xl px-0 sm:px-4 md:px-10 w-full">
           <div className="relative py-10">
             <div className="px-4 md:px-10 mx-auto w-full">
@@ -246,7 +246,6 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
                 <div className="flex flex-wrap md:flex-nowrap items-center gap-5">
                   <div className="w-full mx-auto mt-2 md:mt-0 mb-6 md:mb-0 xs:w-1/4 sm:w-2/3 lg:w-1/2 h-full text-center relative">
                     <div className="mx-auto w-48 sm:w-full h-48 sm:h-96 bg-gray-600 rounded animate-pulse mb-6" />
-                    <div className="w-60 mx-auto h-10 bg-gray-600 rounded animate-pulse" />
                   </div>
                   <div className="flex-grow w-full sm:w-2/3 sm:ml-10 lg:ml-0 sm:items-right lg:w-1/2 h-full py-0 sm:py-5">
                     <div className="w-full h-56 bg-primary-2 rounded p-4">
@@ -270,7 +269,7 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
             </div>
           </div>
         </div>
-      </div>
+      </section>
       {
         invalidCredentials ?
           <ModalOnboarding onboardingState={'invalid_auth'} />
@@ -385,9 +384,9 @@ export default function playerDetails({ setManualPlayerID, setManualPlayerStats 
               </div>
             </div>
           </div>
-          <div className='flex justify-center'>
+          <div className='flex justify-center pb-10'>
             <a
-              className='hideLinkBorder rounded py-2 px-4 text-white bg-primary bg-opacity-80'
+              className='hideLinkBorder rounded py-2 px-4 text-white bg-primary bg-opacity-80 shadow-md'
               href="https://makework.fun?utm_source=embed"
               target="_blank">
               ⚡ Powered By Make Work Fun

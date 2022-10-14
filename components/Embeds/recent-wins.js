@@ -365,9 +365,9 @@ export default function RecentWins({utility, hideAttribution, hideDelete, hideSh
             </div>
           </div>
         </div>
-        {!hideAttribution ? <div className='flex justify-center'>
+        {!hideAttribution ? <div className='flex justify-center pb-10'>
             <a
-              className='hideLinkBorder rounded py-2 px-4 text-white bg-primary bg-opacity-80'
+              className='hideLinkBorder rounded py-2 px-4 text-white bg-primary bg-opacity-80 shadow-md'
               href="https://makework.fun?utm_source=embed"
               target="_blank">
               ⚡ Powered By Make Work Fun
