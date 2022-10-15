@@ -48,7 +48,7 @@ export default function PlayerCard({ embedTab }) {
         var embed_link_temp = `${t.substr(
           0,
           t.lastIndexOf('/')
-        )}/embed/player-card?display=demo`;
+        )}/embed/player-card?display=demo&hideWinManage=true`;
       }
     }
 
