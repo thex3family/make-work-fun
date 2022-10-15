@@ -141,7 +141,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
       }
       { display ? (display == 'demo' && hideWinManage != 'true') ? <DemoWinManage win={true} lvl={true} /> : null : null}
       <main id="skip">
-        {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') && !router.asPath.includes('demo') ? <>
+        {(user || router.asPath.includes('embed/')) && !router.asPath.includes('auth') && !router.asPath.includes('demo') && !router.asPath.includes('id') ? <>
           <SideBar router={router} mobileDevice={mobileDevice} />
         </> : null}
         {user && userProfile ? <ModalUpdates user={user} userProfile={userProfile} /> : null}

@@ -640,8 +640,8 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
         </div>
       </section>
       <section className="text-gray-600 body-font bg-dark">
-        <div className="container px-5 py-0 sm:py-24 mx-auto flex flex-wrap-reverse">
-          <div className="lg:w-1/3 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
+        <div className="container px-5 py-24 mx-auto flex flex-wrap-reverse">
+          <div className="md:w-1/2 xl:w-1/4 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
             <div
               className={`${embedTab == 0 || embedTab == 1 ? '' : 'hidden'}`}
             >
@@ -654,7 +654,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
               />
             ) : null}
           </div>
-          <div className="flex flex-col flex-wrap w-full lg:py-6 lg:w-2/3 lg:pl-12 lg:text-left text-center">
+          <div className="flex flex-col flex-wrap w-full py-6 md:w-1/2 xl:w-3/4 md:pl-12 md:text-left text-center">
             <div className="flex flex-col mb-10 lg:items-start items-center px-5">
               <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
                 Bring Your Character  <span className='bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 font-bold'>Anywhere.</span>

@@ -1044,8 +1044,7 @@ export default function embed({ metaBase, setMeta }) {
                       </div>
                       <iframe
                         id="player-card"
-                        className={`resize ${friends ? null : 'lg:w-96'}`}
-                        width={'1280'}
+                        className={`resize ${friends ? 'w-full' : 'lg:w-96'}`}
                         scrolling={'yes'}
                         height={`${friends ? '650' : '610'}`}
                         src={embed_link}
