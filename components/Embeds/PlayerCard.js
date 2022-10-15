@@ -131,8 +131,7 @@ export default function PlayerCard({ embedTab }) {
         <div className="mb-1 font-semibold text-accents-2">Preview</div>
         <iframe
           id="player-card"
-          className={`resize ${friends ? null : 'lg:w-96'}`}
-          width={'1280'}
+          className={`resize w-full`}
           scrolling={'yes'}
           height={`${friends ? '650' : '610'}`}
           src={embed_link}
