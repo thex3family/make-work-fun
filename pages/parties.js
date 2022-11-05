@@ -23,6 +23,7 @@ import DataTable, { createTheme } from 'react-data-table-component';
 import RecentWinsSkeleton from '@/components/Skeletons/RecentWinsSkeleton';
 import moment from 'moment';
 import ModalOnboarding from '@/components/Modals/ModalOnboarding';
+import { Tooltip } from '@mantine/core';
 
 createTheme('game', {
   text: {
@@ -432,7 +433,7 @@ export default function parties({ metaBase, setMeta }) {
     }
   };
 
-  if (!playerStats || loading) {
+  if (!playerAllTimeStats || loading) {
     return (
       <>
         <PartiesSkeleton />
@@ -540,18 +541,23 @@ export default function parties({ metaBase, setMeta }) {
 
                         </div>
                         <div className="text-center my-5">
-                          <Button
-                                onClick={() => setCreateParty(true)}
-                                className="px-5 font-bold py-2 rounded"
-                                variant="dailies"
-                                disabled={
-                                  playerAllTimeStats && playerAllTimeStats.current_level < 10
-                                }
+                          <Tooltip
+                            placement="center"
+                            label="Your all-time level must be at least level 10"
+                            withArrow
+                            arrowSize={3}
+                            disabled={ playerAllTimeStats.current_level >= 10 }
+                            >
+                            <Button
+                              onClick={() => setCreateParty(true)}
+                              className="px-5 font-bold py-2 rounded"
+                              variant="dailies"
+                              disabled={ playerAllTimeStats.current_level < 10 }
                               >
-                                <i className="text-yellow-500 fas fa-crown mr-2" />
-                                Create Party
-                          </Button>
-
+                              <i className="text-yellow-500 fas fa-crown mr-2" />
+                              Create Party
+                            </Button>
+                          </Tooltip>
                         </div>
                       </section>
                       : null}
