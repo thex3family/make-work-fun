@@ -11,6 +11,7 @@ import RecruitingBoard from '@/components/Parties/RecruitingBoard';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import {
   fetchAllParties,
+  fetchAllTimeStatsForPlayer,
   fetchPlayerStats
 } from '@/components/Fetch/fetchMaster';
 import { downloadImage } from '@/utils/downloadImage';
@@ -71,6 +72,7 @@ export default function parties({ metaBase, setMeta }) {
   const [showWinModal, setShowWinModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
   const [playerStats, setPlayerStats] = useState(null);
+  const [playerAllTimeStats, setPlayerAllTimeStats] = useState(null);
 
   const [backgroundUrl, setBackgroundUrl] = useState('/');
 
@@ -146,6 +148,7 @@ export default function parties({ metaBase, setMeta }) {
 
   async function refreshStats() {
     setPlayerStats(await fetchPlayerStats(null, setNewToSeason));
+    setPlayerAllTimeStats(await fetchAllTimeStatsForPlayer());
     setLoading(false);
     setAllParties(await fetchAllParties());
   }
@@ -537,27 +540,17 @@ export default function parties({ metaBase, setMeta }) {
 
                         </div>
                         <div className="text-center my-5">
-                          {playerStats?.role?.includes('Party Leader') ?
-                            <Button
-                              onClick={() => setCreateParty(true)}
-                              className="px-5 font-bold py-2 rounded"
-                              variant="dailies"
-                              disabled={
-                                !partyLimit
-                                  ? playerStats
-                                    ? playerStats.role
-                                      ? !playerStats.role.includes('Party Leader')
-                                      : true
-                                    : true
-                                  : true
-                              }
-                            >
-                              <i className="text-yellow-500 fas fa-crown mr-2" />
-                              Create Party
-                            </Button>
-                            :
-                            null
-                          }
+                          <Button
+                                onClick={() => setCreateParty(true)}
+                                className="px-5 font-bold py-2 rounded"
+                                variant="dailies"
+                                disabled={
+                                  playerAllTimeStats && playerAllTimeStats.current_level < 10
+                                }
+                              >
+                                <i className="text-yellow-500 fas fa-crown mr-2" />
+                                Create Party
+                          </Button>
 
                         </div>
                       </section>
