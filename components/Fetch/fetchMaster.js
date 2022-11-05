@@ -180,6 +180,21 @@ export async function fetchPlayerStats(player, setNewToSeason) {
   }
 }
 
+export async function fetchAllTimeStatsForPlayer() {
+  const user = supabase.auth.user();
+  const { data, error } = await supabase
+    .from('leaderboard')
+    .select('*')
+    .eq('player', user.id)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
 export async function fetchWins(user) {
   try {
 
