@@ -546,13 +546,13 @@ export default function parties({ metaBase, setMeta }) {
                             label="Your all-time level must be at least level 10"
                             withArrow
                             arrowSize={3}
-                            disabled={ playerAllTimeStats.current_level >= 10 }
+                            disabled={ playerAllTimeStats && playerAllTimeStats.current_level >= 10 }
                             >
                             <Button
                               onClick={() => setCreateParty(true)}
                               className="px-5 font-bold py-2 rounded"
                               variant="dailies"
-                              disabled={ playerAllTimeStats.current_level < 10 }
+                              disabled={ playerAllTimeStats && playerAllTimeStats.current_level < 10 }
                               >
                               <i className="text-yellow-500 fas fa-crown mr-2" />
                               Create Party
