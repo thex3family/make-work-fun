@@ -100,7 +100,7 @@ const Navbar = () => {
                         <span className="sr-only">Home</span>
                         <img
                           className="h-8 w-auto sm:h-10"
-                          src="../co-x3logo_white_full.svg"
+                          src="../MWF-logo(white).svg"
                         />
                         <span className="text-white ml-3 py-2 font-medium uppercase bg-gradient-to-r from-emerald-500 to-blue-500 rounded px-2">
                           Beta
@@ -223,7 +223,7 @@ const Navbar = () => {
                         <a href="/" className={s.logo}>
                           <img
                             className="h-8 w-auto"
-                            src="co-x3logo_white_full.svg"
+                            src="MWF-logo(white).svg"
                             alt=""
                           />
                         </a>

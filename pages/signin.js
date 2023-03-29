@@ -326,7 +326,7 @@ const SignIn = ({ user, metaBase, setMeta }) => {
               <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
                 <Link href="/" ><i className="fas fa-chevron-circle-left cursor-pointer text-xl w-4" /></Link>
                 <div className="flex justify-center pb-12 ">
-                  <Link href="/" ><img src="logo-white.svg" width="64px" height="64px" className="cursor-pointer" /></Link>
+                  <Link href="/" ><img src="MWF-icon.svg" width="64px" height="64px" className="cursor-pointer" /></Link>
                 </div>
                 <div className="flex flex-col space-y-4">
                   {message.content && (
@@ -505,7 +505,7 @@ const SignIn = ({ user, metaBase, setMeta }) => {
               <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
                 <i className="fas fa-chevron-circle-left cursor-pointer text-xl w-4" onClick={() => setSignType('signin')} />
                 <div className="flex justify-center pb-12 ">
-                  <Link href="/" ><img src="logo-white.svg" width="64px" height="64px" className="cursor-pointer" /></Link>
+                  <Link href="/" ><img src="MWF-icon.svg" width="64px" height="64px" className="cursor-pointer" /></Link>
                 </div>
                 <form
                   onSubmit={handleSignup}

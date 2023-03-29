@@ -1,25 +1,32 @@
-{
-    "name": "Make Work Fun",
-    "short_name": "Make Work Fun",
-    "description": "Make Work Fun, Get Stuff Done",
+  {
     "theme_color": "#2e3537",
     "background_color": "#2e3537",
     "display": "fullscreen",
-    "orientation": "portrait-primary",
     "scope": "/",
     "start_url": "/",
+    "description": "Gamify your productivity tools and unlock multiplayer for personal development.",
+    "short_name": "Make Work Fun",
+    "name": "Make Work Fun",
     "icons": [
-      {
-        "src": "icons/manifest-icon-192.png",
-        "sizes": "192x192",
-        "type": "image/png",
-        "purpose": "maskable any"
-      },
-      {
-        "src": "icons/manifest-icon-512.png",
-        "sizes": "512x512",
-        "type": "image/png",
-        "purpose": "maskable any"
-      }
+        {
+            "src": "icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
     ]
   }
