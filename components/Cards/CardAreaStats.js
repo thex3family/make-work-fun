@@ -127,7 +127,7 @@ export default function CardAreaStats({ areaStats }) {
                 <p className="text-left font-semibold text-xl text-white-700 mb-4">
                   Overall Life Progression{' '}
                   <a
-                    href="https://academy.co-x3.com/en/articles/5476321-attributing-your-wins-to-areas-of-competence/?utm_source=makeworkfun"
+                    href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/attributing-your-wins-to-areas-of-competence/hLuisZUWSgk9WZACBny6ob/?utm_source=makeworkfun"
                     target="_blank"
                     className="absolute ml-1.5 mt-2 text-sm fas fa-question-circle"
                   />

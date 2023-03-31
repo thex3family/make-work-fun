@@ -14,7 +14,7 @@ export default function Invalid() {
             Unfortunately we weren't able to connect to your database. We're here to help! Potential reasons may include...
           </p>
           <ol className="text-lg text-accents-6 text-left sm:text-xl max-w-2xl m-auto p-2 pt-6">
-            <li>1. The integration may not have access to the database. <a className="text-emerald-500 font-semibold" href='https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_57d01e96e0/' target="_blank">Learn more.</a></li>
+            <li>1. The integration may not have access to the database. <a className="text-emerald-500 font-semibold" href='https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/manage-connected-notion-databases-in-the-make-work-fun-app/u6ZWsKRhSeCSYuChKweFt1?utm_source=makeworkfun' target="_blank">Learn more.</a></li>
             <li>2. You may have copied and pasted an <span className="font-semibold">incorrect database url.</span></li>
             <li>3. You may have copied and pasted an <span className="font-semibold">incorrect API key.</span></li>
           </ol>

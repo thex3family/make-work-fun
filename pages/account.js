@@ -787,7 +787,7 @@ export default function Account({
                       </p>
                       {subscriptionStatus ? (
                         <a
-                          href="https://academy.co-x3.com/en/articles/5122951-how-do-i-get-access-to-the-vip-patron-space"
+                          href="https://academy.co-x3.com/our-community-space/pKKz7rGeB4iFWvYKCtUPiy/how-do-i-get-access-to-the-vip-patron-space/8fo7HgLyMwFATUFTeqknDg?utm_source=makeworkfun"
                           target="_blank"
                         >
                           <Button
@@ -1104,7 +1104,7 @@ export default function Account({
                   }
                 >
                   <div className="hidden sm:block text-md text-accents-5 mt-1">
-                    Works best with success plan from{' '}
+                    Works best with the Success Plan database from{' '}
                     <a
                       className="text-emerald-500 font-semibold"
                       href="https://toolbox.co-x3.com/L-CTRL"
@@ -1184,7 +1184,7 @@ export default function Account({
                         {!loading ?
                           <button
                             onClick={() => addCredentials()}
-                            className="text-emerald-500 mx-auto font-semibold"
+                            className="text-emerald-500 mx-auto font-semibold hideLinkBorder"
                           >
                             {notionCredentials.length == 0
                               ? 'Connect Manually'

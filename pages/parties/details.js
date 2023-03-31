@@ -881,7 +881,7 @@ export default function partyDetail({metaBase, setMeta}) {
                                         </p>
                                         <a
                                           className="text-right font-semibold text-emerald-500"
-                                          href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
+                                          href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/what-are-party-quests-in-make-work-fun/acWsZEpEicSEFgJPRfid4d#slay-your-dragon?utm_source=makeworkfun"
                                           target="_blank"
                                         >
                                           Where do I find this?
@@ -1309,7 +1309,7 @@ export default function partyDetail({metaBase, setMeta}) {
                           2. Help them understand{' '}
                           <a
                             className="text-emerald-500"
-                            href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
+                            href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/what-are-party-quests-in-make-work-fun/acWsZEpEicSEFgJPRfid4d#party-mechanics?utm_source=makeworkfun"
                             target="_blank"
                           >
                             what they need to do to start.
