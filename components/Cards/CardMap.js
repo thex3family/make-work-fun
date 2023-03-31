@@ -46,7 +46,7 @@ export default function CardMap({
               : '🔓 Open For Family Members'}
             {availability == 'family' ? (
               <a
-                href="https://academy.co-x3.com/en/articles/5115867-day-1-with-the-family-the-checklist"
+                href="https://academy.co-x3.com/our-community-space/pKKz7rGeB4iFWvYKCtUPiy/day-1-with-the-family---the-checklist/uo36jtaKDxVswBiXPHsYkc?utm_source=makeworkfun"
                 target="_blank"
               >
                 <i className="fas fa-question-circle ml-1.5" />
