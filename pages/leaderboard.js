@@ -212,10 +212,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg">
                     <h1 className="text-2xl font-semibold sm:text-3xl">
-                      Season 7 Statistics
+                      Season 8 Statistics
                     </h1>
                     <p className="text-sm text-accents-4 font-semibold">
-                      <i className='fas fa-calendar mr-2'/>Jan 1 - Mar 31
+                      <i className='fas fa-calendar mr-2'/>Apr 1 - Jun 30
                     </p>
                     <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl">
                       <LeaderboardStatistics
@@ -308,7 +308,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
               href="#link1"
               role="tablist"
             >
-              Season 7
+              Season 8
               <span
                 className={
                   'text-xs text-white py-1.5 px-2 ml-2 top-0 text-center border-2 shadow-lg rounded-full font-bold ' +
