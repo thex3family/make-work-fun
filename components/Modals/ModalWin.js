@@ -2,7 +2,7 @@ import { generateGIF } from '@/components/Widgets/generateGIF';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase-client';
 import Link from 'next/link';
-import { shareWithGuilded } from '@/utils/sendGuildedWebhook';
+import { shareWithCircle } from '@/utils/sendCircleWebhook';
 import useSound from 'use-sound';
 
 export default function WinModal({
@@ -15,6 +15,7 @@ export default function WinModal({
   hideShareWithFamily,
   hideDelete
 }) {
+  const user = supabase.auth.user();
   const [activeGIF, setActiveGIF] = useState(null);
   const [sharedWithFamily, setSharedWithFamily] = useState(false);
   const [deleteOption, setDeleteOption] = useState(null);
@@ -69,20 +70,20 @@ export default function WinModal({
     setBoxClass('');
   }
 
-  async function deleteWin(){
-    if (display != 'demo'){
+  async function deleteWin() {
+    if (display != 'demo') {
       try {
         const { data, error } = await supabase
           .from('success_plan')
           .delete()
-          .match({'id': activeModalStats.id});
-  
+          .match({ 'id': activeModalStats.id });
+
         if (error && status !== 406) {
           throw error;
         }
       } catch (error) {
         // alert(error.message);
-      console.log(error.message);
+        console.log(error.message);
       } finally {
         // refresh the win table if in the player page, and the dailies page too... basically refresh anything that is loading leaderboard?
         refreshStats();
@@ -153,35 +154,44 @@ export default function WinModal({
                 {page !== 'validator' ? (
                   sharedWithFamily ? (
                     <div className="inline-block mx-auto">
-                    <a
-                      href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/43bb8933-cd8a-4ec2-90c8-607338b60c38/chat"
-                      target="_blank"
-                    >
                       <button
                         className="bg-gradient-to-r from-emerald-500 to-blue-500 border-2 bg-clip-text text-transparent active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
+                        disabled={true}
                       >
-                        Shared! View In Guilded
+                        {sharedWithFamily}
+                        {sharedWithFamily == "Post created." ?
+                          <a
+                            href="https://our.x3.family/c/share-wins?utm_source=makeworkfun"
+                            target="_blank"
+                            className="ml-1.5 fas fa-question-circle"
+                          /> : ""}
+                        {sharedWithFamily == "User not found" ?
+                          <a
+                            href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/what-are-party-quests-in-make-work-fun/acWsZEpEicSEFgJPRfid4d?utm_source=makeworkfun"
+                            target="_blank"
+                            className="ml-1.5 fas fa-question-circle"
+                          /> : ""}
                       </button>
-                    </a>
                     </div>
                   ) : display !== 'demo' && !hideShareWithFamily ? (
                     <div className="inline-block mx-auto">
-                    <button
-                      className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                      onClick={() =>
-                        shareWithGuilded(
-                          playerStats,
-                          activeModalStats,
-                          activeGIF,
-                          setSharedWithFamily
-                        )
-                      }
-                    >
-                      Share With Family
-                    </button>
-                    
+                      <button
+                        className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                        onClick={() =>
+                          shareWithCircle(
+                            playerStats,
+                            activeModalStats,
+                            activeGIF,
+                            setSharedWithFamily,
+                            user.email,
+                          )
+                        }
+                      >
+                        Share With Family
+                      </button>
+
                     </div>
                   ) : null
                 ) : null}
@@ -235,7 +245,7 @@ export default function WinModal({
                     No
                   </button>
                 </span>
-              : null}
+                : null}
 
             </div>
             {page !== 'player' && display !== 'demo' ? (
