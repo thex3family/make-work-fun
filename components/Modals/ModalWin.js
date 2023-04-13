@@ -164,13 +164,13 @@ export default function WinModal({
                           <a
                             href="https://our.x3.family/c/share-wins?utm_source=makeworkfun"
                             target="_blank"
-                            className="ml-1.5 fas fa-question-circle"
+                            className="ml-1.5 fas fa-question-circle hideLinkBorder"
                           /> : ""}
-                        {sharedWithFamily == "User not found" ?
+                        {sharedWithFamily == "User not found" || "Sending..." ?
                           <a
-                            href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/what-are-party-quests-in-make-work-fun/acWsZEpEicSEFgJPRfid4d?utm_source=makeworkfun"
+                            href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/show-do-i-share-wins-to-the-community-space/nBwsYXTJNeVKpZPaKoAF2k?utm_source=makeworkfun"
                             target="_blank"
-                            className="ml-1.5 fas fa-question-circle"
+                            className="ml-1.5 fas fa-question-circle hideLinkBorder"
                           /> : ""}
                       </button>
                     </div>
