@@ -166,7 +166,13 @@ export default function WinModal({
                             target="_blank"
                             className="ml-1.5 fas fa-question-circle hideLinkBorder"
                           /> : ""}
-                        {sharedWithFamily == "User not found" || "Sending..." ?
+                        {sharedWithFamily == "User not found" ?
+                          <a
+                            href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/show-do-i-share-wins-to-the-community-space/nBwsYXTJNeVKpZPaKoAF2k?utm_source=makeworkfun"
+                            target="_blank"
+                            className="ml-1.5 fas fa-question-circle hideLinkBorder"
+                          /> : ""}
+                        {sharedWithFamily == "Sending..." ?
                           <a
                             href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/show-do-i-share-wins-to-the-community-space/nBwsYXTJNeVKpZPaKoAF2k?utm_source=makeworkfun"
                             target="_blank"
