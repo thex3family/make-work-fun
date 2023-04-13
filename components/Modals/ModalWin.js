@@ -154,10 +154,9 @@ export default function WinModal({
                 {page !== 'validator' ? (
                   sharedWithFamily ? (
                     <div className="inline-block mx-auto">
-                      <button
+                      <a
                         className="bg-gradient-to-r from-emerald-500 to-blue-500 border-2 bg-clip-text text-transparent active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
-                        disabled={true}
                       >
                         {sharedWithFamily}
                         {sharedWithFamily == "Post created." ?
@@ -178,7 +177,7 @@ export default function WinModal({
                             target="_blank"
                             className="ml-1.5 fas fa-question-circle hideLinkBorder"
                           /> : ""}
-                      </button>
+                      </a>
                     </div>
                   ) : display !== 'demo' && !hideShareWithFamily ? (
                     <div className="inline-block mx-auto">
