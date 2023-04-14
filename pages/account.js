@@ -361,8 +361,17 @@ export default function Account({
                   </a>
                 </div>
               }
-            >
+            > <div className="hidden sm:block text-md text-accents-5 mt-1">
+                <a
+                  className="text-emerald-500 font-semibold hideLinkBorder"
+                  href="https://toolbox.co-x3.com?utm_source=makeworkfun"
+                  target="_blank"
+                >
+                  Learn More
+                </a>
+              </div>
               <div className="mt-8 mb-4 font-semibold">
+
                 {!userLoaded ? (
                   <div className="h-12 mb-6">
                     <LoadingDots />
@@ -1104,29 +1113,21 @@ export default function Account({
                   }
                 >
                   <div className="hidden sm:block text-md text-accents-5 mt-1">
-                    Works best with the Success Plan database from{' '}
                     <a
-                      className="text-emerald-500 font-semibold"
-                      href="https://toolbox.co-x3.com/L-CTRL"
+                      className="text-emerald-500 font-semibold hideLinkBorder"
+                      href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/how-do-i-easily-connect-any-notion-database-to-the-make-work-fun-app/rNSULyAdfLaRE55EMVpvwf"
                       target="_blank"
                     >
-                      L-CTRL
-                    </a>{' '}
-                    or{' '}
-                    <a
-                      className="text-emerald-500 font-semibold"
-                      href="https://toolbox.co-x3.com/gamify-life"
-                      target="_blank"
-                    >
-                      Gamify Your Life!
+                      Learn More
                     </a>
                   </div>
                   {newNotionDatabases ?
                     <>
                       <div className="my-3">
                         <div>
-                          <a href={notionOAuthURL}><Button variant="incognito">Reconnect Notion
-                          </Button></a>
+                          <a href={notionOAuthURL}>
+                            <Button variant="incognito">Reconnect Notion</Button>
+                          </a>
                         </div>
                         {/* <div className='hidden sm:inline'>
                           <Button variant="incognito" onClick={() => window.open({notionOAuthURL},
