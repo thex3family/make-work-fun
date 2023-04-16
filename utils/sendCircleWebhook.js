@@ -2,7 +2,7 @@ export async function shareWithCircle(playerStats, activeModalStats, activeGIF, 
   setSharedWithFamily('Sending...')
   let textNextRank = '';
   let userResponse = '';
-  if (playerStats.next_rank) {
+  if (playerStats?.next_rank) {
     textNextRank = `(${playerStats.next_rank} EXP to next rank)`;
   }
 

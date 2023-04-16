@@ -45,6 +45,8 @@ export default function UserWinManage({ user, setRefreshChildStats, win, lvl }) 
         if (payload) {
             // checking if the win is assigned to the defined user
             if (payload.new.player === user.id) {
+                refreshStats()
+
                 // if true, show the winModal
                 console.log('Win assigned to current user');
 
