@@ -179,7 +179,7 @@ export default function WinModal({
                           /> : ""}
                       </a>
                     </div>
-                  ) : display !== 'demo' && !hideShareWithFamily ? (
+                  ) : display !== 'demo' && !hideShareWithFamily && playerStats ? (
                     <div className="inline-block mx-auto">
                       <button
                         className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -257,8 +257,9 @@ export default function WinModal({
               <div className="flex items-center p-3 border-t border-solid border-blueGray-200 rounded-b bg-primary-3">
                 <Link href="/player">
                   <button
-                    className="text-emerald-500 background-transparent mx-auto font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none ease-linear transition-all duration-150"
+                    className="text-emerald-500 background-transparent mx-auto font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none ease-linear transition-all duration-150 hideLinkBorder"
                     type="button"
+                    onClick={() => closeModal()}
                   >
                     View Character Stats
                   </button>
