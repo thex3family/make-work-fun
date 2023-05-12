@@ -18,6 +18,11 @@ const play_menu = [
   { name: 'Embed 🔗', href: '/embed' },
 ];
 
+const mobile_play_menu = [
+  { name: 'Account 📋', href: '/account' },
+  { name: 'Embed 🔗', href: '/embed' },
+];
+
 import Link from 'next/link';
 import s from './Navbar.module.css';
 
@@ -233,7 +238,7 @@ const Navbar = () => {
                         </a>
                       </div>
                       <div className="-mr-2">
-                        <Popover.Button className="bg-transparent rounded-md p-2 inline-flex items-center justify-center text-primary hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500">
+                        <Popover.Button className="bg-transparent rounded-md p-2 inline-flex items-center justify-center text-primary hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500 hideLinkBorder">
                           <span className="sr-only">Close main menu</span>
                           <XIcon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
@@ -241,7 +246,7 @@ const Navbar = () => {
                     </div>
                     <div className="px-2 pt-2 pb-3 space-y-1">
                       <Popover.Button className="w-full">
-                        {user ? <div className='bg-dark rounded-md py-1 bg-opacity-30'>{play_menu.map((item) => (
+                        {user ? <div className='bg-dark rounded-md py-1 bg-opacity-50'>{mobile_play_menu.map((item) => (
                           <Link href={item.href}>
                             <a
                               key={item.name}
