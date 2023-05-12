@@ -99,8 +99,12 @@ const Navbar = () => {
                       <a href="/" className={s.logo}>
                         <span className="sr-only">Home</span>
                         <img
-                          className="h-8 w-auto sm:h-10"
+                          className="w-auto h-10 md:block hidden"
                           src="../MWF-logo(white).svg"
+                        />
+                         <img
+                          className="w-auto h-10 md:hidden"
+                          src="../MWF-icon.svg"
                         />
                         <span className="text-white ml-3 py-2 font-medium uppercase bg-gradient-to-r from-emerald-500 to-blue-500 rounded px-2">
                           Beta
@@ -108,7 +112,7 @@ const Navbar = () => {
                       </a>
                       <div className="-mr-2 flex items-center lg:hidden">
                         <a className="mr-1.5 text-lg fas fa-question-circle launch_intercom" />
-                        <Popover.Button className="bg-primary-2 rounded-md p-2 inline-flex items-center justify-center text-white hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500">
+                        <Popover.Button className="bg-primary-2 rounded-md p-2 inline-flex items-center justify-center text-white hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500 hideLinkBorder">
                           <span className="sr-only">Open main menu</span>
                           <MenuIcon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
@@ -278,7 +282,7 @@ const Navbar = () => {
                       ) : (
                         <Link href="/signin">
                           <a className="block w-full px-5 py-3 text-center font-medium text-primary bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9">
-                            Play Now
+                            Play Now 🚀
                           </a>
                         </Link>
                       )}
