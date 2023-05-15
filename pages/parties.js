@@ -540,6 +540,8 @@ export default function parties({ metaBase, setMeta }) {
                            ))}
 
                         </div>
+                        </section>
+                      : "You do not have any active parties."}
                         <div className="text-center my-5">
                           <Tooltip
                             placement="center"
