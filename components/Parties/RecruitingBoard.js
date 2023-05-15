@@ -90,17 +90,6 @@ export default function RecruitingBoard({
       return parties.map((party, i) => (
         <CardPartyRecruit key={i} party={party} partyLimit={partyLimit} />
       ));
-    } else {
-      return (
-        <>
-          <p className="mx-auto text-center pb-2">
-            Looks like everyone is already on an adventure. Request a party or join a party in progress!
-
-          </p>
-
-
-        </>
-      );
     }
   };
 
@@ -192,7 +181,7 @@ export default function RecruitingBoard({
                   ) : null}
                 </div>
               </>
-            ))}<a href="https://www.guilded.gg/thex3family/groups/Gza4RWEd/channels/8dd9fd6d-cd47-47e0-8a2c-3e7d87034d69/chat" target="_blank">
+            ))}<a href="https://our.x3.family/c/make-work-fun" target="_blank">
 
               <Button
                 className="px-5 font-bold py-2 rounded mb-6"
