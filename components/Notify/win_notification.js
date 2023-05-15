@@ -57,7 +57,7 @@ export default async function notifyMe(type, details) {
   }
 
     
-  let img = '/img/co-x3logo_white.png';
+  let img = '/img/MWF-icon.png';
 
   if (type == 'win') {
     let title = "🎉 You've completed a " + details.type.toLowerCase() + '!';

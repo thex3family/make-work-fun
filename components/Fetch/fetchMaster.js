@@ -207,7 +207,6 @@ export async function fetchWins(user) {
       .order('closing_date', { ascending: false })
       .order('entered_on', { ascending: false });
     if (data) {
-      console.log(data);
       return data;
     }
 

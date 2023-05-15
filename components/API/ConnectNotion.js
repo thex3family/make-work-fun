@@ -284,8 +284,8 @@ export default function ConnectNotion({
             <div className="mt-2 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
               <p className="font-semibold w-full sm:w-auto">Database ID</p>
               <a
-                className="text-right font-semibold text-emerald-500"
-                href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_b577a8d246"
+                className="text-right font-semibold text-emerald-500 hideLinkBorder"
+                href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/how-do-i-manually-connect-my-notion-databases-to-the-make-work-fun-app/qs4LtpXeUXgEnEQ88kJuDi#step-4-get-your-database-id?utm_source=makeworkfun"
                 target="_blank"
               >
                 Where do I find this?
@@ -302,8 +302,8 @@ export default function ConnectNotion({
             <div className="mt-3 flex flex-row justify-between mb-2 flex-wrap sm:flex-nowrap">
               <p className="font-semibold w-full sm:w-auto">Notion API Secret</p>
               <a
-                className="text-right font-semibold text-emerald-500"
-                href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection#h_a887bad862"
+                className="text-right font-semibold text-emerald-500 hideLinkBorder"
+                href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/how-do-i-manually-connect-my-notion-databases-to-the-make-work-fun-app/qs4LtpXeUXgEnEQ88kJuDi#step-2-get-your-notion-api-secret?utm_source=makeworkfun"
                 target="_blank"
               >
                 Where do I find this?
@@ -357,8 +357,8 @@ export default function ConnectNotion({
           <div className="mt-4 mb-2">
             <p className="w-full sm:w-auto">
               If you have multiple users sharing this database in Notion, you can specify which wins to sync to your Make Work Fun account by specifying your Notion User ID below. <a
-                className="text-right font-semibold text-emerald-500"
-                href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
+                className="text-right font-semibold text-emerald-500 hideLinkBorder"
+                href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/what-if-my-database-is-currently-being-shared-with-multiple-people/dkZxaJLKU5JtKfuGkPvWwY?utm_source=makeworkfun"
                 target="_blank"
               >
                 Learn more.
