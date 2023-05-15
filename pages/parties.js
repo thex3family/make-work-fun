@@ -536,7 +536,9 @@ export default function parties({ metaBase, setMeta }) {
                            ))}
 
                         </div>
-                        <div className="text-center my-5">
+                      </section>
+                      : "You do not have any active parties."}
+                      <div className="text-center my-5">
                           {playerStats?.role?.includes('Party Leader') ?
                             <Button
                               onClick={() => setCreateParty(true)}
@@ -560,8 +562,6 @@ export default function parties({ metaBase, setMeta }) {
                           }
 
                         </div>
-                      </section>
-                      : null}
                     <section>
                       <div className="flex items-center mt-4">
                         <div
