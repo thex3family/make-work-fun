@@ -1,6 +1,13 @@
-[
+[{
+  "date": "May 15, 2023",
+  "title": "Parties For All",
+  "desc": "Starting today, everyone can lead a party as long as their all-time level has reached at least 10. We're so excited to see what you'll start next!",
+  "img_url": "0.51.png",
+  "button_url": "/parties",
+  "version": "51"
+  },
   {
-  "date": "Apr 13, 2022",
+  "date": "Apr 13, 2023",
   "title": "Send Wins To Circle!",
   "desc": "We’ve made it easy for you to share your wins to our brand new community space, right from your app.",
   "img_url": "0.50.png",
@@ -8,7 +15,7 @@
   "version": "50"
   },
   {
-  "date": "Apr 1, 2022",
+  "date": "Apr 1, 2023",
   "title": "New Season, New Me",
   "desc": "We've updated our look and revamped our academy resources to help you be the best version of you. Check out our roadmap this season on Github!",
   "img_url": "0.49.png",
