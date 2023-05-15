@@ -558,7 +558,7 @@ export default function embed({ metaBase, setMeta }) {
               <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto mb-2">
                 to interact with your avatar in your Notion pages and website!
               </p>
-              <a href="https://academy.co-x3.com/en/articles/5882142-how-can-i-embed-the-make-work-fun-app-into-notion-or-my-websites" target="_blank" className="text-lg text-emerald-600 font-semibold hideLinkBorder">
+              <a href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/how-can-i-embed-the-make-work-fun-app-into-notion-or-my-websites/7Eevv2if7rYGEjQMJWDiyW?utm_source=makeworkfun" target="_blank" className="text-lg text-emerald-600 font-semibold hideLinkBorder">
                 Learn More
               </a>
             </div>

@@ -145,7 +145,7 @@ export default function ConnectPOST({ APIKeys, getAPIKeys
                             <p className="font-semibold w-full sm:w-auto">Webhook Sample (cURL)</p>
                             <a
                                 className="text-right font-semibold text-emerald-500"
-                                href="https://academy.co-x3.com/en/articles/5851787-send-wins-via-api-to-the-app"
+                                href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/how-to-send-wins-via-api-to-the-app/mu8eUYzsMX69WwgZnL1zU9?utm_source=makeworkfun"
                                 target="_blank"
                             >
                                 View Documentation

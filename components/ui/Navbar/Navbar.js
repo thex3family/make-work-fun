@@ -18,6 +18,11 @@ const play_menu = [
   { name: 'Embed 🔗', href: '/embed' },
 ];
 
+const mobile_play_menu = [
+  { name: 'Account 📋', href: '/account' },
+  { name: 'Embed 🔗', href: '/embed' },
+];
+
 import Link from 'next/link';
 import s from './Navbar.module.css';
 
@@ -99,8 +104,12 @@ const Navbar = () => {
                       <a href="/" className={s.logo}>
                         <span className="sr-only">Home</span>
                         <img
-                          className="h-8 w-auto sm:h-10"
-                          src="../co-x3logo_white_full.svg"
+                          className="w-auto h-10 md:block hidden"
+                          src="../MWF-logo(white).svg"
+                        />
+                         <img
+                          className="w-auto h-10 md:hidden"
+                          src="../MWF-icon.svg"
                         />
                         <span className="text-white ml-3 py-2 font-medium uppercase bg-gradient-to-r from-emerald-500 to-blue-500 rounded px-2">
                           Beta
@@ -108,7 +117,7 @@ const Navbar = () => {
                       </a>
                       <div className="-mr-2 flex items-center lg:hidden">
                         <a className="mr-1.5 text-lg fas fa-question-circle launch_intercom" />
-                        <Popover.Button className="bg-primary-2 rounded-md p-2 inline-flex items-center justify-center text-white hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500">
+                        <Popover.Button className="bg-primary-2 rounded-md p-2 inline-flex items-center justify-center text-white hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500 hideLinkBorder">
                           <span className="sr-only">Open main menu</span>
                           <MenuIcon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
@@ -223,13 +232,13 @@ const Navbar = () => {
                         <a href="/" className={s.logo}>
                           <img
                             className="h-8 w-auto"
-                            src="co-x3logo_white_full.svg"
+                            src="MWF-logo(white).svg"
                             alt=""
                           />
                         </a>
                       </div>
                       <div className="-mr-2">
-                        <Popover.Button className="bg-transparent rounded-md p-2 inline-flex items-center justify-center text-primary hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500">
+                        <Popover.Button className="bg-transparent rounded-md p-2 inline-flex items-center justify-center text-primary hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500 hideLinkBorder">
                           <span className="sr-only">Close main menu</span>
                           <XIcon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
@@ -237,7 +246,7 @@ const Navbar = () => {
                     </div>
                     <div className="px-2 pt-2 pb-3 space-y-1">
                       <Popover.Button className="w-full">
-                        {user ? <div className='bg-dark rounded-md py-1 bg-opacity-30'>{play_menu.map((item) => (
+                        {user ? <div className='bg-dark rounded-md py-1 bg-opacity-50'>{mobile_play_menu.map((item) => (
                           <Link href={item.href}>
                             <a
                               key={item.name}
@@ -278,7 +287,7 @@ const Navbar = () => {
                       ) : (
                         <Link href="/signin">
                           <a className="block w-full px-5 py-3 text-center font-medium text-primary bg-gradient-to-r from-emerald-500 to-blue-500 hover:text-accents-9">
-                            Play Now
+                            Play Now 🚀
                           </a>
                         </Link>
                       )}

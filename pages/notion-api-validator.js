@@ -1140,7 +1140,7 @@ export default function NotionWizard({ response, nickname }) {
                             <br />
                             <a
                               className="text-emerald-500"
-                              href="https://academy.co-x3.com/en/articles/5547184-what-are-party-quests#h_2fb532658e"
+                              href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/what-are-party-quests-in-make-work-fun/acWsZEpEicSEFgJPRfid4d?utm_source=makeworkfun"
                               target="_blank"
                             >
                               - Party Quest: Slay Your Dragon
@@ -1221,7 +1221,7 @@ export default function NotionWizard({ response, nickname }) {
                           database.{' '}
                           <a
                             className="text-emerald-500"
-                            href="https://academy.co-x3.com/en/articles/5486715-what-if-my-database-is-currently-being-shared-with-multiple-people"
+                            href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/what-if-my-database-is-currently-being-shared-with-multiple-people/dkZxaJLKU5JtKfuGkPvWwY?utm_source=makeworkfun"
                             target="_blank"
                           >
                             Learn more about how to utilize this property.
@@ -1241,7 +1241,7 @@ export default function NotionWizard({ response, nickname }) {
               {/*footer*/}
               <div className="flex items-center py-4 justify-end border-t border-solid border-blueGray-200 rounded-b">
                 <a
-                  href="https://academy.co-x3.com/en/articles/5263453-get-started-with-the-co-x3-family-connection?utm_source=family-connection"
+                  href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/how-do-i-easily-connect-any-notion-database-to-the-make-work-fun-app/rNSULyAdfLaRE55EMVpvwf#required-properties?utm_source=makeworkfun"
                   target="_blank"
                   className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 >

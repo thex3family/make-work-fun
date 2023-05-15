@@ -133,7 +133,7 @@ export default function ModalParty({ setCreateParty, party }) {
                     <div className="mb-2 font-semibold">
                       Party Challenge
                       <a
-                        href="https://academy.co-x3.com/en/articles/5547184-what-is-the-party-quests-feature"
+                        href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/what-are-party-quests-in-make-work-fun/acWsZEpEicSEFgJPRfid4d?utm_source=makeworkfun"
                         target="_blank"
                         className="absolute ml-1.5 mt-1.5 text-sm fas fa-question-circle"
                       />

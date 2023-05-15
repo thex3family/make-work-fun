@@ -17,7 +17,7 @@ export default function Footer() {
           </a>
           <p className="mt-4 text-sm text-primary align-middle">Created with ♥ by the <a href="https://co-x3.com/?utm_source=makeworkfun" target="_blank" className="">Co-x3 Family</a></p>
           <p className="mt-1 text-sm text-primary align-middle">© All Rights Reserved</p>
-          <p className="mt-4 text-sm text-emerald-500 align-middle font-semibold"><Link href="/docs/privacy-policy">Privacy Policy</Link> | <Link href="/docs/terms-of-use">Terms Of Use</Link></p>
+          <p className="mt-4 text-sm text-emerald-500 align-middle font-semibold"><a className="hideLinkBorder" target="_blank" href="/docs/privacy-policy">Privacy Policy</a> | <a className="hideLinkBorder" target="_blank"  href="/docs/terms-of-use">Terms Of Use</a> | <a className="hideLinkBorder" target="_blank" href="https://github.com/orgs/thex3family/projects/2/views/1">Roadmap</a></p>
         </div>
       </div>
     </footer>
