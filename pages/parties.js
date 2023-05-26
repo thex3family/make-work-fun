@@ -60,7 +60,7 @@ createTheme('game', {
   }
 });
 
-export default function parties({ metaBase, setMeta }) {
+export default function parties({ metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [activeParties, setActiveParties] = useState(null);
   const [recruitingParties, setRecruitingParties] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -153,6 +153,13 @@ export default function parties({ metaBase, setMeta }) {
     setLoading(false);
     setAllParties(await fetchAllParties());
   }
+
+  useEffect(() => {
+    if (refreshChildStats) {
+      refreshStats();
+      setRefreshChildStats(false);
+    }
+  }, [refreshChildStats]);
 
   useEffect(() => {
     if (playerStats) loadBackgroundURL();
@@ -329,10 +336,10 @@ export default function parties({ metaBase, setMeta }) {
     >
       {
         row.status >= 3 ?
-        "A"
-        : "-"
+          "A"
+          : "-"
       }
-      
+
     </div>
   );
   const DateCustom = (row) => (
@@ -433,18 +440,17 @@ export default function parties({ metaBase, setMeta }) {
     }
   };
 
-  if (!playerAllTimeStats || loading) {
+  if (!playerStats) {
     return (
       <>
         <PartiesSkeleton />
-
         {
           newToSeason ?
             <ModalOnboarding onboardingState={5} />
             : null
         }
       </>
-    );
+    )
   }
 
   return (
@@ -537,30 +543,30 @@ export default function parties({ metaBase, setMeta }) {
 
                           {activeParties?.map((party) => (
                             <CardParty key={party.id} party={party} />
-                           ))}
+                          ))}
 
                         </div>
-                        </section>
+                      </section>
                       : "You do not have any active parties."}
-                        <div className="text-center my-5">
-                          <Tooltip
-                            placement="center"
-                            label="Your all-time level must be at least level 10"
-                            withArrow
-                            arrowSize={3}
-                            disabled={ playerAllTimeStats && playerAllTimeStats.current_level >= 10 }
-                            >
-                            <Button
-                              onClick={() => setCreateParty(true)}
-                              className="px-5 font-bold py-2 rounded"
-                              variant="dailies"
-                              disabled={ playerAllTimeStats && playerAllTimeStats.current_level < 10 }
-                              >
-                              <i className="text-yellow-500 fas fa-crown mr-2" />
-                              Create Party
-                            </Button>
-                          </Tooltip>
-                        </div>
+                    <div className="text-center my-5">
+                      <Tooltip
+                        placement="center"
+                        label="Your all-time level must be at least level 10"
+                        withArrow
+                        arrowSize={3}
+                        disabled={playerAllTimeStats && playerAllTimeStats.current_level >= 10}
+                      >
+                        <Button
+                          onClick={() => setCreateParty(true)}
+                          className="px-5 font-bold py-2 rounded"
+                          variant="dailies"
+                          disabled={playerAllTimeStats && playerAllTimeStats.current_level < 10}
+                        >
+                          <i className="text-yellow-500 fas fa-crown mr-2" />
+                          Create Party
+                        </Button>
+                      </Tooltip>
+                    </div>
                     <section>
                       <div className="flex items-center mt-4">
                         <div

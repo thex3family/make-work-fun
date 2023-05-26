@@ -81,7 +81,6 @@ export default function Player({ metaBase, setMeta, refreshChildStats, setRefres
   const [playerStats, setPlayerStats] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
   const [background_url, setBackgroundUrl] = useState('/');
-  const [levelUp, setLevelUp] = useState(false);
   const [showWinModal, setShowWinModal] = useState(false);
   const [showTitleModal, setShowTitleModal] = useState(false);
   const [activeModalStats, setActiveModalStats] = useState(null);
