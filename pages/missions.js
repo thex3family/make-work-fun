@@ -208,7 +208,7 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
                         Mission Board
                       </div>
                       <button
-                        className="p-1 ml-auto bg-transparent border-0 float-right text-xl my-auto leading-none font-semibold outline-none focus:outline-none"
+                        className="p-1 ml-auto bg-transparent border-0 float-right text-xl my-auto leading-none font-semibold outline-none focus:outline-none hideLinkBorder"
                         onClick={() => loadAndRefresh()}
                         disabled={loading}
                         loading={loading}
@@ -279,7 +279,7 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
                       <div className="grid grid-cols-3 gap-2 p-2 bg-white text-white shadow-lg rounded border">
                         {tasks ?
                           tasks.results.map((task) => (
-                            <a href={changeUrl(task.url)} target="_blank" className='p-4 border rounded bg-black bg-opacity-80 text-center hover:bg-gray-100 hover:text-black cursor-pointer hideLinkBorder'>
+                            <a href={changeUrl(task.url)} target="_blank" className='p-4 rounded bg-black bg-opacity-80 text-center hover:bg-white hover:text-black hover:scale-105 transition duration-500 ease-out transform cursor-pointer hideLinkBorder'>
                               <p className="font-semibold truncate mb-1">{task.properties.Name.title[0].plain_text}</p>
                               <p className="font-normal">{task.properties["Upstream (Sum)"].formula.string}</p>
                               {/* <p className="font-normal">{task.properties.Status?.select?.name}</p> */}
@@ -322,7 +322,7 @@ export async function getServerSideProps({ req }) {
     if (!user) {
       return {
         redirect: {
-          destination: '/signin?redirect=player',
+          destination: '/signin?redirect=missions',
           permanent: false
         }
       };
