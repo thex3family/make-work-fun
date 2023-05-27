@@ -45,6 +45,7 @@
     "next-pwa": "^5.4.6",
     "random-word-slugs": "^0.0.5",
     "react": "^17.0.2",
+    "react-animated-3d-card": "^1.0.2",
     "react-canvas-confetti": "^1.2.1",
     "react-code-blocks": "^0.0.9-0",
     "react-countup": "^5.2.0",
