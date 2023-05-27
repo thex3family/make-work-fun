@@ -143,26 +143,26 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
   function changeUrl(url) {
     let oldUrl = new URL(url);
     let newUrl = new URL(url);
-    
-    newUrl.hostname = 'thex3family.notion.site'; 
+
+    newUrl.hostname = 'thex3family.notion.site';
     newUrl.pathname = newUrl.pathname.replace('/thex3family', '');
 
     return newUrl.toString();
-}
+  }
 
 
-if (!playerStats) {
-  return (
-    <>
-      <PlayerSkeleton />
-      {
-        newToSeason ?
-          <ModalOnboarding onboardingState={5} />
-          : null
-      }
-    </>
-  )
-}
+  if (!playerStats) {
+    return (
+      <>
+        <PlayerSkeleton />
+        {
+          newToSeason ?
+            <ModalOnboarding onboardingState={5} />
+            : null
+        }
+      </>
+    )
+  }
 
   return (
     <>
