@@ -471,7 +471,7 @@ const SignIn = ({ user, metaBase, setMeta }) => {
                   <span className="pt-1 text-center text-sm">
                     <span className="text-accents-7">Don't have an account?</span>
                     {` `}
-                    <a className="text-accent-9 font-bold hover:underline cursor-pointer" onClick={() => setSignType('signup')}>
+                    <a className="text-accent-9 font-bold hover:underline cursor-pointer hideLinkBorder" onClick={() => setSignType('signup')}>
                       Sign up.
                     </a>
                   </span>
@@ -546,7 +546,7 @@ const SignIn = ({ user, metaBase, setMeta }) => {
                   <span className="pt-1 text-center text-sm">
                     <span className="text-accents-7">Do you have an account?</span>
                     {` `}
-                    <a className="text-accent-9 font-bold hover:underline cursor-pointer" onClick={() => setSignType('signin')}>
+                    <a className="text-accent-9 font-bold hover:underline cursor-pointer hideLinkBorder" onClick={() => setSignType('signin')}>
                       Sign in.
                     </a>
                   </span>

@@ -1,10 +1,12 @@
 import { Client } from '@notionhq/client';
 import { supabase } from '@/utils/supabase-client';
+import Button from '@/components/ui/Button/Button';
+import Link from 'next/link';
 
 export default function TaskList({ impact_tasks }) {
 
   return (
-    <div className='p-6'>
+    <div className='py-6 px-10'>
       <h2 className='text-xl font-semibold mb-3'>Impact Tasks</h2>
       <div className='flex flex-col gap-3'>
         {impact_tasks ?
@@ -22,25 +24,31 @@ export default function TaskList({ impact_tasks }) {
                   : '/challenge/bonus.png'
                   })`
               }}>
-              <div className={`bg-dark bg-opacity-70 p-4 flex flex-row justify-between align-middle items-center ${task.properties.Status?.select?.name == "In Progress" ? 'ring-yellow-400 ring-2 rounded' : ''} `}>
-                <div className='w-3/5'>
+              <div className={`bg-dark bg-opacity-70 p-4 flex flex-col sm:flex-row justify-between align-middle items-center ${task.properties.Status?.select?.name == "In Progress" ? 'ring-yellow-400 ring-2 rounded' : ''} `}>
+                <div className='w-full sm:w-3/5 text-center sm:text-left'>
                   <p className="font-semibold truncate mb-1">{task.properties.Name.title[0].plain_text}</p>
                   <p className="font-normal">{task.properties["Upstream (Sum)"].formula.string}</p>
                   <p className="font-normal">{task.properties.Details.formula.string}</p>
                   {/* <p className="font-normal">{task.properties.Priority?.select?.name}</p> */}
                 </div>
-                <div className='w-0.5 bg-white opacity-60 h-20 rounded'></div>
+                <div className='w-3/4 sm:w-0.5 m-4 bg-white opacity-60 h-0.5 sm:h-20 rounded'></div>
                 <div className='text-center'>
                   <p className="font-normal">{task.properties.Punctuality.formula.string}</p>
-                  <p className="text-xs mt-3 mx-auto">
-                    <span className="text-xs mx-auto font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
+                  <p className="text-xs mt-3 mx-auto font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
                       {task.properties.Reward.formula.string}
-                    </span>
                   </p>
                 </div>
               </div>
             </a>
-          )) : null}
+          )) : 
+          <a href="/missions" target="_blank">
+            <Button
+              className="mr-auto"
+              variant="prominent"
+            >
+              Pick Up A Mission
+            </Button>
+          </a>}
       </div>
     </div>
   );
@@ -54,7 +62,7 @@ export async function getServerSideProps({ req }) {
     if (!user) {
       return {
         redirect: {
-          destination: '/signin?redirect=player',
+          destination: '/signin?redirect=task-list',
           permanent: false
         }
       };
