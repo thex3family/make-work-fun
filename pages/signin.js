@@ -450,7 +450,7 @@ const SignIn = ({ user, metaBase, setMeta }) => {
                   <span className="text-center text-sm">
                     <a
                       href="#"
-                      className="text-accents-7 text-accent-9 hover:underline cursor-pointer"
+                      className="text-accents-7 text-accent-9 hover:underline cursor-pointer hideLinkBorder"
                       onClick={() => {
                         if (authView) {
                           setPassword('');
