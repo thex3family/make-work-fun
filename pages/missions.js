@@ -41,7 +41,6 @@ import Button from '@/components/ui/Button';
 import CardAdventure from '@/components/Cards/CardAdventure';
 
 export default function Missions({ metaBase, setMeta, refreshChildStats, setRefreshChildStats, tasks }) {
-  console.log(tasks);
 
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -50,6 +49,7 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
   const [avatar_url, setAvatarUrl] = useState(null);
   const [background_url, setBackgroundUrl] = useState('/');
   const [openTab, setOpenTab] = useState(null);
+  const [details, setDetails] = useState(false);
 
   const [onboardingState, setOnboardingState] = useState(null);
 
@@ -194,8 +194,9 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}
+                  className='flex-col gap-4'
                 >
-                  <CardAdventure />
+                  <CardAdventure/>
                 </div>
               </div>
               <div className="max-w-6xl mx-auto pb-8 px-4 sm:px-6 lg:px-8 ">
@@ -396,7 +397,7 @@ export async function getServerSideProps({ req }) {
       },
       sorts: [
         {
-          property: 'Days To Go',
+          property: 'Do Date',
           direction: 'ascending',
         },
         {

@@ -1,55 +1,34 @@
 import { Client } from '@notionhq/client';
 import { supabase } from '@/utils/supabase-client';
-import Button from '@/components/ui/Button/Button';
-import Link from 'next/link';
+import TaskGroups from '@/components/Tasks/tasks_groups';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-export default function TaskList({ impact_tasks }) {
+export default function TaskList({ impact_tasks, all_personal_tasks }) {
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  function loadAndRefresh() {
+    setLoading(true);
+    router.reload(window.location.pathname);
+  }
 
   return (
     <div className='py-6 px-10'>
-      <h2 className='text-xl font-semibold mb-3'>Impact Tasks</h2>
-      <div className='flex flex-col gap-3'>
-        {impact_tasks ?
-          impact_tasks.results.map((task) => (
-
-            <a className={`w-full hideLinkBorder shadow-lg rounded cursor-pointer  
-              bg-primary-3 bg-cover bg-center object-cover transition duration-500 ease-out transform hover:scale-105 ${task.properties.Status?.select?.name == "In Progress" ? 'scale-105' : ''}`} href={task.url} target="_blank"
-              style={{
-                backgroundImage: `url(${task.properties.Priority?.select?.name.includes("Ice Cream")
-                  ? '/challenge/ice_cream.png'
-                  : task.properties.Priority?.select?.name.includes("Eat The Frog")
-                  ? '/challenge/eat_the_frog.png'
-                  : task.properties.Priority?.select?.name.includes("Priority")
-                  ? '/challenge/priority.png'
-                  : '/challenge/bonus.png'
-                  })`
-              }}>
-              <div className={`bg-dark bg-opacity-70 p-4 flex flex-col sm:flex-row justify-between align-middle items-center ${task.properties.Status?.select?.name == "In Progress" ? 'ring-yellow-400 ring-2 rounded' : ''} `}>
-                <div className='w-full sm:w-3/5 text-center sm:text-left'>
-                  <p className="font-semibold truncate mb-1">{task.properties.Name.title[0].plain_text}</p>
-                  <p className="font-normal">{task.properties["Upstream (Sum)"].formula.string}</p>
-                  <p className="font-normal">{task.properties.Details.formula.string}</p>
-                  {/* <p className="font-normal">{task.properties.Priority?.select?.name}</p> */}
-                </div>
-                <div className='w-3/4 sm:w-0.5 m-4 bg-white opacity-60 h-0.5 sm:h-20 rounded'></div>
-                <div className='text-center'>
-                  <p className="font-normal">{task.properties.Punctuality.formula.string}</p>
-                  <p className="text-xs mt-3 mx-auto font-semibold py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200">
-                      {task.properties.Reward.formula.string}
-                  </p>
-                </div>
-              </div>
-            </a>
-          )) : 
-          <a href="/missions" target="_blank">
-            <Button
-              className="mr-auto"
-              variant="prominent"
-            >
-              Pick Up A Mission
-            </Button>
-          </a>}
+      <div className="max-w-6xl mx-auto pt-8 pb-8 px-4">
+        <div className="sm:flex sm:flex-col sm:align-center">
+          <h1 className="text-4xl font-extrabold text-center sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
+            Active Quests
+          </h1>
+          <p className="text-xl text-accents-6 text-center sm:text-2xl max-w-2xl m-auto">
+            Quests in progress or scheduled to do today. <i className={`ml-1 fas fa-sync-alt cursor-pointer ${loading ? 'animate-spin' : ''}`} onClick={() => loadAndRefresh()}/>
+          </p>
+         
+        </div>
       </div>
+      <TaskGroups tasks={all_personal_tasks} name='Personal Tasks' />
+      <TaskGroups tasks={impact_tasks.results} name='Impact Tasks' />
     </div>
   );
 }
@@ -68,15 +47,15 @@ export async function getServerSideProps({ req }) {
       };
     }
 
-    console.log(user.id);
-
-    const { data } = await supabase
+    const { data: userData } = await supabase
       .from('users')
       .select('notion_user_id')
       .eq('id', user.id)
       .single();
 
-    const notion_user_id = data.notion_user_id;
+    const notion_user_id = userData.notion_user_id;
+
+    let all_personal_tasks = [];
 
     if (notion_user_id) {
       // Send credentials to Notion API
@@ -132,7 +111,127 @@ export async function getServerSideProps({ req }) {
         ],
       });
 
-      return { props: { user, impact_tasks } };
+      const { data: notionDatabases } = await supabase
+        .from('notion_credentials')
+        .select('nickname, api_secret_key, database_id')
+        .eq('player', user.id);
+
+      if (notionDatabases) {
+        try {
+
+          const dataPromises = notionDatabases.map(async (database) => {
+            const notion_personal = new Client({ auth: database.api_secret_key });
+            const personal_tasks = await notion_personal.databases.query({
+              database_id: database.database_id,
+              filter: {
+                and: [
+                  {
+                    property: 'Type',
+                    select: {
+                      equals: 'Task',
+                    },
+                  },
+                  {
+                    property: 'Status',
+                    select: {
+                      does_not_equal: 'Complete',
+                    },
+                  },
+                  {
+                    or: [
+                      {
+                        property: 'Status',
+                        select: {
+                          equals: 'In Progress',
+                        },
+                      },
+                      {
+                        property: 'Do Date',
+                        date: {
+                          before: new Date().toISOString(),
+                        },
+                      },
+                    ]
+                  },
+                  {
+                    or: [
+                      {
+                        property: 'Collaborators',
+                        people: {
+                          contains: notion_user_id,
+                        },
+                      },
+                      {
+                        property: 'Collaborators',
+                        people: {
+                          is_empty: true,
+                        },
+                      },
+                    ]
+                  }
+
+                ],
+              },
+              sorts: [
+                {
+                  property: 'Do Date',
+                  direction: 'ascending',
+                },
+                {
+                  property: 'Impact',
+                  direction: 'ascending',
+                },
+              ],
+            });
+            return personal_tasks; // return data
+          });
+
+          // wait for all promises to resolve
+          const promise = await Promise.allSettled(dataPromises);
+
+          // You can then filter for fulfilled promises and their values like this:
+          all_personal_tasks = promise
+            .filter(promise => promise.status === 'fulfilled')
+            .map(promise => {
+              return promise.value.results;
+            })
+            .flat();
+
+
+          // Sort all_personal_tasks
+          all_personal_tasks.sort((a, b) => {
+            // Convert 'Do Date' strings to Date objects
+            let dateA = new Date(a['Do Date']);
+            let dateB = new Date(b['Do Date']);
+
+            // Sort by 'Do Date' first
+            if (dateA < dateB) {
+              return -1;
+            }
+            if (dateA > dateB) {
+              return 1;
+            }
+
+            // If 'Do Date' is the same, sort by 'Impact'
+            if (a.Impact < b.Impact) {
+              return -1;
+            }
+            if (a.Impact > b.Impact) {
+              return 1;
+            }
+
+            // If both 'Do Date' and 'Impact' are the same, do not change order
+            return 0;
+          });
+
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+
+      return { props: { user, impact_tasks, all_personal_tasks } };
     }
 
 
