@@ -111,6 +111,8 @@ export async function getServerSideProps({ req }) {
         ],
       });
 
+      impact_tasks.results = impact_tasks.results.map(task => ({ ...task, api_secret_key: process.env.IMPACT_SECRET_KEY }));
+
       const { data: notionDatabases } = await supabase
         .from('notion_credentials')
         .select('nickname, api_secret_key, database_id')
@@ -183,7 +185,10 @@ export async function getServerSideProps({ req }) {
                 },
               ],
             });
-            return personal_tasks; // return data
+            return { 
+              tasks: personal_tasks, 
+              api_secret_key: database.api_secret_key 
+            }; // return object with tasks and key
           });
 
           // wait for all promises to resolve
@@ -192,10 +197,9 @@ export async function getServerSideProps({ req }) {
           // You can then filter for fulfilled promises and their values like this:
           all_personal_tasks = promise
             .filter(promise => promise.status === 'fulfilled')
-            .map(promise => {
-              return promise.value.results;
-            })
-            .flat();
+            .flatMap(promise => 
+              promise.value.tasks.results.map(task => ({ ...task, api_secret_key: promise.value.api_secret_key }))
+            );
 
 
           // Sort all_personal_tasks
