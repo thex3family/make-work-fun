@@ -25,7 +25,7 @@ export default function ModalTasks({ visibility, setVisibility, mobileDevice, us
               <div>
               </div>
               <div className="flex flex-row items-center">
-                  <button onClick={() => setOpacity()} className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"><i className="fas fa-sun" /> - {opacity}</button>
+                  <button onClick={() => setOpacity()} className="mt-3 w-full align-middle justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"><i className="fas fa-sun" /> - {opacity}</button>
                 <div className={`${mobileDevice ? 'hidden' : ''}`}>
 
                   <button type="button" onClick={() => setSize('small')} className="fas fa-mobile-alt mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" />
