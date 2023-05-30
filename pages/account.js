@@ -5,23 +5,17 @@ import { useState, useEffect, Fragment } from 'react';
 import LoadingDots from '@/components/ui/LoadingDots';
 import Button from '@/components/ui/Button';
 import { userContent } from '@/utils/useUser';
-import { postData } from '@/utils/helpers';
 import Input from '@/components/ui/Input';
 
 import { supabase } from '@/utils/supabase-client';
-import {
-  subscription_table,
-  product_table,
-  minifyRecords
-} from '@/utils/airtable';
 import ConnectNotion from '@/components/API/ConnectNotion';
 import { fetchAPIKeys, fetchNotionCredentials } from '@/components/Fetch/fetchMaster';
 import { truncateString } from '@/utils/truncateString';
 import { Menu, Transition } from '@headlessui/react';
 import ConnectPOST from '@/components/API/ConnectPOST';
 
-import { Client } from '@notionhq/client';
 import NewNotionDatabases from '@/components/API/NewNotionDatabases';
+import { Skeleton } from '@mantine/core';
 
 function Card({ title, description, footer, children }) {
   return (
@@ -39,11 +33,7 @@ function Card({ title, description, footer, children }) {
 }
 
 export default function Account({
-  initialPurchaseRecord,
-  subscriptionPurchaseRecord,
-  inactiveSubscriptionRecord,
-  user,
-  notion_databases
+  user
 }) {
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -59,6 +49,9 @@ export default function Account({
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
   const [activeTab, setActiveTab] = useState(1);
   const [activeConnect, setActiveConnect] = useState(1);
+
+
+  const [userData, setUserData] = useState(null);
 
   const notionOAuthURL = `https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_HOST_URL)}%2Fauth%2Fnotion%2Fcallback&response_type=code`;
 
@@ -114,12 +107,38 @@ export default function Account({
   }
 
   useEffect(() => {
+    if (user) getAccountData();
     if (user) getProfile();
     if (user) getNotionCredentials();
     if (user) getAPIKeys();
-    if (subscriptionPurchaseRecord)
-      getSubscriptionStatus(subscriptionPurchaseRecord[0]);
   }, [user]);
+
+  async function getAccountData() {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('/api/account-data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user })  // pass user data
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUserData(data);
+
+          if (data.subscriptionPurchaseRecord){
+            getSubscriptionStatus(data.subscriptionPurchaseRecord[0]);
+          }
+        } else {
+          throw new Error('Response not okay');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }
 
   // useEffect(() => {
   //   if (activeTab === 3) checkForUserUpdates()
@@ -173,11 +192,11 @@ export default function Account({
   const [newNotionDatabases, setNewNotionDatabases] = useState(null);
 
   useEffect(() => {
-    if (notion_databases && notionCredentials) {
-      let difference = notion_databases.filter(({ id: id1 }) => !notionCredentials.some(({ database_id: id2 }) => id2 === id1));
+    if (userData?.notion_databases && notionCredentials) {
+      let difference = userData.notion_databases.filter(({ id: id1 }) => !notionCredentials.some(({ database_id: id2 }) => id2 === id1));
       setNewNotionDatabases(difference);
     }
-  }, [notion_databases, notionCredentials]);
+  }, [userData?.notion_databases, notionCredentials]);
 
   async function getAPIKeys() {
     setAPIKeys(await fetchAPIKeys());
@@ -340,6 +359,8 @@ export default function Account({
           </div>
         </div>
         <div className='p-4 bg-dark bg-opacity-40'>
+          { userData ?
+          <>
           {activeTab == 1 ?
             <Card
               title="Your Personal Toolbox"
@@ -376,8 +397,8 @@ export default function Account({
                   <div className="h-12 mb-6">
                     <LoadingDots />
                   </div>
-                ) : initialPurchaseRecord.length != 0 ? (
-                  initialPurchaseRecord.map((purchase) => (
+                ) : userData.initialPurchaseRecord.length != 0 ? (
+                  userData.initialPurchaseRecord.map((purchase) => (
                     <div className="pb-5 flex justify-between flex-col sm:flex-row sm:items-center">
                       <p className="sm:pb-0 pb-3">
                         <div className="flex flex-row items-center">
@@ -502,13 +523,13 @@ export default function Account({
                         let us know.
                       </a>
                     </p>
-                    {subscriptionPurchaseRecord[0] ? (
+                    {userData.subscriptionPurchaseRecord[0] ? (
                       <>
                         <div className="py-3 px-5 my-5 flex justify-between flex-col sm:flex-row sm:items-center bg-emerald-500 bg-opacity-20 border-2 border-emerald-500 border-opacity-80 rounded">
                           <p className="sm:pb-0 pb-3">
                             <div className="flex flex-row items-center">
                               <span>
-                                {subscriptionPurchaseRecord[0].fields
+                                {userData.subscriptionPurchaseRecord[0].fields
                                   .subscription_name}
                               </span>
                             </div>
@@ -523,7 +544,7 @@ export default function Account({
                               Joined On:
                               <span className="ml-1 text-accents-3">
                                 {
-                                  subscriptionPurchaseRecord[0].fields.joined_on.split(
+                                  userData.subscriptionPurchaseRecord[0].fields.joined_on.split(
                                     'T'
                                   )[0]
                                 }
@@ -532,7 +553,7 @@ export default function Account({
                             <p className="text-accents-5 text-sm">
                               Streak:{' '}
                               {Array.from(
-                                { length: subscriptionPurchaseRecord[0].fields.streak },
+                                { length: userData.subscriptionPurchaseRecord[0].fields.streak },
                                 (_, i) => (
                                   <span key={i}>⭐</span>
                                 )
@@ -552,13 +573,13 @@ export default function Account({
                           }
                         </div>
                       </>
-                    ) : (inactiveSubscriptionRecord[0] ?
+                    ) : (userData.inactiveSubscriptionRecord[0] ?
                       <>
                         <div className="py-3 px-5 my-5 flex justify-between flex-col sm:flex-row sm:items-center bg-red-500 bg-opacity-20 border-2 border-red-500 border-opacity-80 rounded">
                           <p className="sm:pb-0 pb-3">
                             <div className="flex flex-row items-center">
                               <span>
-                                {inactiveSubscriptionRecord[0].fields
+                                {userData.inactiveSubscriptionRecord[0].fields
                                   .subscription_name}
                               </span>
                             </div>
@@ -572,7 +593,7 @@ export default function Account({
                               Ended On:
                               <span className="ml-1 text-accents-3">
                                 {
-                                  inactiveSubscriptionRecord[0].fields.expires_on.split(
+                                  userData.inactiveSubscriptionRecord[0].fields.expires_on.split(
                                     'T'
                                   )[0]
                                 }
@@ -581,7 +602,7 @@ export default function Account({
                             <p className="text-accents-5 text-sm">
                               Streak:{' '}
                               {Array.from(
-                                { length: inactiveSubscriptionRecord[0].fields.streak },
+                                { length: userData.inactiveSubscriptionRecord[0].fields.streak },
                                 (_, i) => (
                                   <span key={i}>⭐</span>
                                 )
@@ -636,7 +657,7 @@ export default function Account({
                       {subscriptionStatus ? (
                         <a
                           href={
-                            subscriptionPurchaseRecord[0].fields.download_url
+                            userData.subscriptionPurchaseRecord[0].fields.download_url
                           }
                           target="_blank"
                         >
@@ -853,7 +874,7 @@ export default function Account({
                       </p>
                       {subscriptionStatus ? (
                         <a href={
-                          subscriptionPurchaseRecord[0].fields.consultation_url
+                          userData.subscriptionPurchaseRecord[0].fields.consultation_url
                         } target="_blank">
                           <Button
                             className="w-full sm:w-auto text-sm"
@@ -1272,6 +1293,17 @@ export default function Account({
                 : null
               }</>
           }
+          </>
+          : <div className="border border-accents-1	max-w-3xl w-full p rounded-md m-auto my-8 bg-black animate-fade-in">
+          <div className="px-5 py-4">
+            <div className="mb-2 h-8 sm:h-10 w-1/2 bg-gray-600 rounded animate-pulse"></div>
+            <div className="mb-4 h-4 w-3/4 bg-gray-600 rounded animate-pulse"></div>
+            <div className="mb-1 h-40 bg-gray-600 rounded animate-pulse"></div>
+          </div>
+          <div className="border-t border-accents-1 bg-primary-2 p-4 text-accents-3 rounded-b-md">
+          <div className="h-4 w-full bg-gray-600 rounded animate-pulse"></div>
+          </div>
+        </div>}
         </div>
       </section>
 
@@ -1350,69 +1382,73 @@ export async function getServerSideProps({ req }) {
 
     // Check for purchases from airtable
 
-    const purchaseRecord = await product_table
-      .select({
-        filterByFormula: `{customer_email} = '${user.email}'`,
-        view: 'App - One-Off Purchases',
-        sort: [{ field: 'value', direction: 'desc' }]
-      })
-      .firstPage();
+    // const purchaseRecord = await product_table
+    //   .select({
+    //     filterByFormula: `{customer_email} = '${user.email}'`,
+    //     view: 'App - One-Off Purchases',
+    //     sort: [{ field: 'value', direction: 'desc' }]
+    //   })
+    //   .firstPage();
 
-    const subscriptionRecord = await subscription_table
-      .select({
-        filterByFormula: `{customer_email} = '${user.email}'`,
-        view: 'App - Active Subscriptions',
-        sort: [{ field: 'value', direction: 'desc' }]
-      })
-      .firstPage();
+    // const subscriptionRecord = await subscription_table
+    //   .select({
+    //     filterByFormula: `{customer_email} = '${user.email}'`,
+    //     view: 'App - Active Subscriptions',
+    //     sort: [{ field: 'value', direction: 'desc' }]
+    //   })
+    //   .firstPage();
 
-    const inactiveSubscriptionRecord = await subscription_table
-      .select({
-        filterByFormula: `{customer_email} = '${user.email}'`,
-        view: 'App - Inactive Subscriptions',
-        sort: [{ field: 'value', direction: 'desc' }]
-      })
-      .firstPage();
+    // const inactiveSubscriptionRecord = await subscription_table
+    //   .select({
+    //     filterByFormula: `{customer_email} = '${user.email}'`,
+    //     view: 'App - Inactive Subscriptions',
+    //     sort: [{ field: 'value', direction: 'desc' }]
+    //   })
+    //   .firstPage();
 
 
-    // Get Notion Secret Key
+    // // Get Notion Secret Key
 
-    const { data } = await supabase
-      .from('users')
-      .select('notion_auth_key')
-      .eq('id', user.id)
-      .single();
+    // const { data } = await supabase
+    //   .from('users')
+    //   .select('notion_auth_key')
+    //   .eq('id', user.id)
+    //   .single();
 
-    let notion_databases = null;
+    // let notion_databases = null;
 
-    if (data) {
-      const notion_auth_key = data.notion_auth_key
-      try {
-        const notion = new Client({ auth: notion_auth_key });
+    // if (data) {
+    //   const notion_auth_key = data.notion_auth_key
+    //   try {
+    //     const notion = new Client({ auth: notion_auth_key });
 
-        if (notion) {
-          const databases = await notion.search({
-            filter: {
-              value: 'database',
-              property: 'object',
-            }
-          });
+    //     if (notion) {
+    //       const databases = await notion.search({
+    //         filter: {
+    //           value: 'database',
+    //           property: 'object',
+    //         }
+    //       });
 
-          notion_databases = databases.results;
-        }
+    //       notion_databases = databases.results;
+    //     }
 
-      } catch {
-      }
-    }
+    //   } catch {
+    //   }
+    // }
+
+    // return {
+    //   props: {
+    //     initialPurchaseRecord: minifyRecords(purchaseRecord),
+    //     subscriptionPurchaseRecord: minifyRecords(subscriptionRecord),
+    //     inactiveSubscriptionRecord: minifyRecords(inactiveSubscriptionRecord),
+    //     user,
+    //     notion_databases
+    //   }
+    // };
 
     return {
-      props: {
-        initialPurchaseRecord: minifyRecords(purchaseRecord),
-        subscriptionPurchaseRecord: minifyRecords(subscriptionRecord),
-        inactiveSubscriptionRecord: minifyRecords(inactiveSubscriptionRecord),
-        user,
-        notion_databases
-      }
+      props: { user }
     };
   } catch (error) {
     console.log(error);
