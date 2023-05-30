@@ -1,11 +1,21 @@
-[{
+[
+  {
+  "date": "May 30, 2023",
+  "title": "Interact With Your Active Quests",
+  "desc": "Change the status of your active quests directly from Make Work Fun - so you can always stay focused on what needs to be done.",
+  "img_url": "0.53.png",
+  "button_url": "/player",
+  "version": "53"
+  },
+  {
   "date": "May 29, 2023",
   "title": "See Your Active Quests",
   "desc": "We have a new tool for you to see all your active quests in one place. Think of it as an integrated task list across all your different databases.",
   "img_url": "0.52.png",
   "button_url": "/player",
   "version": "52"
-  },{
+  },
+  {
   "date": "May 15, 2023",
   "title": "Parties For All",
   "desc": "Starting today, everyone can lead a party as long as their all-time level has reached at least 10. We're so excited to see what you'll start next!",

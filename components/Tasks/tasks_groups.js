@@ -149,7 +149,7 @@ export default function TaskGroups({ tasks, name }) {
                                     <div className='flex flex-col text-center bg-white bg-opacity-10 opacity-20 transition duration-500 ease-out transform hover:opacity-100 p-3 rounded mx-auto cursor-pointer' onClick={() => handIn(task.id, task.properties["Closing Date"], task.api_secret_key)}><i className='fas fa-check' /></div>
                                     </Tooltip>
                                 </div>
-                                <a className={`overflow-hidden w-full hideLinkBorder shadow-lg rounded cursor-pointer bg-primary-3 bg-cover bg-center object-cover transition duration-500 ease-out transform opacity-40 hover:scale-105 hover:opacity-100 ${task.properties.Status?.select?.name == "In Progress" ? 'scale-105 opacity-100 ring-yellow-400 ring-2 rounded' : ''} `} href={task.url} target="_blank"
+                                <a className={`overflow-hidden w-full hideLinkBorder shadow-lg rounded cursor-pointer bg-primary-3 bg-cover bg-center object-cover transition duration-500 ease-out transform opacity-40 hover:scale-105 hover:opacity-100 ${task.properties.Status?.select?.name == "In Progress" ? 'opacity-100 ring-yellow-400 ring-2 rounded' : ''} `} href={task.url} target="_blank"
                                     style={{
                                         backgroundImage: `url(${task.properties.Priority?.select?.name.includes("Ice Cream")
                                             ? '/challenge/ice_cream.png'
