@@ -1,8 +1,8 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { supabase } from '../utils/supabase-client';
 import { useState, useEffect } from 'react';
 import { userContent } from '@/utils/useUser';
-import { useRouter } from 'next/router';
 
 import ModalLevelUp from '@/components/Modals/ModalLevelUp';
 import ModalOnboarding from '@/components/Modals/ModalOnboarding';
@@ -16,12 +16,42 @@ import LoadingDots from '@/components/ui/LoadingDots';
 import DailiesSkeleton from '@/components/Skeletons/DailiesSkeleton';
 import EditDailies from '@/components/Habits/edit_habits';
 import PlayDailies from '@/components/Habits/play_habits';
+import { Modal } from '@mantine/core';
 
 export default function dailies({ user, metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
+  const router = useRouter();
+  const [currentDay, setCurrentDay] = useState(new Date().getDay());
+  const [showDayModal, setShowDayModal] = useState(false);
+
+  const checkDayAndRefresh = () => {
+    const now = new Date();
+    if (now.getDay() !== currentDay) {
+      setShowDayModal(true);
+    }
+  }
+
+  useEffect(() => {
+    const interval = setInterval(checkDayAndRefresh, 1000 * 60 * 60); // Check every hour
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, [currentDay]);
+
+  useEffect(() => {
+    // Register focus event listener
+    window.addEventListener('focus', checkDayAndRefresh);
+
+    // Cleanup event listener on unmount
+    return () => window.removeEventListener('focus', checkDayAndRefresh);
+  }, [currentDay]);
+
+  const handleModalClose = () => {
+    router.reload(window.location.pathname);
+  }
+
   const [levelUp, setLevelUp] = useState(false);
   const [playerStats, setPlayerStats] = useState(null);
   const [activeMode, setActiveMode] = useState(1);
-  const router = useRouter();
 
   const { mode } = router.query;
 
@@ -217,6 +247,40 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
       ) : (
         null
       )}
+      { showDayModal ? 
+       <Modal
+          centered
+          opened={setShowDayModal}
+          onClose={() => handleModalClose()}
+          classNames={{
+            modal: 'text-white bg-dark hideLinkBorder',
+            title: 'hidden',
+            close: 'hidden',
+          }}
+        >
+          <div class="relative rounded-lg text-left ">
+            <div class="">
+              <div class="sm:flex sm:items-center sm:gap-2">
+                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 sm:mx-0 sm:h-10 sm:w-10">
+                  <i className='fas fa-sun text-emerald-800'/>
+                </div>
+                <div class="text-center m-2 sm:text-left">
+                    <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">It's a brand new day!</h3>
+                  <div class="mt-2">
+                    <p class="text-sm text-white-500">Your quests for the day have been reset.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="mt-4 mb-5 flex justify-center">
+            <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
+              onClick={() => handleModalClose()}
+            >OK</button></div>
+
+        </Modal>
+        : null }
     </>
   );
 }
