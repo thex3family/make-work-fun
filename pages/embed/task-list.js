@@ -128,11 +128,22 @@ export async function getServerSideProps({ req }) {
               filter: {
                 and: [
                   {
-                    property: 'Type',
-                    select: {
-                      equals: 'Task',
-                    },
+                    or: [
+                      {
+                        property: 'Type',
+                        select: {
+                          equals: 'Task',
+                        },
+                      },
+                      {
+                        property: 'Type',
+                        select: {
+                          equals: 'Event',
+                        },
+                      },
+                    ]
                   },
+                  
                   {
                     property: 'Status',
                     select: {
