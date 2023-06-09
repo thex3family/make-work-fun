@@ -111,7 +111,7 @@ export default function map({ metaBase, setMeta }) {
 
               <video className="relative rounded-xl animate-fade-in-up" autoplay="" loop={true}><source src="/vid/gather-demo.mp4" />
               </video>
-              <a href="https://app.gather.town/app/CxOkO4jP0Q4UY6rt/thex3family" target="_blank" className='mx-auto '>
+              <a href="https://meta.x3.family" target="_blank" className='mx-auto '>
                 <Button
                   className="w-auto my-4 animate-fade-in-up"
                   variant="prominent"
