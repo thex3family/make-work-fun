@@ -44,13 +44,8 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
 
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { user, userLoaded, userOnboarding } = userContent();
   const [playerStats, setPlayerStats] = useState(null);
-  const [avatar_url, setAvatarUrl] = useState(null);
-  const [background_url, setBackgroundUrl] = useState('/');
-  const [openTab, setOpenTab] = useState(null);
-  const [details, setDetails] = useState(false);
-
+  const [background_url, setBackgroundUrl] = useState('background/cityscape.jpg');
   const [onboardingState, setOnboardingState] = useState(null);
 
   const [newToSeason, setNewToSeason] = useState(null);
@@ -69,76 +64,7 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
     setMeta(meta)
   }, []);
 
-  // Waits until database fetches user state before loading anything
 
-  useEffect(() => {
-    if (userOnboarding) initializePlayer();
-  }, [userOnboarding]);
-
-  // Set player background when the information loads
-
-  useEffect(() => {
-    if (playerStats) setAvatarUrl(playerStats.avatar_url)
-    if (playerStats) fetchPlayerBackground(playerStats.background_url);
-  }, playerStats);
-
-  // Checks if the user is ready to load
-
-  function initializePlayer() {
-    try {
-      if (userOnboarding.onboarding_state.includes('4')) {
-        loadPlayer();
-      } else {
-        setOnboardingState(parseInt(userOnboarding.onboarding_state, 10));
-        console.log('Setting onboarding state...', parseInt(userOnboarding.onboarding_state, 10))
-      }
-    } catch (error) {
-      // alert(error.message);
-      console.log(error.message);
-    } finally {
-      console.log('InitializedPlayer');
-    }
-  }
-
-  // If player is ready to load, go for it!
-
-  async function loadPlayer() {
-    console.log('Loading Player');
-    await refreshStats();
-  }
-
-  async function refreshStats() {
-    console.log('Refreshing Stats');
-    setPlayerStats(await fetchPlayerStats(null, setNewToSeason));
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    if (refreshChildStats) {
-      refreshStats();
-      setRefreshChildStats(false);
-    }
-  }, [refreshChildStats]);
-
-  async function fetchPlayerBackground(path) {
-    if (path) {
-      try {
-        const { data, error } = await supabase.storage
-          .from('backgrounds')
-          .download(path);
-        if (error) {
-          throw error;
-        }
-        const url = URL.createObjectURL(data);
-        setBackgroundUrl(url);
-      } catch (error) {
-        console.log('Error downloading image: ', error.message);
-      } finally {
-      }
-    } else {
-      setBackgroundUrl('background/cityscape.jpg');
-    }
-  }
 
   function changeUrl(url) {
     let oldUrl = new URL(url);
@@ -148,20 +74,6 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
     newUrl.pathname = newUrl.pathname.replace('/thex3family', '');
 
     return newUrl.toString();
-  }
-
-
-  if (!playerStats) {
-    return (
-      <>
-        <PlayerSkeleton />
-        {
-          newToSeason ?
-            <ModalOnboarding onboardingState={5} />
-            : null
-        }
-      </>
-    )
   }
 
   return (
@@ -177,10 +89,7 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
                 <h1 className="text-4xl font-extrabold text-white text-center sm:text-6xl">
                   Welcome,{' '}
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500 pb-5">
-                    {playerStats ? playerStats.full_name ? playerStats.full_name : 'Adventurer' : (
-                      <LoadingDots />
-                    )}
-                    !
+                    Adventurer!
                   </span>
                 </h1>
                 <p className="mt-5 px-2 text-xl text-accents-6 text-center sm:text-2xl max-w-xl md:max-w-3xl m-auto">
@@ -197,6 +106,16 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
                   className='flex-col gap-4'
                 >
                   <CardAdventure/>
+                  <div className="inline-block mx-auto mt-4">
+                  <a href="https://thex3family.notion.site/Adventurer-Benefits-09e49fd7a0e44d478db6abe48ee91b63" target="_blank">
+                    <Button
+                      className="w-auto mx-auto my-4"
+                      variant="prominent"
+                    >
+                      Unlock My Adventurer Card 🙄
+                    </Button>
+                  </a>
+                </div>
                 </div>
               </div>
               <div className="max-w-6xl mx-auto pb-8 px-4 sm:px-6 lg:px-8 ">
@@ -318,16 +237,16 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
 export async function getServerSideProps({ req }) {
   try {
     // Get the user's session based on the request
-    const { user } = await supabase.auth.api.getUserByCookie(req);
+    // const { user } = await supabase.auth.api.getUserByCookie(req);
 
-    if (!user) {
-      return {
-        redirect: {
-          destination: '/signin?redirect=missions',
-          permanent: false
-        }
-      };
-    }
+    // if (!user) {
+    //   return {
+    //     redirect: {
+    //       destination: '/signin?redirect=missions',
+    //       permanent: false
+    //     }
+    //   };
+    // }
 
     // Send credentials to Notion API
     const notion = new Client({ auth: process.env.IMPACT_SECRET_KEY });
@@ -407,7 +326,7 @@ export async function getServerSideProps({ req }) {
       ],
     });
 
-    return { props: { user, tasks } };
+    return { props: { tasks } };
 
   } catch (error) {
     console.log(error);
