@@ -6,8 +6,9 @@ import { useRouter } from 'next/router';
 
 const main_navigation = [
   { name: 'Leaderboard 🏆', href: '/leaderboard' },
-  { name: 'Map 🌍', href: '/map' },
-  { name: 'Updates ✨', href: '/new',}
+  { name: 'Missions ⚔️', href: '/missions' },
+  // { name: 'Map 🌍', href: '/map' },
+  { name: 'Updates ✨', href: '/new'}
 ];
 
 const play_menu = [
