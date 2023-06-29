@@ -91,7 +91,7 @@ const Navbar = () => {
       <a href="#skip" className="sr-only focus:not-sr-only">
         Skip to content
       </a>
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto max-w-7xl px-6">
         <Popover>
           {({ open }) => (
             <>
@@ -105,11 +105,11 @@ const Navbar = () => {
                       <a href="/" className={s.logo}>
                         <span className="sr-only">Home</span>
                         <img
-                          className="w-auto h-10 md:block hidden"
+                          className="w-auto h-10 xl:block hidden"
                           src="../MWF-logo(white).svg"
                         />
                          <img
-                          className="w-auto h-10 md:hidden"
+                          className="w-auto h-10 xl:hidden"
                           src="../MWF-icon.svg"
                         />
                         <span className="text-white ml-3 py-2 font-medium uppercase bg-gradient-to-r from-emerald-500 to-blue-500 rounded px-2">
