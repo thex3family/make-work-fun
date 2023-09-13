@@ -17,8 +17,12 @@ export function HabitInteraction({ date, habitState, habitCompletedToday, setHab
   const [hours, setHours] = useState(null);
   const [mins, setMins] = useState(null);
 
-  const [habitCompleted, setHabitCompleted] = useState(habitState);
+  const [habitCompleted, setHabitCompleted] = useState(null);
   const [insertedDetails, setInsertedDetails] = useState(insertedD);
+  
+  useEffect(() => {
+    setHabitCompleted(habitState);
+  }, [habitState]);
 
   useEffect(() => {
     setDetails(insertedDetails);
