@@ -605,6 +605,8 @@ export default function HabitRow({
 
   async function fetchHabitState(habit_id, date, setHabit) {
     try {
+      // clear previous habit information
+      setHabit(null);
 
       const { data, error } = await supabase
         .from('completed_habits')
