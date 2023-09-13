@@ -46,7 +46,7 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
   }, [currentDay]);
 
   const handleModalClose = () => {
-    router.reload(window.location.pathname);
+    setRefreshChildStats(true);
   }
 
   const [levelUp, setLevelUp] = useState(false);
@@ -185,7 +185,6 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                 Complete 80% of your daily quests to receive bonus rewards!
               </p>
             </div>
-
             <div className="text-center bg-black bg-opacity-90 py-10 px-4 sm:px-10 rounded-0 sm:rounded-b relative mt-7 pt-14">
               <div className="mx-auto absolute inset-x-0 -top-7 bg-gray-700 w-full rounded-0 sm:rounded-xl sm:max-w-md h-14 align-middle shadow-xl grid grid-cols-3 place-items-center text-lg fontmedium px-2 gap-2">
                 <div
@@ -222,6 +221,8 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
                     player={player}
                     setLevelUp={setLevelUp}
                     changeMode={changeMode}
+                    refreshChildStats={refreshChildStats}
+                    setShowDayModal = {setShowDayModal}
                   />
                 </> : null}
               {activeMode == 2 ?
