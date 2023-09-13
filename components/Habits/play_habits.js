@@ -15,7 +15,7 @@ import {
     claimDailyBonus
 } from '@/components/Fetch/fetchMaster';
 
-export default function PlayDailies({ player, setLevelUp, changeMode }) {
+export default function PlayDailies({ player, setLevelUp, changeMode, refreshChildStats, setShowDayModal }) {
     const [downstreamHabitRefresh, setDownstreamHabitRefresh] = useState(false);
 
     const [habits, setHabits] = useState(null);
@@ -55,6 +55,13 @@ export default function PlayDailies({ player, setLevelUp, changeMode }) {
 
     }, []);
 
+    useEffect(() => {
+        if (refreshChildStats) {
+            refreshDailies();
+            refreshStats();
+        }
+      }, [refreshChildStats]);
+
 
     async function loadPlayer() {
         console.log('Loading Player');
@@ -67,6 +74,7 @@ export default function PlayDailies({ player, setLevelUp, changeMode }) {
         console.log('Refreshing Dailies');
         fetchDailies(player, setHabits, setLevelUp, setDailiesCount);
         setDownstreamHabitRefresh(true);
+        setShowDayModal(false);
     }
 
     async function refreshStats() {
