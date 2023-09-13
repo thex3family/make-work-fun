@@ -27,6 +27,12 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
     const now = new Date();
     if (now.getDay() !== currentDay) {
       setShowDayModal(true);
+      
+      // update date checker
+      setCurrentDay(now.getDay());
+
+      // immediately refresh stats
+      setRefreshChildStats(true);
     }
   }
 
@@ -44,10 +50,6 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
     // Cleanup event listener on unmount
     return () => window.removeEventListener('focus', checkDayAndRefresh);
   }, [currentDay]);
-
-  const handleModalClose = () => {
-    setRefreshChildStats(true);
-  }
 
   const [levelUp, setLevelUp] = useState(false);
   const [playerStats, setPlayerStats] = useState(null);
@@ -252,7 +254,6 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
        <Modal
           centered
           opened={setShowDayModal}
-          onClose={() => handleModalClose()}
           classNames={{
             modal: 'text-white bg-dark hideLinkBorder',
             title: 'hidden',
@@ -277,7 +278,6 @@ export default function dailies({ user, metaBase, setMeta, refreshChildStats, se
           </div>
           <div class="mt-4 mb-5 flex justify-center">
             <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
-              onClick={() => handleModalClose()}
             >OK</button></div>
 
         </Modal>
