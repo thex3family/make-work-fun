@@ -40,7 +40,7 @@ import ModalOnboarding from '@/components/Modals/ModalOnboarding';
 import Button from '@/components/ui/Button';
 import CardAdventure from '@/components/Cards/CardAdventure';
 
-export default function Missions({ metaBase, setMeta, refreshChildStats, setRefreshChildStats, tasks }) {
+export default function Missions({ metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
 
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -118,110 +118,6 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
                 </div>
                 </div>
               </div>
-              <div className="max-w-6xl mx-auto pb-8 px-4 sm:px-6 lg:px-8 ">
-                <div className="relative my-6 mx-auto h-auto rounded bg-white bg-opacity-10">
-                  {/*content*/}
-                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div className="flex items-start justify-between p-5 border-b border-solid bg-black bg-opacity-90 rounded-t">
-                      <div className="text-2xl font-semibold">
-                        Mission Board
-                      </div>
-                      <button
-                        className="p-1 ml-auto bg-transparent border-0 float-right text-xl my-auto leading-none font-semibold outline-none focus:outline-none hideLinkBorder"
-                        onClick={() => loadAndRefresh()}
-                        disabled={loading}
-                        loading={loading}
-                      >
-                        <span className="hidden md:inline-block">
-                          {loading ? 'Loading' : 'Refresh'}
-                        </span>
-                        <i className="ml-3 fas fa-sync-alt"></i>
-                      </button>
-                    </div>
-                  </div>
-                  {/*body*/}
-                  <p className="text-white my-6 mx-6">
-                    Collaborative adventures with our community where we are slaying new dragons and exploring new worlds.
-                  </p>
-                  <div className="flex flex-col md:flex-row my-6 mx-6 gap-3">
-                    {/* <div className="md:w-1/2 scroll-tab-header">
-                      <ul
-                        className="flex mb-0 list-none pb-5 px-2 md:pb-0 md:px-0 flex-nowrap overflow-scroll no-scrollbar md:overflow-visible flex-row md:flex-col gap-3"
-                        role="tablist"
-                      >
-                        <li className="mr-2 flex-auto text-left min-w-max">
-                              <a
-                                className={
-                                  'font-semibold uppercase px-5 py-3 rounded block leading-normal align-middle hideLinkBorder hover:bg-gray-100 hover:text-black ' +
-                                  (openTab === null
-                                    ? 'text-black bg-gray-100 font-bold'
-                                    : 'text-gray-200')
-                                }
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setOpenTab(null);
-                                }}
-                                data-toggle="tab"
-                                href="#"
-                                role="tablist"
-                              >
-                                All Quests
-                              </a>
-                            </li>
-                        {projects ?
-                          projects.results.map((project) => (
-                            <li className="mr-2 flex-auto text-left min-w-max">
-                              <a
-                                className={
-                                  'font-semibold uppercase px-5 py-3 rounded block leading-normal align-middle hideLinkBorder hover:bg-gray-100 hover:text-black ' +
-                                  (openTab === project.properties.Name.title[0].plain_text
-                                    ? 'text-black bg-gray-100 font-bold'
-                                    : 'text-gray-200')
-                                }
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setOpenTab(project.properties.Name.title[0].plain_text);
-                                }}
-                                data-toggle="tab"
-                                href="#"
-                                role="tablist"
-                              >
-                                {project.properties.Name.title[0].plain_text}
-                                <p className="text-xs font-medium">{project.properties.Details.formula.string}</p>
-                              </a>
-                            </li>
-                          ))
-                          : null}
-                      </ul>
-                    </div> */}
-                    <div className="w-full mb-6">
-                      <div className="grid grid-cols-3 gap-2 p-2 bg-white text-white shadow-lg rounded border">
-                        {tasks ?
-                          tasks.results.map((task) => (
-                            <a href={changeUrl(task.url)} target="_blank" className='p-4 rounded bg-black bg-opacity-80 text-center hover:bg-white hover:text-black hover:scale-105 transition duration-500 ease-out transform cursor-pointer hideLinkBorder'>
-                              <p className="font-semibold truncate mb-1">{task.properties.Name.title[0].plain_text}</p>
-                              <p className="font-normal">{task.properties["Upstream (Sum)"].formula.string}</p>
-                              {/* <p className="font-normal">{task.properties.Status?.select?.name}</p> */}
-                              <p className="font-normal">{task.properties.Reward.formula.string}</p>
-                            </a>
-                          )) : null}
-                      </div>
-                    </div>
-                  </div>
-                  {/* <div className="relative text-blueGray-500">
-                    <div className="flex items-center py-4 justify-end border-t border-solid border-blueGray-200 rounded-b">
-                      <a
-                        href="https://academy.co-x3.com/make-work-fun-app/aXV29eQnHfmsNGacNfqLUz/how-do-i-easily-connect-any-notion-database-to-the-make-work-fun-app/rNSULyAdfLaRE55EMVpvwf#required-properties?utm_source=makeworkfun"
-                        target="_blank"
-                        className="hideLinkBorder text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      >
-                        Troubleshoot
-                      </a>
-                    </div>
-                  </div> */}
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -234,107 +130,107 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
   );
 }
 
-export async function getServerSideProps({ req }) {
-  try {
-    // Get the user's session based on the request
-    // const { user } = await supabase.auth.api.getUserByCookie(req);
+// export async function getServerSideProps({ req }) {
+//   try {
+//     // Get the user's session based on the request
+//     // const { user } = await supabase.auth.api.getUserByCookie(req);
 
-    // if (!user) {
-    //   return {
-    //     redirect: {
-    //       destination: '/signin?redirect=missions',
-    //       permanent: false
-    //     }
-    //   };
-    // }
+//     // if (!user) {
+//     //   return {
+//     //     redirect: {
+//     //       destination: '/signin?redirect=missions',
+//     //       permanent: false
+//     //     }
+//     //   };
+//     // }
 
-    // Send credentials to Notion API
-    const notion = new Client({ auth: process.env.IMPACT_SECRET_KEY });
-    // const projects = await notion.databases.query({
-    //   database_id: process.env.IMPACT_DATABASE_ID,
-    //   filter: {
-    //     and: [
-    //       {
-    //         property: 'Type',
-    //         select: {
-    //           equals: 'Project',
-    //         },
-    //       },
-    //       {
-    //         property: 'Sub-Type (Optional)',
-    //         multi_select: {
-    //           contains: 'World Boss',
-    //         },
-    //       },
-    //       {
-    //         property: 'Status',
-    //         select: {
-    //           does_not_equal: 'Complete',
-    //         },
-    //       },
-    //     ],
-    //   },
-    //   sorts: [
-    //     {
-    //       property: 'Days To Go',
-    //       direction: 'ascending',
-    //     },
-    //     {
-    //       property: 'Impact',
-    //       direction: 'ascending',
-    //     },
-    //   ],
-    // });
+//     // Send credentials to Notion API
+//     const notion = new Client({ auth: process.env.IMPACT_SECRET_KEY });
+//     // const projects = await notion.databases.query({
+//     //   database_id: process.env.IMPACT_DATABASE_ID,
+//     //   filter: {
+//     //     and: [
+//     //       {
+//     //         property: 'Type',
+//     //         select: {
+//     //           equals: 'Project',
+//     //         },
+//     //       },
+//     //       {
+//     //         property: 'Sub-Type (Optional)',
+//     //         multi_select: {
+//     //           contains: 'World Boss',
+//     //         },
+//     //       },
+//     //       {
+//     //         property: 'Status',
+//     //         select: {
+//     //           does_not_equal: 'Complete',
+//     //         },
+//     //       },
+//     //     ],
+//     //   },
+//     //   sorts: [
+//     //     {
+//     //       property: 'Days To Go',
+//     //       direction: 'ascending',
+//     //     },
+//     //     {
+//     //       property: 'Impact',
+//     //       direction: 'ascending',
+//     //     },
+//     //   ],
+//     // });
 
-    const tasks = await notion.databases.query({
-      database_id: process.env.IMPACT_DATABASE_ID,
-      filter: {
-        and: [
-          {
-            property: 'Type',
-            select: {
-              equals: 'Task',
-            },
-          },
-          {
-            property: 'Upstream Sub-Type',
-            rollup: {
-              any: {
-                multi_select: {
-                  contains: "World Boss"
-                }
-              }
-            },
-          },
-          {
-            property: 'Status',
-            select: {
-              does_not_equal: 'Complete',
-            },
-          },
-        ],
-      },
-      sorts: [
-        {
-          property: 'Do Date',
-          direction: 'ascending',
-        },
-        {
-          property: 'Impact',
-          direction: 'ascending',
-        },
-      ],
-    });
+//     const tasks = await notion.databases.query({
+//       database_id: process.env.IMPACT_DATABASE_ID,
+//       filter: {
+//         and: [
+//           {
+//             property: 'Type',
+//             select: {
+//               equals: 'Task',
+//             },
+//           },
+//           {
+//             property: 'Upstream Sub-Type',
+//             rollup: {
+//               any: {
+//                 multi_select: {
+//                   contains: "World Boss"
+//                 }
+//               }
+//             },
+//           },
+//           {
+//             property: 'Status',
+//             select: {
+//               does_not_equal: 'Complete',
+//             },
+//           },
+//         ],
+//       },
+//       sorts: [
+//         {
+//           property: 'Do Date',
+//           direction: 'ascending',
+//         },
+//         {
+//           property: 'Impact',
+//           direction: 'ascending',
+//         },
+//       ],
+//     });
 
-    return { props: { tasks } };
+//     return { props: { tasks } };
 
-  } catch (error) {
-    console.log(error);
-    return {
-      redirect: {
-        destination: '/credentials-invalid',
-        permanent: false
-      }
-    };
-  }
-}
+//   } catch (error) {
+//     console.log(error);
+//     return {
+//       redirect: {
+//         destination: '/credentials-invalid',
+//         permanent: false
+//       }
+//     };
+//   }
+// }
