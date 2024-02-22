@@ -4,7 +4,7 @@ import TaskGroups from '@/components/Tasks/tasks_groups';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-export default function TaskList({ impact_tasks, all_personal_tasks }) {
+export default function TaskList({ all_personal_tasks }) {
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ export default function TaskList({ impact_tasks, all_personal_tasks }) {
         </div>
       </div>
       <TaskGroups tasks={all_personal_tasks} name='Personal Tasks' />
-      <TaskGroups tasks={impact_tasks.results} name='Impact Tasks' />
+      {/* <TaskGroups tasks={impact_tasks.results} name='Impact Tasks' /> */}
     </div>
   );
 }
@@ -61,57 +61,57 @@ export async function getServerSideProps({ req }) {
       // Send credentials to Notion API
       const notion = new Client({ auth: process.env.IMPACT_SECRET_KEY });
 
-      const impact_tasks = await notion.databases.query({
-        database_id: process.env.IMPACT_DATABASE_ID,
-        filter: {
-          and: [
-            {
-              property: 'Type',
-              select: {
-                equals: 'Task',
-              },
-            },
-            {
-              property: 'Upstream Sub-Type',
-              rollup: {
-                any: {
-                  multi_select: {
-                    contains: "World Boss"
-                  }
-                }
-              },
-            },
-            {
-              property: 'Status',
-              select: {
-                does_not_equal: 'Complete',
-              },
-            },
-            {
-              property: 'Collaborators',
-              people: {
-                contains: notion_user_id,
-              },
-            },
-          ],
-        },
-        sorts: [
-          {
-            property: 'Priority',
-            direction: 'ascending',
-          },
-          {
-            property: 'Days To Go',
-            direction: 'ascending',
-          },
-          {
-            property: 'Impact',
-            direction: 'ascending',
-          },
-        ],
-      });
+      // const impact_tasks = await notion.databases.query({
+      //   database_id: process.env.IMPACT_DATABASE_ID,
+      //   filter: {
+      //     and: [
+      //       {
+      //         property: 'Type',
+      //         select: {
+      //           equals: 'Task',
+      //         },
+      //       },
+      //       {
+      //         property: 'Upstream Sub-Type',
+      //         rollup: {
+      //           any: {
+      //             multi_select: {
+      //               contains: "World Boss"
+      //             }
+      //           }
+      //         },
+      //       },
+      //       {
+      //         property: 'Status',
+      //         select: {
+      //           does_not_equal: 'Complete',
+      //         },
+      //       },
+      //       {
+      //         property: 'Collaborators',
+      //         people: {
+      //           contains: notion_user_id,
+      //         },
+      //       },
+      //     ],
+      //   },
+      //   sorts: [
+      //     {
+      //       property: 'Priority',
+      //       direction: 'ascending',
+      //     },
+      //     {
+      //       property: 'Days To Go',
+      //       direction: 'ascending',
+      //     },
+      //     {
+      //       property: 'Impact',
+      //       direction: 'ascending',
+      //     },
+      //   ],
+      // });
 
-      impact_tasks.results = impact_tasks.results.map(task => ({ ...task, api_secret_key: process.env.IMPACT_SECRET_KEY }));
+      //impact_tasks.results = impact_tasks.results.map(task => ({ ...task, api_secret_key: process.env.IMPACT_SECRET_KEY }));
 
       const { data: notionDatabases } = await supabase
         .from('notion_credentials')
@@ -246,7 +246,8 @@ export async function getServerSideProps({ req }) {
       }
 
 
-      return { props: { user, impact_tasks, all_personal_tasks } };
+      // return { props: { user, impact_tasks, all_personal_tasks } };
+      return { props: { user, all_personal_tasks } };
     }
 
 
