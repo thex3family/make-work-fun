@@ -57,7 +57,7 @@ export async function shareWithDiscord(playerStats, activeModalStats, activeGIF,
           {
             color: null,
             author: {
-              name: '💬 Start a discussion!'
+              name: '💬 Reply or Create Thread To Start A Discussion!'
               // url: 'https://toolbox.co-x3.com/family-connection/?utm_source=guilded',
             }
           }
