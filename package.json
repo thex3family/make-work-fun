@@ -69,7 +69,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "0.4.1",
     "autoprefixer": "10.2.5",
-    "postcss": "8.2.8",
+    "postcss": "8.4.38",
     "postcss-flexbugs-fixes": "5.0.2",
     "postcss-preset-env": "6.7.0",
     "prettier": "2.2.1"
