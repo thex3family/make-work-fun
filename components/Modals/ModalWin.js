@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase-client';
 import Link from 'next/link';
 import { shareWithCircle } from '@/utils/sendCircleWebhook';
+import { shareWithDiscord } from '@/utils/sendDiscordWebhook';
 import useSound from 'use-sound';
 
 export default function WinModal({
@@ -159,6 +160,12 @@ export default function WinModal({
                         type="button"
                       >
                         {sharedWithFamily}
+                        {sharedWithFamily == "Win Shared" ?
+                          <a
+                            href="https://discordapp.com/channels/653664936903573504/1204246192335364116"
+                            target="_blank"
+                            className="ml-1.5 fas fa-question-circle hideLinkBorder"
+                          /> : ""}
                         {sharedWithFamily == "Post created." ?
                           <a
                             href="https://our.x3.family/c/share-wins?utm_source=makeworkfun"
@@ -185,12 +192,11 @@ export default function WinModal({
                         className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
                         onClick={() =>
-                          shareWithCircle(
+                          shareWithDiscord(
                             playerStats,
                             activeModalStats,
                             activeGIF,
                             setSharedWithFamily,
-                            user.email,
                           )
                         }
                       >
