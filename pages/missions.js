@@ -106,7 +106,7 @@ export default function Missions({ metaBase, setMeta, refreshChildStats, setRefr
                 >
                   <CardAdventure/>
                   <div className="inline-block mx-auto mt-4">
-                  <a href="https://thex3family.notion.site/Adventurer-Benefits-09e49fd7a0e44d478db6abe48ee91b63" target="_blank">
+                  <a href="https://the.x3.family/make-positive-impact/contribute/be-an-adventurer" target="_blank">
                     <Button
                       className="w-auto mx-auto my-4"
                       variant="prominent"
