@@ -795,6 +795,28 @@ export async function fetchDailiesCompletedToday(player) {
   }
 }
 
+
+export async function fetchDailiesCompleted(player) {
+  try {
+    const { data, error } = await supabase
+      .from('completed_habits')
+      .select('*, habit(name)')
+      .eq('player', player)
+
+    if (data) {
+      console.log(data);
+      return data;
+    }
+
+    if (error && status !== 406) {
+      throw error;
+    }
+  } catch (error) {
+    // alert(error.message)
+  } finally {
+  }
+}
+
 export async function dailyBonusButtons(player, setDailyBonus) {
   try {
 
