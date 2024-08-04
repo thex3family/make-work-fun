@@ -1388,7 +1388,9 @@ export default function NotionWizard({ response, nickname }) {
 export async function getServerSideProps({ req }) {
   try {
     // Get credentials from Supabase
-    const { user } = await supabase.auth.api.getUserByCookie(req);
+    const { user, token } = await supabase.auth.api.getUserByCookie(req);
+
+    supabase.auth.setAuth(token);
 
     const key = await supabase
       .from('notion_credentials_validation')
@@ -1396,6 +1398,9 @@ export async function getServerSideProps({ req }) {
       .eq('player', user.id)
       .limit(1)
       .single();
+
+      console.log("test", key)
+
     const data = await supabase
       .from('notion_credentials')
       .select('nickname, api_secret_key, database_id')
