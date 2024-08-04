@@ -36,7 +36,9 @@ export default function TaskList({ all_personal_tasks }) {
 export async function getServerSideProps({ req }) {
   try {
     // Get the user's session based on the request
-    const { user } = await supabase.auth.api.getUserByCookie(req);
+    const { user, token } = await supabase.auth.api.getUserByCookie(req);
+    
+    supabase.auth.setAuth(token);
 
     if (!user) {
       return {
