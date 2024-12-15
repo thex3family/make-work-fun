@@ -31,8 +31,9 @@ export default function ConnectNotion({
 
   const notionOAuthURL = `https://api.notion.com/v1/oauth/authorize?owner=user&client_id=434a27ea-a826-4129-88ea-af114203938c&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_HOST_URL)}%2Fauth%2Fnotion%2Fcallback&response_type=code`;
 
+  // Need to refactor this to validate the secret key using the Notion utility instead.
 
-  var api = /^(?:secret|ntn)_\w{43}$/;
+  var api = /^(?:secret_[a-zA-Z0-9]{43}|ntn_[a-zA-Z0-9]{46})$/;
   var id = /^\(?([0-9a-zA-Z]{8})\)?[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{4})[-. ]([0-9a-zA-Z]{12})$/;
   var notionLink = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 
