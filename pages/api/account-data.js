@@ -4,12 +4,31 @@ import {
     minifyRecords
 } from '@/utils/airtable';
 import { supabase } from '@/utils/supabase-client';
+import { createClient } from '@supabase/supabase-js';
 
 import { Client } from '@notionhq/client';
 
 export default async function handler(req, res) {
     try {
-        const { user } = req.body;
+        // Identify the caller from their session cookie. This route returns
+        // purchase history and reads Notion credentials, so the account it acts
+        // on must come from the verified session, never from the request body.
+        const { user, token } = await supabase.auth.api.getUserByCookie(req);
+
+        if (!user) {
+            return res.status(401).json({ error: 'Not authenticated' });
+        }
+
+        // Per-request client carrying the caller's token, so the credential read
+        // below runs as that signed-in user. Deliberately not
+        // `supabase.auth.setAuth()` on the shared client -- that one is
+        // module-level, and mutating it lets one request's token bleed into a
+        // concurrent request's query.
+        const supabaseForUser = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+        );
+        supabaseForUser.auth.setAuth(token);
 
         // Check for purchases from airtable
 
@@ -37,7 +56,7 @@ export default async function handler(req, res) {
             })
             .firstPage();
 
-        const { data } = await supabase
+        const { data } = await supabaseForUser
             .from('users')
             .select('notion_auth_key')
             .eq('id', user.id)
