@@ -17,6 +17,12 @@ import {
 } from '@/components/Fetch/fetchMaster';
 // import Pagination from '@/components/Pagination';
 import { downloadImage } from '@/utils/downloadImage';
+import {
+  seasonNumber,
+  seasonNumberFromTag,
+  seasonLabel,
+  seasonDateRange
+} from '@/utils/season';
 
 export default function HomePage({metaBase, setMeta, refreshChildStats, setRefreshChildStats }) {
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -26,6 +32,13 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
   const [sNPlayers, setsNPlayers] = useState([]);
   const [wPlayers, setWPlayers] = useState([]);
   const [activePlayers, setActivePlayers] = useState([]);
+
+  // The season the leaderboard is currently showing. Taken from the rows the
+  // database returned (they are all filtered on `latest`), so the heading can
+  // never drift out of sync with the data. Falls back to the calendar while
+  // the fetch is still in flight.
+  const currentSeason =
+    seasonNumberFromTag(sNPlayers[0]?.season) || seasonNumber();
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -212,10 +225,10 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
                 <div className="w-full md:w-3/5 py-6 text-center">
                   <div className="max-w-6xl w-full md:w-11/12 lg:w-full xl:w-11/12 ml-auto py-8 px-0 sm:px-6 lg:px-8 my-auto bg-black bg-opacity-50 rounded-lg">
                     <h1 className="text-2xl font-semibold sm:text-3xl">
-                      Season 20 Statistics
+                      {seasonLabel(currentSeason)} Statistics
                     </h1>
                     <p className="text-sm text-accents-4 font-semibold">
-                      <i className='fas fa-calendar mr-2'/>Apr 1 - Jun 30
+                      <i className='fas fa-calendar mr-2'/>{seasonDateRange(currentSeason)}
                     </p>
                     <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl">
                       <LeaderboardStatistics
@@ -308,7 +321,7 @@ export default function HomePage({metaBase, setMeta, refreshChildStats, setRefre
               href="#link1"
               role="tablist"
             >
-              Season 20
+              {seasonLabel(currentSeason)}
               <span
                 className={
                   'text-xs text-white py-1.5 px-2 ml-2 top-0 text-center border-2 shadow-lg rounded-full font-bold ' +
