@@ -75,6 +75,41 @@ flight. See `pages/leaderboard.js`. That way the heading cannot drift from the d
 `season_of(timestamptz)` buckets by calendar date in the session timezone. Note that
 `all_wins.closing_date` is `timestamptz` while `success_plan.closing_date` is `date`.
 
+## Leaderboards are materialized — they are NOT live
+
+`leaderboard` and `leaderboard_season` are thin views over materialized views
+(`mv_leaderboard_alltime`, `mv_leaderboard_season`). The heavy aggregate — which
+reads `all_wins` several times, each redoing a UNION dedupe over ~120k rows — used
+to run on *every* anonymous page load and took ~5s (all-time) and ~17s (season).
+Now it runs once per refresh.
+
+- **Refresh:** `pg_cron` job `refresh-leaderboards` runs `REFRESH MATERIALIZED VIEW
+  CONCURRENTLY` on both, every 5 minutes (`2-59/5 * * * *`, offset ~2 min after the
+  Notion sync tick). New wins therefore appear on the leaderboard within ~5 minutes,
+  not instantly. This is deliberate and fine at the current win volume.
+- **Consequence:** profile edits (avatar/name/title) also lag up to 5 min on the
+  leaderboard, because those columns are baked into the matview at refresh time. If
+  that ever becomes a problem, split the matview to aggregates-only and join `users`
+  live in the wrapper view.
+- **`latest`, `exp_earned_today`, `exp_earned_week`** are frozen at refresh time too
+  (≤5 min stale). At a quarter boundary the `latest` flag flips within one refresh.
+- **Do not add `security_invoker = true`** to the wrapper views. They must run with
+  definer rights so `anon` can read other players' names/avatars through them despite
+  `users` RLS — the whole leaderboard is intentionally public.
+- **The `mv_*` matviews are NOT granted to `anon`/`authenticated`** — clients read the
+  named views only. Keep it that way; the Supabase advisor flags API-exposed matviews.
+- **Editing the leaderboard logic** means editing the matview body (a migration), not
+  a view. The wrapper views are just `SELECT * FROM mv_...`. After changing a matview,
+  `REFRESH` it and confirm row counts/EXP totals are unchanged (snapshot before/after).
+- **`all_wins` uses `UNION`, not `UNION ALL`, on purpose.** ~2,100 rows in
+  `success_plan` are distinct wins (distinct `notion_id`) that share
+  name/exp/dates; the UNION collapses them. Switching to `UNION ALL` would add
+  ~164k EXP across 76 players — a scoring change, not an optimization. Don't.
+
+`leaderboard_stats` is a one-row view over `mv_leaderboard_alltime` giving the
+homepage its three hero numbers (players, level-ups, total EXP) cheaply, instead of
+pulling the whole 5000-row leaderboard client-side.
+
 ## Database access rules
 
 - **`public.users` is intentionally readable by everyone** — the leaderboard needs
