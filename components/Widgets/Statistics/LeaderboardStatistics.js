@@ -20,7 +20,7 @@ export default function LeaderboardStatistics({
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
           <strong>
-            <CountUp start={0} end={players} duration={1} separator="," />{' '}
+            <CountUp key={players} start={0} end={players} duration={1} separator="," />{' '}
             <i className="fas fa-running" />
           </strong>
           <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>
@@ -32,7 +32,7 @@ export default function LeaderboardStatistics({
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
           <strong>
-            <CountUp start={0} end={levels_earned} duration={1} separator="," />{' '}
+            <CountUp key={levels_earned} start={0} end={levels_earned} duration={1} separator="," />{' '}
             <i className="fas fa-angle-double-up" />
           </strong>
           <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>
@@ -44,7 +44,7 @@ export default function LeaderboardStatistics({
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
           <strong>
-            <CountUp start={0} end={exp_earned} duration={1} separator="," />{' '}
+            <CountUp key={exp_earned} start={0} end={exp_earned} duration={1} separator="," />{' '}
             XP
           </strong>
           <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>EXP Earned</div>
