@@ -339,6 +339,25 @@ export async function fetchWeekWins(player) {
   }
 }
 
+// The homepage's three hero numbers (player count, level-ups, total EXP) used
+// to be derived client-side by pulling the entire ~5000-row all-time
+// leaderboard (2.18MB) on every visit. leaderboard_stats is a one-row view over
+// the same matview that computes them in Postgres -- ~60 bytes instead.
+export async function fetchLeaderboardTotals(setStats) {
+  try {
+    const { data } = await supabase
+      .from('leaderboard_stats')
+      .select('*')
+      .single();
+
+    if (data) {
+      setStats(data);
+    }
+  } catch (error) {
+    // leave the previous stats in place on failure
+  }
+}
+
 export async function fetchLeaderboardStats(setPlayers, setLoading, season) {
   try {
     if (season) {
