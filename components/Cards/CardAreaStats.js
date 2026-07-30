@@ -133,7 +133,7 @@ export default function CardAreaStats({ areaStats }) {
                   />
                 </p>
               </div>
-              {areaStats.map((stat, i) => (
+              {(areaStats || []).map((stat, i) => (
                 <LevelBar
                   key={i}
                   title={stat.area}

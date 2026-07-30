@@ -148,7 +148,7 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
         {children}
       </main>
       {userOnboarding ? (
-        userOnboarding.onboarding_state.includes('4') &&
+        userOnboarding.onboarding_state?.includes('4') &&
           !router.asPath.includes('embed/') && !router.asPath.includes('auth') ? (
           <BottomNavbar />
         ) : null
