@@ -214,14 +214,26 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
   useEffect(() => {
     if (inView) {
       let interval = setInterval(() => {
-        let scrollingPlayer = activePlayers[count];
-        setScrollingPlayers([...scrollingPlayers, scrollingPlayer])
+        // Nothing to rotate through yet: either the first fetch has not landed,
+        // or the current season genuinely has very few players. Bail instead of
+        // pushing `undefined` into the ticker -- it used to survive into render
+        // and throw on `player.player_rank`, taking the whole page down.
+        if (!activePlayers.length) return;
+
+        const scrollingPlayer = activePlayers[count];
+
+        if (scrollingPlayer) {
+          setScrollingPlayers((current) => [...current, scrollingPlayer]);
+        }
         scrollToBottom()
         if (count < activePlayers.length - 1) {
           setCount(count + 1);
         } else {
           setScrollingPlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']).slice(0, 2));
-          setCount(2);
+          // Resume after the two seeded rows, but never past the end. `2` was
+          // hardcoded, which silently assumed at least three players -- true
+          // for a mature season, false at the start of a new one.
+          setCount(Math.min(2, Math.max(activePlayers.length - 1, 0)));
         }
       }, 3000);
 
@@ -236,6 +248,11 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
   const bottomRef = useRef();
 
   const scrollToBottom = () => {
+    // The ticker is not always mounted -- it is behind the loading state, and
+    // absent entirely when there is nothing to scroll. Without this guard the
+    // interval throws on `null.scrollIntoView`.
+    if (!bottomRef.current) return;
+
     bottomRef.current.scrollIntoView({
       behavior: "smooth",
       block: "center",
@@ -329,7 +346,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                           </>
                         ) : (
                           <>
-                            {scrollingPlayers ? scrollingPlayers.map((player, i) => (
+                            {scrollingPlayers ? scrollingPlayers.filter(Boolean).map((player, i) => (
                               <Avatar
                                 key={i}
                                 displayMode={'short'}
