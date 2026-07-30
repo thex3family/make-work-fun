@@ -1,5 +1,11 @@
 import s from './LeaderboardStatistics.module.css';
-import CountUp from 'react-countup';
+
+// These numbers arrive from an async fetch after the component has mounted (and
+// after SSR rendered them as 0). react-countup v5 latches its value at mount and
+// never reflected the update -- not on prop change, not even on a keyed remount
+// -- so the hero numbers sat at 0. Rendering the value directly is correct
+// regardless of when the data lands.
+const fmt = (n) => Number(n || 0).toLocaleString();
 
 export default function LeaderboardStatistics({
   players,
@@ -20,7 +26,7 @@ export default function LeaderboardStatistics({
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
           <strong>
-            <CountUp key={players} start={0} end={players} duration={1} separator="," />{' '}
+            {fmt(players)}{' '}
             <i className="fas fa-running" />
           </strong>
           <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>
@@ -32,7 +38,7 @@ export default function LeaderboardStatistics({
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
           <strong>
-            <CountUp key={levels_earned} start={0} end={levels_earned} duration={1} separator="," />{' '}
+            {fmt(levels_earned)}{' '}
             <i className="fas fa-angle-double-up" />
           </strong>
           <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>
@@ -44,7 +50,7 @@ export default function LeaderboardStatistics({
       <span className={s.Countdowncol}>
         <span className={s.Countdowncolelement}>
           <strong>
-            <CountUp key={exp_earned} start={0} end={exp_earned} duration={1} separator="," />{' '}
+            {fmt(exp_earned)}{' '}
             XP
           </strong>
           <div className={`${s.Countdowncolformat} bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500`}>EXP Earned</div>
