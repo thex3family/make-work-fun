@@ -11,7 +11,8 @@ import { useInView } from 'react-intersection-observer';
 // functions
 
 import {
-  fetchLeaderboardStats
+  fetchLeaderboardStats,
+  fetchLeaderboardTotals
 } from '@/components/Fetch/fetchMaster';
 import PlayerCard from '@/components/Embeds/PlayerCard';
 import DailiesEntry from '@/components/Embeds/DailiesEntry';
@@ -21,6 +22,7 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
   const [loading, setLoading] = useState(true);
 
   const [players, setPlayers] = useState([]);
+  const [stats, setStats] = useState({ players: 0, levels_earned: 0, exp_earned: 0 });
   const [sNPlayers, setsNPlayers] = useState([]);
   const [activePlayers, setActivePlayers] = useState([]);
   const [count, setCount] = useState(2);
@@ -199,7 +201,9 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
   async function refreshStats() {
     console.log('Refreshing Stats');
     fetchLeaderboardStats(setsNPlayers, setLoading, true);
-    fetchLeaderboardStats(setPlayers, setLoading);
+    // Hero numbers come from the tiny stats view now, not the full all-time
+    // leaderboard -- the homepage never needed the 5000 rows, only the totals.
+    fetchLeaderboardTotals(setStats);
   }
 
 
@@ -286,17 +290,9 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
                     </p>
                     <h1 className="rounded-lg w-full md:w-11/12 md:-ml-3 lg:w-full mx-auto text-sm font-semibold text-center md:text-left lg:text-sm">
                       <LeaderboardStatistics
-                        players={players.length}
-                        levels_earned={
-                          players.reduce(
-                            (a, v) => (a = a + v.current_level),
-                            0
-                          ) - players.length
-                        }
-                        exp_earned={players.reduce(
-                          (a, v) => (a = a + v.total_exp),
-                          0
-                        )}
+                        players={stats.players}
+                        levels_earned={stats.levels_earned}
+                        exp_earned={stats.exp_earned}
                       />
                     </h1>
                   </div>
