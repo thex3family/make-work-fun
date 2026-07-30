@@ -33,6 +33,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# agent tooling / git worktrees created under .claude/worktrees are full
+# checkouts of this repo -- never commit them
+.claude/
+
 # workers
 **/public/workbox-*.js
 **/public/sw.js

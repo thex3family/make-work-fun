@@ -545,39 +545,32 @@ export async function fetchFriendshipLink(setFriendshipLink) {
   }
 }
 
+// Callers render the result directly, so this must always resolve to an array.
+//
+// It previously returned `undefined` on every failure path: the trailing
+// `if (error && status !== 406)` referenced an `error` that was block-scoped
+// inside the two branches above, so it threw ReferenceError, the empty catch
+// swallowed it, and the function fell off the end. Consumers then called
+// .map() on undefined and took the page down -- including the public embeds.
 export async function fetchAreaStats(player) {
   try {
-    if (!player) {
-      const user = supabase.auth.user();
+    const playerId = player || supabase.auth.user()?.id;
 
-      const { data, error } = await supabase
-        .from('area_stats')
-        .select('*')
-        .eq('player', user.id)
-        .limit(6);
+    if (!playerId) return [];
 
-      if (data) {
-        return data;
-      }
-    }
-    if (player) {
-      const { data, error } = await supabase
-        .from('area_stats')
-        .select('*')
-        .eq('player', player)
-        .limit(6);
+    const { data, error } = await supabase
+      .from('area_stats')
+      .select('*')
+      .eq('player', playerId)
+      .limit(6);
 
-      if (data) {
-        return data;
-      }
-    }
-
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
+
+    return data || [];
   } catch (error) {
-    // alert(error.message)
-  } finally {
+    return [];
   }
 }
 

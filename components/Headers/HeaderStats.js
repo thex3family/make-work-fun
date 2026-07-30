@@ -21,10 +21,19 @@ export default function HeaderStats({
   user_id,
   refreshStats
 }) {
+  const [showHide, setShowHide] = useState(true);
+
+  // player.js renders this before its stats fetch resolves, and
+  // fetchPlayerStats swallows its errors and returns undefined -- an expired
+  // session makes `supabase.auth.user()` null and throws inside the fetch.
+  // Neither of player.js's loading gates catches that combination, so bail
+  // here rather than dereferencing. Declared after the hook so hook order is
+  // unconditional.
+  if (!playerStats) return null;
+
   const exp_percent = Math.floor(
     (playerStats.exp_progress / playerStats.level_exp) * 100
   );
-  const [showHide, setShowHide] = useState(true);
 
   async function handleAvatarUpload(url) {
     setAvatarUrl(await downloadImage(url, 'avatar'));

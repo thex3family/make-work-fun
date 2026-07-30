@@ -230,10 +230,12 @@ export default function HomePage({ metaBase, setMeta, refreshChildStats, setRefr
           setCount(count + 1);
         } else {
           setScrollingPlayers([...sNPlayers].sort((a, b) => b['exp_earned_week'] - a['exp_earned_week']).slice(0, 2));
-          // Resume after the two seeded rows, but never past the end. `2` was
-          // hardcoded, which silently assumed at least three players -- true
-          // for a mature season, false at the start of a new one.
-          setCount(Math.min(2, Math.max(activePlayers.length - 1, 0)));
+          // Resume after the two seeded rows. `2` was hardcoded, which silently
+          // assumed at least three players -- true for a mature season, false
+          // at the start of a new one. Clamping to length (not length - 1)
+          // lands one past the end for 1- and 2-player seasons, so the guard
+          // above skips the tick instead of re-appending someone already shown.
+          setCount(Math.min(2, activePlayers.length));
         }
       }, 3000);
 
