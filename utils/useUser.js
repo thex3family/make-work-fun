@@ -60,6 +60,15 @@ export const UserContextProvider = (props) => {
     supabase.from('onboarding').select('*').eq('id', user.id).single().limit(1);
   const getUserProfile = () =>
     supabase.from('users').select('*').eq('id', user.id).single();
+  // Secrets (Notion token/identity, billing) live in user_private, which is
+  // RLS-scoped to the owner -- public.users has to stay world-readable for the
+  // leaderboard, so it can't hold them. Merged into userProfile below so
+  // consumers reading userProfile.notion_auth_key et al. don't change.
+  //
+  // Deliberately not .single(): a user who has never connected Notion has no
+  // row here, and .single() treats zero rows as an error.
+  const getUserPrivate = () =>
+    supabase.from('user_private').select('*').eq('id', user.id);
   // const getSubscription = () =>
   //   supabase
   //     .from('subscriptions')
@@ -73,12 +82,23 @@ export const UserContextProvider = (props) => {
         getUserDetails(),
         getUserOnboarding(),
         getUserProfile(),
+        getUserPrivate()
         // getSubscription()
       ]).then((results) => {
-        setUserDetails(results[0].value.data);
-        setUserOnboarding(results[1].value.data);
-        setUserProfile(results[2].value.data);
-        // setSubscription(results[3].value.data);
+        // allSettled entries are {status:'rejected', reason} on failure -- there
+        // is no .value, so the previous results[N].value.data threw and took the
+        // whole app down with it. Optional-chain every read.
+        setUserDetails(results[0]?.value?.data ?? null);
+        setUserOnboarding(results[1]?.value?.data ?? null);
+
+        const profile = results[2]?.value?.data ?? null;
+        const priv = results[3]?.value?.data?.[0] ?? {};
+
+        // Spreading into null yields a truthy-but-hollow object, which would
+        // defeat every `userProfile?.x` guard downstream. Keep null as null.
+        setUserProfile(profile ? { ...profile, ...priv } : null);
+
+        // setSubscription(results[4].value.data);
         setUserLoaded(true);
       });
     }

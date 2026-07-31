@@ -17,16 +17,29 @@ export default function notionCallback({ response, user }) {
     }, [response])
 
     async function updateDatabase() {
+        // getServerSideProps passes `user` straight through with no null check,
+        // so an expired/absent cookie lands here as null. Previously that threw
+        // on user.id into a catch that only console.logs; now it would also make
+        // the upsert's conflict key null, which is a guaranteed failure.
+        if (!user) {
+            setLoading(false);
+            return;
+        }
+
         try {
+            // Secrets live in user_private (RLS-scoped to the owner), not in the
+            // world-readable users table. Upsert rather than update so a user
+            // created after the backfill still gets a row.
             const { data, error } = await supabase
-                .from('users')
-                .update({ 
+                .from('user_private')
+                .upsert({
+                    id: user.id,
                     notion_auth_key: response.access_token,
                     notion_user_id: response.owner.user.id,
                     notion_user_name: response.owner.user.name,
                     notion_user_email: response.owner.user.person.email,
-                 })
-                .eq('id', user.id);
+                    private_updated_at: new Date().toISOString()
+                 });
 
             if (error) {
                 throw error;
@@ -58,7 +71,9 @@ export default function notionCallback({ response, user }) {
         } catch (error) {
             // alert(error.message);
         } finally {
-            updateNotionCredentials();
+            // This used to call updateNotionCredentials() -- itself -- which is
+            // unbounded recursion: every Notion connect kicked off an endless
+            // loop of notion_credentials writes.
             setLoading(false)
         }
     }
