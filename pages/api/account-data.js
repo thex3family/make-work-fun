@@ -57,7 +57,7 @@ export default async function handler(req, res) {
             .firstPage();
 
         const { data } = await supabaseForUser
-            .from('users')
+            .from('user_private')
             .select('notion_auth_key')
             .eq('id', user.id)
             .single();

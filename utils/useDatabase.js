@@ -77,13 +77,16 @@ const copyBillingDetailsToCustomer = async (uuid, payment_method) => {
   const customer = payment_method.customer;
   const { name, phone, address } = payment_method.billing_details;
   await stripe.customers.update(customer, { name, phone, address });
+  // Billing details moved to user_private alongside the other per-user secrets.
+  // supabaseAdmin is service_role, so RLS and grants don't apply here; upsert
+  // rather than update so a user created after the backfill still gets a row.
   const { error } = await supabaseAdmin
-    .from('users')
-    .update({
+    .from('user_private')
+    .upsert({
+      id: uuid,
       billing_address: address,
       payment_method: payment_method[payment_method.type]
-    })
-    .eq('id', uuid);
+    });
   if (error) throw error;
 };
 

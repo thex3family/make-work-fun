@@ -1,4 +1,5 @@
 import { Client } from '@notionhq/client';
+import { createClient } from '@supabase/supabase-js';
 import { supabase } from '@/utils/supabase-client';
 import TaskGroups from '@/components/Tasks/tasks_groups';
 import { useRouter } from 'next/router';
@@ -37,8 +38,6 @@ export async function getServerSideProps({ req }) {
   try {
     // Get the user's session based on the request
     const { user, token } = await supabase.auth.api.getUserByCookie(req);
-    
-    supabase.auth.setAuth(token);
 
     if (!user) {
       return {
@@ -49,13 +48,29 @@ export async function getServerSideProps({ req }) {
       };
     }
 
-    const { data: userData } = await supabase
-      .from('users')
+    // Per-request client. This runs in getServerSideProps, where one Node
+    // process serves concurrent requests -- calling setAuth() on the shared
+    // module-level client lets one request's JWT bleed into another's query.
+    // That was survivable while this read hit `users` (USING (true) plus an
+    // .eq('id') filter still returned the right row), but user_private is
+    // RLS-scoped to auth.uid(), so a bled token silently returns zero rows.
+    const supabaseForUser = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
+    supabaseForUser.auth.setAuth(token);
+
+    const { data: userData } = await supabaseForUser
+      .from('user_private')
       .select('notion_user_id')
       .eq('id', user.id)
       .single();
 
-    const notion_user_id = userData.notion_user_id;
+    // Zero rows is normal -- roughly half of all users have never connected
+    // Notion. .single() returns null there, and the bare deref used to throw
+    // into the outer catch and redirect to /credentials-invalid, telling people
+    // their credentials were broken when they were fine.
+    const notion_user_id = userData?.notion_user_id;
 
     let all_personal_tasks = [];
 
