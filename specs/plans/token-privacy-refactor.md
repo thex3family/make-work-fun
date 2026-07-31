@@ -8,13 +8,16 @@ revised: 2026-07-30
 
 # Token Privacy Refactor
 
-> **Revision note.** An adversarial review of the first draft found two critical
-> defects: the Stripe webhook writer was missing from scope entirely (Phase 3
-> would have broken subscription syncing), and the draft cited
-> `pages/embed/task-list.js` as *proof* a code path runs authenticated when that
-> file actually contains a cross-request token-bleed bug which this refactor
-> would promote from latent to live. Both are fixed below. Phase 3's
-> `DROP COLUMN` safety was independently verified against `pg_depend`.
+> **Revision note.** An adversarial review of the first draft found two defects.
+> The serious one: the draft cited `pages/embed/task-list.js` as *proof* a code
+> path runs authenticated, when that file actually contains a cross-request
+> token-bleed bug which this refactor would promote from latent to live. The
+> second: the Stripe billing writer (`utils/useDatabase.js`) was missing from
+> scope. The review rated that critical on the assumption payments were live —
+> they are not (0 subscriptions, 0 rows with billing data), so it is a dormant
+> landmine rather than a breakage. Still fixed here, because the scaffolding is
+> being kept deliberately. Phase 3's `DROP COLUMN` safety was independently
+> verified against `pg_depend`.
 
 ## Problem
 
@@ -32,8 +35,8 @@ The same table stores per-user secrets:
 | `notion_user_email` | 4,604 | PII |
 | `notion_user_name` | ~4,600 | PII |
 | `notion_user_id` | ~4,600 | External identifier |
-| `billing_address` | 0 | PII (but has a live writer) |
-| `payment_method` | 0 | PII (but has a live writer) |
+| `billing_address` | 0 | PII — dormant writer (Stripe not enabled) |
+| `payment_method` | 0 | PII — dormant writer (Stripe not enabled) |
 
 `anon` was narrowed to 11 safe columns already. **`authenticated` holds
 table-level SELECT on all 17**, so any of ~9,000 accounts can read all 4,606
@@ -215,14 +218,23 @@ SELECT count(*) FROM public.user_private WHERE notion_auth_key IS NOT NULL; -- 4
      catch and redirect to `/credentials-invalid`, telling users their
      credentials are broken when they aren't.
 
-5. **`utils/useDatabase.js:76-88`** — the Stripe webhook billing writer, missing
-   from the first draft. It does `.from('users').update({ billing_address,
-   payment_method })` and then `if (error) throw error`. After Phase 3 that is
-   `PGRST204 column not found` → throw → webhook 500s → **Stripe marks the
-   endpoint failing and subscription status stops syncing.** Repoint to
-   `.from('user_private').upsert({ id: uuid, billing_address, payment_method })`.
-   It uses `supabaseAdmin` (service role), so RLS and grants are moot; upsert
-   rather than update so a user created after the backfill still works.
+5. **`utils/useDatabase.js:76-88`** — the Stripe billing writer. It does
+   `.from('users').update({ billing_address, payment_method })` then
+   `if (error) throw error`, so after Phase 3 it would hit
+   `PGRST204 column not found` and throw out of the webhook handler.
+
+   **This is dormant, not broken:** `copyBillingDetailsToCustomer` is only
+   reached from `manageSubscriptionStatusChange` on a subscription event, and
+   there are **0 subscriptions** and 0 rows with billing data — payments have
+   never been switched on. The Stripe scaffolding is being kept intentionally,
+   so the point of fixing it now is that Phase 3 would otherwise leave a
+   landmine that detonates whenever payments *are* enabled, long after anyone
+   remembers this refactor.
+
+   Repoint to `.from('user_private').upsert({ id: uuid, billing_address,
+   payment_method })`. It uses `supabaseAdmin` (service role), so RLS and grants
+   are moot; upsert rather than update so a user created after the backfill
+   still works.
 
 **Deploy and confirm before Phase 3.** While both copies exist, either read path
 returns correct data, so a stale bundle is harmless.
@@ -278,7 +290,10 @@ is entirely commented out.
 - [ ] Account page still lists Notion databases (`/api/account-data`)
 - [ ] `/embed/task-list` resolves for a Notion user **and** renders sensibly for a
       user with no `user_private` row
-- [ ] Trigger a Stripe subscription event → webhook 200s, billing lands
+- [ ] Stripe billing writer: **code review only** — payments are not enabled
+      (0 subscriptions), so there is no event to trigger. Confirm by reading that
+      `useDatabase.js` no longer references `users.billing_address` /
+      `users.payment_method`
 - [ ] `select('*')` on `users` works for anon and authenticated after Phase 3
 - [ ] Supabase security advisor shows no new findings
 
