@@ -1,10 +1,16 @@
 ---
 name: Token Privacy Refactor
 description: "Move per-user secrets out of public.users so no signed-in account can read another account's Notion credentials."
-status: draft
+status: active
 created: 2026-07-30
 revised: 2026-07-30
 ---
+
+> **Progress.** Phases 1 and 2 are applied and deployed (commit `c8b423a`).
+> Phase 3 is **blocked on signed-in verification** — see the checklist. Until
+> Phase 3 runs, the tokens still exist in `public.users` and `authenticated`
+> can still read them, so **the exposure is not yet closed.** Phase 2 moved the
+> application onto the new table; Phase 3 is what actually removes the data.
 
 # Token Privacy Refactor
 
@@ -107,7 +113,10 @@ Ordering is the whole risk. The app must read the new table **before** the old
 columns disappear, and keep working while both exist.
 
 ### Phase 1: Create and backfill (additive — nothing breaks)
-**Status:** not started · **Migration:** `create_user_private`
+**Status:** done — 9,040 rows backfilled (== `count(users)`), 4,608 with a token.
+Verified `anon` refused, and `authenticated` *without* a JWT sees 0 rows, so RLS
+is enforcing rather than merely declared.
+**Migration:** `create_user_private`
 
 ```sql
 -- Types verified against information_schema: notion_* are varchar,
@@ -156,7 +165,9 @@ SELECT count(*) FROM public.user_private WHERE notion_auth_key IS NOT NULL; -- 4
 ```
 
 ### Phase 2: Point the app at the new table, then deploy
-**Status:** not started
+**Status:** done — shipped in `c8b423a`, confirmed live (`user_private` present
+in the deployed `_app` chunk). All public pages 200 with no client-side
+exceptions. Signed-in paths are **not** yet verified; see Phase 3's gate.
 **Files:** `utils/useUser.js`, `pages/auth/notion/callback.js`,
 `pages/api/account-data.js`, `pages/embed/task-list.js`, `utils/useDatabase.js`
 
@@ -240,7 +251,20 @@ SELECT count(*) FROM public.user_private WHERE notion_auth_key IS NOT NULL; -- 4
 returns correct data, so a stale bundle is harmless.
 
 ### Phase 3: Drop the columns (only after Phase 2 is live and verified)
-**Status:** not started · **Migration:** `drop_private_columns_from_users`
+**Status:** blocked. Phase 2 is live, but three of its paths are behind a login
+and cannot be exercised without a session:
+
+1. Sign in → the account page still lists your Notion databases
+   (`/api/account-data` reading `user_private`)
+2. Connect a Notion account → the token lands in `user_private`
+3. `/embed/task-list` resolves for a Notion user, and renders sensibly for a
+   user who has never connected Notion (the zero-row case)
+
+Until those pass, the code revert path still exists because `public.users` keeps
+its copy of the data. Dropping the columns removes that path (the backup table
+below is the only way back), so do not run this phase on an unverified Phase 2.
+
+**Migration:** `drop_private_columns_from_users`
 
 ```sql
 -- Back up first; DROP COLUMN is not reversible.
