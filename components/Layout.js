@@ -35,56 +35,9 @@ export default function Layout({ children, meta, manualPlayerID, manualPlayerSta
 
   useEffect(() => {
     const mobileDevice = detectMob();
-    setupIntercom(mobileDevice);
     setMobileDevice(mobileDevice);
 
   }, [user]);
-
-  function setupIntercom(mobileDevice) {
-    // hide it on embeds until I figure out a good way to pass user credentials to intercom
-    if (process.env.NODE_ENV === 'production' && !router.asPath.includes('embed/')) {
-      window.intercomSettings = {
-        app_id: 'dcx9wsn6',
-        hide_default_launcher: mobileDevice,
-        email: user?.email,
-        name: userProfile?.full_name,
-        custom_launcher_selector: '.launch_intercom'
-      };
-
-      (function () {
-        var w = window;
-        var ic = w.Intercom;
-        if (typeof ic === 'function') {
-          ic('reattach_activator');
-          ic('update', w.intercomSettings);
-        } else {
-          var d = document;
-          var i = function () {
-            i.c(arguments);
-          };
-          i.q = [];
-          i.c = function (args) {
-            i.q.push(args);
-          };
-          w.Intercom = i;
-          var l = function () {
-            var s = d.createElement('script');
-            s.type = 'text/javascript';
-            s.async = true;
-            s.src = 'https://widget.intercom.io/widget/dcx9wsn6';
-            var x = d.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s, x);
-          };
-          if (w.attachEvent) {
-            w.attachEvent('onload', l);
-          } else {
-            w.addEventListener('load', l, false);
-          }
-        }
-      })();
-      console.log('Intercom Started');
-    }
-  }
 
   const { win } = router.query;
   const { lvl } = router.query;
