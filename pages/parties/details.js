@@ -139,7 +139,7 @@ export default function partyDetail({metaBase, setMeta}) {
     setPartyPlayers(await fetchPartyMembers(party.id));
     setDailyTarget(party.daily_target);
     setDue_Date(moment(party.due_date).local().format('YYYY-MM-DDTHH:mm:ss'));
-    if (party.challenge == 1) {
+    if (party.challenge == 1 && user?.id) {
       setDailyTarget_Achieved(
         await fetchWinsPastDate(
           user.id,
@@ -322,6 +322,12 @@ export default function partyDetail({metaBase, setMeta}) {
     try {
       const user = supabase.auth.user();
 
+      // The Save button is live even with the field empty, so this arrives as
+      // null the first time a player opens a dragon quest.
+      if (!database_id) {
+        return;
+      }
+
       // if matches a url, then change the format
 
       if (database_id.match(notionLink)) {
@@ -400,25 +406,19 @@ export default function partyDetail({metaBase, setMeta}) {
         .eq('type', 'Party Mission')
         .gte('entered_on', moment().startOf('day').utc().format());
 
-      if (error && status !== 406) {
+      if (error) {
         throw error;
       }
 
       // I'll need to seperate out the daily target from the other missions later on...
 
-      console.log('Daily Target Hit!', data, data.length);
-      const fetchData = data;
-
-      if (fetchData.length === 0) {
-        setDailyTargetRewardClaimed(false);
-      } else {
-        setDailyTargetRewardClaimed(true);
-      }
+      // Reading data.length before checking `error` threw whenever the query
+      // failed, and the catch left the flag on its `true` default -- so a
+      // failed lookup showed an unclaimed reward as already "Claimed".
+      setDailyTargetRewardClaimed((data || []).length > 0);
     } catch (error) {
-      // alert(error.message);
       console.log(error.message);
-    } finally {
-      // How do I show the null state?
+      setDailyTargetRewardClaimed(false);
     }
   }
 
