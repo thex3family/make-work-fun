@@ -6,7 +6,6 @@ import { supabase } from '../utils/supabase-client';
 import { userContent } from '@/utils/useUser';
 import { useRouter } from 'next/router';
 import CardParty from '@/components/Cards/CardParty';
-import Kanban from '@/components/Parties/Kanban';
 import RecruitingBoard from '@/components/Parties/RecruitingBoard';
 import { triggerWinModal } from '@/components/Modals/ModalHandler';
 import {
@@ -285,8 +284,13 @@ export default function parties({ metaBase, setMeta, refreshChildStats, setRefre
 
   async function fetchRecruitingParties() {
     try {
+      // party_details, not party. A party whose due date has passed is In
+      // Review (3) even though the table still says In Progress (2), and the
+      // view is what applies that rule. Reading the table straight advertised
+      // finished parties on the Join A Party board, labelled "In Progress",
+      // and let players join them.
       const { data, error } = await supabase
-        .from('party')
+        .from('party_details')
         .select('*')
         .or('status.eq.1,status.eq.2')
         .order('status', { ascending: true })
@@ -580,9 +584,6 @@ export default function parties({ metaBase, setMeta, refreshChildStats, setRefre
                           aria-hidden="true"
                         ></div>
                       </div>
-                      {/* {recruitingParties ? (
-                <Kanban recruitingParties={recruitingParties} />
-              ) : null} */}
                       {recruitingParties && activeParties ? (
                         <RecruitingBoard
                           partyLimit={partyLimit}
