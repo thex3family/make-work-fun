@@ -62,7 +62,7 @@ export default function CardPartyRecruit({ party, partyLimit }) {
             {partyMembers ? (
               <>
                 {partyMembers.slice(0, 3).map((member) => (
-                  <AvatarMember member={member} />
+                  <AvatarMember key={member.party_member_id} member={member} />
                 ))}{' '}
                 {(partyMembers.length - 3) > 1 ?
                   <div
