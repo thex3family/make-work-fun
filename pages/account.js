@@ -116,12 +116,19 @@ export default function Account({
   async function getAccountData() {
     const fetchData = async () => {
       try {
+        // Send the access token explicitly. This effect is keyed on `user`,
+        // which auth-helpers publishes from localStorage before the session
+        // cookie is synced, so on a full page load cookie-only auth loses the
+        // race and 401s. The server verifies this token; the body is ignored.
+        const accessToken = supabase.auth.session()?.access_token;
+
         const res = await fetch('/api/account-data', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
           },
-          body: JSON.stringify({ user })  // pass user data
+          body: JSON.stringify({})
         });
         if (res.ok) {
           const data = await res.json();
