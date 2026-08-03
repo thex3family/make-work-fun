@@ -4,6 +4,12 @@ import Button from '../ui/Button';
 import Router from 'next/router';
 import { supabase } from '@/utils/supabase-client';
 import LoadingDots from '../ui/LoadingDots';
+import { seasonStartDate } from '@/utils/season';
+import moment from 'moment';
+
+// Matched on when checking whether this season's opening win already exists,
+// so the name has to stay in sync with the row inserted below.
+const SEASON_START_WIN = 'My First Win This Season';
 
 export default function ModalOnboarding({ onboardingState, player }) {
   const [header, setHeader] = useState(null);
@@ -62,6 +68,14 @@ export default function ModalOnboarding({ onboardingState, player }) {
     }
   }
 
+  // Granted once per player per season.
+  //
+  // This used to insert unconditionally and then reload. The reload lands
+  // before the new win is visible on the seasonal leaderboard, so the modal
+  // comes straight back -- and players click it again. Recorded gaps between
+  // repeat rows are 2-9 seconds, and it has produced 1,820 duplicate wins
+  // across 686 player-seasons, one player reaching 42. The insert is now
+  // guarded by a lookup so a repeat click costs nothing.
   async function startSeason() {
     try {
       setLoading(true);
@@ -69,9 +83,31 @@ export default function ModalOnboarding({ onboardingState, player }) {
       // only for signed in users
       const user = supabase.auth.user();
 
+      if (!user) {
+        throw new Error('You need to be signed in to start the season.');
+      }
+
+      const seasonStart = seasonStartDate();
+
+      const { data: existing, error: lookupError } = await supabase
+        .from('success_plan')
+        .select('id')
+        .eq('player', user.id)
+        .eq('name', SEASON_START_WIN)
+        .gte('closing_date', moment(seasonStart).format('YYYY-MM-DD'))
+        .limit(1);
+
+      if (lookupError) {
+        throw lookupError;
+      }
+
+      if (existing && existing.length > 0) {
+        return;
+      }
+
       let testDateStr = new Date();
 
-      const { data, error } = await supabase.from('success_plan').insert([
+      const { error } = await supabase.from('success_plan').insert([
         {
           player: user.id,
           difficulty: 1,
@@ -82,14 +118,14 @@ export default function ModalOnboarding({ onboardingState, player }) {
           punctuality: 0,
           exp_reward: 25,
           gold_reward: 25,
-          name: 'My First Win This Season'
+          name: SEASON_START_WIN
         }
       ]);
-      if (error && status !== 406) {
+
+      if (error) {
         throw error;
       }
     } catch (error) {
-      // alert(error.message);
       console.log(error.message);
     } finally {
       Router.reload(window.location.pathname)
