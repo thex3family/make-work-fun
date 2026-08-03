@@ -24,6 +24,7 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewLoaded, setReviewLoaded] = useState(null);
   const [saving, setSaving] = useState(null);
+  const [saveError, setSaveError] = useState(null);
   const classes = useStyles();
 
   // load review
@@ -39,18 +40,17 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
         .eq('party_member', party_member_id)
         .single();
 
+      // A player who has not reflected yet has no row, which `.single()`
+      // reports as a 406 error rather than as empty data. That is the normal
+      // first-open case, so it just leaves the form blank.
       if (data) {
         setReviewWell(data.done_well);
         setReviewBetter(data.do_better);
         setReviewHelpful(data.be_helpful);
         setReviewRating(data.party_rating);
       }
-
-      if (error && status !== 406) {
-        throw error;
-      }
     } catch (error) {
-      // alert(error.message)
+      console.log(error.message);
     } finally {
       setReviewLoaded(true);
     }
@@ -59,11 +59,10 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
   // save review
   async function saveReview(done_well, do_better, be_helpful, party_rating) {
     setSaving(true);
+    setSaveError(null);
 
     try {
-      const user = supabase.auth.user();
-
-      let { data, error } = await supabase
+      const { error } = await supabase
         .from('party_review')
         .upsert({
           party_member: party_member_id,
@@ -74,13 +73,21 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
           updated_at: new Date()
         })
         .eq('party_member', party_member_id);
-    } catch (error) {
-     // alert(error.message);
-     console.log(error.message);
-    } finally {
-      setSaving(false);
-      changePlayerStatus('Reviewing')
+
+      if (error) {
+        throw error;
+      }
+
+      // Only mark the player as having reflected once the reflection is
+      // actually stored. This used to run from a finally, so a failed save
+      // still closed the modal and flipped the status -- the player was told
+      // they had reflected and their answers were gone.
+      changePlayerStatus('Reviewing');
       setOpenReviewModal(false);
+    } catch (error) {
+      console.log(error.message);
+      setSaveError(error.message || 'Your reflection was not saved. Please try again.');
+      setSaving(false);
     }
   }
 
@@ -189,6 +196,13 @@ export default function ModalReview({ setOpenReviewModal, party_member_id, chang
                   </div>
                 )}
               </div>
+              {saveError ? (
+                <div className="mx-6 mb-2 rounded border-2 border-red-500 bg-red-100 p-3 text-sm font-semibold text-red-700">
+                  <i className="fas fa-exclamation-triangle mr-2" />
+                  {saveError}
+                </div>
+              ) : null}
+
               {/* <img src="img/default_avatar.png" height="auto" className="w-3/4 mx-auto pb-2" /> */}
               {/*footer*/}
               <div className="flex items-center p-6 border-t border-solid border-blueGray-200 rounded-b">
