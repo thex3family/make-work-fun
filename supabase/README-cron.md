@@ -25,6 +25,23 @@ CREATE EXTENSION IF NOT EXISTS pg_cron;
 CREATE EXTENSION IF NOT EXISTS pg_net;
 ```
 
+## Store the secret in the database
+
+The cron job reads its bearer token from `private.app_secrets` rather than
+carrying a literal, so rotating it is one `UPDATE` and no secret lands in
+migration history. The `private` schema is not in PostgREST's exposed schema
+list, so it is unreachable over the REST API regardless of grants.
+
+```sql
+INSERT INTO private.app_secrets (name, value, note)
+VALUES ('sync_secret', '<SYNC_SECRET>', 'must match SYNC_SECRET in Vercel')
+ON CONFLICT (name) DO UPDATE
+  SET value = EXCLUDED.value, updated_at = now();
+```
+
+Supabase Vault would be the nicer home, but its encryption routine needs a
+pgsodium key permission that the normal connection does not hold.
+
 ## Schedule it
 
 ```sql
@@ -33,19 +50,30 @@ SELECT cron.schedule(
   '*/5 * * * *',
   $$
     SELECT net.http_post(
-      url     := 'https://<your-domain>/api/sync/notion',
+      url     := 'https://www.makework.fun/api/sync/notion?batch=10',
       headers := jsonb_build_object(
                    'Content-Type',  'application/json',
-                   'Authorization', 'Bearer <SYNC_SECRET>'
+                   'Authorization',
+                   'Bearer ' || (SELECT value FROM private.app_secrets WHERE name = 'sync_secret')
                  )
     );
   $$
 );
 ```
 
-Every five minutes the route takes the next batch of candidates — hot ones
-first, then the round-robin sweep — so a run is bounded regardless of how many
-credentials exist.
+**Why `batch=10`.** A batch of 12 measured 7.6s end-to-end and Vercel's Hobby
+tier kills functions at 10s. Raise it only if you know you are on Pro (60s+).
+The 5-minute cadence catches up on whatever a run does not reach.
+
+**Why nothing starves.** `sync_candidates` orders by *how overdue* each
+credential is — hot ones (a win in the last 90 days) come due every 10 minutes,
+cold ones every 24 hours, and the most overdue wins the slot. An earlier version
+sorted all hot ahead of all cold, which starved the cold tier permanently: a
+returning player is cold, and could never become hot because becoming hot
+requires a win to sync, which requires being polled.
+
+The `notion-sync` job runs at `:00,:05,…` and `refresh-leaderboards` at
+`:02,:07,…` so the two do not contend.
 
 ## Watching it
 
