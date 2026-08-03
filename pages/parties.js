@@ -142,8 +142,7 @@ export default function parties({ metaBase, setMeta, refreshChildStats, setRefre
 
   async function loadPlayer() {
     console.log('Loading Player');
-    fetchActiveParties();
-    fetchRecruitingParties();
+    loadParties();
     refreshStats();
   }
 
@@ -152,6 +151,15 @@ export default function parties({ metaBase, setMeta, refreshChildStats, setRefre
     setPlayerAllTimeStats(await fetchAllTimeStatsForPlayer());
     setLoading(false);
     setAllParties(await fetchAllParties());
+  }
+
+  // The party list only renders once both fetches have answered, so both have
+  // to resolve to an array even when the query fails -- otherwise a single
+  // failed request hides the recruiting board entirely.
+  async function loadParties() {
+    setActiveParties(await fetchActiveParties());
+    setRecruitingParties(await fetchRecruitingParties());
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -180,9 +188,12 @@ export default function parties({ metaBase, setMeta, refreshChildStats, setRefre
     }
   }
 
+  // Both inputs arrive from independent fetches. Keyed on partyLimitNo alone,
+  // this never re-ran when activeParties landed second, so a player at their
+  // limit was still offered every Join button.
   useEffect(() => {
-    if (activeParties?.length >= partyLimitNo) setPartyLimit(true);
-  }, [partyLimitNo]);
+    setPartyLimit(activeParties?.length >= partyLimitNo);
+  }, [activeParties, partyLimitNo]);
 
   async function fetchActiveParties() {
     try {
@@ -213,6 +224,8 @@ export default function parties({ metaBase, setMeta, refreshChildStats, setRefre
       //   };
       // });
 
+      if (!user) return [];
+
       const { data, error } = await supabase
         .from('party_member_details')
         .select('*')
@@ -220,21 +233,14 @@ export default function parties({ metaBase, setMeta, refreshChildStats, setRefre
         .neq('party_status', 4)
         .eq('player', user.id);
 
-      var parties_you_are_in = data;
-
-      // // only use the parties that are in progress
-      // setActiveParties(parties_you_are_in.filter((party) => party.status == 2));
-
-      setActiveParties(parties_you_are_in);
-
-      if (error && status !== 406) {
+      if (error) {
         throw error;
       }
+
+      return data || [];
     } catch (error) {
-      // alert(error.message);
       console.log(error.message);
-    } finally {
-      setLoading(false);
+      return [];
     }
   }
 
@@ -285,21 +291,14 @@ export default function parties({ metaBase, setMeta, refreshChildStats, setRefre
         .or('status.eq.1,status.eq.2')
         .order('status', { ascending: true })
 
-      var recruitingParties = data;
-
-      // recruitingParties = await addChallengeNameAndMemberAvatars(
-      //   recruitingParties
-      // );
-
-      setRecruitingParties(recruitingParties);
-
-      if (error && status !== 406) {
+      if (error) {
         throw error;
       }
+
+      return data || [];
     } catch (error) {
-      // alert(error.message)
-    } finally {
-      setLoading(false);
+      console.log(error.message);
+      return [];
     }
   }
 
