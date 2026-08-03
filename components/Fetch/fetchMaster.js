@@ -180,19 +180,30 @@ export async function fetchPlayerStats(player, setNewToSeason) {
   }
 }
 
+// Returns null rather than throwing when the player has no all-time leaderboard
+// row. `.single()` answers 406 for zero rows, so a player who has never logged a
+// win used to make this reject -- and callers await it in the middle of a
+// refresh sequence, so the throw aborted every later step in that sequence.
 export async function fetchAllTimeStatsForPlayer() {
-  const user = supabase.auth.user();
-  const { data, error } = await supabase
-    .from('leaderboard')
-    .select('*')
-    .eq('player', user.id)
-    .single();
+  try {
+    const user = supabase.auth.user();
 
-  if (error) {
-    throw error;
+    if (!user) return null;
+
+    const { data, error } = await supabase
+      .from('leaderboard')
+      .select('*')
+      .eq('player', user.id)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data || null;
+  } catch (error) {
+    return null;
   }
-
-  return data;
 }
 
 export async function fetchWins(user) {
@@ -452,16 +463,13 @@ export async function fetchPartyPlayers(party_id) {
       .order('role', { ascending: false })
       .eq('party_id', party_id);
 
-    if (data) {
-      return data;
-    }
-
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
+
+    return data || [];
   } catch (error) {
-    // alert(error.message)
-  } finally {
+    return [];
   }
 }
 
@@ -472,16 +480,13 @@ export async function fetchAllParties() {
       .select('*')
       .order('due_date', { ascending: false })
 
-    if (data) {
-      return data;
-    }
-
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
+
+    return data || [];
   } catch (error) {
-    // alert(error.message)
-  } finally {
+    return [];
   }
 }
 
@@ -621,20 +626,19 @@ export async function fetchAllPartyDetails(party_slug) {
       .select('*')
       .eq('party_slug', party_slug)
 
-    if (data) {
-      console.log('AllPartyDetails', data);
-      return data;
-    }
-
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
+
+    return data || [];
   } catch (error) {
-    // alert(error.message)
-  } finally {
+    return [];
   }
 }
 
+// null means "no such party" -- the details page renders its Party Not Found
+// state off that. `.single()` reports zero rows as a 406 error, not as empty
+// data, so an unknown slug lands in the catch.
 export async function fetchParty(party_slug) {
   try {
     const { data, error } = await supabase
@@ -643,17 +647,13 @@ export async function fetchParty(party_slug) {
       .eq('slug', party_slug)
       .single();
 
-    if (data) {
-      console.log('PartyDetails', data);
-      return data;
-    }
-
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
+
+    return data || null;
   } catch (error) {
-    // alert(error.message)
-  } finally {
+    return null;
   }
 }
 
@@ -666,38 +666,15 @@ export async function fetchPartyMembers(party_id) {
       .order('notion_page_name', { ascending: false })
       .eq('party_id', party_id);
 
-    if (data) {
-      return data;
-
-      // this takes too long to load.
-      var newData = data;
-
-      for (let i = 0; i < data.length; i++) {
-        let oldData = data[i];
-        newData[i] = {
-          ...oldData,
-          avatar_url: oldData.avatar_url
-            ? await downloadImage(oldData.avatar_url, 'avatar')
-            : null,
-          background_url: oldData.background_url
-            ? await downloadImage(oldData.background_url, 'background')
-            : null,
-          dragon_bg_url: oldData.dragon_bg_url
-            ? await downloadImage(oldData.dragon_bg_url, 'background')
-            : null
-        };
-      }
-      console.log(newData)
-      return newData;
-    }
-
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
+
+    // Avatar/background URLs are handed to the caller as storage paths and
+    // resolved per-card. Pre-resolving them all here was too slow.
+    return data || [];
   } catch (error) {
-    // alert(error.message);
-    console.log(error.message);
-  } finally {
+    return [];
   }
 }
 
