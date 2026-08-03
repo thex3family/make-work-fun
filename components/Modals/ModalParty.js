@@ -13,6 +13,7 @@ export default function ModalParty({ setCreateParty, party }) {
   const [partyChallenge, setPartyChallenge] = useState(1);
   const [newParty, setNewParty] = useState(true);
   const [saving, setSaving] = useState(null);
+  const [saveError, setSaveError] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -29,16 +30,20 @@ export default function ModalParty({ setCreateParty, party }) {
 
   async function saveParty(id, name, description, challenge) {
     setSaving(true);
+    setSaveError(null);
 
     // if create new party
     if (newParty) {
       try {
         const user = supabase.auth.user();
 
-        // will this generate immediately or do I need an await
-        const slug = await generateSlug();
+        if (!user) {
+          throw new Error('You need to be signed in to create a party.');
+        }
 
-        let { data, error } = await supabase.from('party').insert([
+        const slug = generateSlug();
+
+        const { data, error } = await supabase.from('party').insert([
           {
             name: name,
             description: description,
@@ -49,31 +54,44 @@ export default function ModalParty({ setCreateParty, party }) {
           }
         ]);
 
-        console.log(data, error);
-        console.log(data[0]);
+        if (error) {
+          throw error;
+        }
 
-        const party_id = data[0].id;
+        // The insert returns the created row, which is the only way to learn
+        // the generated id. Reading data[0] without this check was how a failed
+        // insert turned into a TypeError that the catch swallowed, leaving the
+        // button stuck on "Saving..." with nothing created and nothing said.
+        const createdParty = data && data[0];
 
-        // add party leader (but I don't know the party ID since I just created it...)
+        if (!createdParty) {
+          throw new Error('The party was not created. Please try again.');
+        }
 
-        await supabase.from('party_members').insert([
-          {
-            party_id: party_id,
-            player: user.id,
-            role: 'Party Leader'
-          }
-        ]);
+        const { error: memberError } = await supabase
+          .from('party_members')
+          .insert([
+            {
+              party_id: createdParty.id,
+              player: user.id,
+              role: 'Party Leader'
+            }
+          ]);
+
+        if (memberError) {
+          throw memberError;
+        }
+
         router.push('/parties/details?id=' + slug);
       } catch (error) {
-        // alert(error.message);
-      console.log(error.message);
-      } finally {
-        // setSaving(false);
+        console.log(error.message);
+        setSaveError(error.message || 'Something went wrong. Please try again.');
+        setSaving(false);
       }
     } else {
       // just updating existing entries (not allowing changing challenge)
       try {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('party')
           .update({
             name: name,
@@ -82,11 +100,14 @@ export default function ModalParty({ setCreateParty, party }) {
           })
           .eq('id', id);
 
+        if (error) {
+          throw error;
+        }
+
         router.reload(window.location.pathname);
       } catch (error) {
-       // alert(error.message);
-      console.log(error.message);
-      } finally {
+        console.log(error.message);
+        setSaveError(error.message || 'Something went wrong. Please try again.');
         setSaving(false);
       }
     }
@@ -178,6 +199,13 @@ export default function ModalParty({ setCreateParty, party }) {
                   </div>
                 </div>
               </div>
+
+              {saveError ? (
+                <div className="mx-6 mb-2 rounded border-2 border-red-500 bg-red-100 p-3 text-sm font-semibold text-red-700">
+                  <i className="fas fa-exclamation-triangle mr-2" />
+                  {saveError}
+                </div>
+              ) : null}
 
               <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">
                 <button
