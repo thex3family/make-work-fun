@@ -473,10 +473,12 @@ export async function fetchPartyPlayers(party_id) {
   }
 }
 
+// party_details rather than party, so the listed status matches the one the
+// details page shows -- the view derives In Review from a passed due date.
 export async function fetchAllParties() {
   try {
     const { data, error } = await supabase
-      .from('party')
+      .from('party_details')
       .select('*')
       .order('due_date', { ascending: false })
 
