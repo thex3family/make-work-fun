@@ -59,7 +59,7 @@ export default function HeaderStats({
                 >
                   <CardAreaStats areaStats={areaStats} />
                 </div>
-                <div data-intercom-target="avatar" className={`${showHide ? '' : 'hidden'} animate-fade-in`}
+                <div className={`${showHide ? '' : 'hidden'} animate-fade-in`}
                 >
                   <Avatar
                     avatarUrl={avatarUrl}
