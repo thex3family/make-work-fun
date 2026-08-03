@@ -4,16 +4,41 @@ import {
     minifyRecords
 } from '@/utils/airtable';
 import { supabase } from '@/utils/supabase-client';
+import { supabaseAdmin } from '@/utils/supabase-admin';
 import { createClient } from '@supabase/supabase-js';
 
 import { Client } from '@notionhq/client';
 
 export default async function handler(req, res) {
     try {
-        // Identify the caller from their session cookie. This route returns
+        // Identify the caller from a verified credential. This route returns
         // purchase history and reads Notion credentials, so the account it acts
-        // on must come from the verified session, never from the request body.
-        const { user, token } = await supabase.auth.api.getUserByCookie(req);
+        // on must never come from the request body.
+        //
+        // Prefer the bearer token over the cookie. The client calls this from a
+        // useEffect keyed on `user`, and auth-helpers publishes `user` from
+        // localStorage *before* it finishes syncing the session to a cookie --
+        // so on a full page load the cookie is reliably absent at that instant
+        // and cookie-only auth 401s. The token is signed and verified below, so
+        // trusting it is not the same as trusting req.body.
+        const bearer = (req.headers.authorization || '').replace(/^Bearer /i, '');
+
+        let user = null;
+        let token = null;
+
+        if (bearer) {
+            const { data, error } = await supabaseAdmin.auth.api.getUser(bearer);
+            if (!error && data) {
+                user = data;
+                token = bearer;
+            }
+        }
+
+        if (!user) {
+            const viaCookie = await supabase.auth.api.getUserByCookie(req);
+            user = viaCookie.user;
+            token = viaCookie.token;
+        }
 
         if (!user) {
             return res.status(401).json({ error: 'Not authenticated' });
