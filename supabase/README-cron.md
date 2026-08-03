@@ -61,9 +61,18 @@ SELECT cron.schedule(
 );
 ```
 
-**Why `batch=10`.** A batch of 12 measured 7.6s end-to-end and Vercel's Hobby
-tier kills functions at 10s. Raise it only if you know you are on Pro (60s+).
-The 5-minute cadence catches up on whatever a run does not reach.
+**Why `batch=8` and `timeout_milliseconds := 20000`.** Both were tuned by
+watching real runs, and both matter:
+
+- A batch of 10 took **~9 seconds**. Vercel's Hobby tier kills functions at 10s,
+  so 10 was one slow Notion call away from being truncated mid-run. 8 lands
+  around 6-7s. Raise it only if you know you are on Pro (60s+).
+- `pg_net`'s default timeout is about **5 seconds**, so it gave up before the
+  route finished and logged `"Timeout was reached"` with a null status on every
+  single run. The sync still completed — Vercel keeps executing after the client
+  disconnects — but `net._http_response` was useless for telling whether it had.
+  Without the explicit timeout you are blind in exactly the way this file warns
+  about below.
 
 **Why nothing starves.** `sync_candidates` orders by *how overdue* each
 credential is — hot ones (a win in the last 90 days) come due every 10 minutes,
