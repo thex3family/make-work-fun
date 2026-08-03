@@ -55,6 +55,12 @@ export function seasonQuarter(n) {
   };
 }
 
+// First calendar day of a season, as a local Date. Inverse of seasonNumber.
+export function seasonStartDate(n = seasonNumber()) {
+  const { year, quarter } = seasonQuarter(n);
+  return new Date(year, (quarter - 1) * 3, 1);
+}
+
 // Human date range for a season, e.g. 21 -> 'Jul 1 - Sep 30'.
 export function seasonDateRange(n) {
   return QUARTER_RANGES[seasonQuarter(n).quarter - 1];
