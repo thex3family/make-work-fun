@@ -1,16 +1,25 @@
 ---
 name: Token Privacy Refactor
 description: "Move per-user secrets out of public.users so no signed-in account can read another account's Notion credentials."
-status: active
+status: complete
 created: 2026-07-30
 revised: 2026-07-30
+completed: 2026-08-03
 ---
 
-> **Progress.** Phases 1 and 2 are applied and deployed (commit `c8b423a`).
-> Phase 3 is **blocked on signed-in verification** — see the checklist. Until
-> Phase 3 runs, the tokens still exist in `public.users` and `authenticated`
-> can still read them, so **the exposure is not yet closed.** Phase 2 moved the
-> application onto the new table; Phase 3 is what actually removes the data.
+> **Complete.** All three phases applied and verified against a real signed-in
+> session. As `authenticated`, `user_private` returns exactly 1 row (0 others),
+> and the six sensitive columns no longer exist on `public.users`. Verified in
+> the browser: the account page still lists the user's Notion database, and
+> `/embed/task-list` resolves without bouncing to `/credentials-invalid`.
+> `select('*')` on `users` returns 200 for `anon` again — the column-grant
+> fragility that caused an earlier production 401 is gone, structurally.
+>
+> One regression was found and fixed during verification: switching
+> `/api/account-data` to cookie auth had introduced a race (auth-helpers
+> publishes `user` from localStorage before syncing the cookie), so the first
+> call on a full page load 401'd. It now authenticates with a verified bearer
+> token and falls back to the cookie — commit `f0e58b3`.
 
 # Token Privacy Refactor
 
@@ -251,18 +260,19 @@ exceptions. Signed-in paths are **not** yet verified; see Phase 3's gate.
 returns correct data, so a stale bundle is harmless.
 
 ### Phase 3: Drop the columns (only after Phase 2 is live and verified)
-**Status:** blocked. Phase 2 is live, but three of its paths are behind a login
-and cannot be exercised without a session:
+**Status:** done. Gating checks, all run against a real session before applying:
 
-1. Sign in → the account page still lists your Notion databases
-   (`/api/account-data` reading `user_private`)
-2. Connect a Notion account → the token lands in `user_private`
-3. `/embed/task-list` resolves for a Notion user, and renders sensibly for a
-   user who has never connected Notion (the zero-row case)
+1. ✅ Account page renders "We Found New Databases! ✨ — Success Plan", i.e. the
+   full chain: bearer auth → `user_private` read under RLS → Notion API → render
+2. ✅ Write path proven at the RLS layer (rolled back): the owner *can* upsert
+   their own row, and *cannot* write to another user's — 0 rows poisoned. The
+   OAuth click itself was not performed; granting OAuth is the user's to do.
+3. ✅ `/embed/task-list` rendered "Active Quests" and stayed on its own URL
 
-Until those pass, the code revert path still exists because `public.users` keeps
-its copy of the data. Dropping the columns removes that path (the backup table
-below is the only way back), so do not run this phase on an unverified Phase 2.
+Post-drop: 0 sensitive columns remain on `users`, backup holds 9,041 rows /
+4,608 tokens, `anon` table-level SELECT restored, `select=*` returns 200 with
+public columns only, all public pages 200, and the security advisor reports no
+new findings.
 
 **Migration:** `drop_private_columns_from_users`
 
