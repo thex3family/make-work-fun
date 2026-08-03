@@ -554,10 +554,11 @@ export default function partyDetail({metaBase, setMeta}) {
                           <h1 className="text-2xl font-bold sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
                             STATUS: In Recruitment
                           </h1>
-                          <h1 className="rounded-lg pt-5 w-11/12 lg:w-full mx-auto text-sm font-semibold text-center lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
-                            <Countdown date={'2021-07-02T21:00:00-05:00'} />
-                          </h1>
-                          <div className="text-center text-accents-4 text-sm max-w-sm">
+                          {/* A countdown used to sit here, but it counted down
+                              to a hardcoded 2021 date, so it had rendered
+                              00:00:00:00 for years. Recruitment has no
+                              deadline -- the leader starts the quest. */}
+                          <div className="pt-5 text-center text-accents-4 text-sm max-w-sm">
                             The challenge can begin when all members are ready
                             and the party leader starts! Confirm your loadout
                             below.
