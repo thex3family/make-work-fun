@@ -153,13 +153,13 @@ export default function ConnectPOST({ APIKeys, getAPIKeys
                         </div>
                         <CopyBlock
       text={
-`curl --location --request POST 
-'https://n8n.x3.family/webhook/new-win'\
- 
+`curl --location --request POST
+'https://www.makework.fun/api/wins'\
+
 --header 'Content-Type: application/json' \
- 
+
 --data-raw '{
-    "api_key": "${key.id}"
+    "api_key": "${key.id}",
     "name": "Test"
 }'`}
       language='c'
