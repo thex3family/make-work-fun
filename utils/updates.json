@@ -1,5 +1,13 @@
 [
   {
+  "date": "Aug 4, 2026",
+  "title": "Party Quests Are Back In Action",
+  "desc": "We've fixed up party quests from top to bottom. Creating a party, joining one, and reflecting after a challenge all work reliably again - and finished parties now wrap up on their own instead of lingering on the recruitment board forever.",
+  "desc2": "The board has been swept clean, so the next party you see recruiting is really recruiting. Level 10+ adventurers, it's a great day to start one!",
+  "button_url": "/parties",
+  "version": "55"
+  },
+  {
   "date": "Jun 20, 2023",
   "title": "Embark On Missions",
   "desc": "Level up and earn your very own adventurer card by going on missions to make positive impact on the world.",
