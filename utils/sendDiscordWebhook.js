@@ -1,68 +1,50 @@
-export async function shareWithDiscord(playerStats, activeModalStats, activeGIF, setSharedWithFamily) {
-    let textNextRank = '';
-    if (playerStats.next_rank) {
-      textNextRank = `(${playerStats.next_rank} EXP to next rank)`;
+import { supabase } from './supabase-client';
+
+// Shares a win to the community Discord channel.
+//
+// The webhook URL used to live here as NEXT_PUBLIC_DISCORD_WEBHOOK, which Next
+// inlines into the client bundle -- so it was readable by anyone who fetched
+// the app chunk, and a scanner duly found it and posted into the channel. The
+// URL now lives server-side in DISCORD_WEBHOOK and this only talks to our own
+// authenticated route.
+//
+// The server re-reads the win and the player's standing from the database, so
+// only the win id and the chosen GIF need to travel.
+export async function shareWithDiscord(
+  playerStats,
+  activeModalStats,
+  activeGIF,
+  setSharedWithFamily
+) {
+  try {
+    const accessToken = supabase.auth.session()?.access_token;
+
+    if (!accessToken) {
+      setSharedWithFamily('Sign in to share');
+      return;
     }
 
-    fetch(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK, {
-      method: 'post',
+    const res = await fetch('/api/share/discord', {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
       },
       body: JSON.stringify({
-        content: null,
-        // embeds to be sent
-
-        embeds: [
-          {
-            // decimal number colour of the side of the embed
-            color: null,
-            author: {
-              name: `🎉 ${playerStats.full_name} completed a ${activeModalStats.type}!`
-            },
-            // author
-            // - icon next to text at top (text is a link)
-            // embed title
-            // - link on 2nd row
-            title: `${activeModalStats.name}`,
-            // url: `${activeModalStats.notion_id ? `https://www.notion.so/${activeModalStats.notion_id.replace(/-/g, '')}` : `https://makework.fun/dailies/`}`,
-            url: `https://makework.fun/player?utm_source=community&utm_medium=sharewithfamily&win_id=${activeModalStats.id}`,
-            // thumbnail
-            thumbnail: {
-              url: `${activeGIF}`
-            },
-            // embed description
-            // - text on 3rd row
-            description: `Completed On: ${activeModalStats.closing_date}`,
-            // custom embed fields: bold title/name, normal content/value below title
-            // - located below description, above image.
-            fields: [
-              {
-                name: `Leaderboard Position #${playerStats.player_rank}`,
-                value: `${textNextRank}` ////
-              }
-            ],
-            // image
-            // - picture below description(and fields) - this needs to be the gif that we fetch from random whatever.
-            // image: {
-            //   url:
-            //     'http://makework.fun/img/celebratory-cat.gif',
-            // },
-            // footer
-            // - icon next to text at bottom
-            footer: {
-              text: `Rewards: +${activeModalStats.gold_reward} 💰 | +${activeModalStats.exp_reward} XP`
-            }
-          },
-          {
-            color: null,
-            author: {
-              name: '💬 Reply or Create Thread To Start A Discussion!'
-              // url: 'https://toolbox.co-x3.com/family-connection/?utm_source=guilded',
-            }
-          }
-        ]
+        win: { id: activeModalStats?.id },
+        gif: activeGIF
       })
     });
-    setSharedWithFamily("Win Shared");
+
+    if (!res.ok) {
+      throw new Error(`share failed: ${res.status}`);
+    }
+
+    setSharedWithFamily('Win Shared');
+  } catch (error) {
+    // Previously this fired and forgot, so a failed share still said "Win
+    // Shared". Tell the truth instead.
+    console.error('Share to Discord failed:', error.message);
+    setSharedWithFamily('Share failed, try again');
   }
+}
