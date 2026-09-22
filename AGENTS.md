@@ -118,6 +118,14 @@ pulling the whole 5000-row leaderboard client-side.
 - **`anon` therefore has SELECT on an explicit column list, not the whole table.**
   Never widen that grant, and never add an anon-facing `select('*')` on `users`. If
   a public surface needs a new column, add that one column to the grant.
+- **A column-level `REVOKE` cannot subtract from a table-level `GRANT`.** Supabase
+  gives roles table-wide grants by default (`anon=arwdDxt/postgres`), so
+  `REVOKE SELECT (col) ... FROM anon` silently does nothing. That is why the grant
+  above is built the other way round: revoke the table-level privilege, then grant
+  back the specific columns.
+- **Multiple permissive RLS policies are OR'd.** One policy with `USING (true)`
+  defeats every stricter policy beside it on the same table and command. Check the
+  existing policies before adding one, not just the one you are writing.
 - The single `select('*')` on `users` (`utils/useUser.js`) runs authenticated and
   fetches only the caller's own row. Keep it that way — better still, narrow it to
   the columns actually used.
@@ -130,7 +138,9 @@ pulling the whole 5000-row leaderboard client-side.
 - `authentication_links.id` is the secret token embedded in share/embed URLs. It is
   a credential, not an identifier.
 
-Verify any grant or policy change empirically before reporting it done:
+Verify any grant or policy change empirically before reporting it done. Prove
+exposure with counts, column names and `has_*_privilege()` checks — never by
+dumping rows of personal data:
 
 ```sql
 BEGIN;
