@@ -3,8 +3,9 @@
 Gamified personal-development leaderboard. Wins flow in from Notion, become EXP and
 gold, and rank players on a seasonal leaderboard.
 
-General conventions live in `../AGENTS.md` (commit rules, git safety, line endings,
-database discipline). This file covers what's specific to this repo.
+This file covers what's specific to this repo. General conventions (commit rules,
+git safety, line endings, database discipline) come from your machine-wide agent
+instructions.
 
 **This is a public open-source repository.** Commit messages, comments, and docs are
 world-readable. Write them for that audience.
@@ -113,16 +114,16 @@ pulling the whole 5000-row leaderboard client-side.
 ## Database access rules
 
 - **`public.users` is intentionally readable by everyone** — the leaderboard needs
-  other players' names and avatars. It also holds per-user integration credentials
-  and contact fields in the same row.
-- **`anon` therefore has SELECT on an explicit column list, not the whole table.**
-  Never widen that grant, and never add an anon-facing `select('*')` on `users`. If
-  a public surface needs a new column, add that one column to the grant.
+  other players' names and avatars. It holds **public profile columns only**.
+- **Anything private goes in `public.user_private`** (Notion OAuth token and
+  identity, billing address, payment method), one row per user, RLS
+  `auth.uid() = id`. Never add a secret or contact column to `users`: `anon` has
+  table-level SELECT on it, so a new column there is public the moment it exists.
 - **A column-level `REVOKE` cannot subtract from a table-level `GRANT`.** Supabase
   gives roles table-wide grants by default (`anon=arwdDxt/postgres`), so
-  `REVOKE SELECT (col) ... FROM anon` silently does nothing. That is why the grant
-  above is built the other way round: revoke the table-level privilege, then grant
-  back the specific columns.
+  `REVOKE SELECT (col) ... FROM anon` silently does nothing. Column grants also
+  break PostgREST `select=*`. That is why secrets were moved to their own table
+  rather than hidden by column grants.
 - **Multiple permissive RLS policies are OR'd.** One policy with `USING (true)`
   defeats every stricter policy beside it on the same table and command. Check the
   existing policies before adding one, not just the one you are writing.
@@ -154,7 +155,7 @@ ROLLBACK;
 - **Notion** — wins are pulled from each player's Notion "Success Plan" database.
   `@notionhq/client` is a direct dependency; server-side routes live under
   `pages/api/`. Per-player Notion credentials live in `notion_credentials`, and
-  OAuth tokens on `users`.
+  OAuth tokens in `user_private`.
 - **Embeds** (`pages/embed/*`) render public overlay widgets addressed by a secret
   link id. They are anonymous surfaces — assume no session.
 - **Stripe** — subscriptions, via `pages/api/webhooks`.
