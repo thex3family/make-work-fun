@@ -2,6 +2,7 @@ import { IconPickerItem } from 'react-fa-icon-picker';
 import moment from 'moment';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabase-client';
+import { uploadImage } from '@/utils/uploadImage';
 import Input from '@/components/ui/Input';
 import ModalDQDetail from '../Modals/ModalDQDetail';
 import { downloadImage } from '@/utils/downloadImage';
@@ -154,30 +155,15 @@ export default function HabitSquare({
       console.log('Demo Pressed')
     } else {
       if (type == 'Picture') {
-        try {
-          setSaving(true);
-
-          const file = inputDetails.target.files[0];
-          const fileExt = file.name.split('.').pop();
-          const fileName = `${Math.random()}.${fileExt}`;
-          const filePath = `${fileName}`;
-
-          let { error: uploadError } = await supabase.storage
-            .from('dailies')
-            .upload(filePath, file);
-
-          if (uploadError) {
-            throw uploadError;
-          }
-
-          toggleHabitStatus(habit_id, type, filePath).then(() => {
+        setSaving(true);
+        const result = await uploadImage('dailies', inputDetails.target.files?.[0]);
+        if (result.ok) {
+          toggleHabitStatus(habit_id, type, result.path).then(() => {
             fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
           });
-
-        } catch (error) {
-          // alert(error.message);
-          console.log(error.message);
-        } finally {
+        } else {
+          setSaving(false);
+          alert(result.error);
         }
 
       } else {

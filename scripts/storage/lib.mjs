@@ -48,8 +48,8 @@ export function extOf(name) {
   return m ? m[1].toLowerCase() : '';
 }
 
-// Every object in a bucket, as { name, size, mimetype }. Keys are flat (no
-// folders) in every bucket.
+// Every object at the top of a bucket, as { name, size, mimetype, createdAt }.
+// Keys are flat; the one placeholder inside a folder is ignored.
 export async function listObjects(supabase, bucket) {
   const out = [];
   for (let offset = 0; ; offset += 1000) {
@@ -59,7 +59,12 @@ export async function listObjects(supabase, bucket) {
     if (error) throw new Error(`list ${bucket}: ${error.message}`);
     for (const o of data) {
       if (!o.id) continue; // folder placeholder
-      out.push({ name: o.name, size: o.metadata?.size ?? 0, mimetype: o.metadata?.mimetype ?? '' });
+      out.push({
+        name: o.name,
+        size: o.metadata?.size ?? 0,
+        mimetype: o.metadata?.mimetype ?? '',
+        createdAt: o.created_at
+      });
     }
     if (data.length < 1000) return out;
   }
