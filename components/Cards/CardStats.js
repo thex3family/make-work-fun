@@ -217,7 +217,7 @@ export default function CardStats({
     setSaveItem(true);
     if (activeItem) {
       // if there is an image upload
-      if (event) {
+      if (event?.target.files?.[0]) {
         const upload = await uploadImage('items', event.target.files?.[0]);
         if (!upload.ok) {
           alert(upload.error);
@@ -274,7 +274,7 @@ export default function CardStats({
     } else {
 
       // if there is an image upload
-      if (event) {
+      if (event?.target.files?.[0]) {
         const upload = await uploadImage('items', event.target.files?.[0]);
         if (!upload.ok) {
           alert(upload.error);
@@ -335,13 +335,15 @@ export default function CardStats({
     setShopEdit(false);
 
     // if there is an image upload
-    if (event) {
-      const upload = await uploadImage('shopkeepers', event.target.files?.[0]);
-      if (!upload.ok) {
-        alert(upload.error);
-        setSaveShopkeeperImage(null);
-        return;
-      }
+    const file = event?.target.files?.[0];
+    const upload = file ? await uploadImage('shopkeepers', file) : null;
+    if (upload && !upload.ok) {
+      // Still save the intro and tagline below; only the image is dropped.
+      alert(upload.error);
+      setSaveShopkeeperImage(null);
+    }
+
+    if (upload?.ok) {
       const filePath = upload.path;
 
       try {

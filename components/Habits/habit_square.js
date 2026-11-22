@@ -163,7 +163,7 @@ export default function HabitSquare({
           });
         } else {
           setSaving(false);
-          alert(result.error);
+          if (inputDetails.target.files?.[0]) alert(result.error); // no alert for a cancelled picker
         }
 
       } else {

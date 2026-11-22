@@ -30,7 +30,7 @@ for (const bucket of BUCKETS) {
   const doomed = objects.filter(
     (o) =>
       !used[bucket].has(o.name) &&
-      backedUp.has(`${bucket}/${o.name}`) &&
+      backedUp.get(`${bucket}/${o.name}`) === o.size &&
       Date.now() - new Date(o.createdAt).getTime() > WEEK
   );
   const bytes = doomed.reduce((a, o) => a + o.size, 0);

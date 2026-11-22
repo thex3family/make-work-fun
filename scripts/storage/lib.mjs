@@ -70,30 +70,49 @@ export async function listObjects(supabase, bucket) {
   }
 }
 
+// Every non-null value of table.column. Pages by primary key rather than by
+// offset: offset pages have no stable order and shift when a row is deleted
+// mid-scan, which would silently drop a reference -- and prune.mjs deletes
+// whatever isn't referenced. The row count is checked against an exact count
+// taken first, so a short read fails loudly instead.
 async function selectAll(supabase, table, column) {
+  const { count, error: countError } = await supabase
+    .from(table)
+    .select('id', { count: 'exact', head: true })
+    .not(column, 'is', null);
+  if (countError) throw new Error(`${table}.${column} count: ${countError.message}`);
+
   const values = [];
-  for (let from = 0; ; from += 1000) {
-    const { data, error } = await supabase
-      .from(table)
-      .select(column)
-      .not(column, 'is', null)
-      .range(from, from + 999);
+  let last = null;
+  for (;;) {
+    let query = supabase.from(table).select(`id, ${column}`).not(column, 'is', null).order('id').limit(1000);
+    if (last !== null) query = query.gt('id', last);
+    const { data, error } = await query;
     if (error) throw new Error(`${table}.${column}: ${error.message}`);
+    if (data.length === 0) break;
     for (const row of data) values.push(row[column]);
-    if (data.length < 1000) return values;
+    last = data[data.length - 1].id;
   }
+
+  // Rows can be added while reading, never silently lost.
+  if (values.length < count) {
+    throw new Error(`${table}.${column}: read ${values.length} rows but ${count} exist`);
+  }
+  return values;
 }
 
 // The storage keys something still points at, per bucket. Keep this list in
 // step with every column the app passes to downloadImage(); anything not in it
-// is treated as unused and can be deleted.
+// is treated as unused and can be deleted. (The `dailies` view's
+// latest_details is completed_habits.details, so it needs no entry.)
+// Checked 2026-11-23: these are the only public columns whose values equal a
+// storage object name.
 export const REFERENCES = [
   ['avatars', 'users', 'avatar_url'],
   ['backgrounds', 'users', 'background_url'],
   ['shopkeepers', 'users', 'shopkeeper_url'],
   ['items', 'item_shop', 'img_url'],
-  ['dailies', 'completed_habits', 'details'],
-  ['dailies', 'dailies', 'latest_details']
+  ['dailies', 'completed_habits', 'details']
 ];
 
 export async function usedKeys(supabase) {

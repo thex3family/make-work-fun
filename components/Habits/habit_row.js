@@ -579,8 +579,11 @@ export default function HabitRow({
             fetchDailies(player, setHabits, setLevelUp, setDailiesCount, 'click');
           });
         } else {
+          // Undo the optimistic tick set above: nothing was saved.
+          setHabitCompleted(habitCompleted);
+          if (day == 'today') setHabitCompletedToday(habitCompleted);
           setSaving(false);
-          alert(result.error);
+          if (inputDetails.target.files?.[0]) alert(result.error); // no alert for a cancelled picker
         }
 
       } else {

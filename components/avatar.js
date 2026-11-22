@@ -20,16 +20,20 @@ export default function Avatar({ avatarUrl, size, onAvatarUpload, onBackgroundUp
   };
 
   async function uploadAvatar(event) {
+    const file = event.target.files?.[0];
+    if (!file) return; // picker cancelled
     setUploading(true);
-    const result = await uploadImage('avatars', event.target.files?.[0]);
+    const result = await uploadImage('avatars', file);
     setUploading(false);
     if (result.ok) onAvatarUpload(result.path);
     else alert(result.error);
   }
 
   async function uploadBackground(event) {
+    const file = event.target.files?.[0];
+    if (!file) return; // picker cancelled
     setUploading(true);
-    const result = await uploadImage('backgrounds', event.target.files?.[0]);
+    const result = await uploadImage('backgrounds', file);
     setUploading(false);
     if (result.ok) onBackgroundUpload(result.path);
     else alert(result.error);
