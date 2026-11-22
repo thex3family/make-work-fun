@@ -6,6 +6,9 @@
 //   node scripts/storage/shrink.mjs <backup-dir> --verify    check every used key
 //   node scripts/storage/shrink.mjs <backup-dir> --restore all|<bucket>/<key>
 //
+// Restoring an original over 5 MB needs the bucket limit lifted first (see
+// supabase/migrations/20261123130000_storage_bucket_limits.sql).
+//
 // Reads originals from the phase 1 backup, never from storage, so a rerun
 // can't shrink an already-shrunk file. Progress goes to <backup-dir>/shrink-log.jsonl;
 // a rerun skips keys already logged. Stops at the first upload error.

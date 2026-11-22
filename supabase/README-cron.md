@@ -139,3 +139,42 @@ curl -X POST https://<your-domain>/api/sync/notion \
 Add `?batch=50` to push a larger batch through — useful for working down the
 round-robin backlog after a period of downtime. The route caps this at 50 to
 stay inside Vercel's function timeout (10s on Hobby, 60s+ on Pro).
+
+# Refreshing the leaderboards
+
+`refresh-leaderboards` (`2-59/5 * * * *`) runs
+`private.refresh_leaderboards_if_changed()` (migration
+`20261123120000_refresh_leaderboards_on_change.sql`). A full refresh of both
+materialized views takes about 20 s, so the function skips it unless:
+
+- the **fingerprint** changed: the sum of insert, update and delete counters in
+  `pg_stat_user_tables` for every table the views read (`success_plan`,
+  `completed_habits`, `habits`, `users`, `energy`, `item_purchases`, `titles`), or
+- the **hour** rolled over since the last refresh, because `exp_earned_today`,
+  `exp_earned_week` and the season's `latest` flag depend on the clock.
+
+A skipped tick takes a few milliseconds. A new win usually appears within 5
+minutes, and at worst within about 6: Postgres publishes table counters with a
+short delay, so a write committed just before a tick is caught on the next one.
+Counters reset when the database restarts, which reads as a change and costs one
+refresh.
+
+**If the views ever start reading another table, add it to the function's list.**
+The tables come from `pg_depend` on the two views, through `all_wins`.
+
+Force a refresh now:
+
+```sql
+UPDATE private.leaderboard_refresh_state SET fingerprint = NULL;
+SELECT private.refresh_leaderboards_if_changed();  -- 'refreshed'
+```
+
+Did recent ticks refresh or skip?
+
+```sql
+SELECT start_time, end_time - start_time AS took, return_message
+FROM cron.job_run_details
+WHERE jobid = (SELECT jobid FROM cron.job WHERE jobname = 'refresh-leaderboards')
+ORDER BY start_time DESC
+LIMIT 20;
+```
