@@ -90,7 +90,7 @@ if (verify) {
       total += buf.length;
       if (shrunk.has(id) && data.type !== 'image/webp') throw new Error(`served as ${data.type}, expected image/webp`);
       if (SKIP.has(extOf(m.key))) notDecoded++;
-      else await sharp(buf, { animated: true }).metadata();
+      else await sharp(buf, { animated: true, limitInputPixels: false }).metadata();
     } catch (e) {
       failures.push(`${id}: ${e.message}`);
     }
