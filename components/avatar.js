@@ -1,5 +1,5 @@
 import { useEffect, useState, createRef } from 'react';
-import { supabase } from '../utils/supabase-client';
+import { uploadImage } from '@/utils/uploadImage';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { createPopper } from '@popperjs/core';
 
@@ -20,63 +20,23 @@ export default function Avatar({ avatarUrl, size, onAvatarUpload, onBackgroundUp
   };
 
   async function uploadAvatar(event) {
-    try {
-      setUploading(true);
-
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.');
-      }
-
-      const file = event.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      let { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      onAvatarUpload(filePath);
-    } catch (error) {
-      // alert(error.message);
-      console.log(error.message);
-    } finally {
-      setUploading(false);
-    }
+    const file = event.target.files?.[0];
+    if (!file) return; // picker cancelled
+    setUploading(true);
+    const result = await uploadImage('avatars', file);
+    setUploading(false);
+    if (result.ok) onAvatarUpload(result.path);
+    else alert(result.error);
   }
 
   async function uploadBackground(event) {
-    try {
-      setUploading(true);
-
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.');
-      }
-
-      const file = event.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      let { error: uploadError } = await supabase.storage
-        .from('backgrounds')
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      onBackgroundUpload(filePath);
-    } catch (error) {
-      // alert(error.message);
-      console.log(error.message);
-    } finally {
-      setUploading(false);
-    }
+    const file = event.target.files?.[0];
+    if (!file) return; // picker cancelled
+    setUploading(true);
+    const result = await uploadImage('backgrounds', file);
+    setUploading(false);
+    if (result.ok) onBackgroundUpload(result.path);
+    else alert(result.error);
   }
 
   return (

@@ -6,6 +6,7 @@ import { createPopper } from '@popperjs/core';
 import { useEffect, useState, createRef } from 'react';
 import { Tooltip, Slider, Drawer, Card, Text, Group, useMantineTheme, NumberInput, Modal, Select, TextInput, Textarea, Skeleton } from '@mantine/core';
 import { supabase } from '@/utils/supabase-client';
+import { uploadImage } from '@/utils/uploadImage';
 import { fetchItemShop, fetchShopkeeper } from '../Fetch/fetchMaster';
 import { map } from 'next-pwa/cache';
 import Confetti from '@/components/Widgets/confetti';
@@ -216,19 +217,14 @@ export default function CardStats({
     setSaveItem(true);
     if (activeItem) {
       // if there is an image upload
-      if (event) {
-        const file = event.target.files[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        let { error: uploadError } = await supabase.storage
-          .from('items')
-          .upload(filePath, file);
-
-        if (uploadError) {
-          throw uploadError;
+      if (event?.target.files?.[0]) {
+        const upload = await uploadImage('items', event.target.files?.[0]);
+        if (!upload.ok) {
+          alert(upload.error);
+          setSaveItem(false);
+          return;
         }
+        const filePath = upload.path;
 
         try {
           const { data, error } = await supabase.from('item_shop').update(
@@ -278,20 +274,14 @@ export default function CardStats({
     } else {
 
       // if there is an image upload
-      if (event) {
-        const file = event.target.files[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        let { error: uploadError } = await supabase.storage
-          .from('items')
-          .upload(filePath, file);
-
-        if (uploadError) {
-          throw uploadError;
+      if (event?.target.files?.[0]) {
+        const upload = await uploadImage('items', event.target.files?.[0]);
+        if (!upload.ok) {
+          alert(upload.error);
+          setSaveItem(false);
+          return;
         }
-
+        const filePath = upload.path;
 
         try {
           const { data, error } = await supabase.from('item_shop').insert(
@@ -345,19 +335,16 @@ export default function CardStats({
     setShopEdit(false);
 
     // if there is an image upload
-    if (event) {
-      const file = event.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
+    const file = event?.target.files?.[0];
+    const upload = file ? await uploadImage('shopkeepers', file) : null;
+    if (upload && !upload.ok) {
+      // Still save the intro and tagline below; only the image is dropped.
+      alert(upload.error);
+      setSaveShopkeeperImage(null);
+    }
 
-      let { error: uploadError } = await supabase.storage
-        .from('shopkeepers')
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
-      }
+    if (upload?.ok) {
+      const filePath = upload.path;
 
       try {
         const { data, error } = await supabase.from('users').update(
