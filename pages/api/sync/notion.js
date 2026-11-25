@@ -40,13 +40,15 @@ const MAX_CONSECUTIVE_FAILURES = 5;
 // Timing, against Vercel's 10s limit (Hobby), measured from the start of the
 // request. Everything a run does must finish by RUN_DEADLINE_MS, leaving room
 // for the cold start that comes before the handler runs.
-//  - A credential is started only if CREDENTIAL_MIN_MS remain.
-//  - A Notion query gets at most QUERY_TIMEOUT_MS, and the run stops paging
-//    while MARK_RESERVE_MS + SAVE_RESERVE_MS still remain, so every win it
-//    fetched is also stored and marked in Notion in the same run.
-// Unfetched pages are picked up by the next run.
+//  - A credential is started only if CREDENTIAL_MIN_MS remain: enough for
+//    the usual case, a quick query that finds nothing new.
+//  - A Notion query gets at most QUERY_TIMEOUT_MS, and paging stops while
+//    MARK_RESERVE_MS + SAVE_RESERVE_MS still remain.
+//  - Wins are stored only if there is time to mark them in Notion in the
+//    same run. Otherwise they are left alone and fetched again next time,
+//    rather than stored unmarked (and refetched on every run).
 const RUN_DEADLINE_MS = 7000;
-const CREDENTIAL_MIN_MS = 5000;
+const CREDENTIAL_MIN_MS = 2500;
 const QUERY_TIMEOUT_MS = 3000;
 const SAVE_RESERVE_MS = 700;
 const MARK_RESERVE_MS = 2000;
@@ -172,7 +174,7 @@ async function syncCredential(db, credential, deadline) {
 
   do {
     const response = await notion(
-      Math.min(QUERY_TIMEOUT_MS, left() - SAVE_RESERVE_MS - MARK_RESERVE_MS)
+      Math.min(QUERY_TIMEOUT_MS, left() - 300)
     ).databases.query({
       database_id: credential.database_id,
       filter: notionFilter(credential.collaborator),
@@ -194,6 +196,10 @@ async function syncCredential(db, credential, deadline) {
   );
 
   if (rows.length === 0) return { wins: 0, truncated: Boolean(cursor) };
+
+  if (left() < SAVE_RESERVE_MS + MARK_RESERVE_MS) {
+    return { wins: 0, postponed: rows.length, truncated: true };
+  }
 
   // Insert only: a win already stored is left exactly as it is. Pages are
   // fetched only until they're marked, so a repeat means an earlier run stored
@@ -292,7 +298,7 @@ export default async function handler(req, res) {
         })
         .eq('id', credential.id);
 
-      if (result.wins > 0 || result.truncated) {
+      if (result.wins > 0 || result.postponed || result.truncated) {
         summary.details.push({ id: credential.id, ...result });
       }
     } catch (err) {
