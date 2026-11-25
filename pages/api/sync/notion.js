@@ -31,6 +31,7 @@ import { calculateRewards } from '@/utils/rewards';
 // Keep a run comfortably inside Vercel's function timeout (10s on Hobby).
 // The cron cadence catches up on whatever a run doesn't reach.
 const DEFAULT_BATCH_SIZE = 15;
+const CONCURRENCY = 4;
 // Small pages: every fetched win is marked in Notion in the same run, and
 // Notion rate-limits a burst of 100 marks enough to push a run past 9s
 // (seen 25 Nov 2026). A backlog drains 25 wins per page instead.
@@ -264,12 +265,11 @@ export default async function handler(req, res) {
 
   const summary = { scanned: 0, wins: 0, failed: 0, deferred: 0, details: [] };
 
-  for (const credential of credentials || []) {
-    if (deadline - Date.now() < CREDENTIAL_MIN_MS) {
-      summary.deferred += 1; // still at the head of the queue for the next run
-      continue;
-    }
-
+  // Credentials are independent (each has its own Notion token, so its own
+  // rate limit), and nearly all the time is spent waiting on Notion. Work
+  // through them CONCURRENCY at a time; each worker takes the next credential
+  // only while there is time for one.
+  async function processCredential(credential) {
     // Claim it before working on it. If Vercel kills the run part-way, this
     // credential has still moved to the back of sync_candidates, so one that
     // keeps timing out can't sit at the head of the queue and stall every run
@@ -281,7 +281,7 @@ export default async function handler(req, res) {
     if (claimError) {
       console.error(`claim ${credential.id} failed: ${claimError.message}`);
       summary.deferred += 1;
-      continue;
+      return;
     }
     summary.scanned += 1;
 
@@ -322,6 +322,15 @@ export default async function handler(req, res) {
       summary.details.push({ id: credential.id, failures, transient, error: message.slice(0, 200) });
     }
   }
+
+  const queue = [...(credentials || [])];
+  async function worker() {
+    while (queue.length > 0 && deadline - Date.now() >= CREDENTIAL_MIN_MS) {
+      await processCredential(queue.shift());
+    }
+  }
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  summary.deferred += queue.length; // still at the head of the queue for the next run
 
   summary.ms = Date.now() - startedAt;
   return res.status(200).json(summary);
