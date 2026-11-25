@@ -6,6 +6,9 @@
 //   node scripts/storage/shrink.mjs <backup-dir> --verify    check every used key
 //   node scripts/storage/shrink.mjs <backup-dir> --restore all|<bucket>/<key>
 //
+// Restoring an original over 5 MB needs the bucket limit lifted first (see
+// supabase/migrations/20261123130000_storage_bucket_limits.sql).
+//
 // Reads originals from the phase 1 backup, never from storage, so a rerun
 // can't shrink an already-shrunk file. Progress goes to <backup-dir>/shrink-log.jsonl;
 // a rerun skips keys already logged. Stops at the first upload error.
@@ -87,7 +90,7 @@ if (verify) {
       total += buf.length;
       if (shrunk.has(id) && data.type !== 'image/webp') throw new Error(`served as ${data.type}, expected image/webp`);
       if (SKIP.has(extOf(m.key))) notDecoded++;
-      else await sharp(buf, { animated: true }).metadata();
+      else await sharp(buf, { animated: true, limitInputPixels: false }).metadata();
     } catch (e) {
       failures.push(`${id}: ${e.message}`);
     }

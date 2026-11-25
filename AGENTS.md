@@ -84,10 +84,15 @@ reads `all_wins` several times, each redoing a UNION dedupe over ~120k rows — 
 to run on *every* anonymous page load and took ~5s (all-time) and ~17s (season).
 Now it runs once per refresh.
 
-- **Refresh:** `pg_cron` job `refresh-leaderboards` runs `REFRESH MATERIALIZED VIEW
-  CONCURRENTLY` on both, every 5 minutes (`2-59/5 * * * *`, offset ~2 min after the
-  Notion sync tick). New wins therefore appear on the leaderboard within ~5 minutes,
-  not instantly. This is deliberate and fine at the current win volume.
+- **Refresh:** `pg_cron` job `refresh-leaderboards` ticks every 5 minutes
+  (`2-59/5 * * * *`, offset ~2 min after the Notion sync tick) and calls
+  `private.refresh_leaderboards_if_changed()`. That runs `REFRESH MATERIALIZED VIEW
+  CONCURRENTLY` on both views only when a write touched one of the tables they read,
+  or the hour rolled over; otherwise it returns in milliseconds. The refresh costs
+  ~20 s, which the free plan's small server can't afford every 5 minutes. New wins
+  appear within ~5 minutes (worst case ~6), not instantly. Details and the table
+  list the function watches are in `supabase/README-cron.md`; if the views start
+  reading another table, add it there.
 - **Consequence:** profile edits (avatar/name/title) also lag up to 5 min on the
   leaderboard, because those columns are baked into the matview at refresh time. If
   that ever becomes a problem, split the matview to aggregates-only and join `users`
@@ -149,6 +154,40 @@ SET LOCAL ROLE anon;
 SELECT count(*) FROM public.<relation>;
 ROLLBACK;
 ```
+
+## Storage
+
+The project runs on the Supabase free plan: **1 GB of storage, 5 GB of downloads
+a month**. Images are what fills both.
+
+- **Every upload goes through `utils/uploadImage.js`.** It redraws still images
+  no larger than the bucket's preset (512 px for avatars, items and shopkeepers;
+  1920 px backgrounds; 1600 px dailies) and sends WebP, or PNG/JPEG on Safari,
+  which can't encode WebP. GIF and WebP are sent unchanged because a canvas would
+  drop their animation. Never call `supabase.storage...upload()` directly.
+- **Buckets reject files over 5 MB** and anything that isn't a common image
+  type or MP4 (migration `20261123130000_storage_bucket_limits.sql`).
+- **Keys are random and never reused** for a different image, so uploads carry a
+  one-year `cacheControl`.
+- **Existing files were shrunk in place in Nov 2026**, under their old keys, by
+  `scripts/storage/shrink.mjs`. A key's extension may not match its contents (a
+  `.gif` can hold animated WebP, a `.heic` holds WebP). That's deliberate:
+  renaming would have meant rewriting every row that points at an image.
+  Browsers decode by content, not by name.
+- **What counts as "in use"** is `REFERENCES` in `scripts/storage/lib.mjs`: the
+  only columns whose values are storage keys. If you add a column that stores
+  an upload, add it there too, or `prune.mjs` will treat those files as unused.
+- Buckets are private; the app reads images with `supabase.storage.download()`.
+
+## Backups
+
+The free plan has **no backups**. A weekly `pg_dump` runs in the private repo
+`thex3family/make-work-fun-backups` (GitHub Actions; dumps kept 90 days as
+workflow artifacts). Its README says how to restore. Storage files aren't in the
+dump; a full copy of storage as of 2026-11-23 is kept offline.
+
+Before any risky data change, run that workflow by hand from its Actions tab, so
+the most recent dump is minutes old rather than days.
 
 ## Integrations
 
