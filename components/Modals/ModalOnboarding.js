@@ -24,27 +24,49 @@ export default function ModalOnboarding({ onboardingState, player }) {
   // 5 minutes, so reloading straight after joining just brought this modal
   // back and made the button look broken. Instead, say so and wait for it.
   const [joined, setJoined] = useState(false);
+  // Normally a refresh lands within ~6 minutes. If it hasn't after 10, stop
+  // promising and give the player a button, so they can never be stuck here.
+  const [slow, setSlow] = useState(false);
 
   useEffect(() => {
     if (onboardingState) initializeDetails();
-    if (onboardingState == 5) {
-      const user = supabase.auth.user();
-      if (user) hasSeasonStartWin(user.id).then((has) => has && setJoined(true));
-    }
+    if (onboardingState != 5) return;
+    const user = supabase.auth.user();
+    if (!user) return;
+    let cancelled = false;
+    hasSeasonStartWin(user.id)
+      .then((has) => has && !cancelled && setJoined(true))
+      .catch((error) => console.log(error.message));
+    return () => {
+      cancelled = true;
+    };
   }, [onboardingState]);
 
   useEffect(() => {
     if (!joined) return;
-    const user = supabase.auth.user();
-    if (!user) return;
+    let inFlight = false;
+    const startedAt = Date.now();
     const timer = setInterval(async () => {
-      const { data } = await supabase
-        .from('leaderboard_season')
-        .select('player')
-        .eq('player', user.id)
-        .eq('latest', true)
-        .limit(1);
-      if (data && data.length > 0) Router.reload(window.location.pathname);
+      if (Date.now() - startedAt > 10 * 60 * 1000) setSlow(true);
+      const user = supabase.auth.user();
+      if (!user || inFlight || document.visibilityState === 'hidden') return;
+      inFlight = true;
+      try {
+        const { data } = await supabase
+          .from('leaderboard_season')
+          .select('player')
+          .eq('player', user.id)
+          .eq('latest', true)
+          .limit(1);
+        if (data && data.length > 0) {
+          clearInterval(timer);
+          Router.reload(window.location.pathname);
+        }
+      } catch (error) {
+        console.log(error.message);
+      } finally {
+        inFlight = false;
+      }
     }, 15000);
     return () => clearInterval(timer);
   }, [joined]);
@@ -131,14 +153,17 @@ export default function ModalOnboarding({ onboardingState, player }) {
         return;
       }
 
-      let testDateStr = new Date();
+      // The player's own calendar date, the same day hasSeasonStartWin compares
+      // against. A JS Date would be sent as UTC, which east of UTC can land the
+      // first hours of a season in the previous one.
+      const today = moment().format('YYYY-MM-DD');
 
       const { error } = await supabase.from('success_plan').insert([
         {
           player: user.id,
           difficulty: 1,
-          do_date: testDateStr,
-          closing_date: testDateStr,
+          do_date: today,
+          closing_date: today,
           trend: 'check',
           type: 'Bonus',
           punctuality: 0,
@@ -155,7 +180,8 @@ export default function ModalOnboarding({ onboardingState, player }) {
     } catch (error) {
       console.log(error.message);
     } finally {
-      setLoading(false);
+      // Leave the loading dots up while reloading, so the buttons don't
+      // reappear for a moment and invite another click.
       if (saved && customLink == 'new-season') setJoined(true);
       else Router.reload(window.location.pathname);
     }
@@ -251,11 +277,28 @@ export default function ModalOnboarding({ onboardingState, player }) {
                   {joined ? (
                     <div className="text-black">
                       <p className="text-lg font-semibold text-emerald-600">You're in! 🎉</p>
-                      <p className="text-sm mt-1">
-                        Setting up your season card. This takes up to 5 minutes
-                        and the page will open by itself.
-                      </p>
-                      <div className="mt-3"><LoadingDots /></div>
+                      {slow ? (
+                        <>
+                          <p className="text-sm mt-1">
+                            This is taking longer than expected.
+                          </p>
+                          <Button
+                            variant="prominent"
+                            className="text-md font-semibold text-emerald-600 mt-3"
+                            onClick={() => Router.reload(window.location.pathname)}
+                          >
+                            Refresh
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-sm mt-1">
+                            Getting your season ready. This usually takes a few
+                            minutes, and the page will open by itself.
+                          </p>
+                          <div className="mt-3"><LoadingDots /></div>
+                        </>
+                      )}
                     </div>
                   ) : loading ? <LoadingDots/> : (customLink == 'new-season' ? 
                   <Button
