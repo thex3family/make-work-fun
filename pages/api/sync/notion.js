@@ -31,7 +31,10 @@ import { calculateRewards } from '@/utils/rewards';
 // Keep a run comfortably inside Vercel's function timeout (10s on Hobby).
 // The cron cadence catches up on whatever a run doesn't reach.
 const DEFAULT_BATCH_SIZE = 15;
-const NOTION_PAGE_SIZE = 100;
+// Small pages: every fetched win is marked in Notion in the same run, and
+// Notion rate-limits a burst of 100 marks enough to push a run past 9s
+// (seen 25 Nov 2026). A backlog drains 25 wins per page instead.
+const NOTION_PAGE_SIZE = 25;
 const MAX_PAGES_PER_CREDENTIAL = 10;
 const MAX_CONSECUTIVE_FAILURES = 5;
 // Timing, against Vercel's 10s limit (Hobby), measured from the start of the
@@ -42,7 +45,7 @@ const MAX_CONSECUTIVE_FAILURES = 5;
 //    while MARK_RESERVE_MS + SAVE_RESERVE_MS still remain, so every win it
 //    fetched is also stored and marked in Notion in the same run.
 // Unfetched pages are picked up by the next run.
-const RUN_DEADLINE_MS = 8000;
+const RUN_DEADLINE_MS = 7000;
 const CREDENTIAL_MIN_MS = 5000;
 const QUERY_TIMEOUT_MS = 3000;
 const SAVE_RESERVE_MS = 700;
