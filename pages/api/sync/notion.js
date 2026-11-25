@@ -34,6 +34,13 @@ const DEFAULT_BATCH_SIZE = 15;
 const NOTION_PAGE_SIZE = 100;
 const MAX_PAGES_PER_CREDENTIAL = 10;
 const MAX_CONSECUTIVE_FAILURES = 5;
+// Timing, against Vercel's 10s limit. Each Notion call gives up after
+// NOTION_TIMEOUT_MS. A run starts no new credential after RUN_BUDGET_MS, and
+// makes no Notion call that could end past RUN_DEADLINE_MS: unfetched pages
+// and unmarked wins are simply picked up by the next run.
+const NOTION_TIMEOUT_MS = 4000;
+const RUN_BUDGET_MS = 4000;
+const RUN_DEADLINE_MS = 8500;
 const SHARED_MARKER = 'Shared With Family';
 
 const admin = () =>
@@ -125,8 +132,12 @@ function toRow(page, credential) {
   };
 }
 
-async function syncCredential(db, credential) {
-  const notion = new Client({ auth: credential.api_secret_key });
+async function syncCredential(db, credential, deadline) {
+  const timeLeft = () => deadline - Date.now() > NOTION_TIMEOUT_MS;
+
+  // A slow or hung Notion call must fail on its own rather than run the whole
+  // request into Vercel's 10s limit, where nothing gets recorded.
+  const notion = new Client({ auth: credential.api_secret_key, timeoutMs: NOTION_TIMEOUT_MS });
 
   const rows = [];
   let cursor;
@@ -147,7 +158,7 @@ async function syncCredential(db, credential) {
 
     cursor = response.has_more ? response.next_cursor : undefined;
     pages += 1;
-  } while (cursor && pages < MAX_PAGES_PER_CREDENTIAL);
+  } while (cursor && pages < MAX_PAGES_PER_CREDENTIAL && timeLeft());
 
   if (rows.length === 0) return { wins: 0, truncated: Boolean(cursor) };
 
@@ -161,7 +172,11 @@ async function syncCredential(db, credential) {
 
   // Only stamp Notion once the win is durably stored. If this half fails the
   // page stays unmarked and the next run upserts it again -- which is safe
-  // precisely because the write above is an upsert.
+  // precisely because the write above is an upsert. Out of time counts the
+  // same: the wins are stored, and the next run marks them.
+  if (!timeLeft()) {
+    return { wins: rows.length, failedMarks: rows.length, truncated: Boolean(cursor) };
+  }
   const marked = await Promise.allSettled(
     rows.map((row) =>
       notion.pages.update({
@@ -208,13 +223,27 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: `candidate query: ${error.message}` });
   }
 
-  const summary = { scanned: 0, wins: 0, failed: 0, details: [] };
+  const summary = { scanned: 0, wins: 0, failed: 0, skipped: 0, details: [] };
+  const startedAt = Date.now();
 
   for (const credential of credentials || []) {
+    if (Date.now() - startedAt > RUN_BUDGET_MS) {
+      summary.skipped += 1; // picked up first by the next run
+      continue;
+    }
     summary.scanned += 1;
 
+    // Claim it before working on it. If Vercel kills the run part-way, this
+    // credential has still moved to the back of sync_candidates, so one that
+    // always times out can no longer sit at the head of the queue and stall
+    // every run (it did, from 30 Oct to 25 Nov 2026).
+    await db
+      .from('notion_credentials')
+      .update({ last_synced_at: new Date().toISOString() })
+      .eq('id', credential.id);
+
     try {
-      const result = await syncCredential(db, credential);
+      const result = await syncCredential(db, credential, startedAt + RUN_DEADLINE_MS);
       summary.wins += result.wins;
 
       await db
