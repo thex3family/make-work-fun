@@ -97,6 +97,11 @@ Now it runs once per refresh.
   leaderboard, because those columns are baked into the matview at refresh time. If
   that ever becomes a problem, split the matview to aggregates-only and join `users`
   live in the wrapper view.
+- **Anything a player acts on must not come from these views.** The item shop
+  reads the signed-in player's gold from `public.my_season_gold()` (same formula
+  as `total_gold`, one player, ~20 ms) because a stale balance let the same gold
+  be spent twice. The new-season modal waits for the player to appear in
+  `leaderboard_season` instead of reloading straight back into itself.
 - **`latest`, `exp_earned_today`, `exp_earned_week`** are frozen at refresh time too
   (≤5 min stale). At a quarter boundary the `latest` flag flips within one refresh.
 - **Do not add `security_invoker = true`** to the wrapper views. They must run with

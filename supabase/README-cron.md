@@ -50,23 +50,36 @@ SELECT cron.schedule(
   '*/5 * * * *',
   $$
     SELECT net.http_post(
-      url     := 'https://www.makework.fun/api/sync/notion?batch=10',
+      url     := 'https://www.makework.fun/api/sync/notion?batch=16',
       headers := jsonb_build_object(
                    'Content-Type',  'application/json',
                    'Authorization',
                    'Bearer ' || (SELECT value FROM private.app_secrets WHERE name = 'sync_secret')
-                 )
+                 ),
+      timeout_milliseconds := 20000
     );
   $$
 );
 ```
 
-**Why `batch=8` and `timeout_milliseconds := 20000`.** Both were tuned by
-watching real runs, and both matter:
+**`batch=16` is a ceiling, not a target.** The route bounds each run by time,
+not count (constants at the top of `pages/api/sync/notion.js`): four workers
+take credentials in parallel, each starting one only while 2.5s of a 7s
+budget remain, and every Notion call has its own timeout. A typical run checks
+all 16 in about 5s. `batch` only needs to be large enough to keep the four
+workers busy.
 
-- A batch of 10 took **~9 seconds**. Vercel's Hobby tier kills functions at 10s,
-  so 10 was one slow Notion call away from being truncated mid-run. 8 lands
-  around 6-7s. Raise it only if you know you are on Pro (60s+).
+**Why the time budget exists.** From 30 Oct to 25 Nov 2026 every run hit
+Vercel Hobby's 10s limit and no wins synced. The Notion client waits up to 60s
+per call by default, and a credential was recorded only *after* it was synced,
+so one slow credential at the head of the queue killed each run before anything
+was written, and the next run picked it again. Now a credential is claimed
+(`last_synced_at`) before work starts, so even a killed run moves it to the back
+of the queue. Timeouts, rate limits and Notion 5xx are recorded as
+`(transient)` and don't count toward disabling a credential.
+
+**Why `timeout_milliseconds := 20000`:**
+
 - `pg_net`'s default timeout is about **5 seconds**, so it gave up before the
   route finished and logged `"Timeout was reached"` with a null status on every
   single run. The sync still completed — Vercel keeps executing after the client
@@ -156,8 +169,9 @@ materialized views takes about 20 s, so the function skips it unless:
 A skipped tick takes a few milliseconds. A new win usually appears within 5
 minutes, and at worst within about 6: Postgres publishes table counters with a
 short delay, so a write committed just before a tick is caught on the next one.
-Counters reset when the database restarts, which reads as a change and costs one
-refresh.
+Postgres keeps these counters across a clean restart (seen when the plan
+changed), so a restart alone doesn't force a refresh; the hourly one covers it.
+A crash resets them, which reads as a change and costs one harmless refresh.
 
 **If the views ever start reading another table, add it to the function's list.**
 The tables come from `pg_depend` on the two views, through `all_wins`.
