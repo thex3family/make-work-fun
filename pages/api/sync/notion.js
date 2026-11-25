@@ -34,6 +34,19 @@ const DEFAULT_BATCH_SIZE = 15;
 const NOTION_PAGE_SIZE = 100;
 const MAX_PAGES_PER_CREDENTIAL = 10;
 const MAX_CONSECUTIVE_FAILURES = 5;
+// Timing, against Vercel's 10s limit (Hobby), measured from the start of the
+// request. Everything a run does must finish by RUN_DEADLINE_MS, leaving room
+// for the cold start that comes before the handler runs.
+//  - A credential is started only if CREDENTIAL_MIN_MS remain.
+//  - A Notion query gets at most QUERY_TIMEOUT_MS, and the run stops paging
+//    while MARK_RESERVE_MS + SAVE_RESERVE_MS still remain, so every win it
+//    fetched is also stored and marked in Notion in the same run.
+// Unfetched pages are picked up by the next run.
+const RUN_DEADLINE_MS = 8000;
+const CREDENTIAL_MIN_MS = 5000;
+const QUERY_TIMEOUT_MS = 3000;
+const SAVE_RESERVE_MS = 700;
+const MARK_RESERVE_MS = 2000;
 const SHARED_MARKER = 'Shared With Family';
 
 const admin = () =>
@@ -125,15 +138,39 @@ function toRow(page, credential) {
   };
 }
 
-async function syncCredential(db, credential) {
-  const notion = new Client({ auth: credential.api_secret_key });
+// Errors that say nothing about whether the credential is healthy: Notion was
+// slow, rate-limited or down, or the network dropped. These are recorded but
+// don't count toward disabling the credential.
+const TRANSIENT_CODES = new Set([
+  'notionhq_client_request_timeout',
+  'rate_limited',
+  'internal_server_error',
+  'service_unavailable',
+  'ECONNRESET',
+  'ETIMEDOUT',
+  'ECONNREFUSED',
+  'EAI_AGAIN'
+]);
+
+function isTransient(err) {
+  return TRANSIENT_CODES.has(err?.code) || (err?.status >= 500 && err?.status < 600);
+}
+
+async function syncCredential(db, credential, deadline) {
+  const left = () => deadline - Date.now();
+  // A hung call must fail on its own: the client's default wait is 60s, which
+  // let one slow credential run every request into Vercel's limit.
+  const notion = (timeoutMs) =>
+    new Client({ auth: credential.api_secret_key, timeoutMs: Math.max(500, timeoutMs) });
 
   const rows = [];
   let cursor;
   let pages = 0;
 
   do {
-    const response = await notion.databases.query({
+    const response = await notion(
+      Math.min(QUERY_TIMEOUT_MS, left() - SAVE_RESERVE_MS - MARK_RESERVE_MS)
+    ).databases.query({
       database_id: credential.database_id,
       filter: notionFilter(credential.collaborator),
       page_size: NOTION_PAGE_SIZE,
@@ -147,24 +184,30 @@ async function syncCredential(db, credential) {
 
     cursor = response.has_more ? response.next_cursor : undefined;
     pages += 1;
-  } while (cursor && pages < MAX_PAGES_PER_CREDENTIAL);
+  } while (
+    cursor &&
+    pages < MAX_PAGES_PER_CREDENTIAL &&
+    left() > QUERY_TIMEOUT_MS + SAVE_RESERVE_MS + MARK_RESERVE_MS
+  );
 
   if (rows.length === 0) return { wins: 0, truncated: Boolean(cursor) };
 
-  // Idempotent: re-running over the same pages updates in place rather than
-  // duplicating. Requires the unique index on (notion_id, player).
+  // Insert only: a win already stored is left exactly as it is. Pages are
+  // fetched only until they're marked, so a repeat means an earlier run stored
+  // the win but didn't mark it -- and re-writing it would move a missing
+  // Closing/Do Date to today and re-price the reward.
   const { error: upsertError } = await db
     .from('success_plan')
-    .upsert(rows, { onConflict: 'notion_id,player' });
+    .upsert(rows, { onConflict: 'notion_id,player', ignoreDuplicates: true });
 
   if (upsertError) throw new Error(`upsert failed: ${upsertError.message}`);
 
-  // Only stamp Notion once the win is durably stored. If this half fails the
-  // page stays unmarked and the next run upserts it again -- which is safe
-  // precisely because the write above is an upsert.
+  // Only stamp Notion once the win is durably stored. A page that fails to be
+  // marked is fetched again next run, which the insert-only write makes safe.
+  const markClient = notion(left() - 300);
   const marked = await Promise.allSettled(
     rows.map((row) =>
-      notion.pages.update({
+      markClient.pages.update({
         page_id: row.notion_id,
         properties: {
           'Family Connection': {
@@ -175,12 +218,14 @@ async function syncCredential(db, credential) {
     )
   );
 
-  const failedMarks = marked.filter((m) => m.status === 'rejected').length;
+  const unmarked = marked.filter((m) => m.status === 'rejected').length;
 
-  return { wins: rows.length, failedMarks, truncated: Boolean(cursor) };
+  return { wins: rows.length, unmarked, truncated: Boolean(cursor) };
 }
 
 export default async function handler(req, res) {
+  const startedAt = Date.now();
+  const deadline = startedAt + RUN_DEADLINE_MS;
   const secret = process.env.SYNC_SECRET;
 
   if (!secret) {
@@ -208,13 +253,31 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: `candidate query: ${error.message}` });
   }
 
-  const summary = { scanned: 0, wins: 0, failed: 0, details: [] };
+  const summary = { scanned: 0, wins: 0, failed: 0, deferred: 0, details: [] };
 
   for (const credential of credentials || []) {
+    if (deadline - Date.now() < CREDENTIAL_MIN_MS) {
+      summary.deferred += 1; // still at the head of the queue for the next run
+      continue;
+    }
+
+    // Claim it before working on it. If Vercel kills the run part-way, this
+    // credential has still moved to the back of sync_candidates, so one that
+    // keeps timing out can't sit at the head of the queue and stall every run
+    // (it did, from 30 Oct to 25 Nov 2026).
+    const { error: claimError } = await db
+      .from('notion_credentials')
+      .update({ last_synced_at: new Date().toISOString() })
+      .eq('id', credential.id);
+    if (claimError) {
+      console.error(`claim ${credential.id} failed: ${claimError.message}`);
+      summary.deferred += 1;
+      continue;
+    }
     summary.scanned += 1;
 
     try {
-      const result = await syncCredential(db, credential);
+      const result = await syncCredential(db, credential, deadline);
       summary.wins += result.wins;
 
       await db
@@ -232,26 +295,25 @@ export default async function handler(req, res) {
     } catch (err) {
       summary.failed += 1;
 
-      const failures = (credential.consecutive_failures || 0) + 1;
+      const message = String(err.message || err).slice(0, 500);
+      const transient = isTransient(err);
+      const failures = (credential.consecutive_failures || 0) + (transient ? 0 : 1);
 
       await db
         .from('notion_credentials')
         .update({
           last_synced_at: new Date().toISOString(),
           consecutive_failures: failures,
-          last_error: String(err.message || err).slice(0, 500),
-          // Only give up after repeated failures, and record why.
+          last_error: transient ? `(transient) ${message}` : message,
+          // Only give up after repeated real failures, and record why.
           error: failures >= MAX_CONSECUTIVE_FAILURES
         })
         .eq('id', credential.id);
 
-      summary.details.push({
-        id: credential.id,
-        failures,
-        error: String(err.message || err).slice(0, 200)
-      });
+      summary.details.push({ id: credential.id, failures, transient, error: message.slice(0, 200) });
     }
   }
 
+  summary.ms = Date.now() - startedAt;
   return res.status(200).json(summary);
 }

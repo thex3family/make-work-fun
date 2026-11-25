@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
 import { createPopper } from '@popperjs/core';
-import { useEffect, useState, createRef } from 'react';
+import { useEffect, useRef, useState, createRef } from 'react';
 import { Tooltip, Slider, Drawer, Card, Text, Group, useMantineTheme, NumberInput, Modal, Select, TextInput, Textarea, Skeleton } from '@mantine/core';
 import { supabase } from '@/utils/supabase-client';
 import { uploadImage } from '@/utils/uploadImage';
@@ -122,6 +122,30 @@ export default function CardStats({
 
   const [itemShopOpen, setItemShopOpen] = useState(false);
   const [items, setItems] = useState(null);
+
+  // statGold comes from the leaderboard, which lags up to 5 minutes. On the
+  // signed-in player's own card, read the balance live instead, so a purchase
+  // shows straight away and the shop's Buy check doesn't offer gold that was
+  // just spent. (It is still only a client-side check.) Other players' cards
+  // (leaderboard, embeds) keep statGold.
+  const [liveGold, setLiveGold] = useState(null); // { player, value }
+  const gold = liveGold && liveGold.player === user_id ? liveGold.value : statGold;
+  const goldRequest = useRef(0);
+
+  async function refreshGold() {
+    const me = supabase.auth.user();
+    if (!me || me.id !== user_id) return;
+    const request = ++goldRequest.current;
+    const { data, error } = await supabase.rpc('my_season_gold');
+    // Ignore a response that a newer request has overtaken.
+    if (!error && data !== null && request === goldRequest.current) {
+      setLiveGold({ player: user_id, value: Math.round(data) });
+    }
+  }
+
+  useEffect(() => {
+    refreshGold();
+  }, [user_id, statGold]);
 
 
   const [activeItem, setActiveItem] = useState(null);
@@ -413,6 +437,7 @@ export default function CardStats({
     } finally {
       buySFX();
       refreshStats();
+      refreshGold();
       setBuyItemConfirmation(false);
       setItemShopOpen(false);
       setBuySuccess(true);
@@ -614,7 +639,7 @@ export default function CardStats({
                 variant="slim"
                 className="cursor-pointer "
               >
-                {statGold} 💰
+                {gold} 💰
               </div>
             </Tooltip>
             :  <Tooltip
@@ -627,7 +652,7 @@ export default function CardStats({
               variant="slim"
               className=""
             >
-              {statGold} 💰
+              {gold} 💰
             </div>
           </Tooltip>}
             <Tooltip
@@ -719,7 +744,7 @@ export default function CardStats({
                 variant="slim"
                 className="cursor-pointer"
               >
-                {statGold} 💰
+                {gold} 💰
               </div>
             </Tooltip>
           </div>
@@ -809,7 +834,7 @@ export default function CardStats({
                         <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
                           {purchaseAmount ? activeItem.gold_cost * purchaseAmount : 0} <i className='ml-2 fas fa-coins' />
                         </div>
-                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0 || !purchaseAmount || activeItem.gold_cost * purchaseAmount > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost * purchaseAmount)}>Buy</Button>
+                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseAmount == 0 || !purchaseAmount || activeItem.gold_cost * purchaseAmount > gold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost * purchaseAmount)}>Buy</Button>
                       </>
                       : null}
                     {activeItem.type == 'timer' ?
@@ -833,7 +858,7 @@ export default function CardStats({
                         <div className='mt-4 px-2 py-1 text-center text-lg font-semibold bg-yellow-400 text-white rounded'>
                           {purchaseTime ? activeItem.gold_cost / 5 * purchaseTime : 0} <i className='ml-2 fas fa-coins' />
                         </div>
-                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseTime == 0 || !purchaseTime || activeItem.gold_cost / 5 * purchaseTime > statGold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost / 5 * purchaseTime)}>Buy</Button>
+                        <Button variant="prominent" className="w-full mt-4" disabled={purchaseTime == 0 || !purchaseTime || activeItem.gold_cost / 5 * purchaseTime > gold} onClick={() => setBuyItemConfirmation(activeItem.gold_cost / 5 * purchaseTime)}>Buy</Button>
                       </>
                       : null}
                   </div>
